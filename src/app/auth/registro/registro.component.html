@@ -1,0 +1,12 @@
+<h2>Crear cuenta</h2>
+
+<form (ngSubmit)="registrar()">
+  <input [(ngModel)]="email" name="email" placeholder="Correo" required />
+  <input [(ngModel)]="password" name="password" placeholder="Contraseña" type="password" required />
+  <input [(ngModel)]="confirmPassword" name="confirmPassword" placeholder="Confirmar contraseña" type="password" required />
+
+  <button type="submit">Registrarme</button>
+</form>
+
+<p class="error" *ngIf="error">{{ error }}</p>
+<p class="success" *ngIf="exito">Cuenta creada con éxito 🎉</p>

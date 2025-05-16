@@ -1,0 +1,32 @@
+<div class="dashboard">
+  <h2>Panel del Comercio</h2>
+  <p>Bienvenido de nuevo, <strong>La Panadería del Barrio</strong> 🧁</p>
+
+  <section class="stats">
+    <div class="stat">
+      <h3>{{ productos }}</h3>
+      <p>Productos en venta</p>
+    </div>
+    <div class="stat">
+      <h3>{{ pedidos }}</h3>
+      <p>Pedidos activos</p>
+    </div>
+    <div class="stat alert">
+      <h3>{{ stockBajo }}</h3>
+      <p>Con bajo stock</p>
+    </div>
+  </section>
+
+  <section class="accesos">
+    <a routerLink="/comercio/crear-producto">➕ Nuevo producto</a>
+    <a routerLink="/comercio/promociones/nueva-promocion">🎁 Crear promoción</a>
+    <a routerLink="/comercio/ubicacion">📍 Configurar ubicación</a>
+    <a routerLink="/comercio/suscriptores">🔔 Ver suscriptores</a>
+  </section>
+
+  <section class="premium">
+    <h4>🔓 Accedé a estadísticas por zona</h4>
+    <p>Mejorá tu cuenta a <strong>Premium</strong> y conocé dónde se vende más cada producto.</p>
+    <button routerLink="/premium">Mejorar ahora</button>
+  </section>
+</div>

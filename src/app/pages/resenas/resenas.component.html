@@ -1,0 +1,22 @@
+<div class="resenas">
+  <h2>Opiná sobre locales</h2>
+
+  <form (ngSubmit)="enviarResena()">
+    <input [(ngModel)]="nuevoLocal" name="local" placeholder="Nombre del local" required />
+    <textarea [(ngModel)]="nuevoComentario" name="comentario" placeholder="Tu opinión..." required></textarea>
+    <select [(ngModel)]="nuevaPuntuacion" name="puntuacion" required>
+      <option value="">Puntuación</option>
+      <option *ngFor="let p of [1,2,3,4,5]" [value]="p">{{ p }} ⭐</option>
+    </select>
+    <button type="submit">Enviar reseña</button>
+    <p class="mensaje">{{ mensaje }}</p>
+  </form>
+
+  <div class="lista">
+    <div class="item" *ngFor="let r of resenas">
+      <h4>{{ r.local }} <span>{{ r.puntuacion }}⭐</span></h4>
+      <p>{{ r.comentario }}</p>
+      <small>{{ r.fecha }}</small>
+    </div>
+  </div>
+</div>

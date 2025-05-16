@@ -1,0 +1,17 @@
+<div class="login-container">
+  <img src="assets/img/logo.png" alt="Statill Logo" class="logo" />
+  <h2>Ingresá a Statill</h2>
+
+  <form (ngSubmit)="login()" #form="ngForm">
+    <input type="email" [(ngModel)]="email" name="email" placeholder="Correo electrónico" required />
+    <input type="password" [(ngModel)]="password" name="password" placeholder="Contraseña" required />
+    <button type="submit">Iniciar sesión</button>
+  </form>
+
+  <p class="error" *ngIf="error">{{ error }}</p>
+
+  <p class="registro">
+    ¿No tenés cuenta?
+    <a routerLink="/registro">Registrate</a>
+  </p>
+</div>

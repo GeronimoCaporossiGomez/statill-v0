@@ -1,0 +1,31 @@
+<div class="home">
+  <header>
+    <h2>¡Hola! ¿Qué estás buscando hoy?</h2>
+    <input type="text" placeholder="Buscar productos o locales..." />
+  </header>
+
+  <section class="promos">
+    <h3>Promociones destacadas</h3>
+    <div class="cards">
+      <div class="card">
+        <img src="assets/img/promo1.jpg" alt="Promo 1" />
+        <p>2x1 en bebidas naturales</p>
+      </div>
+      <div class="card">
+        <img src="assets/img/promo2.jpg" alt="Promo 2" />
+        <p>20% en panadería La Abuela</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="recomendados">
+    <h3>Productos recomendados</h3>
+    <div class="productos">
+      <div class="producto" *ngFor="let prod of productos">
+        <img [src]="prod.img" [alt]="prod.nombre" />
+        <h4>{{ prod.nombre }}</h4>
+        <p>$ {{ prod.precio }}</p>
+      </div>
+    </div>
+  </section>
+</div>

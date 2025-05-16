@@ -1,10 +1,10 @@
-.promo {
-  max-width: 600px;
+.resenas {
+  max-width: 700px;
   margin: 2rem auto;
   padding: 2rem;
   background: white;
   border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
   font-family: 'Segoe UI', sans-serif;
 
   h2 {
@@ -16,39 +16,24 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
-
-    label {
-      font-weight: bold;
-    }
+    margin-bottom: 2rem;
 
     input,
-    textarea {
+    textarea,
+    select {
       padding: 0.75rem;
       border: 1px solid #ccc;
       border-radius: 8px;
       font-size: 1rem;
     }
 
-    textarea {
-      resize: vertical;
-      min-height: 80px;
-    }
-
-    .checkbox {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-weight: normal;
-    }
-
     button {
       background: #4caf50;
       color: white;
+      padding: 0.8rem;
       border: none;
-      padding: 0.9rem;
       border-radius: 8px;
       font-size: 1rem;
-      font-weight: bold;
       cursor: pointer;
 
       &:hover {
@@ -57,10 +42,36 @@
     }
 
     .mensaje {
-      text-align: center;
-      font-weight: 500;
-      color: #333;
-      margin-top: 1rem;
+      font-size: 0.95rem;
+      color: #555;
+    }
+  }
+
+  .lista {
+    .item {
+      border-top: 1px solid #eee;
+      padding: 1rem 0;
+
+      h4 {
+        margin: 0;
+        font-size: 1.1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        span {
+          font-size: 1rem;
+          color: #fbc02d;
+        }
+      }
+
+      p {
+        margin: 0.5rem 0;
+      }
+
+      small {
+        color: #888;
+      }
     }
   }
 }
