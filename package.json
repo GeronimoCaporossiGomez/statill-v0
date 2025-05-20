@@ -21,9 +21,7 @@
     "@angular/router": "^19.2.0",
     "@angular/service-worker": "^19.2.0",
     "@angular/ssr": "^19.2.11",
-    "chart.js": "^4.4.9",
     "express": "^4.18.2",
-    "leaflet": "^1.9.4",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
