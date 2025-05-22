@@ -12,6 +12,16 @@ export const routes: Routes = [
       import('./pages/landing/landing.component').then(m => m.LandingPageComponent)
   },
   {
+    path: 'login',
+    loadComponent: () =>
+      import('./auth/login/login.component').then(m => m.LoginComponent)
+  },
+  {
+    path: 'register',
+    loadComponent: () =>
+      import('./auth/registro/registro.component').then(m => m.RegisterComponent)
+  },
+  {
     path: '**',
     redirectTo: 'landing'
   }
