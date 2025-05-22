@@ -1,27 +1,17 @@
-/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
-/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
 {
   "compileOnSave": false,
   "compilerOptions": {
-    "outDir": "./dist/out-tsc",
-    "strict": true,
-    "noImplicitOverride": true,
-    "noPropertyAccessFromIndexSignature": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "skipLibCheck": true,
-    "isolatedModules": true,
-    "esModuleInterop": true,
+    "baseUrl": "./",
+    "downlevelIteration": true,
     "experimentalDecorators": true,
-    "moduleResolution": "bundler",
+    "forceConsistentCasingInFileNames": true,
     "importHelpers": true,
-    "target": "ES2022",
-    "module": "ES2022"
+    "module": "esnext",             // ✅ compatible con Angular 17+ y lazy loading
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "target": "esnext",             // ✅ moderno y aceptado por TypeScript
+    "useDefineForClassFields": false,
+    "lib": ["esnext", "dom"]        // ✅ bibliotecas para JS moderno + navegador
   },
-  "angularCompilerOptions": {
-    "enableI18nLegacyMessageIdFormat": false,
-    "strictInjectionParameters": true,
-    "strictInputAccessModifiers": true,
-    "strictTemplates": true
-  }
+  "exclude": ["node_modules", "dist"]
 }
