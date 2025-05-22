@@ -1,12 +1,77 @@
-/* src/app/landing/landing.component.scss */
-h1 {
-    color: #3f51b5;
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap');
+
+:host {
+  font-family: 'Roboto Condensed', sans-serif;
+}
+
+.landing-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 2rem;
+  background: linear-gradient(to bottom right, #ffeaea, #ffffff); // suave con rojo principal
+
+  h1 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    font-size: 3rem;
+    color: #FD2A2C;
+
+    .highlight {
+      color: darken(#FD2A2C, 10%);
+    }
   }
-  
-  p {
-    font-style: italic;
-    color: #666;
+
+  .subtitle {
+    font-size: 1.2rem;
+    color: #555;
+    margin-top: 0.5rem;
+    text-align: center;
+    max-width: 600px;
   }
-  
+
+  .actions {
+    margin-top: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .btn {
+    background-color: #FD2A2C;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    font-family: 'Roboto Condensed', sans-serif;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: #c82021;
+    }
+
+    &.btn-secondary {
+      background-color: #f1f1f1;
+      color: #333;
+
+      &:hover {
+        background-color: #d6d6d6;
+      }
+    }
+  }
+
+  .footer {
+    position: absolute;
+    bottom: 1rem;
+    font-size: 0.85rem;
+    color: #999;
+    text-align: center;
+  }
+}

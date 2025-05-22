@@ -1,6 +1,7 @@
 @echo off
-:: Cambia esta ruta a donde esté tu node.exe local
+:: Forzar uso de Node local desde carpeta NodeJS
 set "NODE_EXE=NodeJS\node.exe"
 
-:: Corre angular con node local
+:: Ejecutar Angular CLI desde node_modules local
 %NODE_EXE% node_modules/@angular/cli/bin/ng.js %*
+
