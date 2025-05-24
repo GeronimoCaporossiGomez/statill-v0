@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   selector: 'app-register',
   imports: [CommonModule],
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss']
+  templateUrl: './registro.component.html',
+  styleUrls: ['./registro.component.scss']
 })
 export class RegisterComponent {}
