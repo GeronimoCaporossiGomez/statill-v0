@@ -12,14 +12,8 @@ export const routes: Routes = [
       import('./pages/landing/landing.component').then(m => m.LandingPageComponent)
   },
   {
-    path: 'login',
-    loadComponent: () =>
-      import('./auth/login/login.component').then(m => m.LoginComponent)
-  },
-  {
-    path: 'register',
-    loadComponent: () =>
-      import('./auth/registro/registro.component').then(m => m.RegisterComponent)
+  path: 'auth',
+  loadComponent: () => import('./auth/auth.component').then(m => m.AuthComponent)
   },
   {
     path: '**',
