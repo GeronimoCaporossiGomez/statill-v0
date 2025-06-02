@@ -1,45 +1,64 @@
 <!-- landing.component.html -->
 <div class="landing-wrapper">
   <header class="landing-header">
-    <img src="assets/img/logo.png" alt="Statill Logo" class="logo" />
-    <div class="landing-text">
-      <h1 class="brand-title">Bienvenido a <span>Statill</span></h1>
-      <p class="brand-subtitle">
-        La nueva plataforma digital para potenciar comercios locales y crear comunidad entre vendedores y jóvenes compradores.
+    <img src="assets/img/logo.png" alt="Logo Statill" class="logo" />
+    <div class="landing-title">
+      <h1>Impulsá tu comercio con <span>Statill</span></h1>
+      <p class="subtitle">
+        La plataforma que conecta negocios locales con una nueva generación de compradores. Simple, moderna y pensada para crecer juntos.
       </p>
+      <div class="landing-buttons">
+        <a routerLink="/auth" class="btn btn-primary">Empezar ahora</a>
+        <a routerLink="/landing" class="btn btn-secondary">Quiero saber más</a>
+      </div>
     </div>
   </header>
 
-  <section class="landing-description">
-    <h2>¿Qué es Statill?</h2>
+  <section class="section-light">
+    <h2>📌 ¿Qué es Statill?</h2>
     <p>
-      Statill es una plataforma pensada para transformar la relación entre los negocios locales y sus clientes. Desde una única aplicación, los usuarios pueden explorar comercios cercanos, realizar compras, sumar puntos y disfrutar de beneficios exclusivos.
-    </p>
-
-    <h2>Ventajas para los Comercios</h2>
-    <ul>
-      <li>✅ Más visibilidad frente a un público joven y conectado</li>
-      <li>✅ Sistema de fidelización con puntos que premia cada compra</li>
-      <li>✅ Acceso a un panel de ventas con información útil sobre tu negocio</li>
-      <li>✅ Interfaz atractiva, rápida y diseñada para destacar tu marca</li>
-      <li>✅ Conexión directa con nuevos clientes de forma moderna y eficiente</li>
-    </ul>
-
-    <h2>¿Cómo funciona?</h2>
-    <p>
-      Los usuarios se registran fácilmente, navegan entre comercios, compran productos y acumulan puntos automáticamente. Cada comercio cuenta con su propio espacio personalizado donde puede mostrar sus productos y promociones.
-    </p>
-    <p>
-      Statill crea una comunidad dinámica donde cada compra cuenta y cada cliente vuelve con ganas de más.
+      Statill es una plataforma digital pensada para transformar cómo los comercios locales se conectan con sus clientes. Podés mostrar tus productos, gestionar tu tienda, y fidelizar clientes con una experiencia moderna y amigable.
     </p>
   </section>
 
-  <main class="landing-actions">
-    <a routerLink="/auth" class="btn btn-primary">Ingresar o Registrarse</a>
-    <a routerLink="/landing" class="btn btn-secondary">Explorar más</a>
-  </main>
+  <section class="section-benefits">
+    <h2>🚀 Beneficios para Comercios</h2>
+    <ul>
+      <li>✅ Mayor visibilidad ante públicos jóvenes</li>
+      <li>✅ Sistema de puntos para fidelizar clientes</li>
+      <li>✅ Estadísticas para conocer tu rendimiento</li>
+      <li>✅ Herramientas pensadas para escalar tu negocio</li>
+    </ul>
+  </section>
+
+  <section class="section-stock">
+    <h2>📦 Gestión de Stock Inteligente</h2>
+    <p>
+      Mantené tu inventario siempre bajo control. Statill te notifica cuando un producto está por agotarse, te muestra cuáles se venden más y te sugiere qué reponer.
+    </p>
+    <ul>
+      <li>🔄 Carga y edición rápida de productos</li>
+      <li>📉 Alertas de bajo stock automáticas</li>
+      <li>📊 Análisis visual de productos más vendidos</li>
+      <li>📥 Exportación de inventario en un clic</li>
+    </ul>
+  </section>
+
+  <section class="section-users">
+    <h2>👥 Para tus Clientes</h2>
+    <p>
+      Los usuarios pueden registrarse, ver productos, ganar puntos por comprar e incluso seguir sus estadísticas de consumo. Una experiencia divertida y conectada con sus hábitos digitales.
+    </p>
+  </section>
+
+  <section class="section-futuro">
+    <h2>🌐 Listos para crecer</h2>
+    <p>
+      Statill se construye con tecnología moderna (Angular 19) y está listo para integrarse a sistemas reales. Próximamente: panel premium, recomendaciones personalizadas, ventas reales y más.
+    </p>
+  </section>
 
   <footer class="landing-footer">
-    <p>&copy; 2025 Statill. Todos los derechos reservados.</p>
+    <p>&copy; 2025 Statill. Todos los derechos reservados. Diseñado para potenciar negocios reales con herramientas del futuro.</p>
   </footer>
 </div>
