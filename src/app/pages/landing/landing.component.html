@@ -1,14 +1,45 @@
-<div class="landing-container">
-    <h1>Bienvenido a <span class="highlight">Statill</span></h1>
-    <p class="subtitle">La forma más simple de digitalizar tu comercio.</p>
-  
-    <div class="actions">
-      <a routerLink="/auth" class="btn">Iniciar sesión</a>
-      <a [routerLink]="['/auth']" [queryParams]="{ mode: 'register' }" class="btn">Registrarme</a>
+<!-- landing.component.html -->
+<div class="landing-wrapper">
+  <header class="landing-header">
+    <img src="assets/img/logo.png" alt="Statill Logo" class="logo" />
+    <div class="landing-text">
+      <h1 class="brand-title">Bienvenido a <span>Statill</span></h1>
+      <p class="brand-subtitle">
+        La nueva plataforma digital para potenciar comercios locales y crear comunidad entre vendedores y jóvenes compradores.
+      </p>
     </div>
-  
-    <footer class="footer">
-      <p>Statill © 2025 — Datos que potencian tu local</p>
-    </footer>
-  </div>
-  
+  </header>
+
+  <section class="landing-description">
+    <h2>¿Qué es Statill?</h2>
+    <p>
+      Statill es una plataforma pensada para transformar la relación entre los negocios locales y sus clientes. Desde una única aplicación, los usuarios pueden explorar comercios cercanos, realizar compras, sumar puntos y disfrutar de beneficios exclusivos.
+    </p>
+
+    <h2>Ventajas para los Comercios</h2>
+    <ul>
+      <li>✅ Más visibilidad frente a un público joven y conectado</li>
+      <li>✅ Sistema de fidelización con puntos que premia cada compra</li>
+      <li>✅ Acceso a un panel de ventas con información útil sobre tu negocio</li>
+      <li>✅ Interfaz atractiva, rápida y diseñada para destacar tu marca</li>
+      <li>✅ Conexión directa con nuevos clientes de forma moderna y eficiente</li>
+    </ul>
+
+    <h2>¿Cómo funciona?</h2>
+    <p>
+      Los usuarios se registran fácilmente, navegan entre comercios, compran productos y acumulan puntos automáticamente. Cada comercio cuenta con su propio espacio personalizado donde puede mostrar sus productos y promociones.
+    </p>
+    <p>
+      Statill crea una comunidad dinámica donde cada compra cuenta y cada cliente vuelve con ganas de más.
+    </p>
+  </section>
+
+  <main class="landing-actions">
+    <a routerLink="/auth" class="btn btn-primary">Ingresar o Registrarse</a>
+    <a routerLink="/landing" class="btn btn-secondary">Explorar más</a>
+  </main>
+
+  <footer class="landing-footer">
+    <p>&copy; 2025 Statill. Todos los derechos reservados.</p>
+  </footer>
+</div>
