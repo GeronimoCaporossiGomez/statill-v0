@@ -1,10 +1,11 @@
+import { Router } from '@angular/router';
 import {
   Component,
   EventEmitter,
   Output
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms'; // Importamos FormsModule para usar ngModel
+import { FormsModule } from '@angular/forms';
 import {
   trigger,
   state,
@@ -38,6 +39,8 @@ export class AuthModalComponent {
   email = '';
   password = '';
 
+  constructor(private router: Router) {}
+
   toggleMode(value: boolean) {
     this.isLogin = value;
   }
@@ -50,6 +53,11 @@ export class AuthModalComponent {
     };
 
     console.log(this.isLogin ? 'Login exitoso:' : 'Registro completo:', data);
+
+    // Cerrar modal
     this.close.emit();
+
+    // Navegar a /home
+    this.router.navigate(['/home']);
   }
 }

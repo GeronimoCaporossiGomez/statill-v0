@@ -34,7 +34,9 @@
 
   <main class="landing-actions">
     <button class="btn btn-primary" (click)="showAuthModal = true">Ingresar / Registrarse</button>
-    <a routerLink="/home" class="btn btn-secondary">Explorar como visitante</a>
+    <a routerLink="/home" class="btn btn-secondary">
+      Explorar como visitante
+    </a>
   </main>
 
   <app-auth-modal *ngIf="showAuthModal" (close)="showAuthModal = false" />

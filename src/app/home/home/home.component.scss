@@ -1,0 +1,204 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap');
+
+$color-primario: #FD2A2C;
+$color-secundario: #3f51b5;
+$font-titulo: 'Poppins', sans-serif;
+$font-contenido: 'Roboto Condensed', sans-serif;
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+}
+
+.home-layout {
+  display: flex;
+  min-height: 100vh;
+  font-family: $font-contenido;
+
+  .sidebar {
+    width: clamp(200px, 15vw, 240px);
+    background-color: #bcbcbc;
+    border-right: 1px solid #ddd;
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 2rem;
+
+    .logo {
+      width: 60%;
+      max-width: 140px;
+      margin-bottom: 2rem;
+    }
+
+    .sidebar-nav {
+      width: 100%;
+
+      ul {
+        list-style: none;
+        padding: 0;
+
+        li {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          padding: 0.75rem 1rem;
+          margin-bottom: 0.5rem;
+          cursor: pointer;
+          border-radius: 8px;
+          font-size: 1rem;
+          transition: background 0.3s;
+
+          &:hover {
+            background-color: lighten($color-primario, 42%);
+            color: $color-primario;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+  }
+
+  .home-content {
+    flex: 1;
+    padding: clamp(1rem, 4vw, 3rem);
+
+    .home-title {
+      font-family: $font-titulo;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      color: $color-primario;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .search-box {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+
+      input {
+        flex: 1;
+        min-width: 200px;
+        padding: 0.75rem;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-family: $font-contenido;
+      }
+
+      button {
+        background-color: $color-primario;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 0.75rem 1.5rem;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background 0.3s;
+
+        &:hover {
+          background-color: adjust-color($color-primario, $lightness: -10%);
+        }
+      }
+    }
+
+    .productos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+
+      .producto-card {
+        position: relative;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        padding: 1.25rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        transition: transform 0.3s ease;
+
+        &:hover {
+          transform: scale(1.02);
+        }
+
+        h2 {
+          font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+          color: $color-primario;
+          font-weight: bold;
+          margin-bottom: 0.5rem;
+        }
+
+        p {
+          margin: 0.3rem 0;
+          font-size: clamp(0.9rem, 2vw, 1rem);
+        }
+
+        .promo-badge {
+          position: absolute;
+          top: -10px;
+          right: -10px;
+          background: $color-primario;
+          color: white;
+          font-weight: bold;
+          padding: 0.4rem 0.8rem;
+          border-radius: 12px;
+          font-size: 0.85rem;
+          animation: pulse 1.5s infinite;
+        }
+
+        .promo-tiempo {
+          color: darken($color-primario, 15%);
+          font-weight: bold;
+          margin-top: 0.5rem;
+          font-size: 0.9rem;
+          transition: all 0.3s ease-in-out;
+        }
+
+        .btn-carrito {
+          margin-top: 1rem;
+          padding: 0.6rem 1.2rem;
+          background-color: $color-primario;
+          border: none;
+          color: white;
+          border-radius: 6px;
+          cursor: pointer;
+          font-size: 0.95rem;
+          transition: background-color 0.3s;
+
+          &:hover {
+            background-color: darken($color-primario, 10%);
+          }
+        }
+      }
+    }
+
+    .sin-resultados {
+      text-align: center;
+      color: #888;
+      margin-top: 2rem;
+      font-size: 1.1rem;
+    }
+  }
+}
+
+.producto-card.promo {
+  border: 2px solid $color-primario;
+  background-color: lighten($color-primario, 45%);
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(253, 42, 44, 0.7);
+  }
+  70% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(253, 42, 44, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(253, 42, 44, 0);
+  }
+}

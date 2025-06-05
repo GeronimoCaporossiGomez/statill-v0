@@ -1,0 +1,85 @@
+<section class="home-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <img src="assets/img/logo.png" alt="Statill Logo" class="logo" />
+  
+      <nav class="sidebar-nav">
+        <ul>
+          <li (click)="navegarAHome()"><span>👤</span> Mi cuenta</li>
+          <li (click)="navegarAHome()"><span>🏬</span> Locales</li>
+          <li (click)="navegarAHome()"><span>🎁</span> Promociones</li>
+          <li (click)="navegarAHome()"><span>🌟</span> Premium</li>
+        </ul>
+      </nav>
+    </aside>
+  
+    <!-- Contenido principal -->
+    <main class="home-content" [@fadeIn]>
+      <h1 class="home-title">Explorá productos cerca tuyo</h1>
+  
+      <!-- Toggle filtros -->
+      <div class="search-box">
+        <button (click)="toggleFiltros()">
+          {{ filtrosAvanzados ? 'Ocultar filtros' : 'Mostrar filtros' }}
+        </button>
+  
+        <input
+          type="text"
+          placeholder="Buscar por nombre o ID..."
+          [(ngModel)]="searchTerm"
+          *ngIf="!filtrosAvanzados"
+        />
+  
+        <ng-container *ngIf="filtrosAvanzados">
+          <input
+            type="text"
+            placeholder="Nombre o tienda"
+            [(ngModel)]="searchTerm"
+          />
+          <input
+            type="number"
+            placeholder="Precio máximo"
+            [(ngModel)]="precioMax"
+          />
+        </ng-container>
+  
+        <button (click)="buscarProductos()">Filtrar</button>
+      </div>
+  
+      <!-- Productos -->
+      <div *ngIf="productosFiltrados.length > 0" class="productos-grid">
+        <div
+          class="producto-card"
+          *ngFor="let producto of productosFiltrados"
+          [@fadeSlideIn]
+          [class.promo]="producto.promoActiva"
+        >
+          <!-- Promo -->
+          <div class="promo-badge" *ngIf="producto.promoActiva">
+            {{ producto.descuento }}% OFF
+          </div>
+  
+          <!-- Detalle -->
+          <h2>{{ producto.nombre }}</h2>
+          <p><strong>ID:</strong> {{ producto.id }}</p>
+          <p><strong>Tienda:</strong> {{ producto.tienda }}</p>
+          <p><strong>Precio:</strong> ${{ producto.precio }}</p>
+  
+          <p *ngIf="producto.promoActiva" class="promo-tiempo">
+            🕒 Faltan: {{ tiempoRestante(producto.finPromo) }}
+          </p>
+  
+          <!-- Botón -->
+          <button class="btn-carrito" (click)="agregarAlCarrito(producto)">
+            🛒 Añadir al carrito
+          </button>
+        </div>
+      </div>
+  
+      <!-- Sin resultados -->
+      <p *ngIf="productosFiltrados.length === 0" class="sin-resultados">
+        No se encontraron productos con esos filtros.
+      </p>
+    </main>
+  </section>
+  
