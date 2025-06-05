@@ -59,8 +59,6 @@ Instalación como Progressive Web App (PWA).
 Preparado para ser empaquetado como aplicación nativa para Android/iOS.
 
 🛠️ Instalación y ejecución
-bash
-Copy code
 npm install
 npm run start
 📌 Estado del desarrollo
