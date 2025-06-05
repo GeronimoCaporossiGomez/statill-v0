@@ -62,13 +62,13 @@
                 "glob": "favicon.ico",
                 "output": "/"
               }
-            ]
-            
-            ,
+            ],
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+
+            ]
           },
           "configurations": {
             "production": {
@@ -128,7 +128,8 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [
+            ]
           }
         }
       }
