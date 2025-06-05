@@ -72,6 +72,7 @@ import {
     ];
   
     carrito: any[] = [];
+    mostrarCarrito = false;
     ahora: Date = new Date();
     relojSub: Subscription | null = null;
   
@@ -79,7 +80,7 @@ import {
   
     ngOnInit() {
       this.relojSub = interval(1000).subscribe(() => {
-        this.ahora = new Date(); // Actualiza cada segundo
+        this.ahora = new Date();
       });
     }
   
@@ -89,7 +90,6 @@ import {
   
     get productosFiltrados() {
       let result = this.productos;
-  
       const term = this.searchTerm.toLowerCase();
   
       if (this.filtrosAvanzados) {
@@ -142,7 +142,16 @@ import {
   
     agregarAlCarrito(producto: any) {
       this.carrito.push(producto);
+      this.mostrarCarrito = true;
       console.log('🛒 Añadido al carrito:', producto);
+    }
+  
+    cerrarCarrito() {
+      this.mostrarCarrito = false;
+    }
+  
+    irAPagar() {
+      alert('¡Gracias por tu compra! Próximamente conectaremos el pago.');
     }
   
     navegarAHome() {

@@ -1,5 +1,5 @@
 <section class="home-layout">
-    <!-- Sidebar -->
+    <!-- Sidebar de navegación -->
     <aside class="sidebar">
       <img src="assets/img/logo.png" alt="Statill Logo" class="logo" />
   
@@ -17,7 +17,7 @@
     <main class="home-content" [@fadeIn]>
       <h1 class="home-title">Explorá productos cerca tuyo</h1>
   
-      <!-- Toggle filtros -->
+      <!-- Filtros -->
       <div class="search-box">
         <button (click)="toggleFiltros()">
           {{ filtrosAvanzados ? 'Ocultar filtros' : 'Mostrar filtros' }}
@@ -46,7 +46,7 @@
         <button (click)="buscarProductos()">Filtrar</button>
       </div>
   
-      <!-- Productos -->
+      <!-- Grilla de productos -->
       <div *ngIf="productosFiltrados.length > 0" class="productos-grid">
         <div
           class="producto-card"
@@ -54,12 +54,10 @@
           [@fadeSlideIn]
           [class.promo]="producto.promoActiva"
         >
-          <!-- Promo -->
           <div class="promo-badge" *ngIf="producto.promoActiva">
             {{ producto.descuento }}% OFF
           </div>
   
-          <!-- Detalle -->
           <h2>{{ producto.nombre }}</h2>
           <p><strong>ID:</strong> {{ producto.id }}</p>
           <p><strong>Tienda:</strong> {{ producto.tienda }}</p>
@@ -69,7 +67,6 @@
             🕒 Faltan: {{ tiempoRestante(producto.finPromo) }}
           </p>
   
-          <!-- Botón -->
           <button class="btn-carrito" (click)="agregarAlCarrito(producto)">
             🛒 Añadir al carrito
           </button>
@@ -81,5 +78,28 @@
         No se encontraron productos con esos filtros.
       </p>
     </main>
+  
+    <!-- Sidebar de carrito -->
+    <div class="carrito-sidebar" *ngIf="mostrarCarrito">
+      <div class="carrito-header">
+        <h3>🛍️ Tu Carrito</h3>
+        <button (click)="cerrarCarrito()">✖</button>
+      </div>
+  
+      <div class="carrito-body">
+        <div *ngIf="carrito.length === 0">Tu carrito está vacío.</div>
+  
+        <ul>
+          <li *ngFor="let item of carrito">
+            <strong>{{ item.nombre }}</strong>
+            <span>${{ item.precio }}</span>
+          </li>
+        </ul>
+      </div>
+  
+      <div class="carrito-footer">
+        <button (click)="irAPagar()">Ir a pagar</button>
+      </div>
+    </div>
   </section>
   
