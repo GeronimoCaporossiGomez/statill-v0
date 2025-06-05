@@ -3,20 +3,12 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: '',
-    pathMatch: 'full',
-    redirectTo: 'landing'
+    redirectTo: 'landing',
+    pathMatch: 'full'
   },
   {
     path: 'landing',
     loadComponent: () =>
-      import('./pages/landing/landing.component').then(m => m.LandingPageComponent)
+    import('./home/landing/landing.component').then(m => m.LandingComponent)
   },
-  {
-  path: 'auth',
-  loadComponent: () => import('./auth/auth.component').then(m => m.AuthComponent)
-  },
-  {
-    path: '**',
-    redirectTo: 'landing'
-  }
 ];

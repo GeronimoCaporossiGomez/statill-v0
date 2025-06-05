@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;800&display=swap');
+
+:host {
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Fondo difuminado */
+.auth-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+}
+
+/* Modal centrado */
+.auth-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 400px;
+  z-index: 1001;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* Header y Tabs */
+.auth-header {
+  margin-bottom: 1.5rem;
+
+  .tabs {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    border-bottom: 2px solid #eee;
+    margin-bottom: 1rem;
+
+    .tab {
+      flex: 1;
+      text-align: center;
+      font-weight: bold;
+      font-size: 1rem;
+      padding: 0.75rem;
+      cursor: pointer;
+      color: #888;
+      transition: color 0.3s;
+
+      &.active {
+        color: #FD2A2C;
+      }
+    }
+
+    .active-bar {
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 50%;
+      height: 3px;
+      background-color: #FD2A2C;
+      border-radius: 2px;
+      transition: transform 0.3s ease;
+    }
+
+    .move-right {
+      transform: translateX(100%);
+    }
+  }
+}
+
+/* Formulario */
+.auth-body {
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    input {
+      padding: 0.75rem;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+
+    .btn {
+      background-color: #FD2A2C;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 0.75rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s ease;
+
+      &:hover {
+        background-color: #c82021;
+      }
+    }
+  }
+
+  .close-btn {
+    margin-top: 1rem;
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 0.9rem;
+    text-decoration: underline;
+    cursor: pointer;
+
+    &:hover {
+      color: #333;
+    }
+  }
+}

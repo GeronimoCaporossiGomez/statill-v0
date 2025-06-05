@@ -1,0 +1,45 @@
+<!-- landing.component.html -->
+<div class="landing-wrapper">
+  <header class="landing-header">
+    <img src="assets/img/logo.png" alt="Statill Logo" class="logo" />
+    <div class="landing-text">
+      <h1 class="brand-title">Bienvenido a <span>Statill</span></h1>
+      <p class="brand-subtitle">
+        La nueva forma de conectar comercios locales con compradores digitales. Fidelizá clientes, ganá visibilidad y accedé a estadísticas clave.
+      </p>
+    </div>
+  </header>
+
+  <section class="landing-description">
+    <h2>Tu comercio, potenciado</h2>
+    <p>
+      Statill transforma tu negocio en una experiencia interactiva. Permití que los jóvenes exploren tus productos, participen por recompensas y te elijan una y otra vez.
+    </p>
+
+    <div class="features">
+      <div class="feature">
+        <h3>🔍 Visibilidad Inteligente</h3>
+        <p>Está presente en el mapa digital y dejá que te descubran por zona, tendencia o producto.</p>
+      </div>
+      <div class="feature">
+        <h3>📊 Estadísticas Únicas</h3>
+        <p>Consultá comportamiento de compra y hacé crecer tu estrategia con datos reales.</p>
+      </div>
+      <div class="feature">
+        <h3>🚀 Fidelización Dinámica</h3>
+        <p>Ofrecé puntos, beneficios y cupones para quienes se afilian a tu canal.</p>
+      </div>
+    </div>
+  </section>
+
+  <main class="landing-actions">
+    <button class="btn btn-primary" (click)="showAuthModal = true">Ingresar / Registrarse</button>
+    <a routerLink="/home" class="btn btn-secondary">Explorar como visitante</a>
+  </main>
+
+  <app-auth-modal *ngIf="showAuthModal" (close)="showAuthModal = false" />
+
+  <footer class="landing-footer">
+    <p>&copy; 2025 Statill. Transformando tu negocio local en experiencia digital.</p>
+  </footer>
+</div>
