@@ -16,8 +16,4 @@ export const routes: Routes = [
     loadComponent: () =>
       import("../app/home/home/home.component").then(m => m.HomeComponent)
   },
-  {
-    path: 'carrito',
-    loadComponent: () =>
-      import('./pages/carrito/carrito.component').then(m => m.CarritoComponent)
-}];
+];

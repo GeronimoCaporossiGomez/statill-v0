@@ -79,27 +79,30 @@
       </p>
     </main>
   
-    <!-- Sidebar de carrito -->
-    <div class="carrito-sidebar" *ngIf="mostrarCarrito">
-      <div class="carrito-header">
-        <h3>🛍️ Tu Carrito</h3>
-        <button (click)="cerrarCarrito()">✖</button>
-      </div>
-  
-      <div class="carrito-body">
-        <div *ngIf="carrito.length === 0">Tu carrito está vacío.</div>
-  
-        <ul>
-          <li *ngFor="let item of carrito">
-            <strong>{{ item.nombre }}</strong>
-            <span>${{ item.precio }}</span>
-          </li>
-        </ul>
-      </div>
-  
-      <div class="carrito-footer">
-        <button (click)="irAPagar()">Ir a pagar</button>
-      </div>
+<!-- Barra lateral del carrito -->
+<div class="carrito-sidebar" *ngIf="mostrarCarrito">
+  <div class="carrito-header">
+    <h3>🛍️ Tu Carrito</h3>
+    <button (click)="cerrarCarrito()">✖</button>
+  </div>
+
+  <div class="carrito-body">
+    <div *ngIf="carrito.length === 0">Tu carrito está vacío.</div>
+    <ul>
+      <li *ngFor="let item of carrito">
+        <strong>{{ item.nombre }}</strong>
+        <span>${{ item.precio }}</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="carrito-footer" *ngIf="carrito.length > 0">
+    <div class="total">
+      <span>Total:</span>
+      <span>${{ calcularTotal() }}</span>
     </div>
+    <button (click)="irAPagar()">Ir a pagar</button>
+  </div>
+</div>
   </section>
   
