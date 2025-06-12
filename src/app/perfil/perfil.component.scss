@@ -1,0 +1,53 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap');
+
+$color-primario: #FD2A2C;
+$color-secundario: #3f51b5;
+$color-sidebar: #2C2F36; // NUEVO COLOR sidebar
+$font-titulo: 'Poppins', sans-serif;
+$font-contenido: 'Roboto Condensed', sans-serif;
+
+*{
+  font-family: $font-contenido
+}
+    .carrito-body {
+      flex: 1;
+      overflow-y: auto;
+
+      ul {
+        list-style: none;
+        padding: 0;
+
+        li {
+          display: flex;
+          justify-content: space-between;
+          padding: 0.5rem 0;
+          border-bottom: 1px solid #eee;
+
+          strong {
+            font-weight: 600;
+          }
+
+          span {
+            font-weight: bold;
+          }
+        }
+      }
+    }
+
+    .contenedor-perfil{
+      left: 100;
+      width: 20%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 30px;
+      background-color: #f5f5f5;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+
+
+
+

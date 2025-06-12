@@ -8,4 +8,6 @@ import { RouterOutlet } from '@angular/router'; // ✅ IMPORTACIÓN OBLIGATORIA
   imports: [RouterOutlet], // ✅ IMPORTACIÓN DECLARADA
   template: `<router-outlet></router-outlet>`  // ✅ Punto de carga de páginas
 })
-export class AppComponent {}
+export class AppComponent {
+
+}
