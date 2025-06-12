@@ -21,4 +21,9 @@ export const routes: Routes = [
     loadComponent: () =>
     import("../app/perfil/perfil.component").then(m => m.PerfilComponent)
   },
+    {
+    path: 'crear-comercio',
+    loadComponent: () =>
+    import("../app/comercio/crear-comercio/crear-comercio.component").then(m => m.CrearComercioComponent)
+  },
 ];

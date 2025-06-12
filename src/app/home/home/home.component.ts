@@ -168,8 +168,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     alert('¡Gracias por tu compra! Próximamente conectaremos el pago.');
   }
 
-  navegarAHome() {
-    this.router.navigate(['/home']);
+  navegarAPagina(pagina) {
+    this.router.navigate([pagina]);
   }
 
   toggleSidebar() {

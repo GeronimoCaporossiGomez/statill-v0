@@ -1,0 +1,48 @@
+    <nav class="sidebar-nav">
+      <ul>
+        <li routerLink="/home">👤 Home</li>
+        <li >🏬 Locales</li>
+        <li >🎁 Cuenta</li>
+        <li routerLink="/crear-comercio">🌟 Vendedor</li>
+      </ul>
+    </nav>
+
+<h2>Que querés hacer?</h2>
+
+<div class="contenedor">
+  <button class="boton" type="button" (click)="creandoComercio()">Crear Local</button>
+  <h2>{{creando}}</h2>
+  <button class="boton" type="button">Unirme a un local</button>
+</div>
+
+<div *ngIf="creando; else insertarCodigo">
+  <h3>Nombre</h3>
+  <input type="text" placeholder="Nombre del local">
+  <h3>Logo</h3>
+  <div id="caja-blanca"></div>
+  <h3>Description</h3>
+  <input type="text" placeholder="Description">
+  <button type="button">Siguiente</button>
+</div>
+
+<div>
+  <h3>Tipo de Local</h3>
+  <select>
+    <option value="Local">Local</option>
+    <option value="Restaurante">Restaurante</option>
+    <option value="tienda">Tienda</option>
+    <option value="bar">Bar</option>
+  </select>
+  <h3>Ubicación</h3>
+  <input type="text" placeholder="Ubicación del local">
+  <h3>Pre-Order?</h3>
+  <label>
+    <input type="checkbox">
+    Permitir pre-orden
+  </label>
+</div>
+
+<ng-template #insertarCodigo>
+  <h3>Unirme a un local</h3>
+  <input type="text" placeholder="Código del local">
+  <button type="submit" >Entrar</button>
