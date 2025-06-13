@@ -26,4 +26,24 @@ export const routes: Routes = [
     loadComponent: () =>
     import("../app/comercio/crear-comercio/crear-comercio.component").then(m => m.CrearComercioComponent)
   },
+    {
+    path: 'escanear',
+    loadComponent: () =>
+    import("../app/comercio/escanear/escanear.component").then(m => m.EscanearComponent)
+  },
+    {
+    path: 'estadisticas',
+    loadComponent: () =>
+    import("../app/comercio/estadisticas/estadisticas.component").then(m => m.EstadisticasComponent)
+  },
+    {
+    path: 'catalogo',
+    loadComponent: () =>
+    import("../app/comercio/catalogo/catalogo.component").then(m => m.CatalogoComponent)
+  },
+    {
+    path: 'ajustes',
+    loadComponent: () =>
+    import("../app/comercio/ajustes/ajustes.component").then(m => m.AjustesComponent)
+  },
 ];

@@ -11,38 +11,56 @@
 
 <div class="contenedor">
   <button class="boton" type="button" (click)="creandoComercio()">Crear Local</button>
-  <h2>{{creando}}</h2>
   <button class="boton" type="button">Unirme a un local</button>
 </div>
 
 <div *ngIf="creando; else insertarCodigo">
-  <h3>Nombre</h3>
-  <input type="text" placeholder="Nombre del local">
-  <h3>Logo</h3>
-  <div id="caja-blanca"></div>
-  <h3>Description</h3>
-  <input type="text" placeholder="Description">
-  <button type="button">Siguiente</button>
+  <form (ngSubmit)="onSubmit(comercioForm)" #comercioForm="ngForm">
+    <div class="primera-parte">
+      <h3>Nombre</h3>
+      <input type="text" name="nombre" ngModel placeholder="Nombre del local">
+      <h3>Logo</h3>
+      <div id="caja-blanca"></div>
+      <h3>Description</h3>
+      <input type="text" name="descripcion" ngModel placeholder="Description">
+      <button type="button">Siguiente</button>
+    </div>
+
+    <div class="segunda-parte">
+      <h3>Tipo de Local</h3>
+      <select name="tipo" ngModel>
+        <option value="Local">Local</option>
+        <option value="Restaurante">Restaurante</option>
+        <option value="tienda">Tienda</option>
+        <option value="bar">Bar</option>
+      </select>
+      <h3>Ubicación</h3>
+      <input type="text" name="ubicacion" ngModel placeholder="Ubicación del local">
+      <h3>Pre-Order?</h3>
+      <label>
+        <input type="checkbox" name="preorder" ngModel>
+        Permitir pre-orden
+      </label>
+    </div>
+
+    <div class="tercera-parte">
+      <h2>Horarios</h2>
+      <div class="TodaEstaCosa" *ngFor="let dia of dias; let i = index">
+        <h1>{{dia}}</h1>
+        <input type="checkbox" name="si{{i}}" ngModel>si
+        <input type="checkbox" name="no{{i}}" ngModel>no
+        <input type="time" name="horaInicio{{i}}" ngModel>
+        <input type="time" name="horaFin{{i}}" ngModel>
+      </div>
+      <button type="submit">Siguiente</button>
+    </div>
+  </form>
 </div>
 
-<div>
-  <h3>Tipo de Local</h3>
-  <select>
-    <option value="Local">Local</option>
-    <option value="Restaurante">Restaurante</option>
-    <option value="tienda">Tienda</option>
-    <option value="bar">Bar</option>
-  </select>
-  <h3>Ubicación</h3>
-  <input type="text" placeholder="Ubicación del local">
-  <h3>Pre-Order?</h3>
-  <label>
-    <input type="checkbox">
-    Permitir pre-orden
-  </label>
-</div>
+
 
 <ng-template #insertarCodigo>
   <h3>Unirme a un local</h3>
   <input type="text" placeholder="Código del local">
-  <button type="submit" >Entrar</button>
+  <button type="submit">Entrar</button>
+</ng-template>
