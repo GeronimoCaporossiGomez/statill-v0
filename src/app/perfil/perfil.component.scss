@@ -35,17 +35,25 @@ $font-contenido: 'Roboto Condensed', sans-serif;
       }
     }
 
-    .contenedor-perfil{
-      left: 100;
-      width: 20%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 30px;
-      background-color: #f5f5f5;
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
+.contenedor-perfil{
+  left: 100;
+  width: 20%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.contenedor-pagina-perfil{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
 
 
 

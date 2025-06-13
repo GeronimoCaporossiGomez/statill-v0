@@ -2,11 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { HeaderStatillComponent } from "../../header-statill/header-statill.component";
 
 @Component({
   selector: 'app-crear-comercio',
   standalone: true,
-  imports: [CommonModule, FormsModule,],
+  imports: [CommonModule, FormsModule, HeaderStatillComponent],
   templateUrl: './crear-comercio.component.html',
   styleUrl: './crear-comercio.component.scss'
 })

@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './estadisticas.component.scss'
 })
 export class EstadisticasComponent {
-  productos: any[] = [
+  productos: any[] = [  /* esto esta copiado aca y en catalogo, deberiamos hacer que esten unificadas */
       { nombre: 'Producto 1', cantidad: 10, precio: 100 },
       { nombre: 'Producto 2', cantidad: 5, precio: 200 },
       { nombre: 'Producto 3', cantidad: 8, precio: 150 },

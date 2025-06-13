@@ -1,13 +1,4 @@
-  <img src="assets/img/logo.png" alt="Statill Logo" class="logo"/> <!-- todo esto en verdad deberiamos hacer un archivo aparte y meterlo en cada componente -->
-  <aside class="sidebar" [class.sidebar-open]="sidebarAbierto">
-    <nav class="sidebar-nav">
-      <ul>
-        <li routerLink="/home">👤 Home</li>
-        <li >🏬 Locales</li>
-        <li >🎁 Cuenta</li>
-        <li routerLink="/crear-comercio">🌟 Vendedor</li>
-      </ul>
-    </nav>
+<app-header-statill></app-header-statill>
 
 <div class=contenedor-pagina-perfil>
   <ul class="contenedor-perfil">
@@ -16,8 +7,10 @@
       <li>Pedidos</li>
   </ul>
 
-  <div>Información personal</div>
-  <div>Información legal</div>
-  <div>Favoritos</div>
-  <button type="button">Cerrar Sesion</button>
+  <div clas="contenedor-informacion">
+    <div>Información personal</div>
+    <div>Información legal</div>
+    <div>Favoritos</div>
+    <button type="button">Cerrar Sesion</button>
+  </div>
 </div>

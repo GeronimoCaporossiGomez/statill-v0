@@ -46,4 +46,9 @@ export const routes: Routes = [
     loadComponent: () =>
     import("../app/comercio/ajustes/ajustes.component").then(m => m.AjustesComponent)
   },
+    {
+    path: 'mapa',
+    loadComponent: () =>
+    import("../app/pages/mapa/mapa.component").then(m => m.MapaComponent)
+  },
 ];

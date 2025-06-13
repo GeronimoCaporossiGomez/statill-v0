@@ -1,1 +1,14 @@
+
+<div class="pagina-catalogo">
+  <div class="contenedor-catalogo">
+    <button type="button" (click)="agregarProducto('a',2,3)">Inserte Producto</button>
+    <div *ngFor="let producto of productos">
+      <div class="producto-card">
+        <h2>{{ producto.nombre }}</h2>
+        <p><strong>Cantidad:</strong> {{ producto.cantidad }}</p>
+        <p><strong>Precio:</strong> ${{ producto.precio }}</p>
+      </div>
+    </div>
+  </div>
+
 <app-comercio-header></app-comercio-header>

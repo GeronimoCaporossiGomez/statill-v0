@@ -13,11 +13,12 @@ import {
   style,
   animate
 } from '@angular/animations';
+import { HeaderStatillComponent } from 'src/app/header-statill/header-statill.component';
 
 @Component({
   standalone: true,
   selector: 'app-home',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, HeaderStatillComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   animations: [
