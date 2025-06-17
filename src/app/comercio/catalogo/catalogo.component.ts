@@ -12,8 +12,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './catalogo.component.scss'
 })
 export class CatalogoComponent {
-  productos: any[] = [
-    ]
+  productos: any[] = []
 
   scioli: string = ''
   cantidad: number = 0
@@ -22,4 +21,5 @@ export class CatalogoComponent {
     const nuevoProducto = { nombre: this.scioli, cantidad: this.cantidad, precio: this.precio };
     this.productos.push(nuevoProducto);
   }
+  //crear el service para pasar el array desde catalogo hasta estadisticas
 }
