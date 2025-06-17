@@ -1,13 +1,13 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { stockComponent } from 'src/app/comercio/stock/stock.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'stock',
-  imports: [CommonModule, stockComponent],
+  selector: 'app-stock',
+  standalone: true,
+  imports: [CommonModule],
   templateUrl: './stock.component.html',
-  styleUrl: './stock.component.scss'
+  styleUrls: ['./stock.component.scss']
 })
-export class MapaComponent {
-
+export class StockComponent {
+  // Lógica futura para código de barras, stock, formulario...
 }
