@@ -11,11 +11,6 @@ export const routes: Routes = [
     loadComponent: () =>
     import('./home/landing/landing.component').then(m => m.LandingComponent)
   },
-  {
-    path: 'stock',
-    loadComponent: () =>
-      import('./comercio/stock/stock.component').then(m => m.StockPageComponent)
-  },
 
   {
     path: "home",

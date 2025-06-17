@@ -2,7 +2,16 @@
 
 <div class="pagina-catalogo">
   <div class="contenedor-catalogo">
-    <button type="button" (click)="agregarProducto('a',2,3)">Inserte Producto</button>
+    <div class="agregar-producto">
+      
+      <input type="text" id="nombre-producto" [(ngModel)]="scioli">
+      <label for="nombre-producto">Nombre de Producto</label>
+      <input type="number" id="cantidad-producto" [(ngModel)]="cantidad">
+      <label for="cantidad-producto">Cantidad de Producto</label>
+      <input type="number" id="precio-producto" [(ngModel)]="precio">
+      <label for="precio-producto">Precio de Producto</label>
+      <button type="button" (click)="agregarProducto()">Inserte Producto</button></div>
+
     <div *ngFor="let producto of productos">
       <div class="producto-card">
         <h2>{{ producto.nombre }}</h2>

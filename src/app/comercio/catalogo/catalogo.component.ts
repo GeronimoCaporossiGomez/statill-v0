@@ -2,25 +2,24 @@ import { Component } from '@angular/core';
 import { ComercioHeaderComponent } from '../comercio-header/comercio-header.component';
 import { CommonModule } from '@angular/common';
 import { HeaderStatillComponent } from 'src/app/header-statill/header-statill.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-catalogo',
   standalone: true,
-  imports: [ComercioHeaderComponent, CommonModule, HeaderStatillComponent],
+  imports: [ComercioHeaderComponent, CommonModule, HeaderStatillComponent, FormsModule],
   templateUrl: './catalogo.component.html',
   styleUrl: './catalogo.component.scss'
 })
 export class CatalogoComponent {
   productos: any[] = [
-      { nombre: 'Producto 1', cantidad: 10, precio: 100 },
-      { nombre: 'Producto 2', cantidad: 5, precio: 200 },
-      { nombre: 'Producto 3', cantidad: 8, precio: 150 },
-      { nombre: 'Producto 4', cantidad: 12, precio: 80 },
-      { nombre: 'Producto 5', cantidad: 7, precio: 120 }
     ]
 
-  agregarProducto(nombre: string, cantidad: number, precio: number) {
-    const nuevoProducto = { nombre, cantidad, precio };
+  scioli: string = ''
+  cantidad: number = 0
+  precio: number = 0
+  agregarProducto() {
+    const nuevoProducto = { nombre: this.scioli, cantidad: this.cantidad, precio: this.precio };
     this.productos.push(nuevoProducto);
   }
 }
