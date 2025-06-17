@@ -1,0 +1,78 @@
+<section class="stock-page">
+  <h1>📦 Gestión de Stock</h1>
+
+  <!-- FORMULARIO -->
+  <form [formGroup]="productoForm" (ngSubmit)="agregarProducto()" class="formulario">
+
+    <div class="grupo">
+      <label>Nombre</label>
+      <input formControlName="nombre" type="text" placeholder="Ej: Galletitas" />
+      <span *ngIf="mostrarError('nombre')">⚠️ Campo obligatorio</span>
+    </div>
+
+    <div class="grupo">
+      <label>Descripción</label>
+      <textarea formControlName="descripcion" rows="2" placeholder="Opcional..."></textarea>
+    </div>
+
+    <div class="grupo">
+      <label>Precio ($)</label>
+      <input formControlName="precio" type="number" step="0.01" min="0" />
+      <span *ngIf="mostrarError('precio')">⚠️ Ingresá un valor válido</span>
+    </div>
+
+    <div class="grupo">
+      <label>Stock</label>
+      <input formControlName="stock" type="number" min="0" />
+      <span *ngIf="mostrarError('stock')">⚠️ Debe ser 0 o mayor</span>
+    </div>
+
+    <div class="grupo">
+      <label>Código de barras</label>
+      <div class="codigo-barras">
+        <input formControlName="codigoBarras" type="text" />
+        <button type="button" (click)="abrirScanner()">📷</button>
+      </div>
+      <span *ngIf="mostrarError('codigoBarras')">⚠️ Campo obligatorio</span>
+    </div>
+
+    <div class="grupo">
+      <label>Imagen del producto</label>
+      <input type="file" accept="image/*" (change)="manejarImagen($event)" />
+      <img *ngIf="imagenBase64" [src]="imagenBase64" alt="Preview" class="preview-img" />
+    </div>
+
+    <button type="submit">➕ Añadir producto</button>
+  </form>
+
+  <!-- ESCÁNER -->
+  <div class="scanner-overlay" *ngIf="mostrarScanner">
+    <div class="scanner-container">
+      <video autoplay></video>
+      <button class="btn-cerrar" (click)="cerrarScanner()">✖</button>
+    </div>
+  </div>
+
+  <!-- ALERTA -->
+  <div *ngIf="alertaStockBajo()" class="alerta-stock">
+    ⚠️ ¡Producto con stock bajo! Considerá reponerlo.
+  </div>
+
+  <!-- LISTA DE PRODUCTOS -->
+  <div class="lista-productos" *ngIf="productos().length > 0">
+    <h2>📋 Productos añadidos ({{ totalProductos() }})</h2>
+    <ul>
+      <li *ngFor="let p of productos(); index as i">
+        <img *ngIf="p.imagen" [src]="p.imagen" alt="Img producto" />
+        <div class="info">
+          <strong>{{ p.nombre }}</strong><br />
+          Código: {{ p.codigoBarras }}<br />
+          Stock: {{ p.stock }} | ${{ p.precio }}
+        </div>
+        <button (click)="eliminarProducto(i)">🗑️</button>
+      </li>
+    </ul>
+  </div>
+
+  <p *ngIf="productos().length === 0" class="sin-productos">No hay productos aún.</p>
+</section>

@@ -14,7 +14,7 @@ export const routes: Routes = [
   {
     path: 'stock',
     loadComponent: () =>
-      import('./comercio/stock/stock.component').then(m => m.StockComponent)
+      import('./comercio/stock/stock.component').then(m => m.StockPageComponent)
   },
 
   {
