@@ -1,0 +1,398 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap');
+
+$color-primario: #FD2A2C;
+$color-secundario: #3f51b5;
+$color-sidebar: #2C2F36; // NUEVO COLOR sidebar
+$font-titulo: 'Poppins', sans-serif;
+$font-contenido: 'Roboto Condensed', sans-serif;
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1030;
+
+  @media (min-width: 769px) {
+    display: none;
+  }
+}
+
+.btn-menu-mobile {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 1050;
+  background: $color-primario;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: none;
+
+  @media (max-width: 768px) {
+    display: block;
+
+    &.oculto {
+      display: none;
+    }
+  }
+}
+
+.home-layout {
+  display: flex;
+  min-height: 100vh;
+  font-family: $font-contenido;
+
+  .sidebar {
+    width: clamp(200px, 15vw, 240px);
+    background-color: $color-sidebar;
+    color: white;
+    padding: 2rem 1rem;
+    border-right: 1px solid #111;
+    z-index: 1040;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+    @media (max-width: 768px) {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: -100%;
+      transition: left 0.3s ease-in-out;
+
+      &.sidebar-open {
+        left: 0;
+      }
+
+      width: 80vw;
+    }
+
+    .logo {
+      width: 60%;
+      max-width: 140px;
+      margin-bottom: 2rem;
+      filter: brightness(0) invert(1);
+    }
+
+    .sidebar-nav {
+      width: 100%;
+
+      ul {
+        list-style: none;
+        padding: 0;
+
+        li {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          padding: 0.75rem 1rem;
+          margin-bottom: 0.5rem;
+          cursor: pointer;
+          border-radius: 8px;
+          font-size: 1rem;
+          transition: background 0.3s;
+
+          &:hover {
+            background-color: lighten($color-sidebar, 10%);
+            color: $color-primario;
+            font-weight: bold;
+          }
+        }
+      }
+    }
+
+    .btn-close-sidebar {
+      display: none;
+      margin-top: auto;
+      font-size: 1.5rem;
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+
+      @media (max-width: 768px) {
+        display: block;
+      }
+    }
+  }
+
+  .home-content {
+    flex: 1;
+    margin-left: clamp(200px, 15vw, 240px);
+    padding: clamp(1rem, 4vw, 3rem);
+    transition: margin 0.3s ease-in-out;
+
+    @media (max-width: 768px) {
+      margin-left: 0;
+      padding: 1rem;
+    }
+
+    .home-title {
+      font-family: $font-titulo;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      color: $color-primario;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .search-box {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2.5rem;
+
+      @media (max-width: 768px) {
+        flex-direction: column;
+
+        input,
+        button {
+          width: 100%;
+        }
+      }
+
+      input {
+        flex: 1;
+        min-width: 200px;
+        padding: 0.75rem;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-family: $font-contenido;
+      }
+
+      button {
+        background-color: $color-primario;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 0.75rem 1.5rem;
+        cursor: pointer;
+        font-weight: 600;
+        transition: background 0.3s;
+
+        &:hover {
+          background-color: darken($color-primario, 10%);
+        }
+      }
+    }
+
+    .productos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+
+      @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .producto-card {
+        position: relative;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        padding: 1.25rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        transition: transform 0.3s ease;
+
+        &.promo {
+          border: 2px solid $color-primario;
+          background-color: lighten($color-primario, 45%);
+        }
+
+        &:hover {
+          transform: scale(1.02);
+        }
+
+        h2 {
+          font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+          color: $color-primario;
+          font-weight: bold;
+          margin-bottom: 0.5rem;
+        }
+
+        p {
+          margin: 0.3rem 0;
+          font-size: clamp(0.9rem, 2vw, 1rem);
+        }
+
+        .promo-badge {
+          position: absolute;
+          top: -10px;
+          right: -10px;
+          background: $color-primario;
+          color: white;
+          font-weight: bold;
+          padding: 0.4rem 0.8rem;
+          border-radius: 12px;
+          font-size: 0.85rem;
+          animation: pulse 1.5s infinite;
+        }
+
+        .promo-tiempo {
+          color: darken($color-primario, 15%);
+          font-weight: bold;
+          margin-top: 0.5rem;
+          font-size: 0.9rem;
+        }
+
+        .btn-carrito {
+          margin-top: 1rem;
+          padding: 0.6rem 1.2rem;
+          background-color: $color-secundario;
+          border: none;
+          color: white;
+          border-radius: 6px;
+          cursor: pointer;
+          font-size: 0.95rem;
+          transition: background-color 0.3s;
+
+          &:hover {
+            background-color: darken($color-secundario, 10%);
+          }
+        }
+      }
+    }
+
+    .sin-resultados {
+      text-align: center;
+      color: #888;
+      margin-top: 2rem;
+      font-size: 1.1rem;
+    }
+  }
+
+  .carrito-sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: clamp(280px, 30vw, 400px);
+    height: 100vh;
+    background-color: white;
+    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.2);
+    padding: 1.5rem;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    animation: slideIn 0.4s ease-out;
+
+    @media (max-width: 768px) {
+      width: 90vw;
+      padding: 1rem;
+      box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .carrito-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+
+      h3 {
+        margin: 0;
+        font-size: 1.4rem;
+        color: $color-primario;
+
+        @media (max-width: 768px) {
+          font-size: 1.2rem;
+        }
+      }
+
+      button {
+        background: none;
+        border: none;
+        font-size: 1.2rem;
+        cursor: pointer;
+
+        @media (max-width: 768px) {
+          font-size: 1.5rem;
+        }
+      }
+    }
+
+    .carrito-body {
+      flex: 1;
+      overflow-y: auto;
+
+      ul {
+        list-style: none;
+        padding: 0;
+
+        li {
+          display: flex;
+          justify-content: space-between;
+          padding: 0.5rem 0;
+          border-bottom: 1px solid #eee;
+
+          strong {
+            font-weight: 600;
+          }
+
+          span {
+            font-weight: bold;
+          }
+        }
+      }
+    }
+
+    .carrito-footer {
+      margin-top: 1rem;
+
+      .total {
+        display: flex;
+        justify-content: space-between;
+        font-weight: bold;
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+      }
+
+      button {
+        width: 100%;
+        padding: 0.75rem;
+        background-color: $color-primario;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-weight: bold;
+        cursor: pointer;
+
+        &:hover {
+          background-color: darken($color-primario, 10%);
+        }
+
+        @media (max-width: 768px) {
+          padding: 1rem;
+          font-size: 1rem;
+        }
+      }
+    }
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(253, 42, 44, 0.7);
+  }
+  70% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(253, 42, 44, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(253, 42, 44, 0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}

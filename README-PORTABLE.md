@@ -1,4 +1,4 @@
-# 📦 Statill – Ejecución con NodeJS Portable
+n# 📦 Statill – Ejecución con NodeJS Portable
 
 Este archivo explica cómo ejecutar Statill en cualquier entorno **sin instalar Node.js ni Angular CLI globalmente**, utilizando el script `run-angular.bat` y una carpeta `NodeJS/` con Node portable.
 
@@ -62,3 +62,5 @@ Esto se guarda **solo en este repositorio**, y no afecta otros proyectos.
 ---
 
 ¡Listo para desarrollar! 🚀
+
+$env:Path = "C:\Users\48458576\statill-v0\NodeJs;" + $env:Path

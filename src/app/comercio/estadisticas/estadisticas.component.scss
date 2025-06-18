@@ -1,0 +1,22 @@
+.pagina-estadisticas{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.contenedor-productos{
+  background-color: aqua;
+  width: 30%;
+  height: 70vh;
+  padding: 10vh;
+  display: flex;
+  flex-direction: column;
+  gap: 5%;
+  overflow: auto; // agrega el scroll
+}
+.producto-card{
+  background-color: white;
+
+}

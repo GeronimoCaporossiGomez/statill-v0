@@ -62,3 +62,67 @@
     <button class="close-btn" (click)="close.emit()">Cerrar</button>
   </div>
 </div>
+<!-- Fondo oscuro -->
+<div class="auth-modal-backdrop" (click)="close.emit()"></div>
+
+<!-- Modal centrado -->
+<div class="auth-modal">
+  <!-- Tabs de navegación -->
+  <div class="auth-header">
+    <div class="tabs">
+      <div
+        class="tab"
+        [class.active]="isLogin"
+        (click)="toggleMode(true)">
+        Iniciar sesión
+      </div>
+      <div
+        class="tab"
+        [class.active]="!isLogin"
+        (click)="toggleMode(false)">
+        Registrarse
+      </div>
+      <div
+        class="active-bar"
+        [class.move-right]="!isLogin">
+      </div>
+    </div>
+  </div>
+
+  <!-- Formulario con animación -->
+  <div class="auth-body" [@fadeSlide]="isLogin ? 'login' : 'register'">
+    <form (ngSubmit)="submitForm()">
+      <!-- Solo en registro -->
+      <ng-container *ngIf="!isLogin">
+        <input
+          type="text"
+          placeholder="Nombre completo"
+          [(ngModel)]="name"
+          name="name"
+          required />
+      </ng-container>
+
+      <!-- Común a login y registro -->
+      <input
+        type="email"
+        placeholder="Correo electrónico"
+        [(ngModel)]="email"
+        name="email"
+        required />
+
+      <input
+        type="password"
+        placeholder="Contraseña"
+        [(ngModel)]="password"
+        name="password"
+        required />
+
+      <button type="submit" class="btn">
+        {{ isLogin ? 'Entrar' : 'Registrarme' }}
+      </button>
+    </form>
+
+    <!-- Cierre del modal -->
+    <button class="close-btn" (click)="close.emit()">Cerrar</button>
+  </div>
+</div>

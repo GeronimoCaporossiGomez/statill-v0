@@ -1,0 +1,21 @@
+
+<app-header-statill></app-header-statill>
+
+<div class="pagina-estadisticas">
+
+  <div class="contenedor-productos">
+    <div *ngFor="let producto of productos">
+      <div class="producto-card">
+        <h2>{{ producto.nombre }}</h2>
+        <p><strong>ID:</strong> {{ producto.id }}</p>
+        <p><strong>Tienda:</strong> {{ producto.tienda }}</p>
+        <p><strong>Precio:</strong> ${{ producto.precio }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="graficos">
+    <p>algo de graficos</p>
+  </div>
+</div>
+<app-comercio-header></app-comercio-header>
