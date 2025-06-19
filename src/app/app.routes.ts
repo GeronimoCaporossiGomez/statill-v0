@@ -41,4 +41,9 @@ export const routes: Routes = [
     loadComponent: () =>
     import("../app/comercio/estadisticas/estadisticas.component").then(m => m.EstadisticasComponent)
   },
+      {
+    path: 'Mapa',
+    loadComponent: () =>
+    import("../app/pages/mapa/mapa.component").then(m => m.MapaComponent)
+  },
 ];
