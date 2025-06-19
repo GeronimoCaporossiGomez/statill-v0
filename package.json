@@ -24,6 +24,9 @@
     "@angular/ssr": "^19.2.11",
     "@zxing/browser": "^0.1.5",
     "express": "^4.18.2",
+    "heatmap.js": "^2.0.5",
+    "leaflet": "^1.9.4",
+    "leaflet-heatmap": "^1.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
