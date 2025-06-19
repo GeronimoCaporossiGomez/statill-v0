@@ -1,0 +1,128 @@
+.contenedor-principal {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+}
+
+.seccion-camara {
+  flex: 1;
+  max-width: 600px;
+}
+
+.seccion-formulario {
+  flex: 1;
+  max-width: 400px;
+  padding: 20px;
+  background: #f5f5f5;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.cuadrado-escanear {
+  margin-bottom: 20px;
+}
+
+.camera-controls {
+  margin: 20px 0;
+  display: flex;
+  gap: 10px;
+  
+  button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    
+    &:disabled {
+      background-color: #cccccc;
+      cursor: not-allowed;
+    }
+    
+    &:hover:not(:disabled) {
+      background-color: #0056b3;
+    }
+  }
+}
+
+.error-message {
+  color: #856404;
+  background-color: #fff3cd;
+  border: 1px solid #ffeeba;
+  padding: 10px;
+  border-radius: 4px;
+  margin: 10px 0;
+}
+
+.formulario-datos {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.campo-dato {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ddd;
+  
+  label {
+    font-weight: bold;
+    color: #555;
+  }
+  
+  span {
+    text-align: right;
+  }
+}
+
+.acciones-formulario {
+  display: flex;
+  gap: 10px;
+  margin-top: 30px;
+  
+  button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    
+    &:first-child {
+      background-color: #17a2b8;
+      color: white;
+      
+      &:hover {
+        background-color: #138496;
+      }
+      
+      &:disabled {
+        background-color: #cccccc;
+        cursor: not-allowed;
+      }
+    }
+    
+    &:last-child {
+      background-color: #6c757d;
+      color: white;
+      
+      &:hover {
+        background-color: #5a6268;
+      }
+    }
+  }
+}
+
+@media print {
+  .seccion-camara, .camera-controls, .acciones-formulario, app-header-statill, app-comercio-header {
+    display: none !important;
+  }
+  
+  .seccion-formulario {
+    max-width: 100%;
+    box-shadow: none;
+    background: none;
+  }
+}

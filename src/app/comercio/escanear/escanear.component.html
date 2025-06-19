@@ -1,9 +1,72 @@
 <app-header-statill></app-header-statill>
-<div class="cuadrado-escanear">
-  <h1>Escanear</h1>
-  <div class="color-box">
-    Escanear producto
+
+<div class="contenedor-principal">
+  <!-- Sección de cámara -->
+  <div class="seccion-camara">
+    <div class="cuadrado-escanear">
+      <h1>Escanear</h1>
+      <div class="color-box">
+        Escanear producto
+      </div>
+      <img src="assets/img/logo.png" alt="Ingresar código QR" />
+    </div>
+
+    <h2>Cámara</h2>
+
+    <div *ngIf="errorMessage" class="error-message">
+      {{ errorMessage }}
+    </div>
+
+    <video #video autoplay playsinline width="600" height="500"></video>
+
+    <div class="camera-controls">
+      <button (click)="toggleCamera()">
+        {{ isCameraOn ? 'Apagar cámara' : 'Encender cámara' }}
+      </button>
+      <button (click)="simularEscaneo()" [disabled]="!isCameraOn">Simular escaneo</button>
+    </div>
   </div>
-  <img src="assets/img/logo.png" alt="Ingresar código QR" />
+
+  <!-- Sección del formulario -->
+  <div class="seccion-formulario">
+    <h2>Datos Escaneados</h2>
+    
+    <div class="formulario-datos">
+      <div class="campo-dato">
+        <label>Nombre:</label>
+        <span>{{ datosEscaneados.nombre || '--' }}</span>
+      </div>
+      
+      <div class="campo-dato">
+        <label>Tipo:</label>
+        <span>{{ datosEscaneados.tipo || '--' }}</span>
+      </div>
+      
+      <div class="campo-dato">
+        <label>Código:</label>
+        <span>{{ datosEscaneados.codigo || '--' }}</span>
+      </div>
+      
+      <div class="campo-dato">
+        <label>Precio:</label>
+        <span>{{ datosEscaneados.precio ? '$' + datosEscaneados.precio : '--' }}</span>
+      </div>
+      
+      <div class="campo-dato">
+        <label>Fecha:</label>
+        <span>{{ datosEscaneados.fecha }}</span>
+      </div>
+    </div>
+
+    <div class="acciones-formulario">
+      <button (click)="imprimirDatos()" [disabled]="!datosEscaneados.nombre">
+        Imprimir
+      </button>
+      <button (click)="limpiarFormulario()">
+        Limpiar
+      </button>
+    </div>
+  </div>
 </div>
+
 <app-comercio-header></app-comercio-header>

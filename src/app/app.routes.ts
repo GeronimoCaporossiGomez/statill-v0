@@ -12,9 +12,9 @@ export const routes: Routes = [
     import('./home/landing/landing.component').then(m => m.LandingComponent)
   },
   {
-    path: "stock",
+    path: "catalogo",
     loadComponent: () =>
-      import("../app/comercio/stock/stock.component").then(m => m.StockComponent)
+      import("../app/comercio/catalogo/catalogo.component").then(m => m.CatalogoComponent)
   },
   {
     path: "home",
