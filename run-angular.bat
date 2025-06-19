@@ -1,15 +1,26 @@
 @echo off
-echo [STATILL] Iniciando aplicacion
+:: -------------------------------
+:: SE PUEDE UTILIZAR HASTA EN TU CASA PERO ES PRINCIPALMENTE PARA LA ESCUELA
+:: Script de arranque de Statill
+:: Usa Node.js portable y Angular CLI local
+:: -------------------------------
 
-:: Ruta relativa al ejecutable Node.js portable
+:: Rutas al ejecutable de Node y Angular CLI
 set "NODE_EXE=NodeJS\node.exe"
+set "NPM_CLI=NodeJS\npm.cmd"
+set "NG_CLI=node_modules\@angular\cli\bin\ng.js"
 
-:: Verifica que node existe
-if not exist "%NODE_EXE%" (
-  echo ❌ Error: No se encontró NodeJS\node.exe
-  pause
-  exit /b 1
+:: Mensaje inicial
+echo [STATILL] 🚀 Iniciando entorno portable...
+
+:: Verificar si Angular CLI está instalado (si falta node_modules o ng.js)
+IF NOT EXIST %NG_CLI% (
+    echo [STATILL] 📦 node_modules no encontrado. Instalando dependencias...
+    %NPM_CLI% install
 )
 
-:: Ejecuta Angular CLI desde node_modules
-"%NODE_EXE%" node_modules/@angular/cli/bin/ng.js %*
+:: Ejecutar Angular
+echo [STATILL] ✅ Ejecutando 'ng serve' con Node portable...
+%NODE_EXE% %NG_CLI% serve
+
+pause
