@@ -46,4 +46,10 @@ export const routes: Routes = [
     loadComponent: () =>
     import("../app/pages/mapa/mapa.component").then(m => m.MapaComponent)
   },
+    ,
+      {
+    path: 'catalogo',
+    loadComponent: () =>
+    import("../app/comercio/catalogo/catalogo.component").then(m => m.CatalogoComponent)
+  },
 ];
