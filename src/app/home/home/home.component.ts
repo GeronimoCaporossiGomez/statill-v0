@@ -135,19 +135,31 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   agregarAlCarrito(producto: any) {
-    this.carrito.push(producto);
     this.mostrarCarrito = true;
     console.log('🛒 Añadido al carrito:', producto);
+    const itemExistente = this.carrito.find(item => item.nombre === producto.nombre);
+    
+    if (itemExistente) {
+      // Si ya está, aumentar la cantidad
+      itemExistente.cantidad++;
+    } else {
+      // Si no, agregar con cantidad 1
+      this.carrito.push({ ...producto, cantidad: 1 });
+    }
   }
 
   removerDelCarrito(producto: any) {
     const index = this.carrito.findIndex(p => p.id === producto.id);
     if (index !== -1) {
-      this.carrito.splice(index, 1);
-      console.log('🗑️ Eliminado del carrito:', producto);
+      if (this.carrito[index].cantidad > 1) {
+        this.carrito[index].cantidad--;
+        console.log('Cantidad reducida:', this.carrito[index]);
+      } else {
+        this.carrito.splice(index, 1);
+        console.log('🗑️ Eliminado del carrito:', producto);
+      }
     }
   }
-
   cerrarCarrito() {
     this.mostrarCarrito = false;
   }

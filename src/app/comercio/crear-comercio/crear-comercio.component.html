@@ -9,16 +9,20 @@
   <button class="boton" type="button">Unirme a un local</button>
 </div>
 
-<div *ngIf="creando; else insertarCodigo">
+
+
+@if (creando){
+<div>
   <form (ngSubmit)="onSubmit(comercioForm)" #comercioForm="ngForm">
     <div class="primera-parte">
       <h3>Nombre</h3>
       <input type="text" name="nombre" ngModel placeholder="Nombre del local">
       <h3>Logo</h3>
+      <input type="file" alt="asd">
       <div id="caja-blanca"></div>
       <h3>Description</h3>
       <input type="text" name="descripcion" ngModel placeholder="Description">
-      <button type="button">Siguiente</button>
+      <button type="button">Siguiente</button> 
     </div>
 
     <div class="segunda-parte">
@@ -40,25 +44,23 @@
 
     <div class="tercera-parte">
       <h2>Horarios</h2>
-      <div class="TodaEstaCosa" *ngFor="let dia of dias; let i = index">
+      @for (dia of dias; track dia; let i = $index){
+      <div class="TodaEstaCosa">
         <h1>{{dia}}</h1>
         <input type="checkbox" name="si{{i}}" ngModel>si
         <input type="checkbox" name="no{{i}}" ngModel>no
         <input type="time" name="horaInicio{{i}}" ngModel>
         <input type="time" name="horaFin{{i}}" ngModel>
       </div>
+      }
       <button type="submit">Siguiente</button>
     </div>
   </form>
 </div>
-
-
-
-  <ng-template #insertarCodigo>
-    <form (ngSubmit)="onSubmit(codigoForm)" #codigoForm="ngForm">
+} @else{
+      <form (ngSubmit)="onSubmit(codigoForm)" #codigoForm="ngForm">
       <h3>Unirme a un local</h3>
       <input type="text" placeholder="Código del local">
       <button type="submit">Entrar</button>
-    </form>
-  </ng-template>
-
+      </form>
+}

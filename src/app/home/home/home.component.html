@@ -110,6 +110,7 @@
         <li *ngFor="let item of carrito">
           <strong>{{ item.nombre }}</strong>
           <span>${{ item.precio }}</span>
+          <span>Cantidad: {{item.cantidad}}</span>
           <button (click)="removerDelCarrito(item)" class="btn-eliminar" title="Eliminar">
             🗑️
           </button>

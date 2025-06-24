@@ -47,8 +47,14 @@ export const routes: Routes = [
     import("../app/comercio/estadisticas/estadisticas.component").then(m => m.EstadisticasComponent)
   },
       {
-    path: 'Mapa',
+    path: 'mapa',
     loadComponent: () =>
     import("../app/pages/mapa/mapa.component").then(m => m.MapaComponent)
+  },
+    ,
+      {
+    path: 'catalogo',
+    loadComponent: () =>
+    import("../app/comercio/catalogo/catalogo.component").then(m => m.CatalogoComponent)
   },
 ];
