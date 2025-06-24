@@ -1,13 +1,118 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap');
+
 $color-primario: #FD2A2C;
 $font-titulo: 'Poppins', sans-serif;
 $font-contenido: 'Roboto Condensed', sans-serif;
-.box {
-    display: flexbox;
-    color: $color-primario
-    width 200px
-}
+
 .Stock-Title {
- font: $font-titulo;
+  font-family: $font-titulo;
+  text-align: center;
+  margin: 20px 0 30px;
+  color: $color-primario;
+  font-size: 2.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.BotonForm {
+  display: block;
+  margin: 0 auto 30px;
+  padding: 12px 25px;
+  background-color: $color-primario;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-family: $font-contenido;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+
+  &:hover {
+    background-color: darken($color-primario, 10%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.form-container {
+  max-width: 650px;
+  margin: 0 auto 40px;
+  padding: 25px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 1px solid lighten($color-primario, 30%);
+}
+
+.product-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  label {
+    font-family: $font-contenido;
+    font-size: 1.1rem;
+    color: darken($color-primario, 15%);
+    font-weight: bold;
+    letter-spacing: 0.5px;
+  }
+
+  input {
+    padding: 12px 15px;
+    border: 2px solid lighten($color-primario, 35%);
+    border-radius: 6px;
+    font-family: $font-contenido;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+
+    &:focus {
+      outline: none;
+      border-color: $color-primario;
+      box-shadow: 0 0 0 3px rgba(253, 42, 44, 0.2);
+    }
+
+    &::placeholder {
+      color: lighten(#000, 60%);
+      font-family: $font-contenido;
+    }
+  }
+}
+
+.submit-button {
+  padding: 12px 25px;
+  background-color: $color-primario;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-family: $font-contenido;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+
+  &:hover {
+    background-color: darken($color-primario, 10%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
 }

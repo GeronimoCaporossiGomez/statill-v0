@@ -1,18 +1,9 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy
-} from '@angular/core';
+import { Component, OnInit, OnDestroy} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { interval, Subscription } from 'rxjs';
-import {
-  trigger,
-  transition,
-  style,
-  animate
-} from '@angular/animations';
+import {trigger, transition, style, animate} from '@angular/animations';
 import { HeaderStatillComponent } from 'src/app/header-statill/header-statill.component';
 
 @Component({

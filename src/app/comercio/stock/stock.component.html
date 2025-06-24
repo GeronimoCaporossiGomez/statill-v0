@@ -1,2 +1,31 @@
-<app-stock></app-stock>
+<router-outlet></router-outlet>
 <h1 class="Stock-Title">Pagina De Stock</h1>
+<button (click)="FormChange()" class="BotonForm">
+  {{ GuardarData ? 'Ocultar Formulario' : 'Añadir Producto' }}
+</button>
+
+<div *ngIf="GuardarData" class="form-container">
+  <form (ngSubmit)="onSubmit()" class="product-form">
+    <div class="form-group">
+      <label for="name">Nombre:</label>
+      <input type="text" id="name" name="name" [(ngModel)]="product.name">
+    </div>
+    
+    <div class="form-group">
+      <label for="code">Introduzca el código de barras:</label>
+      <input type="text" id="code" name="code" [(ngModel)]="product.code">
+    </div>
+    
+    <div class="form-group">
+      <label for="price">Introduzca el precio:</label>
+      <input type="number" id="price" name="price" [(ngModel)]="product.price">
+    </div>
+    
+    <div class="form-group">
+      <label for="description">Introduzca la descripción:</label>
+      <input type="text" id="description" name="description" [(ngModel)]="product.description">
+    </div>
+    
+    <button type="submit" class="submit-button">Guardar Producto</button>
+  </form>
+</div>
