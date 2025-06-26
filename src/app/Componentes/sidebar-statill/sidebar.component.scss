@@ -14,13 +14,12 @@
 .sidebar {
   height: 100vh;
   width: var(--sidebar-collapsed);
-  background: linear-gradient(180deg, #2c3e50, #1a2530);
+  background: linear-gradient(180deg, #eb1a13, #FD2A2C);
   color: var(--color-primario);
   position: fixed;
   top: 0;
   left: 0;
   overflow-x: hidden;
-  transition: width var(--transition-speed);
   z-index: 1000;
   box-shadow: 3px 0 10px rgba(0,0,0,0.2);
 
@@ -52,7 +51,7 @@
     height: 40px;
     margin-right: 10px;
     object-fit: contain;
-    color: white;
+    filter: brightness(0) invert(1);
   }
 
   .logo-text {
@@ -70,9 +69,9 @@
   position: absolute;
   top: 25px;
   right: 10px;
-  background: rgba(255,255,255,0.1);
+  background: rgba(0, 0, 0, 0.1);
   border: none;
-  color: white;
+  color: rgb(255, 255, 255);
   border-radius: 50%;
   width: 32px;
   height: 32px;
@@ -83,7 +82,7 @@
   transition: all 0.3s;
 
   &:hover {
-    background: rgba(255,255,255,0.2);
+    background: var(--color-primario);
     transform: rotate(90deg);
   }
 }
@@ -92,6 +91,21 @@
   padding: 30px 0;
   overflow-y: auto;
   height: calc(100vh - 80px);
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.sidebar-nav::-webkit-scrollbar {
+  width: 0px;
+  background: transparent; /* Chrome/Safari/Webkit */
+}
+
+.sidebar-nav {
+  padding: 30px 0;
+  overflow-y: auto;
+  height: calc(100vh - 80px);
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
 
   ul {
     list-style: none;
@@ -120,8 +134,8 @@
     }
 
     &.active {
-      background: rgba(253, 42, 44, 0.15);
-      color: white;
+      background: rgba(255, 0, 4, 0.15);
+      color: rgb(255, 0, 0);
       border-left: 3px solid var(--color-primario);
     }
 
@@ -138,6 +152,10 @@
       transition: all 0.3s;
     }
   }
+}
+
+.sidebar-nav::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 
 .sidebar.expanded .sidebar-nav span {
