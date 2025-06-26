@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { HeaderStatillComponent } from "../../header-statill/header-statill.component";
+import { HeaderStatillComponent } from "../../Componentes/header-statill/header-statill.component";
 
 @Component({
   selector: 'app-crear-comercio',

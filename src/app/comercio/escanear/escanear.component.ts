@@ -2,7 +2,7 @@ import { Component, ElementRef, ViewChild, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ComercioHeaderComponent } from '../comercio-header/comercio-header.component';
-import { HeaderStatillComponent } from 'src/app/header-statill/header-statill.component';
+import { HeaderStatillComponent } from 'src/app/Componentes/header-statill/header-statill.component';
 
 @Component({
   selector: 'app-escanear',

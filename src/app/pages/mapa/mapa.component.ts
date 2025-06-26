@@ -2,7 +2,7 @@ import * as L from 'leaflet';
 import 'leaflet.heat';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { HeaderStatillComponent } from 'src/app/header-statill/header-statill.component';
+import { HeaderStatillComponent } from 'src/app/Componentes/header-statill/header-statill.component';
 
 @Component({
   selector: 'app-mapa',

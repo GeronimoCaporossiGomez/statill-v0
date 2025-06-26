@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { HeaderStatillComponent } from 'src/app/header-statill/header-statill.component';
+import { HeaderStatillComponent } from 'src/app/Componentes/header-statill/header-statill.component';
 import { ComercioHeaderComponent } from '../comercio-header/comercio-header.component';
 
 @Component({

@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { interval, Subscription } from 'rxjs';
 import {trigger, transition, style, animate} from '@angular/animations';
-import { HeaderStatillComponent } from 'src/app/header-statill/header-statill.component';
+import { HeaderStatillComponent } from 'src/app/Componentes/header-statill/header-statill.component';
 
 @Component({
   standalone: true,

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { HeaderStatillComponent } from '../header-statill/header-statill.component';
+import { HeaderStatillComponent } from '../Componentes/header-statill/header-statill.component';
 
 @Component({
   selector: 'app-perfil',

@@ -1,0 +1,27 @@
+<div class="sidebar" [class.expanded]="isExpanded">
+  <div class="logo-container">
+    <div class="logo">
+      <img src="assets/img/logo.png" alt="Statill" class="logo-icon">
+      <span class="logo-text">Statill</span>
+    </div>
+    <button class="toggle-btn" (click)="toggleSidebar()">
+      <i class="fas fa-bars"></i>
+    </button>
+  </div>
+  
+  <nav class="sidebar-nav">
+    <ul>
+      <li *ngFor="let item of menuItems">
+        <a 
+          [routerLink]="item.path" 
+          routerLinkActive="active"
+          [class.active]="activeItem === item.id"
+          (click)="setActive(item.id)"
+        >
+          <i [class]="item.icon"></i>
+          <span>{{ item.text }}</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>
