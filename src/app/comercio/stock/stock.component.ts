@@ -6,7 +6,7 @@ import { RouterOutlet } from '@angular/router';
 @Component({
   selector: 'app-stock',
   standalone: true,
-  imports: [CommonModule, FormsModule], // Usar FormsModule para el ngmodel
+  imports: [CommonModule, FormsModule, SidebarComponent, RouterOutlet], // Usar FormsModule para el ngmodel
   templateUrl: './stock.component.html',
   styleUrls: ['./stock.component.scss']
 })
