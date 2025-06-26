@@ -2,11 +2,10 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; // Cambiado a forms modulee
 import { SidebarComponent } from 'src/app/Componentes/sidebar-statill/sidebar.component';
-import { RouterOutlet } from '@angular/router';
 @Component({
   selector: 'app-stock',
   standalone: true,
-  imports: [CommonModule, FormsModule, SidebarComponent, RouterOutlet], // Usar FormsModule para el ngmodel
+  imports: [CommonModule, FormsModule, SidebarComponent], // Usar FormsModule para el ngmodel
   templateUrl: './stock.component.html',
   styleUrls: ['./stock.component.scss']
 })

@@ -11,11 +11,8 @@
   </button>
 
   <!-- Sidebar de navegación -->
-  <aside class="sidebar" [class.sidebar-open]="sidebarAbierto">
-    <img src="assets/img/logo.png" alt="Statill Logo" class="logo" />
-
     <nav class="sidebar-nav">
-      <app-header-statill></app-header-statill>
+      <app-sidebar></app-sidebar>
     </nav>
 
     <!-- Botón cerrar menú en móvil -->
@@ -26,7 +23,7 @@
     >
       ✖
     </button>
-  </aside>
+
 
   <!-- Overlay para cerrar sidebar -->
   <div class="overlay" *ngIf="sidebarAbierto" (click)="toggleSidebar()"></div>

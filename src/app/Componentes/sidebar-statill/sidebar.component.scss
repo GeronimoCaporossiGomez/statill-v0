@@ -15,7 +15,7 @@
   height: 100vh;
   width: var(--sidebar-collapsed);
   background: linear-gradient(180deg, #2c3e50, #1a2530);
-  color: white;
+  color: var(--color-primario);
   position: fixed;
   top: 0;
   left: 0;
@@ -52,11 +52,13 @@
     height: 40px;
     margin-right: 10px;
     object-fit: contain;
+    color: white;
   }
 
   .logo-text {
     display: none;
     font-size: 20px;
+   font: --font-titulo;
   }
 }
 

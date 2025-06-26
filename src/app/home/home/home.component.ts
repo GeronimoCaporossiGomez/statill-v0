@@ -4,12 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { interval, Subscription } from 'rxjs';
 import {trigger, transition, style, animate} from '@angular/animations';
-import { HeaderStatillComponent } from 'src/app/Componentes/header-statill/header-statill.component';
-
+import { SidebarComponent} from "src/app/Componentes/sidebar-statill/sidebar.component";
 @Component({
   standalone: true,
   selector: 'app-home',
-  imports: [CommonModule, FormsModule, HeaderStatillComponent],
+  imports: [CommonModule, FormsModule, SidebarComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   animations: [
