@@ -80,6 +80,14 @@ $font-contenido: 'Roboto Condensed', sans-serif;
 
     .sidebar-nav {
       width: 100%;
+      /* Hide scroll bar visually and prevent scrolling */
+      overflow: hidden;
+      /* Hide scrollbar for Webkit browsers */
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      /* Hide scrollbar for Firefox */
+      scrollbar-width: none;
 
       ul {
         list-style: none;
