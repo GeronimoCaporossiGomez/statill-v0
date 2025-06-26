@@ -5,62 +5,71 @@
 <!-- hay mucho ngmodel en este documento, sirve para que la informacion vaya y venga a la variable -->
 
 <div class="contenedor">
-  <button class="boton" type="button" (click)="creandoComercio()">Crear Local</button>
-  <button class="boton" type="button">Unirme a un local</button>
+  <button class="boton" type="button" (click)="aumentarPantalla()">Crear Local</button>
+  <button class="boton" type="button" (click="bajarPantalla()")>Unirme a un local</button>
+  <h1>{{seccionPantalla}}</h1>
 </div>
 
 
 
 @if (creando){
-<div>
   <form (ngSubmit)="onSubmit(comercioForm)" #comercioForm="ngForm">
-    <div class="primera-parte">
-      <h3>Nombre</h3>
-      <input type="text" name="nombre" ngModel placeholder="Nombre del local">
-      <h3>Logo</h3>
-      <input type="file" alt="asd">
-      <div id="caja-blanca"></div>
-      <h3>Description</h3>
-      <input type="text" name="descripcion" ngModel placeholder="Description">
-      <button type="button">Siguiente</button> 
-    </div>
+    @if (seccionPantalla == 1){
+      <div class="seccion-creando">
+        <div class="primera-parte">
+          <h3>Nombre</h3>
+          <input type="text" name="nombre" ngModel placeholder="Nombre del local">
+          <h3>Logo</h3>
+          <input type="file" alt="asd">
+          <div id="caja-blanca"></div>
+          <h3>Description</h3>
+          <input type="text" name="descripcion" ngModel placeholder="Description">
+          <button type="button">Siguiente</button> 
+        </div>
+      </div>
+    }
 
-    <div class="segunda-parte">
-      <h3>Tipo de Local</h3>
-      <select name="tipo" ngModel>
-        <option value="Local">Local</option>
-        <option value="Restaurante">Restaurante</option>
-        <option value="tienda">Tienda</option>
-        <option value="bar">Bar</option>
-      </select>
-      <h3>Ubicación</h3>
-      <input type="text" name="ubicacion" ngModel placeholder="Ubicación del local">
-      <h3>Pre-Order?</h3>
-      <label>
-        <input type="checkbox" name="preorder" ngModel>
-        Permitir pre-orden
-      </label>
-    </div>
+    @if (seccionPantalla == 2){
+      <div class="segunda-parte">
+        <h3>Tipo de Local</h3>
+        <select name="tipo" ngModel>
+          <option value="Local">Local</option>
+          <option value="Restaurante">Restaurante</option>
+          <option value="tienda">Tienda</option>
+          <option value="bar">Bar</option>
+        </select>
+        <h3>Ubicación</h3>
+        <input type="text" name="ubicacion" ngModel placeholder="Ubicación del local">
+        <h3>Pre-Order?</h3>
+        <label>
+          <input type="checkbox" name="preorder" ngModel>
+          Permitir pre-orden
+        </label>
+        <button type="button" (click)="cambiarPantalla(-1)">Anterior</button>
+        <button type="button" (click)="cambiarPantalla(1)">Siguiente</button>
+      </div>
+    }
 
     <div class="tercera-parte">
       <h2>Horarios</h2>
-      @for (dia of dias; track dia; let i = $index){
-      <div class="TodaEstaCosa">
-        <h1>{{dia}}</h1>
-        <input type="checkbox" name="si{{i}}" ngModel>si
-        <input type="checkbox" name="no{{i}}" ngModel>no
-        <input type="time" name="horaInicio{{i}}" ngModel>
-        <input type="time" name="horaFin{{i}}" ngModel>
-      </div>
+      @for (dia of dias; track dia; let i = $index){ 
+        <div class="TodaEstaCosa">
+          <h1>{{dia}}</h1>
+          <input type="checkbox" name="si{{i}}" ngModel>si
+          <input type="checkbox" name="no{{i}}" ngModel>no
+          <input type="time" name="horaInicio{{i}}" ngModel>
+          <input type="time" name="horaFin{{i}}" ngModel>
+        </div>
       }
       <button type="submit">Siguiente</button>
     </div>
   </form>
-</div>
-} @else{
-      <form (ngSubmit)="onSubmit(codigoForm)" #codigoForm="ngForm">
-      <h3>Unirme a un local</h3>
-      <input type="text" placeholder="Código del local">
-      <button type="submit">Entrar</button>
-      </form>
+}
+
+@else{
+  <form (ngSubmit)="onSubmit(codigoForm)" #codigoForm="ngForm">
+    <h3>Unirme a un local</h3>
+    <input type="text" placeholder="Código del local">
+    <button type="submit">Entrar</button>
+  </form>
 }

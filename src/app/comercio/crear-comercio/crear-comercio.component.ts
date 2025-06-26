@@ -12,8 +12,20 @@ import { HeaderStatillComponent } from "../../Componentes/header-statill/header-
   styleUrl: './crear-comercio.component.scss'
 })
 export class CrearComercioComponent {
-  creando:boolean = false;
+  creando:boolean = true;
+  seccionPantalla:number = 0
   dias: string[] = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo'];
+
+  aumentarPantalla() {
+    this.seccionPantalla += 1;
+  }
+
+  bajarPantalla() {
+    this.seccionPantalla -= 1;
+    if (this.seccionPantalla < 0) {
+      this.seccionPantalla = 0;
+    }
+  }
 
   creandoComercio() {
     this.creando = !this.creando;
@@ -23,5 +35,5 @@ export class CrearComercioComponent {
   onSubmit(form: any) {
   console.log(form.value);
   this.router.navigate(['/escanear']);
-}
+  }
 }
