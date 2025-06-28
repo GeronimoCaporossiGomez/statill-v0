@@ -3,131 +3,86 @@
 
 $color-primario: #FD2A2C;
 $color-secundario: #3f51b5;
-$color-sidebar: #2C2F36; // NUEVO COLOR sidebar
+$color-sidebar: #2C2F36;
 $font-titulo: 'Poppins', sans-serif;
 $font-contenido: 'Roboto Condensed', sans-serif;
-
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 1030;
-
-  @media (min-width: 769px) {
-    display: none;
-  }
-}
-
-.btn-menu-mobile {
-  position: fixed;
-  top: 1rem;
-  left: 1rem;
-  z-index: 1050;
-  background: $color-primario;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  font-size: 1.5rem;
-  cursor: pointer;
-  display: none;
-
-  @media (max-width: 768px) {
-    display: block;
-
-    &.oculto {
-      display: none;
-    }
-  }
-}
 
 .home-layout {
   display: flex;
   min-height: 100vh;
   font-family: $font-contenido;
 
-  .sidebar {
+  // Sidebar
+  .sidebar-nav {
     width: clamp(200px, 15vw, 240px);
-    background-color: $color-sidebar;
-    color: white;
     padding: 2rem 1rem;
-    border-right: 1px solid #111;
     z-index: 1040;
     display: flex;
     flex-direction: column;
     gap: 2rem;
+    transition: left 0.3s ease-in-out;
+    position: relative;
+
+    // Scroll totalmente bloqueado
+    overflow: hidden !important;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
 
     @media (max-width: 768px) {
       position: fixed;
       top: 0;
       bottom: 0;
       left: -100%;
-      transition: left 0.3s ease-in-out;
+      width: 80vw;
+      height: 100vh;
 
       &.sidebar-open {
         left: 0;
       }
-
-      width: 80vw;
     }
+  }
 
-    .logo {
-      width: 60%;
-      max-width: 140px;
-      margin-bottom: 2rem;
-      filter: brightness(0) invert(1);
-    }
+  // Overlay que oscurece fondo en mobile
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1030;
 
-    .sidebar-nav {
-      width: 100%;
-      /* Hide scroll bar visually and prevent scrolling */
-      overflow: hidden;
-      /* Hide scrollbar for Webkit browsers */
-      &::-webkit-scrollbar {
-        display: none;
-      }
-      /* Hide scrollbar for Firefox */
-      scrollbar-width: none;
-
-      ul {
-        list-style: none;
-        padding: 0;
-
-        li {
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-          padding: 0.75rem 1rem;
-          margin-bottom: 0.5rem;
-          cursor: pointer;
-          border-radius: 8px;
-          font-size: 1rem;
-          transition: background 0.3s;
-
-          &:hover {
-            background-color: lighten($color-sidebar, 10%);
-            color: $color-primario;
-            font-weight: bold;
-          }
-        }
-      }
-    }
-
-    .btn-close-sidebar {
+    @media (min-width: 769px) {
       display: none;
-      margin-top: auto;
-      font-size: 1.5rem;
-      background: none;
-      border: none;
-      color: white;
-      cursor: pointer;
+    }
+  }
 
-      @media (max-width: 768px) {
-        display: block;
+  // Botón móvil ☰
+  .btn-menu-mobile {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 1050;
+    background: $color-primario;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: none;
+
+    @media (max-width: 768px) {
+      display: block;
+
+      &.oculto {
+        display: none;
       }
     }
   }
 
+  // Contenido principal
   .home-content {
     flex: 1;
     margin-left: clamp(200px, 15vw, 240px);
@@ -291,7 +246,6 @@ $font-contenido: 'Roboto Condensed', sans-serif;
     @media (max-width: 768px) {
       width: 90vw;
       padding: 1rem;
-      box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
     }
 
     .carrito-header {
@@ -381,6 +335,7 @@ $font-contenido: 'Roboto Condensed', sans-serif;
   }
 }
 
+// Animaciones
 @keyframes pulse {
   0% {
     transform: scale(1);

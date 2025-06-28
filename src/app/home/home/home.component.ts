@@ -1,10 +1,11 @@
-import { Component, OnInit, OnDestroy} from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { interval, Subscription } from 'rxjs';
-import {trigger, transition, style, animate} from '@angular/animations';
-import { SidebarComponent} from "src/app/Componentes/sidebar-statill/sidebar.component";
+import { trigger, transition, style, animate } from '@angular/animations';
+import { SidebarComponent } from 'src/app/Componentes/sidebar-statill/sidebar.component';
+
 @Component({
   standalone: true,
   selector: 'app-home',
@@ -41,7 +42,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       distancia: 1.2,
       promoActiva: true,
       descuento: 20,
-      finPromo: new Date(new Date().getTime() + 3600000) // 1 hora
+      finPromo: new Date(new Date().getTime() + 3600000)
     },
     {
       id: 'P002',
@@ -59,7 +60,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       distancia: 2.8,
       promoActiva: true,
       descuento: 15,
-      finPromo: new Date(new Date().getTime() + 7200000) // 2 horas
+      finPromo: new Date(new Date().getTime() + 7200000)
     }
   ];
 
@@ -78,6 +79,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.relojSub?.unsubscribe();
+    document.body.style.overflow = 'auto'; // restaurar scroll por si acaso
   }
 
   get productosFiltrados() {
@@ -112,8 +114,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (ms <= 0) return '00:00:00';
 
     const s = Math.floor(ms / 1000) % 60;
-    const m = Math.floor(ms / 60) % 60;
-    const h = Math.floor(ms / 3600);
+    const m = Math.floor(ms / 60000) % 60;
+    const h = Math.floor(ms / 3600000);
     return `${this.pad(h)}:${this.pad(m)}:${this.pad(s)}`;
   }
 
@@ -135,14 +137,11 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   agregarAlCarrito(producto: any) {
     this.mostrarCarrito = true;
-    console.log('🛒 Añadido al carrito:', producto);
     const itemExistente = this.carrito.find(item => item.nombre === producto.nombre);
-    
+
     if (itemExistente) {
-      // Si ya está, aumentar la cantidad
       itemExistente.cantidad++;
     } else {
-      // Si no, agregar con cantidad 1
       this.carrito.push({ ...producto, cantidad: 1 });
     }
   }
@@ -152,30 +151,30 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (index !== -1) {
       if (this.carrito[index].cantidad > 1) {
         this.carrito[index].cantidad--;
-        console.log('Cantidad reducida:', this.carrito[index]);
       } else {
         this.carrito.splice(index, 1);
-        console.log('🗑️ Eliminado del carrito:', producto);
       }
     }
   }
+
   cerrarCarrito() {
     this.mostrarCarrito = false;
   }
 
   calcularTotal(): number {
-    return this.carrito.reduce((total, item) => total + item.precio, 0);
+    return this.carrito.reduce((total, item) => total + item.precio * item.cantidad, 0);
   }
 
   irAPagar() {
     alert('¡Gracias por tu compra! Próximamente conectaremos el pago.');
   }
 
-  navegarAPagina(pagina) {
+  navegarAPagina(pagina: string) {
     this.router.navigate([pagina]);
   }
 
   toggleSidebar() {
     this.sidebarAbierto = !this.sidebarAbierto;
+    document.body.style.overflow = this.sidebarAbierto ? 'hidden' : 'auto';
   }
 }

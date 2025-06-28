@@ -11,22 +11,14 @@
   </button>
 
   <!-- Sidebar de navegación -->
-    <nav class="sidebar-nav">
-      <app-sidebar></app-sidebar>
-    </nav>
-
-    <!-- Botón cerrar menú en móvil -->
-    <button
-      class="btn-close-sidebar"
-      aria-label="Cerrar menú"
-      (click)="toggleSidebar()"
-    >
-      ✖
-    </button>
-
+  <nav class="sidebar-nav" [class.sidebar-open]="sidebarAbierto">
+    <app-sidebar></app-sidebar>
+  </nav>
 
   <!-- Overlay para cerrar sidebar -->
-  <div class="overlay" *ngIf="sidebarAbierto" (click)="toggleSidebar()"></div>
+  <div class="overlay" *ngIf="sidebarAbierto" (click)="toggleSidebar()">
+    <app-sidebar></app-sidebar>
+  </div>
 
   <!-- Contenido principal -->
   <main class="home-content" [@fadeIn]>
@@ -107,7 +99,7 @@
         <li *ngFor="let item of carrito">
           <strong>{{ item.nombre }}</strong>
           <span>${{ item.precio }}</span>
-          <span>Cantidad: {{item.cantidad}}</span>
+          <span>Cantidad: {{ item.cantidad }}</span>
           <button (click)="removerDelCarrito(item)" class="btn-eliminar" title="Eliminar">
             🗑️
           </button>
@@ -123,5 +115,4 @@
       <button (click)="irAPagar()">Ir a pagar</button>
     </div>
   </div>
-
 </section>
