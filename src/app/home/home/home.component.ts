@@ -1,10 +1,14 @@
-import { Component, OnInit, OnDestroy} from '@angular/core';
+
+
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { interval, Subscription } from 'rxjs';
-import {trigger, transition, style, animate} from '@angular/animations';
-import { SidebarComponent} from "src/app/Componentes/sidebar-statill/sidebar.component";
+import { trigger, transition, style, animate } from '@angular/animations';
+import { SidebarComponent } from 'src/app/Componentes/sidebar-statill/sidebar.component';
+
+
 @Component({
   standalone: true,
   selector: 'app-home',
@@ -31,6 +35,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   precioMax: number | null = null;
   filtrosAvanzados = false;
   sidebarAbierto = false;
+  isPhone = window.innerWidth <= 768;
+
 
   productos = [
     {
@@ -41,7 +47,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       distancia: 1.2,
       promoActiva: true,
       descuento: 20,
-      finPromo: new Date(new Date().getTime() + 3600000) // 1 hora
+      finPromo: new Date(new Date().getTime() + 3600000)
     },
     {
       id: 'P002',
@@ -59,16 +65,26 @@ export class HomeComponent implements OnInit, OnDestroy {
       distancia: 2.8,
       promoActiva: true,
       descuento: 15,
-      finPromo: new Date(new Date().getTime() + 7200000) // 2 horas
+      finPromo: new Date(new Date().getTime() + 7200000)
     }
   ];
+
 
   carrito: any[] = [];
   mostrarCarrito = false;
   ahora: Date = new Date();
   relojSub: Subscription | null = null;
 
-  constructor(private router: Router) {}
+
+  constructor(private router: Router) {
+    window.addEventListener('resize', () => {
+      this.isPhone = window.innerWidth <= 768;
+      if (!this.isPhone) {
+        this.sidebarAbierto = false;
+      }
+    });
+  }
+
 
   ngOnInit() {
     this.relojSub = interval(1000).subscribe(() => {
@@ -76,13 +92,17 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
+
   ngOnDestroy() {
     this.relojSub?.unsubscribe();
+    document.body.style.overflow = 'auto'; // restaurar scroll por si acaso
   }
+
 
   get productosFiltrados() {
     let result = this.productos;
     const term = this.searchTerm.toLowerCase();
+
 
     if (this.filtrosAvanzados) {
       if (term.trim()) {
@@ -91,6 +111,7 @@ export class HomeComponent implements OnInit, OnDestroy {
           p.tienda.toLowerCase().includes(term)
         );
       }
+
 
       if (this.precioMax !== null && this.precioMax > 0) {
         result = result.filter(p => p.precio <= this.precioMax);
@@ -104,22 +125,27 @@ export class HomeComponent implements OnInit, OnDestroy {
       }
     }
 
+
     return result.sort((a, b) => a.distancia - b.distancia);
   }
+
 
   tiempoRestante(fin: Date): string {
     const ms = new Date(fin).getTime() - this.ahora.getTime();
     if (ms <= 0) return '00:00:00';
 
+
     const s = Math.floor(ms / 1000) % 60;
-    const m = Math.floor(ms / 60) % 60;
-    const h = Math.floor(ms / 3600);
+    const m = Math.floor(ms / 60000) % 60;
+    const h = Math.floor(ms / 3600000);
     return `${this.pad(h)}:${this.pad(m)}:${this.pad(s)}`;
   }
+
 
   pad(n: number): string {
     return n < 10 ? '0' + n : n.toString();
   }
+
 
   buscarProductos() {
     console.log('Filtrando:', {
@@ -129,53 +155,65 @@ export class HomeComponent implements OnInit, OnDestroy {
     });
   }
 
+
   toggleFiltros() {
     this.filtrosAvanzados = !this.filtrosAvanzados;
   }
 
+
   agregarAlCarrito(producto: any) {
     this.mostrarCarrito = true;
-    console.log('🛒 Añadido al carrito:', producto);
     const itemExistente = this.carrito.find(item => item.nombre === producto.nombre);
-    
+
+
     if (itemExistente) {
-      // Si ya está, aumentar la cantidad
       itemExistente.cantidad++;
     } else {
-      // Si no, agregar con cantidad 1
       this.carrito.push({ ...producto, cantidad: 1 });
     }
   }
+
 
   removerDelCarrito(producto: any) {
     const index = this.carrito.findIndex(p => p.id === producto.id);
     if (index !== -1) {
       if (this.carrito[index].cantidad > 1) {
         this.carrito[index].cantidad--;
-        console.log('Cantidad reducida:', this.carrito[index]);
       } else {
         this.carrito.splice(index, 1);
-        console.log('🗑️ Eliminado del carrito:', producto);
       }
     }
   }
+
+
   cerrarCarrito() {
     this.mostrarCarrito = false;
   }
 
+
   calcularTotal(): number {
-    return this.carrito.reduce((total, item) => total + item.precio, 0);
+    return this.carrito.reduce((total, item) => total + item.precio * item.cantidad, 0);
   }
+
 
   irAPagar() {
     alert('¡Gracias por tu compra! Próximamente conectaremos el pago.');
   }
 
-  navegarAPagina(pagina) {
+
+  navegarAPagina(pagina: string) {
     this.router.navigate([pagina]);
   }
 
+
   toggleSidebar() {
     this.sidebarAbierto = !this.sidebarAbierto;
+    document.body.style.overflow = this.sidebarAbierto ? 'hidden' : 'auto';
+  }
+
+
+  // Detecta si es mobile (ancho de pantalla <= 768px)
+  esMobile(): boolean {
+    return window.innerWidth <= 768;
   }
 }
