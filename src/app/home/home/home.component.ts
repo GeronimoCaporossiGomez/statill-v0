@@ -32,6 +32,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   precioMax: number | null = null;
   filtrosAvanzados = false;
   sidebarAbierto = false;
+  isPhone = window.innerWidth <= 768;
 
   productos = [
     {
@@ -69,7 +70,14 @@ export class HomeComponent implements OnInit, OnDestroy {
   ahora: Date = new Date();
   relojSub: Subscription | null = null;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+    window.addEventListener('resize', () => {
+      this.isPhone = window.innerWidth <= 768;
+      if (!this.isPhone) {
+        this.sidebarAbierto = false;
+      }
+    });
+  }
 
   ngOnInit() {
     this.relojSub = interval(1000).subscribe(() => {
@@ -176,5 +184,10 @@ export class HomeComponent implements OnInit, OnDestroy {
   toggleSidebar() {
     this.sidebarAbierto = !this.sidebarAbierto;
     document.body.style.overflow = this.sidebarAbierto ? 'hidden' : 'auto';
+  }
+
+  // Detecta si es mobile (ancho de pantalla <= 768px)
+  esMobile(): boolean {
+    return window.innerWidth <= 768;
   }
 }

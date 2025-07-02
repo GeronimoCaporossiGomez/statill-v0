@@ -10,14 +10,17 @@
     ☰
   </button>
 
-  <!-- Sidebar de navegación -->
-  <nav class="sidebar-nav" [class.sidebar-open]="sidebarAbierto">
+  <!-- Sidebar de navegación (desktop only) -->
+  <nav class="sidebar-nav sidebar-desktop" *ngIf="!isPhone">
     <app-sidebar></app-sidebar>
   </nav>
 
-  <!-- Overlay para cerrar sidebar -->
-  <div class="overlay" *ngIf="sidebarAbierto" (click)="toggleSidebar()">
-    <app-sidebar></app-sidebar>
+  <!-- Overlay para cerrar sidebar (mobile only, only rendered when open) -->
+  <div class="overlay" *ngIf="isPhone && sidebarAbierto" (click)="toggleSidebar()">
+    <nav class="sidebar-nav sidebar-mobile" (click)="$event.stopPropagation()">
+      <button class="btn-close-mobile" (click)="toggleSidebar()">✖</button>
+      <app-sidebar></app-sidebar>
+    </nav>
   </div>
 
   <!-- Contenido principal -->

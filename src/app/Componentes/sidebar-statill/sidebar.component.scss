@@ -135,7 +135,7 @@
 
     &.active {
       background: rgba(255, 0, 4, 0.15);
-      color: rgb(255, 0, 0);
+      color: white;
       border-left: 3px solid var(--color-primario);
     }
 
@@ -163,11 +163,32 @@
 }
 
 @media (max-width: 768px) {
-  .sidebar {
-    width: 0;
-    
-    &.expanded {
-      width: var(--sidebar-width);
-    }
+  .sidebar-desktop {
+    display: none !important;
+  }
+  .sidebar-mobile {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 70vw;
+    max-width: 280px;
+    height: 100vh;
+    z-index: 1100;
+    background: linear-gradient(180deg, #eb1a13, #FD2A2C);
+    box-shadow: 3px 0 10px rgba(0,0,0,0.2);
+  }
+  .overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 1099;
+    display: flex;
+    align-items: stretch;
+  }
+}
+
+@media (min-width: 769px) {
+  .sidebar-mobile, .overlay {
+    display: none !important;
   }
 }
