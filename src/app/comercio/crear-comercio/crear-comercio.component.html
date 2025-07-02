@@ -6,15 +6,13 @@
 
 <div class="contenedor">
   <button class="boton" type="button" (click)="aumentarPantalla()">Crear Local</button>
-  <button class="boton" type="button" (click="bajarPantalla()")>Unirme a un local</button>
+  <button class="boton" type="button" (click)="bajarPantalla()">Unirme a un local</button>
   <h1>{{seccionPantalla}}</h1>
 </div>
 
-
-
-@if (creando){
+<div *ngIf="creando">
   <form (ngSubmit)="onSubmit(comercioForm)" #comercioForm="ngForm">
-    @if (seccionPantalla == 1){
+    <div *ngIf="seccionPantalla == 1">
       <div class="seccion-creando">
         <div class="primera-parte">
           <h3>Nombre</h3>
@@ -27,9 +25,9 @@
           <button type="button">Siguiente</button> 
         </div>
       </div>
-    }
+    </div>
 
-    @if (seccionPantalla == 2){
+    <div *ngIf="seccionPantalla == 2">
       <div class="segunda-parte">
         <h3>Tipo de Local</h3>
         <select name="tipo" ngModel>
@@ -48,11 +46,11 @@
         <button type="button" (click)="cambiarPantalla(-1)">Anterior</button>
         <button type="button" (click)="cambiarPantalla(1)">Siguiente</button>
       </div>
-    }
+    </div>
 
     <div class="tercera-parte">
       <h2>Horarios</h2>
-      @for (dia of dias; track dia; let i = $index){ 
+      <div *ngFor="let dia of dias; let i = index">
         <div class="TodaEstaCosa">
           <h1>{{dia}}</h1>
           <input type="checkbox" name="si{{i}}" ngModel>si
@@ -60,16 +58,16 @@
           <input type="time" name="horaInicio{{i}}" ngModel>
           <input type="time" name="horaFin{{i}}" ngModel>
         </div>
-      }
+      </div>
       <button type="submit">Siguiente</button>
     </div>
   </form>
-}
+</div>
 
-@else{
+<div *ngIf="!creando">
   <form (ngSubmit)="onSubmit(codigoForm)" #codigoForm="ngForm">
     <h3>Unirme a un local</h3>
-    <input type="text" placeholder="Código del local">
+    <input type="text" placeholder="Código del local" name="codigo" ngModel>
     <button type="submit">Entrar</button>
   </form>
-}
+</div>
