@@ -36,6 +36,16 @@ export const routes: Routes = [
     loadComponent: () =>
     import("../app/comercio/crear-comercio/crear-comercio.component").then(m => m.CrearComercioComponent)
   },
+  {
+    path: 'configuracion',
+    loadComponent: () =>
+    import("../app/configuracion/configuracion.component").then(m => m.ConfiguracionComponent)
+  },
+  {
+    path: 'ayuda',
+    loadComponent: () =>
+    import("../app/ayuda/ayuda.component").then(m => m.AyudaComponent)
+  },
     {
     path: 'escanear',
     loadComponent: () =>

@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import * as path from 'path';
+import { text } from 'stream/consumers';
 
 @Component({
   selector: 'app-sidebar',
@@ -43,6 +45,18 @@ export class SidebarComponent {
       icon: 'fas fa-store-alt', 
       text: 'Mi Local', 
       id: 'local' 
+    },
+    {
+      path: '/ayuda',
+      icon: 'fas fa-question-circle',
+      text: 'Ayuda',
+      id: 'ayuda'
+    },
+    {
+      path: '/configuracion',
+      icon: 'fas fa-cog',
+      text: 'Configuración',
+      id: 'configuracion'
     }
   ];
 
