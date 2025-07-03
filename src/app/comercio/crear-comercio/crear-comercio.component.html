@@ -1,12 +1,10 @@
 <app-header-statill></app-header-statill>
 
-<h2>Que querés hacer?</h2>
-
 <!-- hay mucho ngmodel en este documento, sirve para que la informacion vaya y venga a la variable -->
-
-<div class="contenedor">
-  <button class="boton" type="button" (click)="aumentarPantalla()">Crear Local</button>
-  <button class="boton" type="button" (click)="bajarPantalla()">Unirme a un local</button>
+<div class="contenedor" *ngIf="seccionPantalla == 0">
+  <h1>Hola vendedor!asdasd Que quieres hacer</h1>
+  <button class="boton" type="button" (click)="creandoComercio(true); seccionPantalla=1">Crear comercio</button>
+  <button class="boton" type="button" (click)="creandoComercio(false); seccionPantalla=0">Unirme a un comercio</button>
   <h1>{{seccionPantalla}}</h1>
 </div>
 
@@ -18,11 +16,14 @@
           <h3>Nombre</h3>
           <input type="text" name="nombre" ngModel placeholder="Nombre del local">
           <h3>Logo</h3>
-          <input type="file" alt="asd">
-          <div id="caja-blanca"></div>
+          <input type="file" (change)="mostrarImagen($event)">
+          <div id="caja-blanca">
+            <img *ngIf="imagenUrl" [src]="imagenUrl" alt="Preview" style="max-width: 100%; max-height: 100%;">
+          </div>
           <h3>Description</h3>
           <input type="text" name="descripcion" ngModel placeholder="Description">
-          <button type="button">Siguiente</button> 
+          <button type="button" (click)="bajarPantalla()">Anterior</button>
+          <button type="button" (click)="aumentarPantalla()">Siguiente</button>
         </div>
       </div>
     </div>
@@ -43,12 +44,13 @@
           <input type="checkbox" name="preorder" ngModel>
           Permitir pre-orden
         </label>
-        <button type="button" (click)="cambiarPantalla(-1)">Anterior</button>
-        <button type="button" (click)="cambiarPantalla(1)">Siguiente</button>
+        <button type="button" (click)="bajarPantalla()">Anterior</button>
+        <button type="button" (click)="aumentarPantalla()">Siguiente</button>
       </div>
     </div>
 
-    <div class="tercera-parte">
+    <div *ngIf="seccionPantalla==3">
+      <div class="tercera-parte">
       <h2>Horarios</h2>
       <div *ngFor="let dia of dias; let i = index">
         <div class="TodaEstaCosa">
@@ -59,8 +61,10 @@
           <input type="time" name="horaFin{{i}}" ngModel>
         </div>
       </div>
+      <button (click)="bajarPantalla()">Anterior</button>
       <button type="submit">Siguiente</button>
     </div>
+  </div>
   </form>
 </div>
 

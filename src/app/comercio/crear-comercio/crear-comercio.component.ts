@@ -18,6 +18,9 @@ export class CrearComercioComponent {
 
   aumentarPantalla() {
     this.seccionPantalla += 1;
+    if(this.seccionPantalla > 3) {
+      this.seccionPantalla = 3;
+    }
   }
 
   bajarPantalla() {
@@ -27,13 +30,24 @@ export class CrearComercioComponent {
     }
   }
 
-  creandoComercio() {
-    this.creando = !this.creando;
+  creandoComercio(x: boolean) {
+    this.creando = x
   }
   constructor(private router: Router) {}
 
   onSubmit(form: any) {
   console.log(form.value);
   this.router.navigate(['/escanear']);
+  }
+
+    imagenUrl: string | ArrayBuffer | null = null;
+
+  mostrarImagen(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = e => this.imagenUrl = reader.result;
+      reader.readAsDataURL(input.files[0]);
+    }
   }
 }
