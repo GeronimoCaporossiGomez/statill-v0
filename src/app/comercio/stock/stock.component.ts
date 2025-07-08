@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; // Cambiado a forms modulee
 import { SidebarComponent } from 'src/app/Componentes/sidebar-statill/sidebar.component';
+import { MiApiService } from 'src/app/servicios/mi-api.service';
+
 @Component({
   selector: 'app-stock',
   standalone: true,
@@ -10,6 +12,8 @@ import { SidebarComponent } from 'src/app/Componentes/sidebar-statill/sidebar.co
   styleUrls: ['./stock.component.scss']
 })
 export class StockComponent {
+  constructor(private miApi: MiApiService) {}
+
   SePuedeVerElformulario = false; // arranca escondidiwis
   product = { // Objeto para almacenar datos del formulario
     name: '',
@@ -19,7 +23,15 @@ export class StockComponent {
     cantidad: null,
   };
 
-  //invertimos
+  productos: any[] = []; // Array para almacenar los productos
+  ngOnInit() {
+    this.miApi.getDatos().subscribe((data: any) => {
+      console.log('prubeba, prubea', data);
+      this.productos = data.data;
+      console.log('Productos desde la API:', this.productos);
+    });
+  }
+    //invertimos
   FormChange() {
     this.SePuedeVerElformulario = !this.SePuedeVerElformulario;
   }

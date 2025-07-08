@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ComercioHeaderComponent } from '../comercio-header/comercio-header.component';
 import { CommonModule } from '@angular/common';
 import { HeaderStatillComponent } from 'src/app/Componentes/header-statill/header-statill.component';
 import { FormsModule } from '@angular/forms';
+import { MiApiService } from 'src/app/servicios/mi-api.service';
 
 @Component({
   selector: 'app-catalogo',
@@ -12,7 +13,15 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './catalogo.component.scss'
 })
 export class CatalogoComponent {
+  constructor(private miApi: MiApiService) {}
   productos: any[] = []
+  ngOnInit() {
+    this.miApi.getDatos().subscribe((data: any) => {
+      console.log('prubeba, prubea', data);
+      this.productos = data.data;
+      console.log('Productos desde la API:', this.productos);
+    });
+  }
 
   scioli: string = ''
   cantidad: number = 0
