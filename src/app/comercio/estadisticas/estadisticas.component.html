@@ -1,4 +1,18 @@
 <section class="contenedor-estadisticas">
-  <h2>Estadísticas de productos</h2>
-  <canvas #productChart width="600" height="400"></canvas>
+  <h2>Listado de productos</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre del producto</th>
+        <th>Cantidad</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let producto of productos">
+        <td>{{ producto.nombre }}</td>
+        <td>{{ producto.cantidad }}</td>
+      </tr>
+    </tbody>
+  </table>
 </section>

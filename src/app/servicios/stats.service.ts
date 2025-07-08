@@ -9,10 +9,11 @@ export class StatisticsService {
   private apiUrl = 'https://statill-api.onrender.com/api';
 
   constructor(private http: HttpClient) {}
+  
+getProductsStats(): Observable<any> {
+  return this.http.get(`${this.apiUrl}/products`);
+}
 
-  getProductsStats(): Observable<any> {
-    return this.http.get(`${this.apiUrl}/products`);
-  }
 
   getStoresStats(): Observable<any> {
     return this.http.get(`${this.apiUrl}/stores`);

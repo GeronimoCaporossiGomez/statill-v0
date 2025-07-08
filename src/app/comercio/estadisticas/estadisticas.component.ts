@@ -1,60 +1,35 @@
 import {
   Component,
-  AfterViewInit,
-  ViewChild,
-  ElementRef,
+  OnInit,
   inject
 } from '@angular/core';
-import Chart from 'chart.js/auto';
 import { ComercioHeaderComponent } from '../comercio-header/comercio-header.component';
 import { CommonModule } from '@angular/common';
 import { HeaderStatillComponent } from 'src/app/Componentes/header-statill/header-statill.component';
-import { StatisticsService } from 'src/app/servicios/stats.service'; // Asegúrate de la ruta correcta
+import { StatisticsService } from 'src/app/servicios/stats.service';
 
 @Component({
   selector: 'app-estadisticas',
   standalone: true,
   imports: [ComercioHeaderComponent, CommonModule, HeaderStatillComponent],
   templateUrl: './estadisticas.component.html',
-  styleUrl: './estadisticas.component.scss',
+  styleUrl: './estadisticas.component.scss'
 })
-export class EstadisticasComponent implements AfterViewInit {
-  @ViewChild('productChart') chartRef!: ElementRef<HTMLCanvasElement>;
-  chart!: Chart;
+export class EstadisticasComponent implements OnInit {
+  productos: { nombre: string; cantidad: number }[] = [];
 
   private statsService = inject(StatisticsService);
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
     this.statsService.getProductsStats().subscribe({
-      next: (productos) => this.initChart(productos),
-      error: (err) => console.error('Error al cargar productos:', err)
-    });
-  }
-
-  initChart(productos: any[]): void {
-    const labels = productos.map(p => p.nombre);
-    const data = productos.map(p => p.cantidad);
-
-    this.chart = new Chart(this.chartRef.nativeElement, {
-      type: 'bar',
-      data: {
-        labels,
-        datasets: [{
-          label: 'Cantidad de productos',
-          data,
-          backgroundColor: 'rgba(75, 192, 192, 0.6)',
-          borderColor: 'rgba(75, 192, 192, 1)',
-          borderWidth: 1
-        }]
+      next: (productos) => {
+        // Aquí se asegura que productos tenga el formato esperado
+        this.productos = productos.map(p => ({
+          nombre: p.nombre,
+          cantidad: p.cantidad
+        }));
       },
-      options: {
-        responsive: true,
-        scales: {
-          y: {
-            beginAtZero: true
-          }
-        }
-      }
+      error: (err) => console.error('Error al cargar productos:', err)
     });
   }
 }
