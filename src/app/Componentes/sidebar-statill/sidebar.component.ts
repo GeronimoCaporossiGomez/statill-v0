@@ -1,9 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import * as path from 'path';
-import { text } from 'stream/consumers';
-
 @Component({
   selector: 'app-sidebar',
   standalone: true,
