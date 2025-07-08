@@ -11,6 +11,15 @@
     ☰
   </button>
 
+  <!-- Sidebar de navegación (desktop only) -->
+  <nav class="sidebar-nav sidebar-desktop" *ngIf="!isPhone">
+    <app-sidebar></app-sidebar>
+  </nav>
+
+  <!-- Overlay para cerrar sidebar (mobile only, only rendered when open) -->
+  <div class="overlay" *ngIf="isPhone && sidebarAbierto" (click)="toggleSidebar()">
+    <nav class="sidebar-nav sidebar-mobile" (click)="$event.stopPropagation()">
+      <button class="btn-close-mobile" (click)="toggleSidebar()">✖</button>
 
   <!-- Sidebar de navegación (desktop only) -->
   <nav class="sidebar-nav sidebar-desktop" *ngIf="!isPhone">
@@ -26,6 +35,7 @@
     </nav>
   </div>
 
+  </div>
 
   <!-- Contenido principal -->
   <main class="home-content" [@fadeIn]>
@@ -118,6 +128,7 @@
           <strong>{{ item.nombre }}</strong>
           <span>${{ item.precio }}</span>
           <span>Cantidad: {{ item.cantidad }}</span>
+          <span>Cantidad: {{ item.cantidad }}</span>
           <button (click)="removerDelCarrito(item)" class="btn-eliminar" title="Eliminar">
             🗑️
           </button>
@@ -134,4 +145,3 @@
       <button (click)="irAPagar()">Ir a pagar</button>
     </div>
   </div>
-</section>

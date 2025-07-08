@@ -48,6 +48,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       promoActiva: true,
       descuento: 20,
       finPromo: new Date(new Date().getTime() + 3600000)
+      finPromo: new Date(new Date().getTime() + 3600000)
     },
     {
       id: 'P002',
@@ -65,6 +66,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       distancia: 2.8,
       promoActiva: true,
       descuento: 15,
+      finPromo: new Date(new Date().getTime() + 7200000)
       finPromo: new Date(new Date().getTime() + 7200000)
     }
   ];
@@ -95,6 +97,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.relojSub?.unsubscribe();
+    document.body.style.overflow = 'auto'; // restaurar scroll por si acaso
     document.body.style.overflow = 'auto'; // restaurar scroll por si acaso
   }
 
@@ -136,6 +139,8 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 
     const s = Math.floor(ms / 1000) % 60;
+    const m = Math.floor(ms / 60000) % 60;
+    const h = Math.floor(ms / 3600000);
     const m = Math.floor(ms / 60000) % 60;
     const h = Math.floor(ms / 3600000);
     return `${this.pad(h)}:${this.pad(m)}:${this.pad(s)}`;
@@ -192,6 +197,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
 
   calcularTotal(): number {
+    return this.carrito.reduce((total, item) => total + item.precio * item.cantidad, 0);
     return this.carrito.reduce((total, item) => total + item.precio * item.cantidad, 0);
   }
 
