@@ -2,6 +2,9 @@
 
 <!-- hay mucho ngmodel en este documento, sirve para que la informacion vaya y venga a la variable -->
 <div class="contenedor" *ngIf="seccionPantalla == 0">
+  <button type="button">
+    <a routerLink="/escanear">Ir a escanear de una</a>
+  </button>
   <h1>Hola vendedor!asdasd Que quieres hacer</h1>
   <button class="boton" type="button" (click)="creandoComercio(true); seccionPantalla=1">Crear comercio</button>
   <button class="boton" type="button" (click)="creandoComercio(false); seccionPantalla=0">Unirme a un comercio</button>

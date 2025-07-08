@@ -23,3 +23,4 @@ export class CatalogoComponent {
   }
   //crear el service para pasar el array desde catalogo hasta estadisticas
 }
+
