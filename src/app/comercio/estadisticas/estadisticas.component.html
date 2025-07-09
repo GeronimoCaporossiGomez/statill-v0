@@ -1,18 +1,14 @@
-<section class="contenedor-estadisticas">
-  <h2>Listado de productos</h2>
+<h2>📦 Estadísticas de Productos</h2>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Nombre del producto</th>
-        <th>Cantidad</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let producto of productos">
-        <td>{{ producto.nombre }}</td>
-        <td>{{ producto.cantidad }}</td>
-      </tr>
-    </tbody>
-  </table>
-</section>
+<ul *ngIf="productos.length > 0; else sinDatos">
+  <li *ngFor="let p of productos">
+    <strong>{{ p.name }}</strong><br />
+    Precio: ${{ p.price }}<br />
+    Cantidad: {{ p.quantity }}
+    <hr />
+  </li>
+</ul>
+
+<ng-template #sinDatos>
+  <p>No hay productos disponibles.</p>
+</ng-template>

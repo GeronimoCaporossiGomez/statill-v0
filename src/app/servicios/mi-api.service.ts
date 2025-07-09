@@ -6,6 +6,11 @@ export class MiApiService {
   constructor(private http: HttpClient) {}
 
   getDatos() {
-    return this.http.get('https://tu-api.com/endpoint');
+    return this.http.get('https://statill-api.onrender.com/api/');
   }
+getProductos() {
+  console.log('Llamando a getProductos...');
+  return this.http.get('https://statill-api.onrender.com/api/v1/products');
+}
+
 }
