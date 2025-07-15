@@ -15,12 +15,15 @@ export class StockComponent {
   constructor(private miApi: MiApiService) {}
 
   SePuedeVerElformulario = false; // arranca escondidiwis
-  product = { // Objeto para almacenar datos del formulario
+  product = {
     name: '',
-    code: '',
+    brand: '',
     price: null,
-    description: '',
+    type: '',
     cantidad: null,
+    description: '',
+    code: '',
+    shop: ''
   };
 
   productos: any[] = []; // Array para almacenar los productos
@@ -36,17 +39,43 @@ export class StockComponent {
     this.SePuedeVerElformulario = !this.SePuedeVerElformulario;
   }
 
-  // Manejar envío del formulario
   GuardarData() {
-    console.log("Formulario enviado: ", this.product);
+    const productoApi = {
+      name: this.product.name,
+      brand: this.product.brand,
+      price: this.product.price,
+      type: this.product.type,
+      quantity: Number(this.product.cantidad),
+      desc: this.product.description,
+      barcode: this.product.code,
+      store_id: Number(this.product.shop)
+    };
+    console.log("Formulario enviado: ", productoApi);
+    this.miApi.crearProducto(productoApi).subscribe(
+      response => {
+        console.log('Producto creado:', response);
+        // Actualizar la lista de productos después de crear
+        this.miApi.getDatos().subscribe((data: any) => {
+          this.productos = data.data;
+          console.log('Productos actualizados:', this.productos);
+        });
+      },
+      error => {
+        console.error('Error al crear producto:', error);
+      }
+    );
     // Resetear el objeto y ocultar formulario
     this.product = {
       name: '',
-      code: '',
+      brand: '',
       price: null,
-      description: '',
+      type: '',
       cantidad: null,
+      description: '',
+      code: '',
+      shop: ''
     };
     this.SePuedeVerElformulario = false;
   }
+  // Manejar envío del formulario
 }

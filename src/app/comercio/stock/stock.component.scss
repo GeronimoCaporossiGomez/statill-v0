@@ -30,6 +30,7 @@ $font-contenido: 'Roboto Condensed', sans-serif;
   transition: all 0.3s ease;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 
+
   &:hover {
     background-color: darken($color-primario, 10%);
     transform: translateY(-2px);
@@ -115,4 +116,19 @@ $font-contenido: 'Roboto Condensed', sans-serif;
   &:active {
     transform: translateY(0);
   }
+}
+
+.productos-container{
+  width: 100%;
+  background-color: aqua;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.producto-card{
+  background-color: red;
+  width: 80%;
+
 }

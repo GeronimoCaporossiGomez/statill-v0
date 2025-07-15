@@ -3,46 +3,54 @@
   {{ SePuedeVerElformulario ? 'Ocultar Formulario' : 'Añadir Producto' }}
 </button>
 
-
 <div *ngIf="SePuedeVerElformulario" class="form-container">
   <form (ngSubmit)="GuardarData()" class="product-form">
     <div class="form-group">
       <label for="name">Nombre:</label>
       <input type="text" id="name" name="name" [(ngModel)]="product.name" required>
     </div>
-
     <div class="form-group">
-      <label for="code">Código de barras:</label>
-      <input type="text" id="code" name="code" [(ngModel)]="product.code" required>
+      <label for="brand">Marca:</label>
+      <input type="text" id="brand" name="brand" [(ngModel)]="product.brand" required>
     </div>
-
     <div class="form-group">
       <label for="price">Precio:</label>
       <input type="number" id="price" name="price" [(ngModel)]="product.price" required>
     </div>
-
     <div class="form-group">
-      <label for="description">Descripción:</label>
-      <input type="text" id="description" name="description" [(ngModel)]="product.description">
+      <label for="type">Tipo:</label>
+      <input type="text" id="type" name="type" [(ngModel)]="product.type" required>
     </div>
-
-      <div class="form-group">
+    <div class="form-group">
       <label for="quantify">Cantidad:</label>
       <input type="text" id="cantidad" name="cantidad" [(ngModel)]="product.cantidad">
+    </div>
+    <div class="form-group">
+      <label for="description">Descripción:</label>
+      <input type="text" id="description" name="description" [(ngModel)]="product.description" required>
+    </div>
+    <div class="form-group">
+      <label for="code">Código de barras:</label>
+      <input type="text" id="code" name="code" [(ngModel)]="product.code" required>
+    </div>
+    <div class="form-group">
+      <label for="shop">id de tienda:</label>
+      <input type="text" id="shop" name="shop" [(ngModel)]="product.shop" required>
     </div>
 
     <button type="submit" class="submit-button">Guardar Producto</button>
   </form>
 </div>
-    <nav class="sidebar-nav">
-      <app-sidebar></app-sidebar>
-    </nav>
 
-<div *ngFor="let producto of productos" class="producto-card">
-  <h3>{{ producto.name }}</h3>
-  <p><strong>ID:</strong> {{ producto.id }}</p>
-  <p><strong>Marca:</strong> {{ producto.brand }}</p>
-  <p><strong>Precio:</strong> ${{ producto.price }}</p>
-  <p><strong>Cantidad:</strong> {{ producto.quantity }}</p>
-  <p><strong>Descripción:</strong> {{ producto.desc }}</p>
+
+<div *ngIf="SePuedeVerElformulario == false" class="productos-container">
+  <div *ngFor="let producto of productos" class="producto-card">
+    <h3>{{ producto.name }}</h3>
+    <p><strong>ID:</strong> {{ producto.id }}</p>
+    <p><strong>Marca:</strong> {{ producto.brand }}</p>
+    <p><strong>Precio:</strong> ${{ producto.price }}</p>
+    <p><strong>Cantidad:</strong> {{ producto.quantity }}</p>
+    <p><strong>Descripción:</strong> {{ producto.desc }}</p>
+  </div>
 </div>
+
