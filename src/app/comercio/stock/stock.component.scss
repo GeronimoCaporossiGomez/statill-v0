@@ -129,6 +129,10 @@ $font-contenido: 'Roboto Condensed', sans-serif;
 
 .producto-card{
   background-color: red;
-  width: 80%;
-
+  width: 70%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
 }

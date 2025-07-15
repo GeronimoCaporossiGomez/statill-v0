@@ -48,7 +48,7 @@ export class StockComponent {
       quantity: Number(this.product.cantidad),
       desc: this.product.description,
       barcode: this.product.code,
-      store_id: Number(this.product.shop)
+      store_id: 2
     };
     console.log("Formulario enviado: ", productoApi);
     this.miApi.crearProducto(productoApi).subscribe(
