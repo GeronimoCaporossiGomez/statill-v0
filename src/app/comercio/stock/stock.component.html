@@ -1,4 +1,5 @@
-<h1 class="Stock-Title">Pagina De Stock</h1>
+<div class="pagina-stock">
+  <h1 class="Stock-Title">Pagina De Stock</h1>
 <button (click)="FormChange()" class="BotonForm">
   {{ SePuedeVerElformulario ? 'Ocultar Formulario' : 'Añadir Producto' }}
 </button>
@@ -41,12 +42,24 @@
 
 <div *ngIf="SePuedeVerElformulario == false" class="productos-container">
   <div *ngFor="let producto of productos" class="producto-card">
-    <h3>{{ producto.name }}</h3>
-    <p><strong>ID:</strong> {{ producto.id }}</p>
-    <p><strong>Marca:</strong> {{ producto.brand }}</p>
-    <p><strong>Precio:</strong> ${{ producto.price }}</p>
-    <p><strong>Cantidad:</strong> {{ producto.quantity }}</p>
-    <p><strong>Descripción:</strong> {{ producto.desc }}</p>
+    <div class="producto-img">
+      <img *ngIf="producto.img" [src]="producto.img" alt="Imagen de {{ producto.name }}" />
+      <div *ngIf="!producto.img" class="img-placeholder">
+        <span>🖼️</span>
+      </div>
+    </div>
+    <div class="producto-info">
+      <div class="producto-nombre">{{ producto.name }}</div>
+      <div class="producto-desc">{{ producto.desc }}</div>
+    </div>
+    <div class="producto-precio">
+      ${{ producto.price }}
+    </div>
+    <div class="producto-editar">
+      <button class="edit-btn" (click)="onEdit(producto, i)">
+        <span>✏️</span>
+      </button>
+    </div>
   </div>
 </div>
-
+</div>

@@ -27,6 +27,10 @@ export class StockComponent {
   };
 
   productos: any[] = []; // Array para almacenar los productos
+  editarIndex: number | null = null;
+  editarProducto: any = {};
+  productoEditandoId: number | null = null; // Nuevo: ID del producto que se está editando
+
   ngOnInit() {
     this.miApi.getDatos().subscribe((data: any) => {
       console.log('prubeba, prubea', data);
@@ -37,6 +41,23 @@ export class StockComponent {
     //invertimos
   FormChange() {
     this.SePuedeVerElformulario = !this.SePuedeVerElformulario;
+  }
+
+  onEdit(producto: any, index: number) {
+    this.editarIndex = index;
+    this.editarProducto = { ...producto };
+    this.SePuedeVerElformulario = true;
+    this.product = {
+      name: producto.name,
+      brand: producto.brand,
+      price: producto.price,
+      type: producto.type,
+      cantidad: producto.quantity,
+      description: producto.desc,
+      code: producto.barcode,
+      shop: producto.store_id
+    };
+    this.productoEditandoId = producto.id; // Guardar el id real del producto
   }
 
   GuardarData() {
@@ -50,20 +71,35 @@ export class StockComponent {
       barcode: this.product.code,
       store_id: 2
     };
-    console.log("Formulario enviado: ", productoApi);
-    this.miApi.crearProducto(productoApi).subscribe(
-      response => {
-        console.log('Producto creado:', response);
-        // Actualizar la lista de productos después de crear
-        this.miApi.getDatos().subscribe((data: any) => {
-          this.productos = data.data;
-          console.log('Productos actualizados:', this.productos);
-        });
-      },
-      error => {
-        console.error('Error al crear producto:', error);
-      }
-    );
+    if (this.productoEditandoId) {
+      // Editar producto existente (PUT)
+      this.miApi.editarProducto(this.productoEditandoId, productoApi).subscribe(
+        response => {
+          console.log('Producto editado correctamente:', response);
+          this.miApi.getDatos().subscribe((data: any) => {
+            this.productos = data.data;
+          });
+        },
+        error => {
+          console.error('Error al editar producto:', error);
+        }
+      );
+      this.productoEditandoId = null;
+      this.editarIndex = null;
+    } else {
+      // Crear producto nuevo (POST)
+      this.miApi.crearProducto(productoApi).subscribe(
+        response => {
+          console.log('Producto posteado correctamente:', response);
+          this.miApi.getDatos().subscribe((data: any) => {
+            this.productos = data.data;
+          });
+        },
+        error => {
+          console.error('Error al crear producto:', error);
+        }
+      );
+    }
     // Resetear el objeto y ocultar formulario
     this.product = {
       name: '',

@@ -9,6 +9,9 @@ export class MiApiService {
     return this.http.get(this.apiUrl + '/api/v1/products/');
   }
   crearProducto(producto: any) {
-  return this.http.post(this.apiUrl + '/api/v1/products/', producto);
-}
+    return this.http.post(this.apiUrl + '/api/v1/products/', producto);
+  }
+  editarProducto(id: number, producto: any) {
+    return this.http.put(this.apiUrl + '/api/v1/products/' + id + '/', producto);
+  }
 }

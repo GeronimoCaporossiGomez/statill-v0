@@ -118,21 +118,133 @@ $font-contenido: 'Roboto Condensed', sans-serif;
   }
 }
 
-.productos-container{
+.productos-container {
   width: 100%;
-  background-color: aqua;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 18px;
+  background: #f6f6f6;
+  padding: 20px 0;
 }
 
-.producto-card{
-  background-color: red;
-  width: 70%;
+.producto-card {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
-  padding: 20px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  width: 80%;
+  min-height: 90px;
+  padding: 12px 24px;
+  gap: 24px;
+}
+
+.producto-img {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0f0f0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.producto-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.img-placeholder {
+  font-size: 2rem;
+  color: #bbb;
+}
+
+.producto-info {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.producto-nombre {
+  font-family: $font-titulo;
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.producto-desc {
+  font-family: $font-contenido;
+  font-size: 1rem;
+  color: #444;
+}
+
+.producto-precio {
+  font-family: $font-titulo;
+  font-size: 1.3rem;
+  color: $color-primario;
+  min-width: 80px;
+  text-align: right;
+}
+
+.producto-editar {
+  min-width: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edit-btn {
+  background: #f6f6f6;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.edit-btn:hover {
+  background: lighten($color-primario, 40%);
+}
+
+.pagina-stock{
+  height: 100vh;
+  width: 100wh;
+  background-color: azure;
+}
+
+.productos-table {
+  width: 80%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin: 0 auto;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.productos-table th, .productos-table td {
+  padding: 18px 12px;
+  text-align: left;
+  font-family: $font-contenido;
+  font-size: 1.1rem;
+  border-bottom: 1px solid #eee;
+}
+.productos-table th {
+  background: $color-primario;
+  color: #fff;
+  font-family: $font-titulo;
+  font-size: 1.2rem;
+  letter-spacing: 1px;
+}
+.productos-table tr:last-child td {
+  border-bottom: none;
+}
+.productos-table tr:hover {
+  background: lighten($color-primario, 45%);
 }
