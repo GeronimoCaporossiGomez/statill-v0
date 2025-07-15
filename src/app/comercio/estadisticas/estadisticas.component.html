@@ -1,14 +1,9 @@
-<h2>📦 Estadísticas de Productos</h2>
+<select [formControl]="productControl">
+  <option value="">Seleccione producto</option>
+  <option *ngFor="let product of products" [value]="product.id">{{product.name}}</option>
+</select>
 
-<ul *ngIf="productos.length > 0; else sinDatos">
-  <li *ngFor="let p of productos">
-    <strong>{{ p.name }}</strong><br />
-    Precio: ${{ p.price }}<br />
-    Cantidad: {{ p.quantity }}
-    <hr />
-  </li>
-</ul>
+<input type="date" [formControl]="startDateControl" />
+<input type="date" [formControl]="endDateControl" />
 
-<ng-template #sinDatos>
-  <p>No hay productos disponibles.</p>
-</ng-template>
+<canvas #chartCanvas></canvas>

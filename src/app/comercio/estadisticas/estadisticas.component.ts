@@ -1,138 +1,142 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ComercioHeaderComponent } from '../comercio-header/comercio-header.component';
-import { HeaderStatillComponent } from 'src/app/Componentes/header-statill/header-statill.component';
-import { MiApiService } from 'src/app/servicios/mi-api.service';
-import { Chart } from 'chart.js';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { Chart, ChartConfiguration, registerables } from 'chart.js';
+import { StatisticsService } from 'src/app/servicios/stats.service';
+
+Chart.register(...registerables);
+
+interface Product {
+  id: number;
+  name: string;
+}
+
+interface SaleProduct {
+  product_id: number;
+  quantity: number;
+}
+
+interface Sale {
+  id: number;
+  timestamp: string;
+  products: SaleProduct[];
+}
 
 @Component({
   selector: 'app-estadisticas',
   standalone: true,
-  imports: [CommonModule, ComercioHeaderComponent, HeaderStatillComponent],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './estadisticas.component.html',
-  styleUrls: ['./estadisticas.component.scss']
+  styleUrls: ['./estadisticas.component.scss'],
 })
-export class EstadisticasComponent implements OnInit {
+export class EstadisticasComponent implements OnInit, OnDestroy {
+  @ViewChild('chartCanvas', { static: true }) chartCanvas!: ElementRef<HTMLCanvasElement>;
 
-  productos: { name: string; quantity: number; price: number; id: number; type: number; barcode: string; description: string }[] = [];
+  private statisticsService = inject(StatisticsService);
+  private chart?: Chart;
 
-  // FEATURE: Preparación para gráfico de precios por tiempo
-  // ventas: any[] = [];
-  // chart: Chart | undefined;
-
-  constructor(private miApi: MiApiService) {}
+  products: Product[] = [];
+  productControl = new FormControl('');
+  startDateControl = new FormControl('');
+  endDateControl = new FormControl('');
 
   ngOnInit(): void {
-    console.log('Iniciando carga de productos...');
-    this.miApi.getProductos().subscribe({
+    this.statisticsService.getProductsStats().subscribe({
       next: (res: any) => {
-        console.log('Respuesta API:', res);
-        if (res.successful && Array.isArray(res.data)) {
-          this.productos = res.data.map((p: any) => ({
-            name: p.name,
-            quantity: p.quantity,
-            price: p.price,
-            id: p.id,
-            type: p.type,
-            barcode: p.barcode,
-            description: p.description,
-          }));
-
-          // FEATURE: Cargar ventas y generar gráfico
-          /*
-          this.miApi.getVentas().subscribe({
-            next: (ventaRes: any) => {
-              if (ventaRes.successful && Array.isArray(ventaRes.data)) {
-                this.ventas = ventaRes.data;
-                this.createChart();
-              }
-            },
-            error: (err) => console.error('Error al cargar ventas', err)
-          });
-          */
-
-        } else {
-          this.productos = [];
-        }
+        this.products = res.data;
       },
       error: (err) => {
         console.error('Error al obtener productos', err);
-        this.productos = [];
-      }
+      },
+    });
+
+    this.productControl.valueChanges.subscribe(() => this.cargarVentas());
+    this.startDateControl.valueChanges.subscribe(() => this.cargarVentas());
+    this.endDateControl.valueChanges.subscribe(() => this.cargarVentas());
+  }
+
+  cargarVentas() {
+    const productId = this.productControl.value;
+    const startDate = this.startDateControl.value;
+    const endDate = this.endDateControl.value;
+
+    if (!productId) {
+      this.destruirGrafico();
+      return;
+    }
+
+    this.statisticsService.getSalesStats().subscribe({
+      next: (res: any) => this.actualizarGrafico(res.data, Number(productId), startDate, endDate),
+      error: (err) => {
+        console.error('Error al cargar ventas', err);
+        this.destruirGrafico();
+      },
     });
   }
 
-  // FEATURE: Crear gráfico con precios por tiempo para cada producto
-  /*
-  createChart() {
-    const grouped: { [productName: string]: { x: Date; y: number }[] } = {};
+  private actualizarGrafico(sales: Sale[], productId: number, start?: string, end?: string) {
+    const ventasPorFecha: Record<string, number> = {};
 
-    this.ventas.forEach((venta: any) => {
-      const producto = this.productos.find(p => p.id === venta.product_id);
-      if (!producto || !venta.timestamp) return;
+    sales.forEach((venta) => {
+      const date = new Date(venta.timestamp);
+      if (isNaN(date.getTime())) return;
 
-      const productName = producto.name;
-      const dataPoint = {
-        x: new Date(venta.timestamp),
-        y: venta.sale_price
-      };
+      const isoDate = date.toISOString().slice(0, 10); // YYYY-MM-DD
 
-      if (!grouped[productName]) {
-        grouped[productName] = [];
+      // Filtrado por fecha si hay valores
+      if (start && new Date(isoDate) < new Date(start)) return;
+      if (end && new Date(isoDate) > new Date(end)) return;
+
+      const producto = venta.products.find((p) => p.product_id === productId);
+      if (producto) {
+        ventasPorFecha[isoDate] = (ventasPorFecha[isoDate] || 0) + producto.quantity;
       }
-      grouped[productName].push(dataPoint);
     });
 
-    const datasets = Object.keys(grouped).map(productName => ({
-      label: productName,
-      data: grouped[productName],
-      fill: false,
-      borderColor: this.getRandomColor(),
-      tension: 0.1
-    }));
+    const fechasOrdenadas = Object.keys(ventasPorFecha).sort(
+      (a, b) => new Date(a).getTime() - new Date(b).getTime()
+    );
+    const data = fechasOrdenadas.map((fecha) => ventasPorFecha[fecha]);
 
-    if (this.chart) {
-      this.chart.destroy();
-    }
+    this.destruirGrafico();
 
-    this.chart = new Chart('priceChart', {
+    const ctx = this.chartCanvas.nativeElement.getContext('2d');
+    if (!ctx) return;
+
+    const config: ChartConfiguration<'line'> = {
       type: 'line',
       data: {
-        datasets
+        labels: fechasOrdenadas,
+        datasets: [
+          {
+            label: 'Cantidad Vendida',
+            data: data,
+            fill: false,
+            borderColor: 'rgb(75, 192, 192)',
+            backgroundColor: 'rgba(75, 192, 192, 0.5)',
+            tension: 0.1,
+          },
+        ],
       },
       options: {
         responsive: true,
-        plugins: {
-          title: {
-            display: true,
-            text: 'Precio de productos en el tiempo'
-          }
-        },
         scales: {
-          x: {
-            type: 'time',
-            time: {
-              unit: 'day'
-            },
-            title: {
-              display: true,
-              text: 'Fecha'
-            }
-          },
-          y: {
-            title: {
-              display: true,
-              text: 'Precio'
-            }
-          }
-        }
-      }
-    });
+          y: { beginAtZero: true },
+        },
+      },
+    };
+
+    this.chart = new Chart(ctx, config);
   }
 
-  getRandomColor(): string {
-    return `hsl(${Math.floor(Math.random() * 360)}, 70%, 50%)`;
+  private destruirGrafico() {
+    if (this.chart) {
+      this.chart.destroy();
+      this.chart = undefined;
+    }
   }
-  
-esta parte esta comentada porque no se ha implementado la API de ventas aún, pero está preparada para ser activada cuando esté disponible.
-*/}
+
+  ngOnDestroy(): void {
+    this.destruirGrafico();
+  }
+}
