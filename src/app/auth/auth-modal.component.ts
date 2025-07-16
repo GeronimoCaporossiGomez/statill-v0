@@ -30,6 +30,7 @@ export class AuthModalComponent {
 
   isLogin = true;
   name = '';
+  apellido = '';
   email = '';
   password = '';
 
@@ -43,7 +44,7 @@ export class AuthModalComponent {
     const data = {
       email: this.email,
       password: this.password,
-      ...(this.isLogin ? {} : { name: this.name })
+      ...(this.isLogin ? {} : { name: this.name, apellido: this.apellido })
     };
 
     console.log(this.isLogin ? 'Login exitoso:' : 'Registro completo:', data);

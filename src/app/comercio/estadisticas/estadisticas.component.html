@@ -2,17 +2,28 @@
   <app-sidebar></app-sidebar>
   <div class="estadisticas-card">
     <div class="estadisticas-controls">
-      <h2 class="estadisticas-title">Categoría:</h2>
-      <select [formControl]="productControl" class="estadisticas-select">
-        <option value="">Seleccione producto</option>
-        <option *ngFor="let product of products" [value]="product.id">{{ product.name }}</option>
-      </select>
+      <ng-container *ngIf="statTypeControl.value !== 'fidelidad_clientes'; else tiendaSelect">
+        <h2 class="estadisticas-title">Categoría:</h2>
+        <select [formControl]="productControl" class="estadisticas-select">
+          <option value="">Seleccione producto</option>
+          <option *ngFor="let product of products" [value]="product.id">{{ product.name }}</option>
+        </select>
+      </ng-container>
+      <ng-template #tiendaSelect>
+        <h2 class="estadisticas-title">Tienda:</h2>
+        <select [formControl]="storeControl" class="estadisticas-select">
+          <option value="">Seleccione tienda</option>
+          <option *ngFor="let store of stores" [value]="store.id">Tienda {{ store.id }}</option>
+        </select>
+      </ng-template>
 
       <h2 class="estadisticas-title">Tipo de gráfico:</h2>
       <select [formControl]="statTypeControl" class="estadisticas-select">
         <option value="ventas_en_el_tiempo">Cantidad Vendida en el Tiempo</option>
         <option value="metodos_pago">Métodos de Pago Usados</option>
         <option value="productos_junto">Productos que se venden junto</option>
+        <option value="ganancias_por_producto">Ganancias por Producto</option>
+        <option value="fidelidad_clientes">Fidelidad de Clientes (Gasto Promedio)</option>
       </select>
 
       <div class="estadisticas-fechas">

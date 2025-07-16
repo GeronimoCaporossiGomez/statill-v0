@@ -23,6 +23,7 @@ interface Sale {
   timestamp: string;
   payment_method: number;
   products: SaleProduct[];
+  store_id?: number;
 }
 
 @Component({
@@ -39,7 +40,9 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
   private chart?: Chart;
 
   products: Product[] = [];
+  stores: any[] = [];
   productControl = new FormControl('');
+  storeControl = new FormControl('');
   startDateControl = new FormControl('');
   endDateControl = new FormControl('');
   statTypeControl = new FormControl('ventas_en_el_tiempo');
@@ -49,8 +52,13 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
       next: (res: any) => (this.products = res.data),
       error: (err) => console.error('Error al obtener productos', err),
     });
+    this.statisticsService.getStoresStats().subscribe({
+      next: (res: any) => (this.stores = res.data),
+      error: (err) => console.error('Error al obtener tiendas', err),
+    });
 
     this.productControl.valueChanges.subscribe(() => this.cargarVentas());
+    this.storeControl.valueChanges.subscribe(() => this.cargarVentas());
     this.startDateControl.valueChanges.subscribe(() => this.cargarVentas());
     this.endDateControl.valueChanges.subscribe(() => this.cargarVentas());
     this.statTypeControl.valueChanges.subscribe(() => this.cargarVentas());
@@ -58,30 +66,107 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
 
   cargarVentas() {
     const productId = this.productControl.value;
+    const storeId = this.storeControl.value;
     const start = this.startDateControl.value;
     const end = this.endDateControl.value;
     const tipo = this.statTypeControl.value;
 
-    if (!productId) {
+    if (
+      (tipo === 'ganancias_por_producto' && !productId) ||
+      (tipo === 'fidelidad_clientes' && !storeId) ||
+      (!productId && tipo !== 'ganancias_por_producto' && tipo !== 'fidelidad_clientes')
+    ) {
       this.destruirGrafico();
       return;
     }
 
     this.statisticsService.getSalesStats().subscribe({
       next: (res: any) => {
-        const ventas = res.data as Sale[];
+        let ventas = res.data as Sale[];
+        // Filtrar por fecha si hay fechas seleccionadas
+        if (start || end) {
+          ventas = ventas.filter((venta) => {
+            const date = new Date(venta.timestamp);
+            const isoDate = date.toISOString().slice(0, 10);
+            if (start && isoDate < start) return false;
+            if (end && isoDate > end) return false;
+            return true;
+          });
+        }
         if (tipo === 'ventas_en_el_tiempo') {
           this.mostrarVentasEnElTiempo(ventas, +productId, start, end);
         } else if (tipo === 'metodos_pago') {
           this.mostrarMetodoDePago(ventas, +productId);
         } else if (tipo === 'productos_junto') {
           this.mostrarProductosJunto(ventas, +productId);
+        } else if (tipo === 'ganancias_por_producto') {
+          this.mostrarGananciasPorProducto(ventas, +productId);
+        } else if (tipo === 'fidelidad_clientes') {
+          this.mostrarFidelidadClientes(ventas, +storeId);
         }
       },
       error: (err) => {
         console.error('Error al cargar ventas', err);
         this.destruirGrafico();
       },
+    });
+  }
+  mostrarGananciasPorProducto(sales: Sale[], productId: number) {
+    // Sumar cantidad * precio solo para el producto seleccionado
+    let total = 0;
+    let prodName = '';
+    sales.forEach((venta) => {
+      venta.products.forEach((p) => {
+        if (p.product_id === productId) {
+          const prod = this.products.find((prod) => prod.id === p.product_id);
+          if (prod) {
+            total += p.quantity * prod.stock; // stock como precio
+            prodName = prod.name;
+          }
+        }
+      });
+    });
+    this.renderChart('bar', {
+      labels: [prodName],
+      datasets: [
+        {
+          label: 'Ganancias del Producto',
+          data: [total],
+          backgroundColor: ['#fd2a2c'],
+        },
+      ],
+    });
+  }
+
+  mostrarFidelidadClientes(sales: Sale[], storeId: number) {
+    // Calcular gasto promedio por cliente en la tienda seleccionada
+    const clientes: Record<number, number[]> = {};
+    sales.forEach((venta) => {
+      if (venta.store_id !== storeId || !venta.id) return;
+      let totalVenta = 0;
+      venta.products.forEach((p) => {
+        const prod = this.products.find((prod) => prod.id === p.product_id);
+        if (prod) {
+          totalVenta += p.quantity * prod.stock; // stock como precio
+        }
+      });
+      if (!clientes[venta.id]) clientes[venta.id] = [];
+      clientes[venta.id].push(totalVenta);
+    });
+    const clientIds = Object.keys(clientes);
+    const data = clientIds.map((id) => {
+      const sum = clientes[+id].reduce((a, b) => a + b, 0);
+      return (sum / clientes[+id].length) || 0;
+    });
+    this.renderChart('bar', {
+      labels: clientIds.map((id) => `Cliente ${id}`),
+      datasets: [
+        {
+          label: 'Gasto promedio por cliente',
+          data,
+          backgroundColor: clientIds.map((_, i) => `hsl(${i * 50}, 70%, 60%)`),
+        },
+      ],
     });
   }
 

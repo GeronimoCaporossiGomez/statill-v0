@@ -10,18 +10,22 @@ export class StatisticsService {
 
   constructor(private http: HttpClient) {}
 
+  // Obtener todos los productos
   getProductsStats(): Observable<any> {
     return this.http.get(`${this.apiUrl}/products`);
   }
 
+  // Obtener todas las tiendas
   getStoresStats(): Observable<any> {
     return this.http.get(`${this.apiUrl}/stores`);
   }
 
+  // Obtener todas las ventas
   getSalesStats(): Observable<any> {
     return this.http.get(`${this.apiUrl}/sales`);
   }
 
+  // Obtener todas las ventas filtradas por producto y fechas
   getSalesByProduct(
     productId: string,
     startDate?: string,
@@ -37,5 +41,20 @@ export class StatisticsService {
     }
 
     return this.http.get(`${this.apiUrl}/sales`, { params });
+  }
+
+  // Obtener todos los usuarios
+  getUsers(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/users`);
+  }
+
+  // Añadir una nueva venta
+  addSale(sale: {
+    user_id: number;
+    store_id: number;
+    payment_method: number;
+    products: { product_id: number; quantity: number }[];
+  }): Observable<any> {
+    return this.http.post(`${this.apiUrl}/sales`, sale);
   }
 }
