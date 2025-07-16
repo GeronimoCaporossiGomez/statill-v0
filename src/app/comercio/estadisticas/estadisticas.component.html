@@ -1,21 +1,29 @@
-
-<app-header-statill></app-header-statill>
-
 <div class="pagina-estadisticas">
+  <app-sidebar></app-sidebar>
+  <div class="estadisticas-card">
+    <div class="estadisticas-controls">
+      <h2 class="estadisticas-title">Categoría:</h2>
+      <select [formControl]="productControl" class="estadisticas-select">
+        <option value="">Seleccione producto</option>
+        <option *ngFor="let product of products" [value]="product.id">{{ product.name }}</option>
+      </select>
 
-  <div class="contenedor-productos">
-    <div *ngFor="let producto of productos">
-      <div class="producto-card">
-        <h2>{{ producto.nombre }}</h2>
-        <p><strong>ID:</strong> {{ producto.id }}</p>
-        <p><strong>Tienda:</strong> {{ producto.tienda }}</p>
-        <p><strong>Precio:</strong> ${{ producto.precio }}</p>
+      <h2 class="estadisticas-title">Tipo de gráfico:</h2>
+      <select [formControl]="statTypeControl" class="estadisticas-select">
+        <option value="ventas_en_el_tiempo">Cantidad Vendida en el Tiempo</option>
+        <option value="metodos_pago">Métodos de Pago Usados</option>
+        <option value="productos_junto">Productos que se venden junto</option>
+      </select>
+
+      <div class="estadisticas-fechas">
+        <input type="date" [formControl]="startDateControl" class="estadisticas-date" />
+        <input type="date" [formControl]="endDateControl" class="estadisticas-date" />
       </div>
+
+      <button class="btn-hacer-grafico" (click)="cargarVentas()">Hacer gráfico</button>
+    </div>
+    <div class="estadisticas-chart-container">
+      <canvas #chartCanvas></canvas>
     </div>
   </div>
-
-  <div class="graficos">
-    <p>algo de graficos</p>
-  </div>
 </div>
-<app-comercio-header></app-comercio-header>
