@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
 })
 export class SidebarComponent {
   isExpanded = false;
-  activeItem = 'home'; // Item activo por defecto
+  activeItem = 'home';
 
   menuItems = [
     {

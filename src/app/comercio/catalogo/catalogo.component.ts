@@ -1,35 +1,40 @@
 import { Component, OnInit } from '@angular/core';
 import { ComercioHeaderComponent } from '../comercio-header/comercio-header.component';
+import { SidebarComponent } from 'src/app/Componentes/sidebar-statill/sidebar.component';
 import { CommonModule } from '@angular/common';
-import { HeaderStatillComponent } from 'src/app/Componentes/header-statill/header-statill.component';
 import { FormsModule } from '@angular/forms';
 import { MiApiService } from 'src/app/servicios/mi-api.service';
 
 @Component({
   selector: 'app-catalogo',
   standalone: true,
-  imports: [ComercioHeaderComponent, CommonModule, HeaderStatillComponent, FormsModule],
+  imports: [ComercioHeaderComponent, CommonModule, SidebarComponent, FormsModule],
   templateUrl: './catalogo.component.html',
   styleUrl: './catalogo.component.scss'
 })
 export class CatalogoComponent {
   constructor(private miApi: MiApiService) {}
-  productos: any[] = []
+  productos: any[] = [];
+  productosCatalogoIds: number[] = [];
+
   ngOnInit() {
     this.miApi.getDatos().subscribe((data: any) => {
-      console.log('prubeba, prubea', data);
       this.productos = data.data;
-      console.log('Productos desde la API:', this.productos);
     });
   }
 
-  scioli: string = ''
-  cantidad: number = 0
-  precio: number = 0
+  selectedProductoId: number|null = null;
+
   agregarProducto() {
-    const nuevoProducto = { nombre: this.scioli, cantidad: this.cantidad, precio: this.precio };
-    this.productos.push(nuevoProducto);
+    if (this.selectedProductoId === null) return;
+    if (!this.productosCatalogoIds.includes(this.selectedProductoId)) {
+      this.productosCatalogoIds.push(this.selectedProductoId);
+    }
+    this.selectedProductoId = null;
   }
-  //crear el service para pasar el array desde catalogo hasta estadisticas
+
+  get productosCatalogo() {
+    return this.productos.filter(p => this.productosCatalogoIds.includes(p.id));
+  }
 }
 
