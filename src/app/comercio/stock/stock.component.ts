@@ -61,14 +61,14 @@ export class StockComponent {
   }
 
   GuardarData() {
-    const productoApi = {
+    const productoApi = { //voy a meter un datos duros para que me deje hacerlo
       name: this.product.name,
-      brand: this.product.brand,
+      brand: 'algo',
       price: this.product.price,
-      type: this.product.type,
+      type: 0,
       quantity: Number(this.product.cantidad),
       desc: this.product.description,
-      barcode: this.product.code,
+      barcode: '+',
       store_id: 2
     };
     if (this.productoEditandoId) {
