@@ -1,15 +1,16 @@
 
-<button type="button" (click)="toggleSidebar()">balhasldha</button>
+<button type="button" class="boton-sidebar" (click)="toggleSidebar()">HOLAHOLAHOLA</button>
 <div *ngIf="isExpanded" class="sidebar sidebariwis">
   <div class="sidebariwis-nav">
     <ul>
       <div *ngIf="vendedor">
         <li *ngFor="let item of menuItemsVendedor">
+          <button type="button" class="boton-sidebar" (click)="toggleSidebar()">----</button>
           <ng-container *ngIf="activeItem === item.id">
             <span class="active-dot"></span>
           </ng-container>
-          <a 
-            [routerLink]="item.path" 
+          <a
+            [routerLink]="item.path"
             routerLinkActive="active"
             [class.active]="activeItem === item.id"
             (click)="setActive(item.id)"
@@ -20,12 +21,13 @@
         </li>
       </div>
       <div *ngIf="!vendedor">
+        <button type="button" class="boton-sidebar" (click)="toggleSidebar()">----</button>
         <li *ngFor="let item of menuItemsComprador">
           <ng-container *ngIf="activeItem === item.id">
             <span class="active-dot"></span>
           </ng-container>
-          <a 
-            [routerLink]="item.path" 
+          <a
+            [routerLink]="item.path"
             routerLinkActive="active"
             [class.active]="activeItem === item.id"
             (click)="setActive(item.id)"

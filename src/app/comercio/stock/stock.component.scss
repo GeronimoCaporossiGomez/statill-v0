@@ -219,8 +219,10 @@ $font-contenido: 'Roboto Condensed', sans-serif;
 }
 
 .pagina-stock{
+  position: relative;
   height: 100vh;
   width: 100wh;
+  padding-top: 90px; // Espacio para el botón fijo arriba
   background-color: #EEEEEE;
 }
 
@@ -256,6 +258,11 @@ $font-contenido: 'Roboto Condensed', sans-serif;
 }
 
 .agregar-producto-card {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
   width: 80%;
   margin: 0 auto 24px auto;
   background: #fff;
