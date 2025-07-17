@@ -100,11 +100,11 @@
   }
 
   .comprador-btn-container {
-    margin-top: auto;
     display: flex;
     justify-content: center;
     align-items: flex-end;
     padding-bottom: 12px;
+    margin-top: auto;
   }
 
   .comprador-btn {
@@ -171,4 +171,11 @@
     display: none !important;
   }
 }
+}
+
+.sidebariwis-nav{
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  margin-top: 3%;
 }
