@@ -1,65 +1,58 @@
 <div class="pagina-stock">
-  <h1 class="Stock-Title">Pagina De Stock</h1>
-<button (click)="FormChange()" class="BotonForm">
-  {{ SePuedeVerElformulario ? 'Ocultar Formulario' : 'Añadir Producto' }}
-</button>
+  <h1 class="Stock-Title">Productos</h1>
+  <div class="agregar-producto-card" (click)="FormChange()">
 
-<div *ngIf="SePuedeVerElformulario" class="form-container">
-  <form (ngSubmit)="GuardarData()" class="product-form">
-    <div class="form-group">
-      <label for="name">Nombre:</label>
-      <input type="text" id="name" name="name" [(ngModel)]="product.name" required>
-    </div>
-    <div class="form-group">
-      <label for="brand">Marca:</label>
-      <input type="text" id="brand" name="brand" [(ngModel)]="product.brand" required>
-    </div>
-    <div class="form-group">
-      <label for="price">Precio:</label>
-      <input type="number" id="price" name="price" [(ngModel)]="product.price" required>
-    </div>
-    <div class="form-group">
-      <label for="type">Tipo:</label>
-      <input type="text" id="type" name="type" [(ngModel)]="product.type" required>
-    </div>
-    <div class="form-group">
-      <label for="quantify">Cantidad:</label>
-      <input type="text" id="cantidad" name="cantidad" [(ngModel)]="product.cantidad">
-    </div>
-    <div class="form-group">
-      <label for="description">Descripción:</label>
-      <input type="text" id="description" name="description" [(ngModel)]="product.description" required>
-    </div>
-    <div class="form-group">
-      <label for="code">Código de barras:</label>
-      <input type="text" id="code" name="code" [(ngModel)]="product.code" required>
-    </div>
+    <div class="agregar-icono">{{SePuedeVerElformulario ? '' : '+'}}</div>
+    <div class="agregar-texto">{{ SePuedeVerElformulario ? 'Cancelar' : 'Añadir Producto' }}</div>
+  </div>
 
-    <button type="submit" class="submit-button">Guardar Producto</button>
-  </form>
-</div>
-
-
-<div *ngIf="SePuedeVerElformulario == false" class="productos-container">
-  <div *ngFor="let producto of productos" class="producto-card">
+  <div *ngIf="SePuedeVerElformulario" class="producto-card producto-form-card">
     <div class="producto-img">
-      <img *ngIf="producto.img" [src]="producto.img" alt="Imagen de {{ producto.name }}" />
-      <div *ngIf="!producto.img" class="img-placeholder">
+      <img *ngIf="product.img" [src]="product.img" alt="Imagen de producto" />
+      <div *ngIf="!product.img" class="img-placeholder">
         <span>🖼️</span>
       </div>
     </div>
     <div class="producto-info">
-      <div class="producto-nombre">{{ producto.name }}</div>
-      <div class="producto-desc">{{ producto.desc }}</div>
+      <input type="text" class="producto-nombre-input" placeholder="Agregar un texto..." [(ngModel)]="product.name" />
+      <input type="text" class="producto-desc-input" placeholder="Describe el producto aquí..." [(ngModel)]="product.description" />
     </div>
     <div class="producto-precio">
-      ${{ producto.price }}
+      <input type="number" class="producto-precio-input" placeholder="precio..." [(ngModel)]="product.price" />
+    </div>
+    <div class="producto-cantidad">
+      <input type="number" class="producto-cantidad-input" placeholder="cantidad..." [(ngModel)]="product.cantidad" min="1" />
     </div>
     <div class="producto-editar">
-      <button class="edit-btn" (click)="onEdit(producto, i)">
-        <span>✏️</span>
+      <button class="submit-button" (click)="GuardarData()">
+        <span>✔️</span>
       </button>
     </div>
   </div>
-</div>
+
+  <div *ngIf="SePuedeVerElformulario == false" class="productos-container">
+    <div *ngFor="let producto of productos; let i = index" class="producto-card">
+      <div class="producto-img">
+        <img *ngIf="producto.img" [src]="producto.img" alt="Imagen de {{ producto.name }}" />
+        <div *ngIf="!producto.img" class="img-placeholder">
+          <span>🖼️</span>
+        </div>
+      </div>
+      <div class="producto-info">
+        <div class="producto-nombre">{{ producto.name }}</div>
+        <div class="producto-desc">{{ producto.desc }}</div>
+      </div>
+      <div class="producto-precio">
+        x{{ producto.quantity }}
+      </div>
+      <div class="producto-precio">
+        ${{ producto.price }}
+      </div>
+      <div class="producto-editar">
+        <button class="edit-btn" (click)="onEdit(producto, i)">
+          <span>✏️</span>
+        </button>
+      </div>
+    </div>
+  </div>
 </div>
