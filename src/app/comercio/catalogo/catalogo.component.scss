@@ -1,17 +1,133 @@
+
 .pagina-catalogo {
   display: flex;
   width: 100%;
-  height: 100%;
+  min-height: 100vh;
+  background: #f3f3f3;
   justify-content: center;
+  align-items: flex-start;
 }
 
-.contenedor-catalogo{
-  background-color: aqua;
-  width: 30%;
-  height: 70vh;
-  padding: 10vh;
+.contenedor-catalogo {
+  background: none;
+  width: 60vw;
+  max-width: 700px;
+  margin-top: 40px;
+  padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 5%;
-  overflow: auto; // agrega el scroll
+  gap: 32px;
+}
+
+.agregar-producto {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+.agregar-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  font-size: 2.2rem;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+.agregar-header i {
+  font-size: 2.8rem;
+  color: #222;
+}
+.agregar-form {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.agregar-form input {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 1rem;
+  width: 160px;
+}
+.agregar-form button {
+  background: #FD2A2C;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-size: 1.1rem;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.producto-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 24px;
+  margin-bottom: 12px;
+}
+.producto-img {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background: #f3f3f3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.producto-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+}
+.producto-img i {
+  font-size: 2.2rem;
+  color: #bbb;
+}
+.producto-info {
+  flex: 1;
+}
+.producto-info h2 {
+  font-size: 1.2rem;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 800;
+  margin: 0 0 4px 0;
+}
+.producto-info p {
+  font-size: 0.95rem;
+  color: #444;
+  margin: 0;
+}
+.producto-precio {
+  font-size: 1.3rem;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 800;
+  color: #222;
+  min-width: 80px;
+  text-align: right;
+}
+.producto-edit {
+  margin-left: 12px;
+  cursor: pointer;
+}
+.producto-edit i {
+  font-size: 1.5rem;
+  color: #222;
 }
