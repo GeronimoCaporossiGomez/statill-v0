@@ -18,10 +18,12 @@
       <input type="text" class="producto-desc-input" placeholder="Describe el producto aquí..." [(ngModel)]="product.description" />
     </div>
     <div class="producto-precio">
-      <input type="number" class="producto-precio-input" placeholder="precio..." [(ngModel)]="product.price" />
+      <label for="precio-input" class="producto-nombre"> Precio:</label>
+      <input type="number" id="precio-input"class="producto-cantidad-input" placeholder="precio..." [(ngModel)]="product.price" min="1"/>
     </div>
     <div class="producto-cantidad">
-      <input type="number" class="producto-cantidad-input" placeholder="cantidad..." [(ngModel)]="product.cantidad" min="1" />
+      <label for="cantidad-input" class="producto-nombre"> Cantidad:</label>
+      <input type="number" id="cantidad-input" class="producto-cantidad-input" placeholder="cantidad..." [(ngModel)]="product.cantidad" min="1" />
     </div>
     <div class="producto-editar">
       <button class="submit-button" (click)="GuardarData()">
