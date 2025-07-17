@@ -1,17 +1,10 @@
-<div class="sidebar" [class.expanded]="isExpanded">
-  <div class="logo-container">
-    <div class="logo">
-      <img src="assets/img/logo.png" alt="Statill" class="logo-icon">
-      <span class="logo-text">Statill</span>
-    </div>
-    <button class="toggle-btn" (click)="toggleSidebar()">
-      <i class="fas fa-bars"></i>
-    </button>
-  </div>
-  
-  <div class="sidebar-nav">
+<div class="sidebar sidebariwis">
+  <div class="sidebariwis-nav">
     <ul>
       <li *ngFor="let item of menuItems">
+        <ng-container *ngIf="activeItem === item.id">
+          <span class="active-dot"></span>
+        </ng-container>
         <a 
           [routerLink]="item.path" 
           routerLinkActive="active"
@@ -23,5 +16,10 @@
         </a>
       </li>
     </ul>
+    <div class="comprador-btn-container">
+      <button class="comprador-btn">
+        <i class="fas fa-person-walking"></i> Comprador
+      </button>
+    </div>
   </div>
 </div>

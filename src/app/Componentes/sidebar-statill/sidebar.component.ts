@@ -13,47 +13,35 @@ export class SidebarComponent {
   activeItem = 'home'; // Item activo por defecto
 
   menuItems = [
-    { 
-      path: '/home', 
-      icon: 'fas fa-home', 
-      text: 'Home', 
-      id: 'home' 
-    },
-    { 
-      path: '/productos', 
-      icon: 'fas fa-box-open', 
-      text: 'Productos', 
-      id: 'productos' 
-    },
-    { 
-      path: '/perfil', 
-      icon: 'fas fa-user-circle', 
-      text: 'Cuenta', 
-      id: 'perfil' 
-    },
-    { 
-      path: '/estadisticas', 
-      icon: 'fas fa-chart-bar', 
-      text: 'Estadísticas', 
-      id: 'estadisticas' 
-    },
-    { 
-      path: '/local', 
-      icon: 'fas fa-store-alt', 
-      text: 'Mi Local', 
-      id: 'local' 
+    {
+      path: '/estadisticas',
+      icon: 'fas fa-chart-bar',
+      text: 'Estadísticas',
+      id: 'estadisticas'
     },
     {
-      path: '/ayuda',
-      icon: 'fas fa-question-circle',
-      text: 'Ayuda',
-      id: 'ayuda'
+      path: '/escanear',
+      icon: 'fas fa-barcode',
+      text: 'Escanear',
+      id: 'escanear'
+    },
+    {
+      path: '/catalogo',
+      icon: 'fas fa-clipboard-list',
+      text: 'Catálogo',
+      id: 'catalogo'
     },
     {
       path: '/configuracion',
       icon: 'fas fa-cog',
-      text: 'Configuración',
+      text: 'Ajustes',
       id: 'configuracion'
+    },
+    {
+      path: '/stock',
+      icon: 'fas fa-store-alt',
+      text: 'Productos',
+      id: 'stock'
     }
   ];
 
