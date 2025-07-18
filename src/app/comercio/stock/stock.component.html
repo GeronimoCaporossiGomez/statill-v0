@@ -1,4 +1,9 @@
 <div class="pagina-stock">
+
+  <nav>
+    <app-sidebar></app-sidebar>
+  </nav>
+
   <h1 class="Stock-Title">Productos</h1>
   <div class="agregar-producto-card" (click)="FormChange()">
 
@@ -51,7 +56,7 @@
         ${{ producto.price }}
       </div>
       <div class="producto-editar">
-        <button class="edit-btn" (click)="onEdit(product, i)">
+        <button class="edit-btn" (click)="onEdit(producto, i)">
           <span>✏️</span>
         </button>
       </div>

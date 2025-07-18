@@ -65,7 +65,7 @@ export class StockComponent {
       name: this.product.name,
       brand: 'algo',
       price: this.product.price,
-      type: 0,
+      type: 1,
       quantity: Number(this.product.cantidad),
       desc: this.product.description,
       barcode: '+',
