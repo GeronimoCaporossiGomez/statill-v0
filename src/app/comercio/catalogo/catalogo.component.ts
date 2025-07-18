@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { ComercioHeaderComponent } from '../comercio-header/comercio-header.component';
 import { SidebarComponent } from 'src/app/Componentes/sidebar-statill/sidebar.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MiApiService } from 'src/app/servicios/mi-api.service';
-
+import { GeneralService } from 'src/app/servicios/general.service';
 @Component({
   selector: 'app-catalogo',
   standalone: true,
-  imports: [ComercioHeaderComponent, CommonModule, SidebarComponent, FormsModule],
+  imports: [CommonModule, SidebarComponent, FormsModule],
   templateUrl: './catalogo.component.html',
   styleUrl: './catalogo.component.scss'
 })
@@ -18,7 +17,7 @@ export class CatalogoComponent {
   productosCatalogoIds: number[] = [];
 
   ngOnInit() {
-    this.miApi.getDatos().subscribe((data: any) => {
+    this.miApi.getProductos().subscribe((data: any) => {
       this.productos = data.data;
     });
   }

@@ -36,23 +36,55 @@
     <form (ngSubmit)="submitForm()">
       <!-- Solo en registro -->
       <ng-container *ngIf="!isLogin">
-        <div class="label-row">
-          <label>Nombre</label>
-          <label>Apellido</label>
+        <div class="row-compact">
+          <div class="col-2">
+            <label>Nombre</label>
+          <input
+            type="text"
+            placeholder="Nombre"
+            [(ngModel)]="first_names"
+            name="first_names"
+            required />
+          </div>
+          <div class="col-2">
+            <label>Apellido</label>
+          <input
+            type="text"
+            placeholder="Apellido"
+            [(ngModel)]="last_name"
+            name="last_name"
+            required />
+          </div>
         </div>
-        <div class="name-fields">
-          <input
-            type="text"
-            placeholder="Ingrese nombre"
-            [(ngModel)]="name"
-            name="name"
-            required />
-          <input
-            type="text"
-            placeholder="Ingrese apellido"
-            [(ngModel)]="apellido"
-            name="apellido"
-            required />
+        <div class="row-compact">
+          <div class="col-2">
+            <label>Fecha de nacimiento</label>
+            <input
+              type="date"
+              [(ngModel)]="birthdate"
+              name="birthdate"
+              required />
+          </div>
+          <div class="col-2">
+            <label>Género</label>
+            <select [(ngModel)]="gender" name="gender" required>
+              <option value="">Seleccione</option>
+              <option value="M">Masculino</option>
+              <option value="F">Femenino</option>
+              <option value="X">Otro</option>
+            </select>
+          </div>
+        </div>
+        <div class="row-compact">
+          <div class="col-1">
+            <label>Zona de residencia</label>
+            <input
+              type="text"
+              placeholder="Ej: Vicente López"
+              [(ngModel)]="res_area"
+              name="res_area"
+              required />
+          </div>
         </div>
       </ng-container>
 

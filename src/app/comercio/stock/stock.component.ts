@@ -32,7 +32,7 @@ export class StockComponent {
   productoEditandoId: number | null = null; // Nuevo: ID del producto que se está editando
 
   ngOnInit() {
-    this.miApi.getDatos().subscribe((data: any) => {
+    this.miApi.getProductos().subscribe((data: any) => {
       console.log('prubeba, prubea', data);
       this.productos = data.data;
       console.log('Productos desde la API:', this.productos);
@@ -76,7 +76,7 @@ export class StockComponent {
       this.miApi.editarProducto(this.productoEditandoId, productoApi).subscribe(
         response => {
           console.log('Producto editado correctamente:', response);
-          this.miApi.getDatos().subscribe((data: any) => {
+          this.miApi.getProductos().subscribe((data: any) => {
             this.productos = data.data;
           });
         },
@@ -91,7 +91,7 @@ export class StockComponent {
       this.miApi.crearProducto(productoApi).subscribe(
         response => {
           console.log('Producto posteado correctamente:', response);
-          this.miApi.getDatos().subscribe((data: any) => {
+          this.miApi.getProductos().subscribe((data: any) => {
             this.productos = data.data;
           });
         },

@@ -42,6 +42,9 @@ export class SidebarComponent {
       icon: 'fas fa-store-alt',
       text: 'Productos',
       id: 'stock'
+    },
+    {
+      
     }
   ];
 
