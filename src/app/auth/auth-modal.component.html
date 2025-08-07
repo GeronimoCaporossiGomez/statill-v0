@@ -96,12 +96,12 @@
         name="email"
         required />
 
-      <label class="input-label">Contraseña</label>
+      <label [(ngModel)]="password" class="input-label">Contraseña</label>
       <input
         type="password"
         placeholder="Ingresar +8 caracteres"
-        [(ngModel)]="password"
         name="password"
+        minlength="8"
         required />
 
       <!-- Términos y condiciones solo en registro -->
@@ -109,7 +109,7 @@
         <span class="terms-icon">&#9888;</span>
         <span>Al registrarse, está aceptando los <a href="#" class="terms-link">términos y condiciones</a></span>
       </div>
-
+      <button type="button" (click)="prueba()" class="btn btn-primary"></button>
       <button type="submit" class="btn btn-primary">
         {{ isLogin ? 'Entrar' : 'Registrarse' }}
       </button>
