@@ -16,8 +16,7 @@ export class MiApiService {
   }
   getUsers() {
     return this.http.get(this.apiUrl + '/api/v1/users/');
-}
-getStores() {
-  return this.http.get(this.apiUrl + '/api/v1/stores/'); }
-
-}
+  }
+  getStores() {
+    return this.http.get(this.apiUrl + '/api/v1/stores/'); }
+  }

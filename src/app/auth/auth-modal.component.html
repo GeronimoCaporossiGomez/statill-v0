@@ -12,22 +12,13 @@
   <!-- Tabs de navegación -->
   <div class="auth-header">
     <div class="tabs">
-      <div
-        class="tab"
-        [class.active]="!isLogin"
-        (click)="toggleMode(false)">
+      <div class="tab" [class.active]="!isLogin" (click)="toggleMode(false)">
         Registro
       </div>
-      <div
-        class="tab"
-        [class.active]="isLogin"
-        (click)="toggleMode(true)">
+      <div class="tab" [class.active]="isLogin" (click)="toggleMode(true)">
         Iniciar sesión
       </div>
-      <div
-        class="active-bar"
-        [class.move-right]="isLogin">
-      </div>
+      <div class="active-bar" [class.move-right]="isLogin"></div>
     </div>
   </div>
 
@@ -36,49 +27,53 @@
     <form (ngSubmit)="submitForm()">
       <!-- Solo en registro -->
       <ng-container *ngIf="!isLogin">
-        <div class="row-compact">
-          <div class="col-2">
-            <label>Nombre</label>
-          <input
-            type="text"
-            placeholder="Nombre"
-            [(ngModel)]="first_names"
-            name="first_names"
-            required />
-          </div>
-          <div class="col-2">
-            <label>Apellido</label>
-          <input
-            type="text"
-            placeholder="Apellido"
-            [(ngModel)]="last_name"
-            name="last_name"
-            required />
-          </div>
-        </div>
-        <div class="row-compact">
-          <div class="col-2">
-            <label>Fecha de nacimiento</label>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="first_names">Nombre</label>
             <input
+              id="first_names"
+              type="text"
+              placeholder="Ingresa tu nombre"
+              [(ngModel)]="first_names"
+              name="first_names"
+              required />
+          </div>
+
+          <div class="form-group">
+            <label for="last_name">Apellido</label>
+            <input
+              id="last_name"
+              type="text"
+              placeholder="Ingresa tu apellido"
+              [(ngModel)]="last_name"
+              name="last_name"
+              required />
+          </div>
+
+          <div class="form-group">
+            <label for="birthdate">Fecha de nacimiento</label>
+            <input
+              id="birthdate"
               type="date"
               [(ngModel)]="birthdate"
               name="birthdate"
               required />
           </div>
-          <div class="col-2">
-            <label>Género</label>
-            <select [(ngModel)]="gender" name="gender" required>
+
+          <div class="form-group">
+            <label for="gender">Género</label>
+            <select id="gender" [(ngModel)]="gender" name="gender" required>
               <option value="">Seleccione</option>
               <option value="M">Masculino</option>
               <option value="F">Femenino</option>
               <option value="X">Otro</option>
             </select>
           </div>
-        </div>
-        <div class="row-compact">
-          <div class="col-1">
-            <label>Zona de residencia</label>
+
+          <div class="form-group full-width">
+            <label for="res_area">Zona de residencia</label>
             <input
+              id="res_area"
               type="text"
               placeholder="Ej: Vicente López"
               [(ngModel)]="res_area"
@@ -88,21 +83,27 @@
         </div>
       </ng-container>
 
-      <label class="input-label">Correo electrónico</label>
-      <input
-        type="email"
-        placeholder="Correo ejemplo@gmail.com"
-        [(ngModel)]="email"
-        name="email"
-        required />
+      <div class="form-group">
+        <label for="email">Correo electrónico</label>
+        <input
+          id="email"
+          type="email"
+          placeholder="ejemplo@gmail.com"
+          [(ngModel)]="email"
+          name="email"
+          required />
+      </div>
 
-      <label class="input-label">Contraseña</label>
-      <input
-        type="password"
-        placeholder="Ingresar +8 caracteres"
-        [(ngModel)]="password"
-        name="password"
-        required />
+      <div class="form-group">
+        <label for="password">Contraseña</label>
+        <input
+          id="password"
+          type="password"
+          placeholder="Ingresar +8 caracteres"
+          [(ngModel)]="password"
+          name="password"
+          required />
+      </div>
 
       <!-- Términos y condiciones solo en registro -->
       <div *ngIf="!isLogin" class="terms">
@@ -111,7 +112,7 @@
       </div>
 
       <button type="submit" class="btn btn-primary">
-        {{ isLogin ? 'Entrar' : 'Registrarse' }}
+        {{ isLogin ? 'Iniciar sesión' : 'Registrarse' }}
       </button>
     </form>
 
@@ -119,6 +120,7 @@
     <div class="divider">
       <span>O</span>
     </div>
+
     <div class="switch-mode">
       <span *ngIf="!isLogin">¿Ya tenés cuenta? <a (click)="toggleMode(true)" class="switch-link">Iniciá sesión</a></span>
       <span *ngIf="isLogin">¿No tenés cuenta? <a (click)="toggleMode(false)" class="switch-link">Registrate</a></span>
