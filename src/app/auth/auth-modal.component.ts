@@ -66,12 +66,12 @@ export class AuthModalComponent {
             this.router.navigate(['/home']);
           } else {
             this.loading = false;
-            this.message = 'Email o contraseña incorrectos.';
+            alert('Email o contraseña incorrectos.');
           }
         },
         error: (err) => {
           this.loading = false;
-          this.message = 'Error al verificar usuarios.';
+          alert('Error al verificar usuarios.');
         }
       });
     } else {
@@ -96,5 +96,8 @@ export class AuthModalComponent {
         }
       });
     }
+  }
+  prueba(){
+    alert('as');
   }
 }
