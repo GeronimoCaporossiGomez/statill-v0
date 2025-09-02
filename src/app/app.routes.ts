@@ -67,4 +67,9 @@ export const routes: Routes = [
     loadComponent: () =>
     import("../app/comercio/catalogo/catalogo.component").then(m => m.CatalogoComponent)
   },
+    {
+    path: "puntos",
+    loadComponent: () =>
+      import("../app/puntos/puntos.component").then(m => m.PuntosComponent)
+  },
 ];
