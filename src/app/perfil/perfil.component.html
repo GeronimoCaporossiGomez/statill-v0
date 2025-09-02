@@ -1,14 +1,31 @@
-<app-header-statill></app-header-statill>
 
-<div class=contenedor-pagina-perfil>
-  <ul class="contenedor-perfil">
-    <img src="assets/img/logo.png" alt="Foto de perfil">
-      <li>Cuenta</li>
-      <li>Pedidos</li>
-  </ul>
+<div class="pagina-perfil">
+  <div class="perfi-izquierda">
+    <div class="seccion-personal">
+      <img src="" alt="nadita">
+      <h1>nombre</h1>
+      <h2>nombre&#64;gmail.com</h2>
+    </div>
+    <div class="seccion-botones">
+      <button class="boton-editar"><a routerLink="/home">Home</a></button>
+      <button class="boton-editar"><a routerLink="/home">Mapa</a></button>
+      <button class="boton-editar"><a routerLink="/home">Puntos</a></button>
+      <button class="boton-cerrar-sesion">Vendedor</button>
+    </div>
+  </div>
 
-  <div style="width: 707px; height: 753px; position: relative">
-    <div style="width: 707px; height: 753px; left: 31px; top: 0px; position: absolute; background: #D9D9D9"></div>
-    <div style="width: 707px; height: 73px; left: 31px; top: 45px; position: absolute; background: white; border-radius: 50px"></div>
-    <div style="width: 738px; height: 68px; left: 0px; top: 48px; position: absolute; text-align: center; justify-content: center; display: flex; flex-direction: column; color: black; font-size: 30.15px; font-family: Poppins; font-weight: 800; word-wrap: break-word">Informacion personal</div>
+  <div class="perfil-derecha">
+    <h1>Mi Cuenta</h1>
+    <div class="perfil-botones">
+      <h2>Perfil</h2>
+      <button type="button">Información Personal</button>
+
+      <h2>Soporte</h2>
+      <button type="button" class="hola">Terminos y condiciones</button>
+      <button type="button">Quejarse</button>
+
+      <h2>Opciones</h2>
+      <button type="button">Cerrar Sesion</button>
+    </div>
+  </div>
 </div>

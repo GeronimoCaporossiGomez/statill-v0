@@ -1,66 +1,158 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap');
 
-$color-primario: #FD2A2C;
-$color-secundario: #3f51b5;
-$color-sidebar: #2C2F36; // NUEVO COLOR sidebar
-$font-titulo: 'Poppins', sans-serif;
-$font-contenido: 'Roboto Condensed', sans-serif;
-
-*{
-  font-family: $font-contenido
+.pagina-perfil {
+  display: flex;
+  gap: 2.5rem;
+  background: #f3f3f3;
+  max-height: 100vh;
+  padding: 2.5rem 0;
 }
-    .carrito-body {
-      flex: 1;
-      overflow-y: auto;
 
-      ul {
-        list-style: none;
-        padding: 0;
-
-        li {
-          display: flex;
-          justify-content: space-between;
-          padding: 0.5rem 0;
-          border-bottom: 1px solid #eee;
-
-          strong {
-            font-weight: 600;
-          }
-
-          span {
-            font-weight: bold;
-          }
-        }
-      }
-    }
-
-.contenedor-perfil{
-  left: 100;
-  width: 20%;
+.perfi-izquierda {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  min-width: 220px;
+  max-width: 260px;
+  padding: 2rem 1.2rem 1.2rem 1.2rem;
+  margin-left: 2rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 30px;
-  background-color: #f5f5f5;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  gap: 1.5rem;
 }
 
-.contenedor-pagina-perfil{
+.seccion-personal {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
+  gap: 0.5rem;
+  img {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: #eaeaea;
+    object-fit: cover;
+    margin-bottom: 0.5rem;
+  }
+  h1 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0;
+    color: #222;
+  }
+  h2 {
+    font-size: 0.98rem;
+    font-weight: 500;
+    color: #888;
+    margin: 0;
+  }
+}
+
+.seccion-botones {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
   width: 100%;
-  height: 100%;
+  button {
+    width: 100%;
+    padding: 0.7rem 0;
+    border-radius: 8px;
+    border: none;
+    font-weight: 700;
+    font-size: 1rem;
+    background: #f3f3f3;
+    color: #222;
+    cursor: pointer;
+    transition: background 0.2s;
+    &:hover {
+      background: #e0e0e0;
+    }
+  }
+  .boton-cerrar-sesion {
+    background: #fd2a2c;
+    color: #fff;
+    font-weight: 700;
+    margin-top: 0.3rem;
+    &:hover {
+      background: #c82021;
+    }
+  }
 }
 
-.contenedor-informacion{
-  width: 400px;
-  height: 400px;
-  background-color: blue;
+.perfil-derecha {
+  flex: 1;
+  padding-right: 2rem;
+  h1 {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 1.2rem;
+    color: #222;
+  }
+  .perfil-botones {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.7rem;
+      color: #222;
+    }
+    button {
+      width: 100%;
+      background: #fff;
+      border: none;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+      padding: 1rem 1.2rem;
+      font-size: 1.08rem;
+      font-weight: 600;
+      color: #222;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-bottom: 0.5rem;
+      &:hover {
+        background: #f3f3f3;
+      }
+      &::after {
+        content: '\2192'; /* flecha derecha */
+        font-size: 1.2rem;
+        color: #888;
+        margin-left: 0.7rem;
+      }
+    }
+  }
 }
 
+// Botón vendedor
+.boton-vendedor {
+  background: #fd2a2c;
+  color: #fff;
+  font-weight: 700;
+  border-radius: 8px;
+  padding: 0.5rem 1.2rem;
+  font-size: 0.98rem;
+  margin-top: 1rem;
+  border: none;
+  box-shadow: 0 1px 4px rgba(253,42,44,0.08);
+}
 
+@media (max-width: 900px) {
+  .pagina-perfil {
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.2rem 0;
+  }
+  .perfil-derecha {
+    padding-right: 0;
+  }
+}
 
-
+.hola{
+  background-color: #c82021 ;
+  margin-bottom: 0%;
+}

@@ -97,7 +97,4 @@ export class AuthModalComponent {
       });
     }
   }
-  prueba(){
-    alert('as');
-  }
 }
