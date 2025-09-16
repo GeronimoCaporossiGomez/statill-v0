@@ -1,38 +1,19 @@
-<section class="home-layout">
+<app-header-statill></app-header-statill>
 
-  <!-- Header estilo imagen -->
-  <header class="statill-header">
-    <div class="header-left">
-      <span class="header-icon"><i class="fa fa-user"></i></span>
-      <span class="header-cuenta">Cuenta <i class="fa fa-chevron-down"></i></span>
+<main class="home-container">
+  <div class="search-container">
+    <input type="text" placeholder="Buscá tu tienda favorita..." class="search-input">
+  </div>
+
+  <section class="promotions-section">
+    <h2 class="promotions-title">¡Promociones imperdibles!🔥🤩</h2>
+    <div class="promotions-grid">
+      <app-discounts-statill
+        *ngFor="let promo of promotions"
+        [logoUrl]="promo.logoUrl"
+        [storeName]="promo.storeName"
+        [discountText]="promo.discountText">
+      </app-discounts-statill>
     </div>
-    <div class="header-center">
-      <span class="header-logo">
-        <img src="assets/img/logo.png" alt="Statill" class="logo-img" />
-        <span class="logo-text">Statill</span>
-      </span>
-    </div>
-    <div class="header-right">
-      <span class="header-icon"><i class="fa fa-map-marker"></i></span>
-      <span class="header-mapa">Mapa</span>
-    </div>
-  </header>
-
-  <main class="home-content">
-    <!-- Buscador arriba -->
-    <div class="search-bar">
-      <label for="search">Cerrar</label>
-      <input
-        id="search"
-        type="text"
-        placeholder="Buscar restaurante, producto..."
-        [(ngModel)]="searchTerm"
-      />
-    </div>
-
-    <!-- Listado de locales/restaurantes -->
-    <app-stores></app-stores>
-
-
-  </main>
-</section>
+  </section>
+</main>

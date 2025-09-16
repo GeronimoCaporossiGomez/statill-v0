@@ -1,28 +1,32 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { StoresComponent } from 'src/app/Componentes/Stores-Statill/Stores.component';
+import { CommonModule, NgFor } from '@angular/common';
+import { HeaderStatillComponent } from 'src/app/Componentes/header-statill/header-statill.component';
+import { DiscountsStatillComponent } from 'src/app/Componentes/Discounts-statill/Discounts-statill.component';
 
 @Component({
-  standalone: true,
   selector: 'app-home',
-  imports: [CommonModule, FormsModule, StoresComponent],
+  standalone: true,
+  imports: [CommonModule, NgFor, HeaderStatillComponent, DiscountsStatillComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  searchTerm = '';
+  promotions = [
+    {
+      id: 1,
+      storeName: 'hola en nombre',
+      discountText: 'soy un descuento',
+      logoUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSidAa0zo1VuvqjZCs18V_DlFovbjc17c964w&s'
+    },
+    {
+      id: 2,
+      storeName: 'Kioscos EL JEVI',
+      discountText: 'Preordená con 20% OFF en kioscos EL JEVI',
+      logoUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSidAa0zo1VuvqjZCs18V_DlFovbjc17c964w&s'
+    },
+    // ... y más promociones
+  ];
 
-  carrito: any[] = [];
-
-  ngOnInit() {}
-
-  agregarAlCarrito(producto: any) {
-    const itemExistente = this.carrito.find(item => item.nombre === producto.nombre);
-    if (itemExistente) {
-      itemExistente.cantidad = (itemExistente.cantidad || 1) + 1;
-    } else {
-      this.carrito.push({ ...producto, cantidad: 1 });
-    }
-  }
+  constructor() { }
+  ngOnInit(): void { }
 }
