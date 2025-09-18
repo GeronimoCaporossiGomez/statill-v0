@@ -2,10 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { SidebarComponent } from "../Componentes/sidebar-statill/sidebar.component";
 import { RouterLink, RouterModule } from "@angular/router";
+import { HeaderStatillComponent } from "../Componentes/header-statill/header-statill.component";
 
 @Component({
   selector: 'app-puntos',
-  imports: [CommonModule, SidebarComponent, RouterLink, RouterModule],
+  imports: [CommonModule, RouterLink, RouterModule, HeaderStatillComponent],
   templateUrl: './puntos.component.html',
   styleUrl: './puntos.component.scss'
 })
