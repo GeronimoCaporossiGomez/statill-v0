@@ -1,6 +1,8 @@
 <nav class="header-nav">
   <div class="seccion-cuenta">
-    <button type="button" *ngIf="!menuAbierto" routerLink="/perfil">Cuenta</button>
+    <div class="bloqueee">
+      <button type="button" *ngIf="!menuAbierto" routerLink="/perfil">Cuenta</button>
+    </div>
     <button type="button" (click)="toggleMenu()">asdada</button>
     <div *ngIf="menuAbierto">
       <button type="button" routerLink="/perfil">Cuenta</button>
