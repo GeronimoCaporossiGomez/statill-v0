@@ -72,4 +72,9 @@ export const routes: Routes = [
     loadComponent: () =>
       import("../app/puntos/puntos.component").then(m => m.PuntosComponent)
   },
+  {
+    path: "preordenes",
+    loadComponent: () =>
+      import("../app/preordenes/preordenes.component").then(m => m.PreordenesComponent)
+  },
 ];

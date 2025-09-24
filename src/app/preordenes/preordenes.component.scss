@@ -23,6 +23,7 @@
   border: 1px solid #C2C2C2;
   background: #FAFAFA;
   height: 25vh;
+  cursor: pointer;
 }
 .seccion-izquierda-cartel{
   display: flex;
@@ -62,7 +63,28 @@ img{
   overflow: hidden;
   text-overflow: ellipsis;
 }
+.texto.detalles {
+  margin-top: 3%;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  word-break: break-word !important; // <-- esto fuerza el salto de línea
+
+}
 
 .gris{
   color: #585858;
+}
+
+.descripcion{
+  height: 30vh;
+  overflow: hidden;
+  color: #585858;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.descripcion-activa{
+  height: auto;
 }

@@ -1,8 +1,10 @@
-<nav class="header-nav">
+<div class="header-nav">
   <div class="seccion-cuenta">
-    <button type="button" *ngIf="!menuAbierto" routerLink="/perfil">Cuenta</button>
-    <button type="button" (click)="toggleMenu()">asdada</button>
-    <div *ngIf="menuAbierto">
+    <div class="seccion-izquierda">
+      <div class="espacio"><button type="button" class="boton-header" *ngIf="!menuAbierto" routerLink="/perfil">Cuenta</button></div>
+      <button type="button" (click)="toggleMenu()">></button>
+    </div>
+    <div class="menu-perfil" *ngIf="menuAbierto">
       <button type="button" routerLink="/perfil">Cuenta</button>
       <button type="button" routerLink="/puntos">Puntos</button>
       <button type="button" routerLink="/perfil">Cuenta</button>
@@ -12,6 +14,6 @@
     <img src="assets/img/statill-header.png" alt="logo de statill">
   </div>
   <div>
-    <a routerLink="/mapa">Mapa</a>
+    <button type="button" class="boton-header" routerLink="/mapa">Mapa</button>
   </div>
-</nav>
+</div>
