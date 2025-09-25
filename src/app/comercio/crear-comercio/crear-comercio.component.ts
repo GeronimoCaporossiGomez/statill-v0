@@ -3,11 +3,12 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { HeaderStatillComponent } from "../../Componentes/header-statill/header-statill.component";
+import { SidebarComponent } from 'src/app/Componentes/sidebar-statill/sidebar.component';
 
 @Component({
   selector: 'app-crear-comercio',
   standalone: true,
-  imports: [CommonModule, FormsModule, HeaderStatillComponent, RouterLink],
+  imports: [CommonModule, FormsModule, SidebarComponent, RouterLink],
   templateUrl: './crear-comercio.component.html',
   styleUrl: './crear-comercio.component.scss'
 })

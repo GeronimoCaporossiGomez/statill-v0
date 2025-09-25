@@ -6,14 +6,14 @@
 
 .puntos-seccion{
   background-color: #EEE;
-  height: auto;
+  height: 100vh;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.cartel-comercio{
+.cartel-puntos{
   width: 90vw;
   border-radius: 20px; /* no se porque tan feo esto */
   display: flex;
@@ -35,7 +35,6 @@ span{
 }
 
 img{
-  border-radius: 50%;
   margin: 2%;
 }
 
@@ -65,4 +64,41 @@ img{
 
 .gris{
   color: #585858;
+}
+
+.cartel-puntos img {
+  width: auto;
+  height: 80%;
+  max-width: 120px;
+  min-width: 48px;
+  object-fit: contain;
+  margin-right: 2vw;
+  background: #fff;
+  border: 2px solid #e0e0e0;
+  /* sin border-radius */
+  transition: width 0.2s, height 0.2s;
+  display: block;
+}
+
+.cartel-puntos .contenido-puntos {
+  flex: 1 1 80%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+@media (max-width: 600px) {
+  .cartel-puntos {
+    height: 60px;
+    min-height: 48px;
+    max-height: 80px;
+    padding: 0 8px;
+  }
+  .cartel-puntos img {
+    max-width: 48px;
+    min-width: 32px;
+    height: 80%;
+    margin-right: 10px;
+  }
 }

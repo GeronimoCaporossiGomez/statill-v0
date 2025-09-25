@@ -1,4 +1,4 @@
-<app-header-statill></app-header-statill>
+<app-sidebar></app-sidebar>
 
 <div class="contenedor-principal">
   <!-- Sección de cámara -->
@@ -30,28 +30,28 @@
   <!-- Sección del formulario -->
   <div class="seccion-formulario">
     <h2>Datos Escaneados</h2>
-    
+
     <div class="formulario-datos">
       <div class="campo-dato">
         <label>Nombre:</label>
         <span>{{ datosEscaneados.nombre || '--' }}</span>
       </div>
-      
+
       <div class="campo-dato">
         <label>Tipo:</label>
         <span>{{ datosEscaneados.tipo || '--' }}</span>
       </div>
-      
+
       <div class="campo-dato">
         <label>Código:</label>
         <span>{{ datosEscaneados.codigo || '--' }}</span>
       </div>
-      
+
       <div class="campo-dato">
         <label>Precio:</label>
         <span>{{ datosEscaneados.precio ? '$' + datosEscaneados.precio : '--' }}</span>
       </div>
-      
+
       <div class="campo-dato">
         <label>Fecha:</label>
         <span>{{ datosEscaneados.fecha }}</span>
@@ -68,5 +68,3 @@
     </div>
   </div>
 </div>
-
-<app-comercio-header></app-comercio-header>

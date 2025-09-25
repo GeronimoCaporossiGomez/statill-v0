@@ -12,8 +12,20 @@ export class SidebarComponent {
 
   isExpanded = false;
   activeItem = 'home'; // Item activo por defecto
-  vendedor: boolean = false
+  vendedor: boolean = true
   menuItemsVendedor = [
+    {
+      path: '/catalogo',
+      icon: 'fas fa-clipboard-list',
+      text: 'Catálogo',
+      id: 'catalogo'
+    },
+    {
+      path: '/stock',
+      icon: 'fas fa-store-alt',
+      text: 'Productos',
+      id: 'stock'
+    },
     {
       path: '/estadisticas',
       icon: 'fas fa-chart-bar',
@@ -27,25 +39,13 @@ export class SidebarComponent {
       id: 'escanear'
     },
     {
-      path: '/catalogo',
-      icon: 'fas fa-clipboard-list',
-      text: 'Catálogo',
-      id: 'catalogo'
-    },
-    {
       path: '/configuracion',
       icon: 'fas fa-cog',
       text: 'Ajustes',
       id: 'configuracion'
     },
     {
-      path: '/stock',
-      icon: 'fas fa-store-alt',
-      text: 'Productos',
-      id: 'stock'
-    },
-    {
-      
+
     }
   ]
     menuItemsComprador = [

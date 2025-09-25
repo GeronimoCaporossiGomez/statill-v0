@@ -15,7 +15,7 @@ export class PreordenesComponent {
 descripcion: number | null = null;;
 
 probando: any[] = [{ /* esto hay que conectarlo con el backend. */
-  imagen: "https://i.pravatar.cc/150?img=3",
+  imagen: "assets/img/tienda.png",
   nombre: "freddie verdury1",
   fecha: "20/10",
   hora: "12:30",
@@ -26,7 +26,7 @@ probando: any[] = [{ /* esto hay que conectarlo con el backend. */
     { propina: 100,},
   ]
 },{ /* esto hay que conectarlo con el backend. */
-  imagen: "https://i.pravatar.cc/150?img=3",
+  imagen: "assets/img/tienda.png",
   nombre: "freddie verdury1",
   fecha: "20/10",
   hora: "12:30",
@@ -37,7 +37,7 @@ probando: any[] = [{ /* esto hay que conectarlo con el backend. */
     { propina: 100,},
   ]
 },{ /* esto hay que conectarlo con el backend. */
-  imagen: "https://i.pravatar.cc/150?img=3",
+  imagen: "assets/img/tienda.png",
   nombre: "freddie verdury1",
   fecha: "20/10",
   hora: "12:30",
@@ -48,7 +48,7 @@ probando: any[] = [{ /* esto hay que conectarlo con el backend. */
     { propina: 100,},
   ]
 },{ /* esto hay que conectarlo con el backend. */
-  imagen: "https://i.pravatar.cc/150?img=3",
+  imagen: "assets/img/tienda.png",
   nombre: "freddie verdury1",
   fecha: "20/10",
   hora: "12:30",

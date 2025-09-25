@@ -1,19 +1,39 @@
-<div class="header-nav">
-  <div class="seccion-cuenta">
+<div class="header-pagina">
+  <div class="header-nav">
     <div class="seccion-izquierda">
-      <div class="espacio"><button type="button" class="boton-header" *ngIf="!menuAbierto" routerLink="/perfil">Cuenta</button></div>
-      <button type="button" (click)="toggleMenu()">></button>
+      <button type="button" class="boton-header" routerLink="/perfil">
+        <img src="assets/img/perfil-statill.png" alt="icono perfil" class="icono-menu" />
+        Cuenta
+      </button>
+      <button type="button" class="boton-toggle" (click)="toggleMenu()">
+        <span>▼</span>
+      </button>
+      <div class="menu-perfil" *ngIf="menuAbierto">
+        <button type="button" routerLink="/preordenes">
+          <span class="icono-menu"></span>
+          Preórdenes
+        </button>
+        <button type="button" routerLink="/puntos">
+          <span class="icono-menu"></span>
+          Puntos
+        </button>
+        <button type="button" routerLink="/crear-comercio" class="boton-rojo">
+          <span class="icono-menu">&#8644;</span>
+          Vendedor
+        </button>
+      </div>
     </div>
-    <div class="menu-perfil" *ngIf="menuAbierto">
-      <button type="button" routerLink="/perfil">Cuenta</button>
-      <button type="button" routerLink="/puntos">Puntos</button>
-      <button type="button" routerLink="/perfil">Cuenta</button>
+
+    <div class="logo-centro">
+      <img src="assets/img/statill-header.png" alt="logo de statill">
     </div>
-  </div>
-  <div class="logo">
-    <img src="assets/img/statill-header.png" alt="logo de statill">
-  </div>
-  <div>
-    <button type="button" class="boton-header" routerLink="/mapa">Mapa</button>
+
+    <div class="seccion-derecha">
+      <button type="button" class="boton-header" routerLink="/mapa">
+        <img src="assets/img/mapa-pin-statill.png" alt="icono mapa" class="icono-menu" />
+        Mapa
+      </button>
+    </div>
   </div>
 </div>
+

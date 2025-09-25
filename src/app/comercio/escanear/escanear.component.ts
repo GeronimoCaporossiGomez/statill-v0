@@ -3,16 +3,18 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ComercioHeaderComponent } from '../comercio-header/comercio-header.component';
 import { HeaderStatillComponent } from 'src/app/Componentes/header-statill/header-statill.component';
+import { SidebarComponent } from "src/app/Componentes/sidebar-statill/sidebar.component";
 
 @Component({
   selector: 'app-escanear',
   standalone: true,
   imports: [
-    ComercioHeaderComponent, 
-    CommonModule, 
+    ComercioHeaderComponent,
+    CommonModule,
     HeaderStatillComponent,
-    FormsModule
-  ],
+    FormsModule,
+    SidebarComponent
+],
   templateUrl: './escanear.component.html',
   styleUrls: ['./escanear.component.scss']
 })
@@ -21,7 +23,7 @@ export class EscanearComponent implements OnDestroy {
   private stream: MediaStream | null = null;
   isCameraOn = false;
   errorMessage: string | null = null;
-  
+
   // Datos del formulario
   datosEscaneados = {
     nombre: '',

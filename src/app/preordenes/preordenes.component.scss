@@ -25,18 +25,36 @@
   height: 25vh;
   cursor: pointer;
 }
+
+.cartel-comercio img, .preorden-avatar {
+  width: clamp(60px, 12vw, 120px);
+  height: clamp(60px, 12vw, 120px);
+  object-fit: cover;
+  margin-right: 2vw;
+  background: #fff;
+  border: 2px solid #e0e0e0;
+  transition: width 0.2s, height 0.2s;
+}
+
+@media (max-width: 600px) {
+  .cartel-comercio img, .preorden-avatar {
+    width: 48px;
+    height: 48px;
+    margin-right: 10px;
+  }
+}
+
 .seccion-izquierda-cartel{
   display: flex;
   align-items: center;
-  width: 70%;
+  width: 95%;
 }
 
 span{
-  color: #06B512;
+  font-weight: bold;
 }
 
 img{
-  border-radius: 50%;
   margin: 2%;
 }
 
@@ -57,7 +75,7 @@ img{
 }
 
 .texto{
-  font-size: 1rem;
+  font-size: 1.25rem;
   width: 100%;
   white-space: nowrap;
   overflow: hidden;

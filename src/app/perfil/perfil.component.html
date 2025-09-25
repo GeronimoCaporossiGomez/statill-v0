@@ -1,31 +1,36 @@
-
 <div class="pagina-perfil">
   <div class="perfi-izquierda">
     <div class="seccion-personal">
-      <img src="" alt="nadita">
-      <h1>nombre</h1>
-      <h2>nombre&#64;gmail.com</h2>
+      <img src="assets/img/perfil-statill.png" alt="avatar perfil">
+      <h1>Juan Pérez</h1>
+      <h2>juanchiperez&#64;gmail.com</h2>
     </div>
     <div class="seccion-botones">
-      <button class="boton-editar" routerLink="/home"><a >Home</a></button>
-      <button class="boton-editar" routerLink="/mapa"><a >Mapa</a></button>
-      <button class="boton-editar" routerLink="/puntos"><a >Puntos</a></button>
-      <button class="boton-cerrar-sesion">Vendedor</button>
+      <button routerLink="/home">
+        <img src="assets/img/home-statill.png" alt="icono home" class="icono-menu" /> Home
+      </button>
+      <button routerLink="/mapa">
+        <img src="assets/img/mapa-pin-statill.png" alt="icono mapa" class="icono-menu" /> Mapa
+      </button>
+      <button routerLink="/puntos">
+        <img src="assets/img/puntos-statill.png" alt="icono puntos" class="icono-menu" /> Puntos
+      </button>
+      <button class="boton-vendedor" style="background-color: red;">
+        <span class="icono-menu">&#8644;</span> Vendedor
+      </button>
     </div>
   </div>
 
   <div class="perfil-derecha">
-    <h1>Mi Cuenta</h1>
+    <h1>Mi cuenta</h1>
     <div class="perfil-botones">
-      <h2>Perfil</h2>
-      <button type="button">Información Personal</button>
-
       <h2>Soporte</h2>
-      <button type="button" class="hola">Terminos y condiciones</button>
-      <button type="button">Quejarse</button>
-
+      <button type="button">Problemas</button>
+      <h2>Perfil</h2>
+      <button type="button">Información personal</button>
+      <button type="button" routerLink="/preordenes">Historial</button>
       <h2>Opciones</h2>
-      <button type="button">Cerrar Sesion</button>
+      <button type="button">Cerrar sesión</button>
     </div>
   </div>
 </div>
