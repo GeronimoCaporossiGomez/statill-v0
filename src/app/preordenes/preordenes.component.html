@@ -12,10 +12,10 @@
               <h2 class="asd roboto">{{prueba.nombre}}: <span>Pedido #{{i+1}} ({{prueba.fecha}}) ({{prueba.hora}})</span></h2>
               <h3 class="gris roboto">{{prueba.descripcion}}</h3>
             <ng-container *ngIf="descripcion === i">
-              <h3 class="descripcion roboto">pago:
-                <h3 class="roboto">Precio final abonado: {{prueba.pago[0].precioFinalAbonado}}</h3>
-                <h3 class="roboto">Medio de pago: {{prueba.pago[1].metodo}}</h3>
-                <h3 class="roboto">Propina: {{prueba.pago[2].propina}}</h3>
+              <h3 class="descripcion roboto">Pago:
+                <h3 class="descri roboto">Precio final abonado: {{prueba.pago[0].precioFinalAbonado}}</h3>
+                <h3 class="descri roboto">Medio de pago: {{prueba.pago[1].metodo}}</h3>
+                <h3 class="descri roboto">Propina: {{prueba.pago[2].propina}}</h3>
               </h3>
             </ng-container>
           </div>
