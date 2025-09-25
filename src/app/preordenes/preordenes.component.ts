@@ -16,9 +16,9 @@ descripcion: number | null = null;;
 
 probando: any[] = [{ /* esto hay que conectarlo con el backend. */
   imagen: "assets/img/tienda.png",
-  nombre: "freddie verdury1",
-  fecha: "20/10",
-  hora: "12:30",
+  nombre: "Nombre de Tienda",
+  fecha: "11/12",
+  hora: "17:45",
   descripcion: "2x Coca-Cola, 1x Pizza, 3x Hamburguesaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
   pago: [
     { precioFinalAbonado: 48500,},
@@ -27,10 +27,10 @@ probando: any[] = [{ /* esto hay que conectarlo con el backend. */
   ]
 },{ /* esto hay que conectarlo con el backend. */
   imagen: "assets/img/tienda.png",
-  nombre: "freddie verdury1",
-  fecha: "20/10",
+  nombre: "Nombre de Tienda",
+  fecha: "8/9",
   hora: "12:30",
-  descripcion: "2x Coca-Cola, 1x Pizza, 3x holi",
+  descripcion: "2x Coca-Cola, 1x Pizza, 3x papa",
   pago: [
     { precioFinalAbonado: 48500,},
     { metodo: "Efectivo"},
@@ -38,10 +38,10 @@ probando: any[] = [{ /* esto hay que conectarlo con el backend. */
   ]
 },{ /* esto hay que conectarlo con el backend. */
   imagen: "assets/img/tienda.png",
-  nombre: "freddie verdury1",
-  fecha: "20/10",
-  hora: "12:30",
-  descripcion: "2x Coca-Cola, 1x Pizza, 3x holi",
+  nombre: "Nombre de Tienda",
+  fecha: "1/2",
+  hora: "9:25",
+  descripcion: "2x Coca-Cola, 1x Pizza, 3x Adios",
   pago: [
     { precioFinalAbonado: 48500,},
     { metodo: "Efectivo"},
@@ -49,10 +49,10 @@ probando: any[] = [{ /* esto hay que conectarlo con el backend. */
   ]
 },{ /* esto hay que conectarlo con el backend. */
   imagen: "assets/img/tienda.png",
-  nombre: "freddie verdury1",
+  nombre: "Nombre de restaurante",
   fecha: "20/10",
-  hora: "12:30",
-  descripcion: "2x Coca-Cola, 1x Pizza, 3x holi",
+  hora: "10:30",
+  descripcion: "2x Coca-Cola, 1x Pizza, 4x Hamburguesa",
   pago: [
     { precioFinalAbonado: 48500,},
     { metodo: "Efectivo"},
