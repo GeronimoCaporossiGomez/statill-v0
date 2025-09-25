@@ -3,7 +3,7 @@
   <app-header-statill></app-header-statill> <!-- esto va a terminar siendo el header del figma -->
 
   <div class="puntos-seccion">
-    <h1>mis puntos:</h1>
+    <h1>Mis preordenes:</h1>
     <div *ngFor="let prueba of probando; let i = index">
       <div class="cartel-comercio" (click)="verDetalle(i)" [ngClass]="{'descripcion-activa': descripcion === i}">
         <div class="seccion-izquierda-cartel">

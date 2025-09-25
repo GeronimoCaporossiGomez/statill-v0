@@ -7,11 +7,11 @@
     <div *ngFor="let prueba of probando">
       <div class="cartel-puntos">
         <img [src]="prueba.imagen" alt="pokoko">
-        <div class="contenido-puntos">
+        <div class="texto contenido-puntos">
           <h2 class="asd roboto">{{prueba.nombre}}: <span>{{prueba.puntos}} pts.</span></h2>
           <h3 class="gris roboto">1 punto equivale a ???</h3>
         </div>
-        <button type="button" routerLink="/home" class="boton-link">manda pa' {{prueba.nombre}}</button>
+        <button type="button" routerLink="/home" class="boton-link">Comprar</button>
       </div>
     </div>
   </div>

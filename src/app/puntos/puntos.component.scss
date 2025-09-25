@@ -39,23 +39,28 @@ img{
 }
 
 .boton-link{
-  background-color: #FF6F61;
+  background-color: transparent;
   border: none;
   border-radius: 8px;
-  color: white;
+  font-weight: bold;
+  color: black;
   padding: 10px 20px;
   text-align: center;
   text-decoration: none;
+    justify-content: center;
+  align-items: center;
   display: inline-block;
-  font-size: 16px;
+  font-size: 30px;
   margin: 4px 2px;
+  text-decoration: underline;
   cursor: pointer;
-  height: 40%;
+  height: 90%;
+  width: 20%;
   margin-right: 3%;
 }
 
 .texto{
-  font-size: 1rem;
+  font-size: 1.40rem;
   width: 100%;
   white-space: nowrap;
   overflow: hidden;
@@ -101,4 +106,14 @@ img{
     height: 80%;
     margin-right: 10px;
   }
+}
+
+
+h1{
+  width: 90vw;
+  display: flex;
+  align-items: right;
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 2% 0;
 }

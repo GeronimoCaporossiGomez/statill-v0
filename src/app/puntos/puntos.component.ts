@@ -14,18 +14,18 @@ export class PuntosComponent {
 
 probando: any[] = [{ /* esto hay que conectarlo con el backend. */
   imagen: "assets/img/tienda.png",
-  nombre: "freddie verdury1",
+  nombre: "Nombre restaurante",
   puntos: 1200,
 
 },
 {
   imagen: "assets/img/tienda.png",
-  nombre: "freddie verdury2",
+  nombre: "Nombre tienda",
   puntos: 1400,
 },
 {
   imagen: "assets/img/tienda.png",
-  nombre: "freddie verdury3",
+  nombre: "Nombre restaurante",
   puntos: 1600,
 }]
 
