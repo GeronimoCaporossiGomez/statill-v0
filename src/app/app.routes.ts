@@ -22,9 +22,14 @@ export const routes: Routes = [
       import("../app/comercio/catalogo/catalogo.component").then(m => m.CatalogoComponent)
   },
   {
+    path: "busqueda",
+    loadComponent: () =>
+      import("./home/busqueda/busqueda.component").then(m => m.HomeComponent)
+  },
+    {
     path: "home",
     loadComponent: () =>
-      import("../app/home/home/home.component").then(m => m.HomeComponent)
+      import("./home/home/home.component").then(m => m.HomeComponent)
   },
     {
     path: 'perfil',
