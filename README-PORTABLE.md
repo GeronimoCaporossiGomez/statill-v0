@@ -63,6 +63,6 @@ Esto se guarda **solo en este repositorio**, y no afecta otros proyectos.
 
 ¡Listo para desarrollar! 🚀
 
-$env:Path = "C:\Users\48458576\statill-v0\NodeJs;" + $env:Path
+$env:Path = "C:\Users\%USERNAME%\statill-v0\NodeJs;" + $env:Path
 
 $env:Path = "D:\statill-v0\NodeJs;" + $env:Path
