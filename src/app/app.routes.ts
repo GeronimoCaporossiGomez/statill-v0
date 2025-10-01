@@ -62,9 +62,10 @@ export const routes: Routes = [
     import("../app/comercio/estadisticas/estadisticas.component").then(m => m.EstadisticasComponent)
   },
       {
-    path: 'mapa',
+    path: 'mapa',  
+
     loadComponent: () =>
-    import("../app/pages/mapa/mapa.component").then(m => m.MapaComponent)
+    import("./pages/mapa-pagina/mapa-pagina.component").then(m => m.MapaPaginaComponent)
   },
     ,
       {

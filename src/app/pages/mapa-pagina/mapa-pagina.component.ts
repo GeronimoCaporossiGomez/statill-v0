@@ -3,11 +3,11 @@ import { Component } from '@angular/core';
 import { HeaderStatillComponent } from 'src/app/Componentes/header-statill/header-statill.component';
 
 @Component({
-  selector: 'app-mapa',
+  selector: 'app-mapa-pagina',
   imports: [CommonModule, HeaderStatillComponent],
-  templateUrl: './mapa.component.html',
-  styleUrl: './mapa.component.scss'
+  templateUrl: './mapa-pagina.component.html',
+  styleUrl: './mapa-pagina.component.scss'
 })
-export class MapaComponent {
+export class MapaPaginaComponent {
 
 }
