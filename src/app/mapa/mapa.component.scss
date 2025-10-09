@@ -1,0 +1,39 @@
+.statill-mapa {
+  width: 100%;
+  height: 400px;
+  min-height: 300px;
+  max-width: 100vw;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+  margin: 0 auto 24px auto;
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+
+#map {
+  width: 100%;
+  height: 60vh;
+  min-height: 320px;
+  max-height: 80vh;
+  border-radius: 18px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+  margin: 0 auto;
+  margin-top: 18px;
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 600px) {
+  .statill-mapa {
+    height: 250px;
+    border-radius: 10px;
+  }
+
+  #map {
+    height: 40vh;
+    min-height: 180px;
+    border-radius: 10px;
+  }
+}

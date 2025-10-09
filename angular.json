@@ -61,6 +61,11 @@
                 "input": "src",
                 "glob": "favicon.ico",
                 "output": "/"
+              },
+              {
+                "glob": "**/*",
+                "input": "./node_modules/leaflet/dist/images",
+                "output": "assets/"
               }
             ],
             "styles": [
