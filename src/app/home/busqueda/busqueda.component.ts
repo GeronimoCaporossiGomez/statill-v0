@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { StoresComponent } from 'src/app/Componentes/Stores-Statill/Stores.component';
+import { HeaderStatillComponent } from 'src/app/Componentes/header-statill/header-statill.component';
 
 @Component({
   standalone: true,
   selector: 'app-home',
-  imports: [CommonModule, FormsModule, StoresComponent],
+  imports: [CommonModule, FormsModule, StoresComponent, HeaderStatillComponent],
   templateUrl: './busqueda.component.html',
   styleUrls: ['./busqueda.component.scss']
 })
