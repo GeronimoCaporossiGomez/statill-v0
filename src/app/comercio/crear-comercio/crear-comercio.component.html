@@ -5,11 +5,10 @@
   <button type="button">
     <a routerLink="/escanear">Ir a escanear de una</a>
   </button>
-  <h1>Hola vendedor!asdasd Que quieres hacer</h1>
+  <h1>¡Hola vendedor!</h1>
+  <h2>¿Que querés hacer?</h2>
   <button class="boton" type="button" (click)="creandoComercio(true); seccionPantalla=1">Crear comercio</button>
   <button class="boton" type="button" (click)="creandoComercio(false); seccionPantalla=0">Unirme a un comercio</button>
-  <h1>{{seccionPantalla}}</h1>
-
 </div>
 
 <div *ngIf="creando">

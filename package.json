@@ -22,7 +22,6 @@
     "@angular/router": "^19.2.0",
     "@angular/service-worker": "^19.2.0",
     "@angular/ssr": "^19.2.11",
-    "@asymmetrik/ngx-leaflet": "^17.0.0",
     "@bluehalo/ngx-leaflet": "^19.0.0",
     "@zxing/browser": "^0.1.5",
     "chart.js": "^4.5.0",
