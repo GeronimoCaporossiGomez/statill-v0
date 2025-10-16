@@ -1,12 +1,318 @@
-#caja-blanca{
-  height: 70px;
-  width: 70px;
-  background-color: gray;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+// Variables
+$primary-color: #FF5555;
+$text-dark: #2a2a2a;
+$bg-light: #f5f5f5;
+$white: #ffffff;
+$border-color: #e0e0e0;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-#map {
-  height: 500px;
+// Estilos generales
+.contenedor {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  background-color: $bg-light;
+}
+
+.contenedor h1 {
+  font-size: 24px;
+  font-weight: 700;
+  color: $text-dark;
+  margin: 0 0 12px 0;
+  text-align: center;
+}
+
+.contenedor h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: $text-dark;
+  margin: 0 0 32px 0;
+  text-align: center;
+}
+
+.contenedor > button:first-child {
+  display: none;
+}
+
+// Contenedor del contenido
+.contenedor,
+form {
+  max-width: 480px;
+  background-color: $white;
+  border-radius: 24px;
+  padding: 40px 30px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  margin: auto;
+}
+
+form {
   width: 100%;
+}
+
+// Botones principales
+.boton {
+  width: 100%;
+  max-width: 220px;
+  padding: 14px 24px;
+  margin: 12px auto;
+  background-color: $primary-color;
+  color: $white;
+  border: none;
+  border-radius: 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+  display: block;
+}
+
+.boton:hover {
+  background-color: darken($primary-color, 8%);
+  transform: translateY(-2px);
+}
+
+// Secciones
+.seccion-creando,
+.segunda-parte,
+.tercera-parte {
+  width: 100%;
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// Primera parte
+.primera-parte {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.primera-parte h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: $text-dark;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.primera-parte input[type="text"],
+.primera-parte input[type="file"] {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid $border-color;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.primera-parte input:focus {
+  outline: none;
+  border-color: $primary-color;
+  box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+}
+
+#caja-blanca {
+  width: 100%;
+  height: 200px;
+  background-color: #f9f9f9;
+  border: 2px dashed $border-color;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+#caja-blanca img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+// Segunda parte
+.segunda-parte {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.segunda-parte h3 {
+  font-size: 14px;
+  font-weight: 600;
+  color: $text-dark;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.segunda-parte select,
+.segunda-parte input[type="text"] {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid $border-color;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+}
+
+.segunda-parte input:focus,
+.segunda-parte select:focus {
+  outline: none;
+  border-color: $primary-color;
+  box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+}
+
+.segunda-parte label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-size: 14px;
+  color: $text-dark;
+}
+
+.segunda-parte input[type="checkbox"] {
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+}
+
+// Tercera parte
+.tercera-parte {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.tercera-parte h2 {
+  font-size: 20px;
+  font-weight: 700;
+  color: $text-dark;
+  margin: 0;
+}
+
+.TodaEstaCosa {
+  background-color: #f9f9f9;
+  padding: 16px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.TodaEstaCosa h1 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  color: $text-dark;
+}
+
+.TodaEstaCosa input[type="checkbox"],
+.TodaEstaCosa input[type="time"] {
+  padding: 8px;
+  border: 1px solid $border-color;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.TodaEstaCosa input:focus {
+  outline: none;
+  border-color: $primary-color;
+}
+
+.TodaEstaCosa input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+// Botones de formulario
+button[type="button"],
+button[type="submit"] {
+  width: 100%;
+  padding: 12px 24px;
+  margin-top: 8px;
+  background-color: $primary-color;
+  color: $white;
+  border: none;
+  border-radius: 24px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+button[type="button"]:hover,
+button[type="submit"]:hover {
+  background-color: darken($primary-color, 8%);
+  transform: translateY(-2px);
+}
+
+// Botón anterior (gris)
+.seccion-creando button:first-of-type,
+.segunda-parte button:first-of-type,
+.tercera-parte button:first-of-type {
+  background-color: #f0f0f0;
+  color: $text-dark;
+}
+
+.seccion-creando button:first-of-type:hover,
+.segunda-parte button:first-of-type:hover,
+.tercera-parte button:first-of-type:hover {
+  background-color: #e0e0e0;
+  color: $text-dark;
+}
+
+// Formulario de unirse
+form h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: $text-dark;
+  text-align: center;
+  margin: 0 0 20px 0;
+}
+
+form input[type="text"] {
+  padding: 12px 14px;
+  border: 1px solid $border-color;
+  border-radius: 8px;
+  font-size: 14px;
+  width: 100%;
+}
+
+form input[type="text"]:focus {
+  outline: none;
+  border-color: $primary-color;
+  box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
+}
+
+// Responsive
+@media (max-width: 600px) {
+  .contenedor,
+  form {
+    padding: 30px 20px;
+    border-radius: 16px;
+  }
+
+  .boton {
+    max-width: 100%;
+  }
 }
