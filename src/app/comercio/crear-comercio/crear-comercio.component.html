@@ -20,8 +20,8 @@
           <input type="text" name="nombre" ngModel placeholder="Nombre del local">
           <h3>Logo</h3>
           <input type="file" (change)="mostrarImagen($event)">
-          <div id="caja-blanca">
-            <img *ngIf="imagenUrl" [src]="imagenUrl" alt="Preview" style="max-width: 100%; max-height: 100%;">
+          <div id="caja-blanca" *ngIf="imagenUrl">
+            <img [src]="imagenUrl" alt="Preview">
           </div>
           <h3>Description</h3>
           <input type="text" name="descripcion" ngModel placeholder="Description">
@@ -54,20 +54,24 @@
 
     <div *ngIf="seccionPantalla==3">
       <div class="tercera-parte">
-      <h2>Horarios</h2>
-      <div *ngFor="let dia of dias; let i = index">
-        <div class="TodaEstaCosa">
-          <h1>{{dia}}</h1>
-          <input type="checkbox" name="si{{i}}" ngModel>si
-          <input type="checkbox" name="no{{i}}" ngModel>no
-          <input type="time" name="horaInicio{{i}}" ngModel>
-          <input type="time" name="horaFin{{i}}" ngModel>
+        <h2>Horarios</h2>
+        <div *ngFor="let dia of dias; let i = index">
+          <div class="TodaEstaCosa">
+            <h1>{{dia}}</h1>
+            <div class="horario-row">
+              <label style="flex: 0 0 auto;">
+                <input type="checkbox" name="si{{i}}" ngModel>
+                Abierto
+              </label>
+              <input type="time" name="horaInicio{{i}}" ngModel placeholder="Desde">
+              <input type="time" name="horaFin{{i}}" ngModel placeholder="Hasta">
+            </div>
+          </div>
         </div>
+        <button type="button" (click)="bajarPantalla()">Anterior</button>
+        <button type="submit">Siguiente</button>
       </div>
-      <button (click)="bajarPantalla()">Anterior</button>
-      <button type="submit">Siguiente</button>
     </div>
-  </div>
   </form>
 </div>
 

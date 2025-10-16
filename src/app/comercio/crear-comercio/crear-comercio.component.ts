@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { HeaderStatillComponent } from "../../Componentes/header-statill/header-statill.component";
@@ -10,12 +10,19 @@ import { SidebarComponent } from 'src/app/Componentes/sidebar-statill/sidebar.co
   standalone: true,
   imports: [CommonModule, FormsModule, SidebarComponent, RouterLink],
   templateUrl: './crear-comercio.component.html',
-  styleUrl: './crear-comercio.component.scss'
+  styleUrl: './crear-comercio.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CrearComercioComponent {
-  creando:boolean = true;
-  seccionPantalla:number = 0
+  creando: boolean = true;
+  seccionPantalla: number = 0;
   dias: string[] = ['Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo'];
+  imagenUrl: string | ArrayBuffer | null = null;
+
+  constructor(
+    private router: Router,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   aumentarPantalla() {
     this.seccionPantalla += 1;
@@ -32,22 +39,22 @@ export class CrearComercioComponent {
   }
 
   creandoComercio(x: boolean) {
-    this.creando = x
+    this.creando = x;
   }
-  constructor(private router: Router) {}
 
   onSubmit(form: any) {
-  console.log(form.value);
-  this.router.navigate(['/escanear']);
+    console.log(form.value);
+    this.router.navigate(['/escanear']);
   }
-
-    imagenUrl: string | ArrayBuffer | null = null;
 
   mostrarImagen(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       const reader = new FileReader();
-      reader.onload = e => this.imagenUrl = reader.result;
+      reader.onload = () => {
+        this.imagenUrl = reader.result;
+        this.cdr.markForCheck();
+      };
       reader.readAsDataURL(input.files[0]);
     }
   }
