@@ -62,7 +62,7 @@ export const routes: Routes = [
     import("../app/comercio/estadisticas/estadisticas.component").then(m => m.EstadisticasComponent)
   },
       {
-    path: 'mapa',  
+    path: 'mapa',
 
     loadComponent: () =>
     import("./pages/mapa-pagina/mapa-pagina.component").then(m => m.MapaPaginaComponent)
@@ -82,5 +82,10 @@ export const routes: Routes = [
     path: "preordenes",
     loadComponent: () =>
       import("../app/preordenes/preordenes.component").then(m => m.PreordenesComponent)
+  },
+  {
+    path: "negocio/:id",
+    loadComponent: () =>
+      import("../app/negocio/negocio.component").then(m => m.NegocioComponent)
   },
 ];
