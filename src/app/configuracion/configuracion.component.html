@@ -4,9 +4,7 @@
 <div>
   @for (comercio of comercios; track comercio.id) {
     <div>
-      <h3>{{ comercio.nombre }}</h3>
-      <p>{{ comercio.descripcion }}</p>
-      <button (click)="irAComercio(comercio.id)">Ver comercio</button>
+      <button (click)="irAComercio(comercio.id)">{{comercio.name}}</button>
     </div>
   }
 </div>

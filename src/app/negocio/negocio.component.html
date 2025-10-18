@@ -1,8 +1,22 @@
-@if (comercio) {
-      <h1>{{ comercio.nombre }}</h1>
-      <p>{{ comercio.descripcion }}</p>
-      <button>Volver a la lista</button>
-    } @else {
-      <p>Comercio no encontrado</p>
-      <button>Volver</button>
+<app-header-statill></app-header-statill>
+
+@if (cargando) {
+  <p>Cargando...</p>
+} @else if (comercio) {
+  <h1>{{ comercio.name }}</h1>
+  <p>{{ comercio.address }}</p>
+
+  <h2>Productos</h2>
+  @for (producto of productos; track producto.id) {
+    <div>
+      <h3>{{ producto.name }}</h3>
+      <p>Marca: {{ producto.brand }}</p>
+      <p>Precio: ${{ producto.price }}</p>
+    </div>
+  }
+
+  <button (click)="volver()">Volver a la lista</button>
+} @else {
+  <p>Comercio no encontrado</p>
+  <button (click)="volver()">Volver</button>
 }

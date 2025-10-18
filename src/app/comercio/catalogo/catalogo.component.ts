@@ -3,7 +3,6 @@ import { SidebarComponent } from 'src/app/Componentes/sidebar-statill/sidebar.co
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MiApiService } from 'src/app/servicios/mi-api.service';
-import { GeneralService } from 'src/app/servicios/general.service';
 @Component({
   selector: 'app-catalogo',
   standalone: true,

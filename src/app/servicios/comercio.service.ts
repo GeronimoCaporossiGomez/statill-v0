@@ -1,22 +1,32 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { Observable, map } from 'rxjs';
+import { MiApiService } from './mi-api.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ComercioService {
-  private comercios: any[] = [
-    { id: 'mcdonalds', nombre: 'McDonald\'s', descripcion: 'Comida rápida' },
-    { id: 'burger-king', nombre: 'Burger King', descripcion: 'Hamburguesas' },
-    { id: 'marcos', nombre: 'Marquitiwis', descripcion: 'puto' },
-    { id: 'starbucks', nombre: 'Starbucks', descripcion: 'Café premium' }
-  ];
+  private miApiService = inject(MiApiService);
 
-  getComercios(): any[] {
-    return this.comercios;
+  getStores(): Observable<any[]> {
+    return this.miApiService.getStores()
+      .pipe(map((response: any) => response.data));
   }
 
-  getComercioById(id: string): any | undefined {
-    return this.comercios.find(c => c.id === id);
+  getStoreById(id: number): Observable<any> {
+    return this.getStores().pipe(
+      map(stores => stores.find((s: any) => s.id === id))
+    );
   }
-  constructor() { }
+
+    getProductos(): Observable<any[]> {
+    return this.miApiService.getProductos()
+      .pipe(map((response: any) => response.data));
+  }
+
+    getProductosByStore(storeId: number): Observable<any[]> {
+    return this.getProductos().pipe(
+      map(productos => productos.filter((p: any) => p.store_id === storeId))
+    );
+  }
 }

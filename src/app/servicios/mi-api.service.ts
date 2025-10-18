@@ -18,5 +18,11 @@ export class MiApiService {
     return this.http.get(this.apiUrl + '/api/v1/users/');
   }
   getStores() {
-    return this.http.get(this.apiUrl + '/api/v1/stores/'); }
+    return this.http.get(this.apiUrl + '/api/v1/stores/');
   }
+  getProductosById(storeId: number) {
+    return this.http.get(this.apiUrl + '/api/v1/products/?store_id=' + storeId);
+  }
+  }
+
+
