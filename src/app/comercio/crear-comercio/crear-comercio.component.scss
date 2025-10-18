@@ -225,23 +225,35 @@ form {
   color: $text-dark;
 }
 
-.TodaEstaCosa input[type="checkbox"],
-.TodaEstaCosa input[type="time"] {
-  padding: 8px;
-  border: 1px solid $border-color;
-  border-radius: 6px;
-  font-size: 13px;
-}
-
-.TodaEstaCosa input:focus {
-  outline: none;
-  border-color: $primary-color;
+.horario-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .TodaEstaCosa input[type="checkbox"] {
   width: 18px;
   height: 18px;
   cursor: pointer;
+  margin: 0;
+  padding: 0;
+}
+
+.TodaEstaCosa input[type="time"] {
+  padding: 10px 12px;
+  border: 1px solid $border-color;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  flex: 1;
+  min-width: 140px;
+}
+
+.TodaEstaCosa input:focus {
+  outline: none;
+  border-color: $primary-color;
+  box-shadow: 0 0 0 3px rgba($primary-color, 0.1);
 }
 
 // Botones de formulario
@@ -267,16 +279,14 @@ button[type="submit"]:hover {
 }
 
 // Botón anterior (gris)
-.seccion-creando button:first-of-type,
-.segunda-parte button:first-of-type,
-.tercera-parte button:first-of-type {
+button[type="button"]:first-of-type,
+button:first-of-type {
   background-color: #f0f0f0;
   color: $text-dark;
 }
 
-.seccion-creando button:first-of-type:hover,
-.segunda-parte button:first-of-type:hover,
-.tercera-parte button:first-of-type:hover {
+button[type="button"]:first-of-type:hover,
+button:first-of-type:hover {
   background-color: #e0e0e0;
   color: $text-dark;
 }
@@ -296,6 +306,7 @@ form input[type="text"] {
   border-radius: 8px;
   font-size: 14px;
   width: 100%;
+  margin-bottom: 16px;
 }
 
 form input[type="text"]:focus {
@@ -314,5 +325,13 @@ form input[type="text"]:focus {
 
   .boton {
     max-width: 100%;
+  }
+
+  .horario-row {
+    flex-direction: column;
+  }
+
+  .TodaEstaCosa input[type="time"] {
+    width: 100%;
   }
 }
