@@ -1,22 +1,51 @@
 <app-header-statill></app-header-statill>
 
 @if (cargando) {
-  <p>Cargando...</p>
+  <div class="loading">
+    <p>Cargando...</p>
+  </div>
 } @else if (comercio) {
-  <h1>{{ comercio.name }}</h1>
-  <p>{{ comercio.address }}</p>
-
-  <h2>Productos</h2>
-  @for (producto of productos; track producto.id) {
-    <div>
-      <h3>{{ producto.name }}</h3>
-      <p>Marca: {{ producto.brand }}</p>
-      <p>Precio: ${{ producto.price }}</p>
+  <div class="container">
+    <!-- Header del comercio -->
+    <div class="store-header">
+      <button class="back-button" (click)="volver()">
+        <span class="arrow">←</span>
+      </button>
+      <div class="store-info">
+        <h1 class="store-name">{{ comercio.name }}</h1>
+        <p class="store-address">{{ comercio.address }}</p>
+      </div>
     </div>
-  }
 
-  <button (click)="volver()">Volver a la lista</button>
+    <!-- Barra de búsqueda -->
+    <div class="search-bar">
+      <input type="text" placeholder="Busque productos aquí">
+    </div>
+
+    <!-- Productos -->
+    <div class="productos-container">
+      <h2 class="seccion-titulo">Productos</h2>
+      <div class="productos-grid">
+        @for (producto of productos; track producto.id) {
+          <div class="producto-card">
+            <div class="producto-info">
+              <h3 class="producto-nombre">{{ producto.name }}</h3>
+              <p class="producto-descripcion">{{ producto.brand }}</p>
+              <p class="producto-precio">{{ producto.price }}pts</p>
+            </div>
+            <div class="producto-imagen">
+              @if (producto.image) {
+                <img [src]="producto.image" [alt]="producto.name">
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
 } @else {
-  <p>Comercio no encontrado</p>
-  <button (click)="volver()">Volver</button>
+  <div class="error">
+    <p>Comercio no encontrado</p>
+    <button (click)="volver()">Volver</button>
+  </div>
 }

@@ -69,7 +69,7 @@ export class StockComponent {
       quantity: Number(this.product.cantidad),
       desc: this.product.description,
       barcode: '+',
-      store_id: 2
+      store_id: 4
     };
     if (this.productoEditandoId) {
       // Editar producto existente (PUT)
