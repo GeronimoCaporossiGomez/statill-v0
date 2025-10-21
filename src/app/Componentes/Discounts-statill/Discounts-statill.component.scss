@@ -1,15 +1,18 @@
+$color-primario: #FD2A2C;
+
 .discount-card {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem;
-  border-radius: 12px;
-  background-color: #f7f7f7;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease-in-out;
+  gap: 1.2rem;
+  padding: 1.4rem;
+  border-radius: 14px;
+  background-color: #fff;
+  border: 1px solid #eee;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  transition: transform 0.18s ease-in-out;
   cursor: pointer;
-  width: 200px;
-  height: 200px;
+  min-height: 140px;
+  width: 100%;
 
   &:hover {
     transform: translateY(-4px);
@@ -17,20 +20,20 @@
 
   .logo-container {
     flex-shrink: 0;
-    width: 80px;
-    height: 80px;
+    width: 96px;
+    height: 96px;
     border-radius: 50%;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: #fff;
-    box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.8), 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
 
     .store-logo {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
+      width: 80%;
+      height: 80%;
+      object-fit: cover;
     }
   }
 
@@ -42,20 +45,98 @@
     flex-grow: 1;
 
     .discount-label {
-      font-size: 1.1rem;
-      font-weight: bold;
-      color: #333;
-      margin: 0 0 0.25rem 0;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #222;
+      margin: 0 0 0.3rem 0;
     }
 
     .store-name {
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: #666;
+      font-size: 1rem;
+      font-weight: 800;
+      color: $color-primario;
       margin: 0;
     }
   }
 }
+
+@media (max-width: 600px) {
+  .discount-card {
+    flex-direction: column;
+    text-align: center;
+    .info-container { align-items: center; }
+  }
+}
+$color-primario: #FD2A2C;
+
+.discount-card {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  padding: 1.4rem;
+  border-radius: 14px;
+  background-color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    padding: 1.4rem;
+    border-radius: 14px;
+    background-color: #fff;
+    border: 1px solid #eee;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    transition: transform 0.18s ease-in-out;
+    cursor: pointer;
+    min-height: 140px;
+    width: 100%;
+  cursor: pointer;
+  min-height: 140px;
+  width: 100%;
+
+    $color-primario: #FD2A2C;
+    transform: translateY(-4px);
+  }
+    $color-primario: #FD2A2C;
+  .logo-container {
+    flex-shrink: 0;
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+
+    .store-logo {
+      width: 80%;
+      height: 80%;
+      object-fit: cover;
+    }
+  }
+
+  .info-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    flex-grow: 1;
+
+    .discount-label {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #222;
+      margin: 0 0 0.3rem 0;
+    }
+
+    .store-name {
+      font-size: 1rem;
+      font-weight: 800;
+      color: $color-primario;
+      margin: 0;
+    }
+  }
+
 
 @media (max-width: 600px) {
   .discount-card {

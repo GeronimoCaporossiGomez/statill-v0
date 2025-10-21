@@ -24,7 +24,18 @@ export class HomeComponent implements OnInit {
       discountText: 'Preordená con 20% OFF en kioscos EL JEVI',
       logoUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSidAa0zo1VuvqjZCs18V_DlFovbjc17c964w&s'
     },
-    // ... y más promociones
+        {
+      id: 3,
+      storeName: 'ESO',
+      discountText: 'Preordená con 20% OFF en ESO',
+      logoUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSidAa0zo1VuvqjZCs18V_DlFovbjc17c964w&s'
+    },
+            {
+      id: 4,
+      storeName: 'EJEMPLO',
+      discountText: 'Preordená con 20% OFF en EJEMPLO',
+      logoUrl: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSidAa0zo1VuvqjZCs18V_DlFovbjc17c964w&s'
+    },
   ];
 
   constructor() { }
