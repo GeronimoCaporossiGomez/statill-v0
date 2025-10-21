@@ -31,7 +31,7 @@
             <div class="producto-info">
               <h3 class="producto-nombre">{{ producto.name }}</h3>
               <p class="producto-descripcion">{{ producto.brand }}</p>
-              <p class="producto-precio">{{ producto.price }}pts</p>
+              <p class="producto-precio">${{ producto.price }}</p>
             </div>
             <div class="producto-imagen">
               @if (producto.image) {
