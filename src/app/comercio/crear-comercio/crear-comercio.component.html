@@ -1,6 +1,6 @@
 <app-sidebar></app-sidebar>
 
-<!-- hay mucho ngmodel en este documento, sirve para que la informacion vaya y venga a la variable -->
+<!-- Pantalla inicial -->
 <div class="contenedor" *ngIf="seccionPantalla == 0">
   <button type="button">
     <a routerLink="/escanear">Ir a escanear de una</a>
@@ -8,75 +8,108 @@
   <h1>¡Hola vendedor!</h1>
   <h2>¿Que querés hacer?</h2>
   <button class="boton" type="button" (click)="creandoComercio(true); seccionPantalla=1">Crear comercio</button>
-  <button class="boton" type="button" (click)="creandoComercio(false); seccionPantalla=0">Unirme a un comercio</button>
+  <button class="boton" type="button" (click)="creandoComercio(false)">Unirme a un comercio</button>
 </div>
 
+<!-- Formulario de creación -->
 <div *ngIf="creando">
   <form (ngSubmit)="onSubmit(comercioForm)" #comercioForm="ngForm">
-    <div *ngIf="seccionPantalla == 1">
-      <div class="seccion-creando">
-        <div class="primera-parte">
-          <h3>Nombre</h3>
-          <input type="text" name="nombre" ngModel placeholder="Nombre del local">
-          <h3>Logo</h3>
-          <input type="file" (change)="mostrarImagen($event)">
-          <div id="caja-blanca" *ngIf="imagenUrl">
-            <img [src]="imagenUrl" alt="Preview">
-          </div>
-          <h3>Description</h3>
-          <input type="text" name="descripcion" ngModel placeholder="Description">
-          <button type="button" (click)="bajarPantalla()">Anterior</button>
-          <button type="button" (click)="aumentarPantalla()">Siguiente</button>
+    
+    <!-- PANTALLA 1 -->
+    <div [style.display]="seccionPantalla == 1 ? 'block' : 'none'" class="seccion-creando">
+      <div class="primera-parte">
+        <h3>Nombre</h3>
+        <input type="text" name="nombre" ngModel placeholder="Nombre del local">
+        
+        <h3>Logo</h3>
+        <input type="file" (change)="mostrarImagen($event)">
+        <div id="caja-blanca" *ngIf="imagenUrl">
+          <img [src]="imagenUrl" alt="Preview">
         </div>
-      </div>
-    </div>
-
-    <div *ngIf="seccionPantalla == 2">
-      <div class="segunda-parte">
-        <h3>Tipo de Local</h3>
-        <select name="tipo" ngModel>
-          <option value="Local">Local</option>
-          <option value="Restaurante">Restaurante</option>
-          <option value="tienda">Tienda</option>
-          <option value="bar">Bar</option>
-        </select>
-        <h3>Ubicación</h3>
-        <input type="text" name="ubicacion" ngModel placeholder="Ubicación del local">
-        <h3>Pre-Order?</h3>
-        <label>
-          <input type="checkbox" name="preorder" ngModel>
-          Permitir pre-orden
-        </label>
+        
+        <h3>Descripción</h3>
+        <input type="text" name="descripcion" ngModel placeholder="Descripción">
+        
         <button type="button" (click)="bajarPantalla()">Anterior</button>
         <button type="button" (click)="aumentarPantalla()">Siguiente</button>
       </div>
     </div>
 
-    <div *ngIf="seccionPantalla==3">
-      <div class="tercera-parte">
-        <h2>Horarios</h2>
-        <div *ngFor="let dia of dias; let i = index">
-          <div class="TodaEstaCosa">
-            <h1>{{dia}}</h1>
-            <div class="horario-row">
-              <label style="flex: 0 0 auto;">
-                <input type="checkbox" name="si{{i}}" ngModel>
-                Abierto
-              </label>
-              <input type="time" name="horaInicio{{i}}" ngModel placeholder="Desde">
-              <input type="time" name="horaFin{{i}}" ngModel placeholder="Hasta">
-            </div>
+    <!-- PANTALLA 2 -->
+    <div [style.display]="seccionPantalla == 2 ? 'block' : 'none'" class="segunda-parte">
+      <h3>Tipo de Local</h3>
+      <select name="tipo" ngModel>
+        <option value="">Seleccionar...</option>
+        <option value="Local">Local</option>
+        <option value="Restaurante">Restaurante</option>
+        <option value="tienda">Tienda</option>
+        <option value="bar">Bar</option>
+      </select>
+      
+      <h3>Ubicación</h3>
+      <input type="text" name="ubicacion" ngModel placeholder="Ubicación del local">
+      
+      <h3>Pre-Order?</h3>
+      <label>
+        <input type="checkbox" name="preorder" ngModel>
+        Permitir pre-orden
+      </label>
+      
+      <h3>Habilitar PS?</h3>
+      <label>
+        <input type="checkbox" name="psEnabled" ngModel [checked]="true">
+        PS habilitado
+      </label>
+      
+      <h3>Métodos de Pago</h3>
+      <label>
+        <input type="checkbox" name="pagoEfectivo" ngModel [checked]="true">
+        Efectivo
+      </label>
+      <label>
+        <input type="checkbox" name="pagoDebito" ngModel [checked]="true">
+        Débito
+      </label>
+      <label>
+        <input type="checkbox" name="pagoCredito" ngModel [checked]="true">
+        Crédito
+      </label>
+      <label>
+        <input type="checkbox" name="pagoTransferencia" ngModel [checked]="true">
+        Transferencia
+      </label>
+      
+      <button type="button" (click)="bajarPantalla()">Anterior</button>
+      <button type="button" (click)="aumentarPantalla()">Siguiente</button>
+    </div>
+
+    <!-- PANTALLA 3 -->
+    <div [style.display]="seccionPantalla == 3 ? 'block' : 'none'" class="tercera-parte">
+      <h2>Horarios</h2>
+      <div *ngFor="let dia of dias; let i = index">
+        <div class="TodaEstaCosa">
+          <h1>{{dia}}</h1>
+          <div class="horario-row">
+            <label style="flex: 0 0 auto;">
+              <input type="checkbox" name="si{{i}}" ngModel>
+              Abierto
+            </label>
+            <input type="time" name="horaInicio{{i}}" ngModel placeholder="Desde">
+            <input type="time" name="horaFin{{i}}" ngModel placeholder="Hasta">
           </div>
         </div>
-        <button type="button" (click)="bajarPantalla()">Anterior</button>
-        <button type="submit">Siguiente</button>
       </div>
+      
+      <button type="button" (click)="bajarPantalla()">Anterior</button>
+      <button type="submit">Crear Comercio</button>
     </div>
+    
   </form>
 </div>
 
-<div *ngIf="!creando">
-  <form (ngSubmit)="onSubmit(codigoForm)" #codigoForm="ngForm">
+<!-- Formulario para unirse -->
+<div *ngIf="!creando && seccionPantalla == 0">
+  <form (ngSubmit)="onSubmitUnirse(codigoForm)" #codigoForm="ngForm">
     <h3>Unirme a un local</h3>
     <input type="text" placeholder="Código del local" name="codigo" ngModel>
     <button type="submit">Entrar</button>
