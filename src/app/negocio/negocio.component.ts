@@ -18,6 +18,7 @@ export class NegocioComponent implements OnInit {
   comercio: any;
   productos: any[] = [];
   cargando = true;
+  carrito: { [key: number]: number } = {}; // { productoId: cantidad }
 
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -41,6 +42,61 @@ export class NegocioComponent implements OnInit {
       error: (err) => {
         console.error('Error al cargar productos:', err);
         this.cargando = false;
+      }
+    });
+  }
+
+  getCantidad(productoId: number): number {
+    return this.carrito[productoId] || 0;
+  }
+
+  agregarProducto(productoId: number) {
+    if (!this.carrito[productoId]) {
+      this.carrito[productoId] = 0;
+    }
+    this.carrito[productoId]++;
+  }
+
+  quitarProducto(productoId: number) {
+    if (this.carrito[productoId] && this.carrito[productoId] > 0) {
+      this.carrito[productoId]--;
+      if (this.carrito[productoId] === 0) {
+        delete this.carrito[productoId];
+      }
+    }
+  }
+
+  getTotalItems(): number {
+    return Object.values(this.carrito).reduce((sum, cant) => sum + cant, 0);
+  }
+
+  finalizarCompra() {
+    if (this.getTotalItems() === 0) {
+      alert('Agregue productos al carrito');
+      return;
+    }
+
+    const products = Object.entries(this.carrito).map(([productId, quantity]) => ({
+      product_id: Number(productId),
+      quantity: quantity
+    }));
+
+    const venta = {
+      store_id: this.comercio.id,
+      products: products,
+      payment_method: 3,
+      user_id: 1
+    };
+
+    this.comercioService.postSales(venta).subscribe({
+      next: (response) => {
+        console.log('Venta realizada:', response);
+        alert('Compra realizada exitosamente!');
+        this.carrito = {}; // Limpiar carrito
+      },
+      error: (err) => {
+        console.error('Error al realizar la venta:', err);
+        alert('Error al realizar la compra');
       }
     });
   }

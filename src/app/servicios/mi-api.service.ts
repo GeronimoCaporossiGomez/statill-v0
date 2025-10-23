@@ -26,6 +26,12 @@ export class MiApiService {
   getProductosById(storeId: number) {
     return this.http.get(this.apiUrl + '/api/v1/products/?store_id=' + storeId);
   }
+  getSales() {
+    return this.http.get(this.apiUrl + '/api/v1/sales/');
+  }
+  postSales(sale: any) {
+    return this.http.post(this.apiUrl + '/api/v1/sales/', sale);
+  }
 }
 
 

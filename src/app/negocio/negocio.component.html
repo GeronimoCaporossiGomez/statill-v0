@@ -32,6 +32,21 @@
               <h3 class="producto-nombre">{{ producto.name }}</h3>
               <p class="producto-descripcion">{{ producto.brand }}</p>
               <p class="producto-precio">${{ producto.price }}</p>
+              
+              <!-- Botones de cantidad -->
+              <div class="cantidad-controls">
+                @if (getCantidad(producto.id) === 0) {
+                  <button class="btn-agregar" (click)="agregarProducto(producto.id)">
+                    Agregar al carrito
+                  </button>
+                } @else {
+                  <div class="contador">
+                    <button class="btn-menos" (click)="quitarProducto(producto.id)">-</button>
+                    <span class="cantidad">{{ getCantidad(producto.id) }}</span>
+                    <button class="btn-mas" (click)="agregarProducto(producto.id)">+</button>
+                  </div>
+                }
+              </div>
             </div>
             <div class="producto-imagen">
               @if (producto.image) {
@@ -42,6 +57,15 @@
         }
       </div>
     </div>
+
+    <!-- Botón de finalizar compra -->
+    @if (getTotalItems() > 0) {
+      <div class="carrito-flotante">
+        <button class="btn-finalizar" (click)="finalizarCompra()">
+          Finalizar Compra ({{ getTotalItems() }} productos)
+        </button>
+      </div>
+    }
   </div>
 } @else {
   <div class="error">

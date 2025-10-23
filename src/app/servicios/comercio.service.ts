@@ -19,14 +19,23 @@ export class ComercioService {
     );
   }
 
-    getProductos(): Observable<any[]> {
+  getProductos(): Observable<any[]> {
     return this.miApiService.getProductos()
       .pipe(map((response: any) => response.data));
   }
 
-    getProductosByStore(storeId: number): Observable<any[]> {
+  getProductosByStore(storeId: number): Observable<any[]> {
     return this.getProductos().pipe(
       map(productos => productos.filter((p: any) => p.store_id === storeId))
     );
+  }
+
+  postSales(sale: any): Observable<any> {
+    return this.miApiService.postSales(sale);
+  }
+
+  getSales(): Observable<any[]> {
+    return this.miApiService.getSales()
+      .pipe(map((response: any) => response.data));
   }
 }

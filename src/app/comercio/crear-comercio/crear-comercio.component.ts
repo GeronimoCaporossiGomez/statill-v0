@@ -24,11 +24,7 @@ export class CrearComercioComponent {
     private router: Router,
     private cdr: ChangeDetectorRef,
     private miApiService: MiApiService
-    // private authService: AuthService // Descomenta cuando tengas el servicio de autenticación
-  ) {
-    // Obtener el user_id del usuario logueado
-    // this.userId = this.authService.getUserId();
-  }
+  ) {}
 
   aumentarPantalla() {
     this.seccionPantalla += 1;
@@ -89,15 +85,15 @@ export class CrearComercioComponent {
       name: form.value.nombre || '',
       address: form.value.ubicacion || '',
       category: categorias[form.value.tipo] || 0,
-      preorder_enabled: form.value.preorder || false,
-      ps_enabled: form.value.psEnabled !== undefined ? form.value.psEnabled : true,
+      preorder_enabled: form.value.preorder === true, // Convertir a boolean
+      ps_enabled: form.value.psEnabled === true, // Convertir a boolean
       opening_times: openingTimes,
       closing_times: closingTimes,
       payment_methods: [
-        form.value.pagoEfectivo !== undefined ? form.value.pagoEfectivo : true,
-        form.value.pagoDebito !== undefined ? form.value.pagoDebito : true,
-        form.value.pagoCredito !== undefined ? form.value.pagoCredito : true,
-        form.value.pagoTransferencia !== undefined ? form.value.pagoTransferencia : true
+        form.value.pagoEfectivo === true,  // ✅ Ahora siempre será true o false
+        form.value.pagoDebito === true,    // ✅ Ahora siempre será true o false
+        form.value.pagoCredito === true,   // ✅ Ahora siempre será true o false
+        form.value.pagoTransferencia === true  // ✅ Ahora siempre será true o false
       ],
       user_id: this.userId
     };
@@ -110,18 +106,8 @@ export class CrearComercioComponent {
   }
 
   enviarComercio(datos: any) {
-    const formData = new FormData();
-    
-    // Agregar todos los datos como JSON string
-    formData.append('data', JSON.stringify(datos));
-    
-    // Agregar el logo si existe
-    if (this.archivoLogo) {
-      formData.append('logo', this.archivoLogo);
-    }
-    
-    // Enviar al backend
-    this.miApiService.postStores(formData).subscribe(
+    // Enviar JSON directamente, NO FormData
+    this.miApiService.postStores(datos).subscribe(
       response => {
         console.log('✅ Comercio creado exitosamente:', response);
         this.router.navigate(['/escanear']);
@@ -136,7 +122,6 @@ export class CrearComercioComponent {
   onSubmitUnirse(form: NgForm) {
     console.log('Código para unirse:', form.value.codigo);
     // Aquí harías la llamada al API para unirse a un comercio
-    // this.miApiService.unirseAComercio(form.value.codigo).subscribe(...)
     this.router.navigate(['/escanear']);
   }
 
