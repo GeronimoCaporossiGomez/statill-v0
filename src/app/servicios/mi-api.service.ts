@@ -20,7 +20,7 @@ export class MiApiService {
   getStores() {
     return this.http.get(this.apiUrl + '/api/v1/stores/');
   }
-  postStores(tienda) {
+  postStores(tienda: any) {
     return this.http.post(this.apiUrl + '/api/v1/stores/', tienda);
   }
   getProductosById(storeId: number) {
