@@ -23,6 +23,6 @@ export class MiApiService {
   getProductosById(storeId: number) {
     return this.http.get(this.apiUrl + '/api/v1/products/?store_id=' + storeId);
   }
-  }
+}
 
 
