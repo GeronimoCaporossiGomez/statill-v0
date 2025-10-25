@@ -14,22 +14,26 @@
 <!-- Formulario de creación -->
 <div *ngIf="creando">
   <form (ngSubmit)="onSubmit(comercioForm)" #comercioForm="ngForm">
-    
+
     <!-- PANTALLA 1 -->
     <div [style.display]="seccionPantalla == 1 ? 'block' : 'none'" class="seccion-creando">
       <div class="primera-parte">
+
+        <h3>Id locala</h3>
+        <input type="number" name="localsito" ngModel placeholder="1">
+
         <h3>Nombre</h3>
         <input type="text" name="nombre" ngModel placeholder="Nombre del local">
-        
+
         <h3>Logo</h3>
         <input type="file" (change)="mostrarImagen($event)">
         <div id="caja-blanca" *ngIf="imagenUrl">
           <img [src]="imagenUrl" alt="Preview">
         </div>
-        
+
         <h3>Descripción</h3>
         <input type="text" name="descripcion" ngModel placeholder="Descripción">
-        
+
         <button type="button" (click)="bajarPantalla()">Anterior</button>
         <button type="button" (click)="aumentarPantalla()">Siguiente</button>
       </div>
@@ -45,22 +49,26 @@
         <option value="tienda">Tienda</option>
         <option value="bar">Bar</option>
       </select>
-      
+
       <h3>Ubicación</h3>
       <input type="text" name="ubicacion" ngModel placeholder="Ubicación del local">
-      
+
       <h3>Pre-Order?</h3>
       <label>
         <input type="checkbox" name="preorder" ngModel>
         Permitir pre-orden
       </label>
-      
+
       <h3>Habilitar PS?</h3>
       <label>
         <input type="checkbox" name="psEnabled" ngModel [checked]="true">
         PS habilitado
       </label>
-      
+      <div *ngIf="comercioForm.value.psEnabled">
+        <h3>Valor PS</h3>
+        <input type="number" name="psValue" ngModel [value]="0" placeholder="0">
+      </div>
+
       <h3>Métodos de Pago</h3>
       <label>
         <input type="checkbox" name="pagoEfectivo" ngModel [checked]="true">
@@ -78,7 +86,7 @@
         <input type="checkbox" name="pagoTransferencia" ngModel [checked]="true">
         Transferencia
       </label>
-      
+
       <button type="button" (click)="bajarPantalla()">Anterior</button>
       <button type="button" (click)="aumentarPantalla()">Siguiente</button>
     </div>
@@ -99,11 +107,11 @@
           </div>
         </div>
       </div>
-      
+
       <button type="button" (click)="bajarPantalla()">Anterior</button>
       <button type="submit">Crear Comercio</button>
     </div>
-    
+
   </form>
 </div>
 

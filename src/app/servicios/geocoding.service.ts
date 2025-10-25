@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError, delay } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class GeocodingService {
-  private nominatimUrl = 'https://nominatim.openstreetmap.org/search';
+  private nominatimUrl = '/nominatim/search';
 
   constructor(private http: HttpClient) {}
 
@@ -30,6 +30,14 @@ export class GeocodingService {
   }
 
   private geocodeIntento(address: string): Observable<{lat: number, lng: number} | null> {
+    // ✅ Headers requeridos por Nominatim
+    const headers = new HttpHeaders({
+      'Accept': 'application/json',
+      'Accept-Language': 'es-AR,es;q=0.9',
+      // Nota: User-Agent no se puede setear desde el browser por seguridad,
+      // pero Nominatim lo requiere. Si sigue fallando, usar proxy.
+    });
+
     const params = {
       q: address,
       format: 'json',
@@ -40,8 +48,8 @@ export class GeocodingService {
 
     console.log('🌍 Geocodificando:', address);
 
-    return this.http.get<any[]>(this.nominatimUrl, { params }).pipe(
-      delay(1000),
+    return this.http.get<any[]>(this.nominatimUrl, { params, headers }).pipe(
+      delay(1000), // ✅ Respetar rate limit de Nominatim (1 req/seg)
       map(results => {
         if (results && results.length > 0) {
           console.log('✅ Resultado encontrado:', results[0]);
@@ -51,6 +59,10 @@ export class GeocodingService {
           };
         }
         throw new Error('No results');
+      }),
+      catchError(error => {
+        console.error('❌ Error en geocodificación:', error);
+        throw error;
       })
     );
   }

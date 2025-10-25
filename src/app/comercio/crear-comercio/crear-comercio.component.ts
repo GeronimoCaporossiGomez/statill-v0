@@ -18,7 +18,7 @@ export class CrearComercioComponent {
   dias: string[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
   imagenUrl: string | ArrayBuffer | null = null;
   archivoLogo: File | null = null;
-  userId: number = 1; // Cambiar por el ID real del usuario logueado
+  userId: number = 1;
 
   constructor(
     private router: Router,
@@ -49,29 +49,29 @@ export class CrearComercioComponent {
 
   onSubmit(form: NgForm) {
     console.log('📋 Datos del formulario (raw):', form.value);
-    
-    // Transformar horarios al formato del backend
+
+    // Transformar horarios al formato del backend (solo HH:MM)
     const openingTimes: (string | null)[] = [];
     const closingTimes: (string | null)[] = [];
-    
+
     this.dias.forEach((dia, i) => {
       const abierto = form.value[`si${i}`];
       const horaInicio = form.value[`horaInicio${i}`];
       const horaFin = form.value[`horaFin${i}`];
-      
+
       if (abierto && horaInicio) {
-        openingTimes.push(this.convertirHoraAISO(horaInicio));
+        openingTimes.push(horaInicio); // ✅ Enviar directamente "09:30"
       } else {
         openingTimes.push(null);
       }
-      
+
       if (abierto && horaFin) {
-        closingTimes.push(this.convertirHoraAISO(horaFin));
+        closingTimes.push(horaFin); // ✅ Enviar directamente "18:00"
       } else {
         closingTimes.push(null);
       }
     });
-    
+
     // Mapear categoría de texto a número
     const categorias: { [key: string]: number } = {
       'Local': 0,
@@ -79,34 +79,39 @@ export class CrearComercioComponent {
       'tienda': 2,
       'bar': 3
     };
-    
+
     // Construir el objeto en el formato del backend
-    const datosParaBackend = {
+    const datosParaBackend: any = {
       name: form.value.nombre || '',
       address: form.value.ubicacion || '',
       category: categorias[form.value.tipo] || 0,
-      preorder_enabled: form.value.preorder === true, // Convertir a boolean
-      ps_enabled: form.value.psEnabled === true, // Convertir a boolean
+      preorder_enabled: form.value.preorder === true,
+      ps_enabled: form.value.psEnabled === true,
       opening_times: openingTimes,
       closing_times: closingTimes,
       payment_methods: [
-        form.value.pagoEfectivo === true,  // ✅ Ahora siempre será true o false
-        form.value.pagoDebito === true,    // ✅ Ahora siempre será true o false
-        form.value.pagoCredito === true,   // ✅ Ahora siempre será true o false
-        form.value.pagoTransferencia === true  // ✅ Ahora siempre será true o false
+        form.value.pagoEfectivo === true,
+        form.value.pagoDebito === true,
+        form.value.pagoCredito === true,
+        form.value.pagoTransferencia === true
       ],
-      user_id: this.userId
+      user_id: form.value.localsito
     };
-    
+
+    // ✅ Si ps_enabled es true, agregar ps_value
+    if (datosParaBackend.ps_enabled) {
+      datosParaBackend.ps_value = form.value.psValue || 0; // Valor por defecto 0
+    }
+
+    console.log('a ver el id', this.userId);
     console.log('🏪 Datos para el backend:', datosParaBackend);
     console.log('📄 JSON:', JSON.stringify(datosParaBackend, null, 2));
-    
+
     // Enviar al backend
     this.enviarComercio(datosParaBackend);
   }
 
   enviarComercio(datos: any) {
-    // Enviar JSON directamente, NO FormData
     this.miApiService.postStores(datos).subscribe(
       response => {
         console.log('✅ Comercio creado exitosamente:', response);
@@ -114,14 +119,13 @@ export class CrearComercioComponent {
       },
       error => {
         console.error('❌ Error al crear comercio:', error);
-        // Aquí podrías mostrar un mensaje de error al usuario
+        console.error('Detalles:', error.error);
       }
     );
   }
 
   onSubmitUnirse(form: NgForm) {
     console.log('Código para unirse:', form.value.codigo);
-    // Aquí harías la llamada al API para unirse a un comercio
     this.router.navigate(['/escanear']);
   }
 
@@ -129,7 +133,7 @@ export class CrearComercioComponent {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files[0]) {
       this.archivoLogo = input.files[0];
-      
+
       const reader = new FileReader();
       reader.onload = () => {
         this.imagenUrl = reader.result;
@@ -137,14 +141,5 @@ export class CrearComercioComponent {
       };
       reader.readAsDataURL(input.files[0]);
     }
-  }
-
-  // Método auxiliar para convertir hora a ISO
-  convertirHoraAISO(hora: string): string {
-    // hora viene como "09:30"
-    const [horas, minutos] = hora.split(':');
-    const fecha = new Date();
-    fecha.setUTCHours(parseInt(horas), parseInt(minutos), 0, 0);
-    return fecha.toISOString();
   }
 }
