@@ -1,16 +1,23 @@
-import { Injectable, inject, isDevMode } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { map, catchError, delay } from 'rxjs/operators';
+import { environment } from '../../../environments/environment.development';
 
 @Injectable({ providedIn: 'root' })
 export class GeocodingService {
+
+    constructor() {
+    // ✅ Debug: ver qué environment está usando
+    console.log('🔧 Environment completo:', environment);
+    console.log('🌐 URL que va a usar:', this.nominatimUrl);
+    console.log('🏭 Production?:', environment.production);
+  }
+
   private http = inject(HttpClient);
 
-  // ✅ Usar endpoint propio en producción, Nominatim directo en dev
-  private nominatimUrl = isDevMode()
-    ? '/api/nominatim'  // ✅ Tu API en Vercel
-    : '/nominatim/search'; // ✅ Proxy local en desarrollo
+  // ✅ Clean y mantenible
+  private nominatimUrl = environment.nominatimUrl;
 
   geocode(address: string): Observable<{lat: number, lng: number} | null> {
     if (!address || address.trim() === '') {
@@ -39,7 +46,7 @@ export class GeocodingService {
       countrycodes: 'ar'
     };
 
-    console.log('🌍 Geocodificando:', address);
+    console.log('🌍 Geocodificando:', address, '| URL:', this.nominatimUrl);
 
     return this.http.get<any[]>(this.nominatimUrl, { params }).pipe(
       delay(1000),

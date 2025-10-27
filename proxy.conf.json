@@ -8,7 +8,7 @@
       "^/nominatim": ""
     },
     "headers": {
-      "User-Agent": "StatillApp/1.0 (Angular Development)"
+      "User-Agent": "StatillApp/1.0"
     }
   }
 }

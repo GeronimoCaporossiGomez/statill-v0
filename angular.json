@@ -78,18 +78,24 @@
           },
           "configurations": {
             "production": {
-              "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "500kB",
-                  "maximumError": "1MB"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "5kB",
-                  "maximumError": "15kB"
-                }
-              ],
+              "fileReplacements": [
+              {
+                "replace": "src/environments/environment.development.ts",
+                "with": "src/environments/environment.ts"
+              }
+            ],
+            "budgets": [
+              {
+                "type": "initial",
+                "maximumWarning": "500kB",
+                "maximumError": "1MB"
+              },
+              {
+                "type": "anyComponentStyle",
+                "maximumWarning": "5kB",
+                "maximumError": "15kB"
+              }
+            ],
               "outputHashing": "all",
               "serviceWorker": "ngsw-config.json"
             },
