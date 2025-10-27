@@ -1,29 +1,34 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
+export default async function handler(req: any, res: any) {
+  // CORS headers
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
-  const { q, format, limit, addressdetails, countrycodes } = req.query;
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
 
   try {
-    const url = new URL('https://nominatim.openstreetmap.org/search');
-    url.searchParams.append('q', q as string);
-    url.searchParams.append('format', format as string || 'json');
-    url.searchParams.append('limit', limit as string || '1');
-    url.searchParams.append('addressdetails', addressdetails as string || '1');
-    url.searchParams.append('countrycodes', countrycodes as string || 'ar');
+    const { q, format = 'json', limit = '1', addressdetails = '1', countrycodes = 'ar' } = req.query;
 
-    const response = await fetch(url.toString(), {
+    if (!q) {
+      return res.status(400).json({ error: 'Missing query parameter' });
+    }
+
+    const nominatimUrl = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=${format}&limit=${limit}&addressdetails=${addressdetails}&countrycodes=${countrycodes}`;
+
+    const response = await fetch(nominatimUrl, {
       headers: {
-        'User-Agent': 'StatillApp/1.0 (contact@statill.com)',
+        'User-Agent': 'StatillApp/1.0',
         'Accept': 'application/json'
       }
     });
 
     const data = await response.json();
 
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Cache-Control', 's-maxage=3600');
-    res.status(200).json(data);
+    return res.status(200).json(data);
+
   } catch (error) {
-    res.status(500).json({ error: 'Geocoding failed' });
+    console.error('Error:', error);
+    return res.status(500).json({ error: 'Failed to geocode' });
   }
 }
