@@ -1,6 +1,6 @@
-export default async function handler(req: any, res: any) {
-  const https = require('https');
+import fetch from 'node-fetch';
 
+export default async function handler(req: any, res: any) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
 
@@ -17,28 +17,19 @@ export default async function handler(req: any, res: any) {
 
     const nominatimUrl = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=${format}&limit=${limit}&addressdetails=${addressdetails}&countrycodes=${countrycodes}`;
 
-    https.get(nominatimUrl, {
+    const response = await fetch(nominatimUrl, {
       headers: {
         'User-Agent': 'StatillApp/1.0',
         'Accept': 'application/json'
       }
-    }, (apiRes: any) => {
-      let data = '';
-
-      apiRes.on('data', (chunk: any) => {
-        data += chunk;
-      });
-
-      apiRes.on('end', () => {
-        res.status(200).json(JSON.parse(data));
-      });
-    }).on('error', (error: any) => {
-      console.error('Error:', error);
-      res.status(500).json({ error: 'Failed to geocode' });
     });
 
-  } catch (error) {
+    const data = await response.json();
+
+    return res.status(200).json(data);
+
+  } catch (error: any) {
     console.error('Error:', error);
-    return res.status(500).json({ error: 'Failed to geocode' });
+    return res.status(500).json({ error: 'Failed to geocode', message: error.message });
   }
 }
