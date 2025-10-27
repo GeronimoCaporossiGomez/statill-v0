@@ -1,23 +1,15 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { map, catchError, delay } from 'rxjs/operators';
-import { environment } from '../../environments/environment.development';
+import { map, catchError, delay, switchMap } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class GeocodingService {
-
-    constructor() {
-    // ✅ Debug: ver qué environment está usando
-    console.log('🔧 Environment completo:', environment);
-    console.log('🌐 URL que va a usar:', this.nominatimUrl);
-    console.log('🏭 Production?:', environment.production);
-  }
-
   private http = inject(HttpClient);
 
-  // ✅ Clean y mantenible
-  private nominatimUrl = environment.nominatimUrl;
+  // ✅ Usar proxy CORS público
+  private corsProxy = 'https://api.allorigins.win/raw?url=';
+  private nominatimBase = 'https://nominatim.openstreetmap.org/search';
 
   geocode(address: string): Observable<{lat: number, lng: number} | null> {
     if (!address || address.trim() === '') {
@@ -38,17 +30,20 @@ export class GeocodingService {
   }
 
   private geocodeIntento(address: string): Observable<{lat: number, lng: number} | null> {
-    const params = {
+    const params = new URLSearchParams({
       q: address,
       format: 'json',
       limit: '1',
       addressdetails: '1',
       countrycodes: 'ar'
-    };
+    });
 
-    console.log('🌍 Geocodificando:', address, '| URL:', this.nominatimUrl);
+    const nominatimUrl = `${this.nominatimBase}?${params.toString()}`;
+    const proxiedUrl = `${this.corsProxy}${encodeURIComponent(nominatimUrl)}`;
 
-    return this.http.get<any[]>(this.nominatimUrl, { params }).pipe(
+    console.log('🌍 Geocodificando:', address);
+
+    return this.http.get<any[]>(proxiedUrl).pipe(
       delay(1000),
       map(results => {
         if (results && results.length > 0) {
