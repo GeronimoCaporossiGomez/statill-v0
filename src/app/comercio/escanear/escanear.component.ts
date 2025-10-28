@@ -6,7 +6,8 @@ import { MiApiService } from '../../servicios/mi-api.service';
 import { ComercioService } from '../../servicios/comercio.service';
 
 // Importar QuaggaJS
-import * as Quagga from 'quagga';
+// Declarar QuaggaJS
+declare const Quagga: any;
 
 @Component({
   selector: 'app-escanear',

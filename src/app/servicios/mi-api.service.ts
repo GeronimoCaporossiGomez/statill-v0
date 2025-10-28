@@ -113,9 +113,6 @@ export class MiApiService {
   getPoints(): Observable<PointsResponse> {
     return this.http.get<PointsResponse>(this.apiUrl + '/api/v1/points/');
   }
-  getProductsByBarcode(barcode: string): Observable<any> {
-    return this.http.get(this.apiUrl + '/api/v1/products/?barcode=' + barcode);
-  }
 }
 
 
