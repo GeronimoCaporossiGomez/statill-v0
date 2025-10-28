@@ -59,12 +59,6 @@ export class EscanearComponent implements OnDestroy, OnInit {
     fecha: new Date().toLocaleDateString()
   };
 
-  tiposProducto = [
-    { id: 0, name: 'Restaurante' },
-    { id: 1, name: 'Kiosco' },
-    { id: 2, name: 'Supermercado' },
-    { id: 3, name: 'Panadería' }
-  ];
 
   constructor(
     private apiService: MiApiService,
@@ -304,13 +298,15 @@ export class EscanearComponent implements OnDestroy, OnInit {
 
     const productoApi = {
       name: this.product.name,
-      brand: this.product.brand || 'algo',
+      brand: 'Sin marca', // Valor por defecto
       price: this.product.price,
+      points_price: 1,
       type: 1, // Tipo por defecto
       quantity: Number(this.product.cantidad) || 1,
       desc: this.product.description || '',
       barcode: this.scannedBarcode,
-      store_id: Number(this.product.shop) || 4
+      hidden: false,
+      store_id: this.currentStore?.id || 1
     };
 
     this.isLoading = true;
@@ -322,7 +318,7 @@ export class EscanearComponent implements OnDestroy, OnInit {
         // Mostrar el producto recién creado
         this.displayData = {
           nombre: this.product.name,
-          marca: this.product.brand || 'Sin marca',
+          marca: 'Sin marca',
           codigo: this.scannedBarcode,
           precio: `$${this.product.price}`,
           tipo: 'Producto',
@@ -341,7 +337,13 @@ export class EscanearComponent implements OnDestroy, OnInit {
   }
 
   getTypeNameById(typeId: number): string {
-    const tipo = this.tiposProducto.find(t => t.id === typeId);
+    const tipos = [
+      { id: 0, name: 'Restaurante' },
+      { id: 1, name: 'Kiosco' },
+      { id: 2, name: 'Supermercado' },
+      { id: 3, name: 'Panadería' }
+    ];
+    const tipo = tipos.find(t => t.id === typeId);
     return tipo ? tipo.name : 'Sin categoría';
   }
 
