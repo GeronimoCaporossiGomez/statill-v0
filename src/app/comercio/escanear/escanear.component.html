@@ -73,6 +73,20 @@
     <div *ngIf="showCreateForm" class="crear-producto-form">
       <h2>➕ Crear Nuevo Producto</h2>
       <p class="form-description">Código escaneado: <strong>{{ newProduct.barcode }}</strong></p>
+      <p *ngIf="currentStore" class="store-info">Creando producto para: <strong>{{ currentStore.name }}</strong> (ID: {{ currentStore.id }})</p>
+      
+      <!-- Mostrar información de productos similares encontrados -->
+      <div *ngIf="foundProducts.length > 0" class="productos-similares">
+        <h3>📋 Productos similares encontrados:</h3>
+        <div class="similar-products-list">
+          <div *ngFor="let product of foundProducts" class="similar-product">
+            <span class="product-name">{{ product.name }}</span>
+            <span class="product-brand">{{ product.brand }}</span>
+            <span class="product-store">Tienda #{{ product.store_id }}</span>
+          </div>
+        </div>
+        <p class="similar-info">Los datos de nombre y marca se han prellenado automáticamente. Complete los campos faltantes.</p>
+      </div>
       
       <div class="form-grid">
         <div class="form-group">

@@ -281,8 +281,88 @@
     background: #e3f2fd;
     padding: 0.8rem;
     border-radius: 8px;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     color: #1976d2;
+  }
+
+  .store-info {
+    background: #f3e5f5;
+    padding: 0.8rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    color: #7b1fa2;
+    border-left: 4px solid #9c27b0;
+    font-size: 0.9rem;
+  }
+
+  // Productos similares encontrados
+  .productos-similares {
+    background: #fff3e0;
+    border: 1px solid #ffb74d;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+
+    h3 {
+      color: #f57c00;
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .similar-products-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      margin-bottom: 1rem;
+
+      .similar-product {
+        background: white;
+        padding: 1rem;
+        border-radius: 8px;
+        border-left: 4px solid #ff9800;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+
+        .product-name {
+          font-weight: 600;
+          color: #2c3e50;
+          flex: 1;
+          min-width: 120px;
+        }
+
+        .product-brand {
+          color: #666;
+          font-style: italic;
+          flex: 1;
+          min-width: 100px;
+        }
+
+        .product-store {
+          background: #e3f2fd;
+          color: #1976d2;
+          padding: 0.3rem 0.8rem;
+          border-radius: 15px;
+          font-size: 0.8rem;
+          font-weight: 600;
+        }
+      }
+    }
+
+    .similar-info {
+      background: #e8f5e8;
+      color: #2e7d32;
+      padding: 0.8rem;
+      border-radius: 8px;
+      margin: 0;
+      font-size: 0.9rem;
+      border-left: 4px solid #4caf50;
+    }
   }
 
   .form-grid {

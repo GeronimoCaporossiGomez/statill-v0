@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SidebarComponent } from "src/app/Componentes/sidebar-statill/sidebar.component";
 import { MiApiService } from '../../servicios/mi-api.service';
+import { ComercioService } from '../../servicios/comercio.service';
 
 @Component({
   selector: 'app-escanear',
@@ -38,8 +39,11 @@ export class EscanearComponent implements OnDestroy, OnInit {
     quantity: null,
     description: '',
     barcode: '',
-    store_id: 4 // Por defecto
+    store_id: 4 // Por defecto, se actualizará dinámicamente
   };
+
+  // Información de la tienda actual
+  currentStore: any = null;
 
   // Datos mostrados (productos encontrados o escaneados)
   displayData = {
@@ -58,10 +62,32 @@ export class EscanearComponent implements OnDestroy, OnInit {
     { id: 3, name: 'Panadería' }
   ];
 
-  constructor(private apiService: MiApiService) {}
+  constructor(
+    private apiService: MiApiService,
+    private comercioService: ComercioService
+  ) {}
 
   ngOnInit() {
-    // Inicialización del componente
+    // Obtener la tienda actual (por ahora usamos la primera tienda disponible)
+    this.loadCurrentStore();
+  }
+
+  loadCurrentStore() {
+    this.comercioService.getStores().subscribe({
+      next: (stores) => {
+        if (stores && stores.length > 0) {
+          // Por ahora usamos la primera tienda disponible
+          // En una implementación real, esto vendría de la autenticación o selección del usuario
+          this.currentStore = stores[0];
+          this.newProduct.store_id = this.currentStore.id;
+          console.log('Tienda actual cargada:', this.currentStore);
+        }
+      },
+      error: (error) => {
+        console.error('Error cargando tiendas:', error);
+        // Mantener el store_id por defecto si hay error
+      }
+    });
   }
 
   async toggleCamera() {
@@ -133,6 +159,7 @@ export class EscanearComponent implements OnDestroy, OnInit {
   generateSimulatedBarcode(): string {
     // Generar código de barras simulado
     const barcodes = [
+      '+', // Código del ejemplo proporcionado
       '7890123456789',
       '1234567890123', 
       '9876543210987',
@@ -157,12 +184,12 @@ export class EscanearComponent implements OnDestroy, OnInit {
         this.isLoading = false;
         
         if (response.successful && response.data && response.data.length > 0) {
-          // Productos encontrados
+          // Productos encontrados - mostrar formulario de crear con datos prellenados
           this.foundProducts = response.data;
-          this.displayFoundProducts();
-          this.errorMessage = `Se encontraron ${response.data.length} producto(s) con este código`;
+          this.showCreateProductFormWithData(barcode, response.data);
+          this.errorMessage = `Se encontraron ${response.data.length} producto(s) con este código. Datos prellenados para crear nuevo producto.`;
         } else {
-          // No hay productos, mostrar formulario de crear
+          // No hay productos, mostrar formulario de crear vacío
           this.showCreateProductForm(barcode);
         }
       },
@@ -193,6 +220,25 @@ export class EscanearComponent implements OnDestroy, OnInit {
     this.showCreateForm = true;
     this.foundProducts = [];
     this.errorMessage = `No se encontraron productos con código ${barcode}. Crear nuevo producto:`;
+  }
+
+  showCreateProductFormWithData(barcode: string, foundProducts: any[]) {
+    // Usar el primer producto encontrado para prellenar los datos
+    const referenceProduct = foundProducts[0];
+    
+    this.newProduct = {
+      name: referenceProduct.name || '',
+      brand: referenceProduct.brand || '',
+      price: null, // No prellenar precio para que el usuario lo ingrese
+      type: referenceProduct.type?.toString() || '',
+      quantity: null, // No prellenar cantidad
+      description: referenceProduct.desc || '',
+      barcode: barcode,
+      store_id: this.newProduct.store_id // Mantener el store_id actual
+    };
+    
+    this.showCreateForm = true;
+    this.errorMessage = `Productos similares encontrados. Datos prellenados con información de "${referenceProduct.name}" (${referenceProduct.brand}). Complete los campos faltantes:`;
   }
 
   createProduct() {
