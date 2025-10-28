@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SidebarComponent } from 'src/app/Componentes/sidebar-statill/sidebar.component';
-import { CrearProductoFormComponent } from 'src/app/Componentes/crear-producto-form/crear-producto-form.component';
+import { ProductoFormComponent, ProductoData } from 'src/app/Componentes/producto-form/producto-form.component';
 import { MiApiService } from 'src/app/servicios/mi-api.service';
 
 @Component({
   selector: 'app-stock',
   standalone: true,
-  imports: [CommonModule, SidebarComponent, CrearProductoFormComponent],
+  imports: [CommonModule, SidebarComponent, ProductoFormComponent],
   templateUrl: './stock.component.html',
   styleUrls: ['./stock.component.scss']
 })
@@ -15,7 +15,7 @@ export class StockComponent {
   constructor(private miApi: MiApiService) {}
 
   SePuedeVerElformulario = false;
-  producto = {
+  producto: ProductoData = {
     name: '',
     brand: '',
     price: 0,
@@ -66,7 +66,7 @@ export class StockComponent {
     this.productoEditandoId = producto.id;
   }
 
-  onProductoSubmit(productoData: any) {
+  onProductoSubmit(productoData: ProductoData) {
     this.isLoading = true;
     this.errorMessage = null;
 
@@ -138,6 +138,11 @@ export class StockComponent {
     this.editarIndex = null;
     this.productoEditandoId = null;
     this.errorMessage = null;
+  }
+
+  onUseSuggestedData(useSuggested: boolean) {
+    console.log('Usar datos sugeridos:', useSuggested);
+    // No hay datos sugeridos en el componente de stock
   }
   // Manejar envío del formulario
 }

@@ -1,63 +1,103 @@
 <app-sidebar></app-sidebar>
 
 <div class="contenedor-principal">
+  <!-- Header de la página -->
+  <div class="page-header">
+    <div class="header-content">
+      <h1 class="page-title">
+        <span class="icon">📱</span>
+        Escáner de Productos
+      </h1>
+      <p class="page-subtitle">Escanea códigos de barras para crear o buscar productos</p>
+    </div>
+  </div>
+
   <!-- Sección de cámara -->
   <div class="seccion-camara">
-    <div class="cuadrado-escanear">
-      <h1>Escanear</h1>
-      <div class="color-box">
-        Escanear producto
-      </div>
-      <img src="assets/img/logo.png" alt="Ingresar código QR" />
-    </div>
-
-    <h2>Cámara</h2>
-
-    <div *ngIf="currentStore" class="store-info">
-      <h3>🏪 Tienda: {{ currentStore.name }}</h3>
-      <p>📍 {{ currentStore.address }}</p>
-    </div>
-
-    <div class="video-container">
-      <div #video id="scanner-container"></div>
-      <div class="video-overlay" *ngIf="!isCameraOn">
-        <p>📷 Cámara desactivada</p>
+    <!-- Información de la tienda -->
+    <div *ngIf="currentStore" class="store-info-card">
+      <div class="store-icon">🏪</div>
+      <div class="store-details">
+        <h3>{{ currentStore.name }}</h3>
+        <p>📍 {{ currentStore.address }}</p>
       </div>
     </div>
 
-    <div class="camera-controls">
-      <button (click)="toggleCamera()" class="camera-btn" [class.active]="isCameraOn">
-        {{ isCameraOn ? '📷 Detener Cámara' : '📷 Activar Cámara' }}
-      </button>
-      
-      <button (click)="startScanning()" class="scan-btn" [disabled]="!isCameraOn || isScanning">
-        {{ isScanning ? '⏳ Escaneando...' : '🔍 Iniciar Escaneo' }}
-      </button>
-      
-      <button (click)="stopScanning()" class="stop-btn" [disabled]="!isScanning">
-        ⏹️ Detener Escaneo
-      </button>
-    </div>
+    <!-- Contenedor de la cámara -->
+    <div class="camera-section">
+      <div class="camera-header">
+        <h2>📷 Cámara de Escaneo</h2>
+        <div class="camera-status" [ngClass]="{'active': isCameraOn, 'inactive': !isCameraOn}">
+          <span class="status-dot"></span>
+          {{ isCameraOn ? 'Activa' : 'Inactiva' }}
+        </div>
+      </div>
 
-    <div *ngIf="errorMessage" class="message" 
-         [ngClass]="{'success': errorMessage.includes('exitosamente'), 'error': !errorMessage.includes('exitosamente')}">
-      {{ errorMessage }}
+      <div class="video-container">
+        <div #video id="scanner-container"></div>
+        <div class="video-overlay" *ngIf="!isCameraOn">
+          <div class="overlay-content">
+            <div class="overlay-icon">📷</div>
+            <p>Cámara desactivada</p>
+            <small>Presiona "Activar Cámara" para comenzar</small>
+          </div>
+        </div>
+        <div class="scanning-overlay" *ngIf="isScanning">
+          <div class="scanning-animation">
+            <div class="scan-line"></div>
+            <p>Escaneando...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Controles de la cámara -->
+      <div class="camera-controls">
+        <button (click)="toggleCamera()" class="control-btn camera-btn" [class.active]="isCameraOn">
+          <span class="btn-icon">{{ isCameraOn ? '📷' : '📷' }}</span>
+          <span class="btn-text">{{ isCameraOn ? 'Detener Cámara' : 'Activar Cámara' }}</span>
+        </button>
+        
+        <button (click)="startScanning()" class="control-btn scan-btn" [disabled]="!isCameraOn || isScanning">
+          <span class="btn-icon">🔍</span>
+          <span class="btn-text">{{ isScanning ? 'Escaneando...' : 'Iniciar Escaneo' }}</span>
+        </button>
+        
+        <button (click)="stopScanning()" class="control-btn stop-btn" [disabled]="!isScanning">
+          <span class="btn-icon">⏹️</span>
+          <span class="btn-text">Detener</span>
+        </button>
+      </div>
+
+      <!-- Mensajes de estado -->
+      <div *ngIf="errorMessage" class="status-message" 
+           [ngClass]="{'success': errorMessage.includes('exitosamente'), 'error': !errorMessage.includes('exitosamente'), 'info': errorMessage.includes('Buscando') || errorMessage.includes('Escaneando')}">
+        <div class="message-icon">
+          <span *ngIf="errorMessage.includes('exitosamente')">✅</span>
+          <span *ngIf="!errorMessage.includes('exitosamente') && !errorMessage.includes('Buscando') && !errorMessage.includes('Escaneando')">⚠️</span>
+          <span *ngIf="errorMessage.includes('Buscando') || errorMessage.includes('Escaneando')">⏳</span>
+        </div>
+        <div class="message-text">{{ errorMessage }}</div>
+      </div>
     </div>
   </div>
 
   <!-- Formulario de crear producto usando el componente reutilizable -->
   <div class="seccion-formulario">
-    <app-crear-producto-form
+    <app-producto-form
       [producto]="producto"
       [isLoading]="isLoading"
       [errorMessage]="errorMessage"
       [showForm]="showCreateForm"
-      [title]="foundProducts.length > 0 ? 'Crear Producto (Datos Prellenados)' : 'Crear Nuevo Producto'"
+      [title]="foundProducts.length > 0 ? 'Crear Producto (Datos Sugeridos)' : 'Crear Nuevo Producto'"
       [submitButtonText]="'Crear Producto'"
+      [showBarcodeField]="true"
+      [showStoreIdField]="true"
+      [suggestedData]="foundProducts"
       (onSubmit)="onProductoSubmit($event)"
       (onCancel)="onCancelar()"
-      (onReset)="onReset()">
-    </app-crear-producto-form>
+      (onReset)="onReset()"
+      (onUseSuggestedData)="onUseSuggestedData($event)">
+    </app-producto-form>
 
     <!-- Información adicional cuando hay productos encontrados -->
     <div *ngIf="foundProducts.length > 0 && showCreateForm" class="found-products-info">

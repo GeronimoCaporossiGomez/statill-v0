@@ -1,9 +1,7 @@
 import { Component, ElementRef, ViewChild, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ComercioHeaderComponent } from '../comercio-header/comercio-header.component';
-import { HeaderStatillComponent } from 'src/app/Componentes/header-statill/header-statill.component';
 import { SidebarComponent } from "src/app/Componentes/sidebar-statill/sidebar.component";
-import { CrearProductoFormComponent } from 'src/app/Componentes/crear-producto-form/crear-producto-form.component';
+import { ProductoFormComponent, ProductoData } from 'src/app/Componentes/producto-form/producto-form.component';
 import { MiApiService, ProductsResponse } from '../../servicios/mi-api.service';
 import { ComercioService } from '../../servicios/comercio.service';
 
@@ -14,11 +12,9 @@ declare const Quagga: any;
   selector: 'app-escanear',
   standalone: true,
   imports: [
-    ComercioHeaderComponent,
     CommonModule,
-    HeaderStatillComponent,
     SidebarComponent,
-    CrearProductoFormComponent
+    ProductoFormComponent
   ],
   templateUrl: './escanear.component.html',
   styleUrls: ['./escanear.component.scss']
@@ -45,7 +41,7 @@ export class EscanearComponent implements OnDestroy, OnInit {
   };
 
   // Producto para el formulario
-  producto = {
+  producto: ProductoData = {
     name: '',
     brand: '',
     price: 0,
@@ -223,10 +219,10 @@ export class EscanearComponent implements OnDestroy, OnInit {
           console.log('🔍 Productos encontrados:', productsWithMatchingBarcode);
           
           if (productsWithMatchingBarcode.length > 0) {
-            // Productos encontrados - mostrar formulario de crear con datos prellenados
+            // Productos encontrados - mostrar formulario con datos sugeridos
             this.foundProducts = productsWithMatchingBarcode;
-            this.showCreateProductFormWithData(barcode, productsWithMatchingBarcode);
-            this.errorMessage = `Se encontraron ${productsWithMatchingBarcode.length} producto(s) con código de barras "${barcode}". Datos prellenados para crear nuevo producto.`;
+            this.showCreateProductFormWithSuggestedData(barcode, productsWithMatchingBarcode);
+            this.errorMessage = `Se encontraron ${productsWithMatchingBarcode.length} producto(s) con código de barras "${barcode}". Puedes usar los datos más comunes o crear uno nuevo.`;
           } else {
             // No hay productos con el mismo código de barras
             this.foundProducts = [];
@@ -256,17 +252,15 @@ export class EscanearComponent implements OnDestroy, OnInit {
     this.foundProducts = [];
   }
 
-  showCreateProductFormWithData(barcode: string, foundProducts: any[]) {
-    const referenceProduct = foundProducts[0];
-    
+  showCreateProductFormWithSuggestedData(barcode: string, foundProducts: any[]) {
     this.producto = {
-      name: referenceProduct.name || '',
-      brand: referenceProduct.brand || '',
-      price: 0, // No prellenar precio
+      name: '',
+      brand: '',
+      price: 0,
       points_price: 1,
-      type: referenceProduct.type || 1,
-      quantity: 0, // No prellenar cantidad
-      desc: referenceProduct.desc || '',
+      type: 1,
+      quantity: 0,
+      desc: '',
       barcode: barcode,
       hidden: false,
       store_id: this.producto.store_id
@@ -275,7 +269,7 @@ export class EscanearComponent implements OnDestroy, OnInit {
     this.showCreateForm = true;
   }
 
-  onProductoSubmit(productoData: any) {
+  onProductoSubmit(productoData: ProductoData) {
     this.isLoading = true;
     this.errorMessage = null;
 
@@ -319,6 +313,11 @@ export class EscanearComponent implements OnDestroy, OnInit {
     };
     this.foundProducts = [];
     this.scannedBarcode = '';
+  }
+
+  onUseSuggestedData(useSuggested: boolean) {
+    console.log('Usar datos sugeridos:', useSuggested);
+    // La lógica de autocompletado se maneja en el componente del formulario
   }
 
   simularEscaneo() {

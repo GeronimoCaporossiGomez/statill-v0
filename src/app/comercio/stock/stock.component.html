@@ -11,17 +11,21 @@
     <div class="agregar-texto">{{ SePuedeVerElformulario ? 'Cancelar' : 'Añadir Producto' }}</div>
   </div>
 
-  <app-crear-producto-form
+  <app-producto-form
     [producto]="producto"
     [isLoading]="isLoading"
     [errorMessage]="errorMessage"
     [showForm]="SePuedeVerElformulario"
     [title]="productoEditandoId ? 'Editar Producto' : 'Crear Producto'"
     [submitButtonText]="productoEditandoId ? 'Actualizar Producto' : 'Crear Producto'"
+    [showBarcodeField]="true"
+    [showStoreIdField]="true"
+    [suggestedData]="null"
     (onSubmit)="onProductoSubmit($event)"
     (onCancel)="onCancelar()"
-    (onReset)="onReset()">
-  </app-crear-producto-form>
+    (onReset)="onReset()"
+    (onUseSuggestedData)="onUseSuggestedData($event)">
+  </app-producto-form>
 
   <div *ngIf="SePuedeVerElformulario == false" class="productos-container">
     <div *ngFor="let producto of productos; let i = index" class="producto-card">

@@ -1,0 +1,226 @@
+<div *ngIf="showForm" class="producto-form">
+  <div class="form-header">
+    <h2>{{ title }}</h2>
+    <div class="form-subtitle">
+      <span class="icon">📦</span>
+      <span>Complete la información del producto</span>
+    </div>
+  </div>
+  
+  <!-- Mensaje de error/success -->
+  <div *ngIf="errorMessage" class="message" 
+       [ngClass]="{'success': errorMessage.includes('exitosamente'), 'error': !errorMessage.includes('exitosamente')}">
+    <div class="message-icon">
+      <span *ngIf="errorMessage.includes('exitosamente')">✅</span>
+      <span *ngIf="!errorMessage.includes('exitosamente')">⚠️</span>
+    </div>
+    <div class="message-text">{{ errorMessage }}</div>
+  </div>
+
+  <!-- Información de productos similares encontrados -->
+  <div *ngIf="suggestedData && suggestedData.length > 0" class="suggested-data-card">
+    <div class="suggested-header">
+      <h4>🔍 Productos Similares Encontrados</h4>
+      <p>Se encontraron {{ suggestedData.length }} producto(s) con el mismo código de barras</p>
+    </div>
+    
+    <div class="suggested-actions">
+      <label class="suggested-toggle">
+        <input 
+          type="checkbox" 
+          [(ngModel)]="useSuggestedData"
+          (change)="toggleSuggestedData()">
+        <span class="toggle-text">Usar datos más comunes de productos similares</span>
+      </label>
+      
+      <div *ngIf="useSuggestedData" class="suggested-preview">
+        <div class="preview-item">
+          <strong>Nombre sugerido:</strong> {{ calculateMostCommonData(suggestedData).name || 'No disponible' }}
+        </div>
+        <div class="preview-item">
+          <strong>Marca sugerida:</strong> {{ calculateMostCommonData(suggestedData).brand || 'No disponible' }}
+        </div>
+        <div class="preview-item">
+          <strong>Descripción sugerida:</strong> {{ calculateMostCommonData(suggestedData).desc || 'No disponible' }}
+        </div>
+        <div class="preview-item">
+          <strong>Categoría sugerida:</strong> {{ getTypeNameById(calculateMostCommonData(suggestedData).type) }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Formulario principal -->
+  <div class="form-content">
+    <div class="form-grid">
+      <!-- Nombre del producto -->
+      <div class="form-group">
+        <label for="name" class="form-label required">
+          <span class="label-icon">📝</span>
+          Nombre del producto
+        </label>
+        <input 
+          type="text" 
+          id="name"
+          [(ngModel)]="producto.name" 
+          placeholder="Ingresa el nombre del producto"
+          class="form-input"
+          required>
+      </div>
+
+      <!-- Marca -->
+      <div class="form-group">
+        <label for="brand" class="form-label">
+          <span class="label-icon">🏷️</span>
+          Marca
+        </label>
+        <input 
+          type="text" 
+          id="brand"
+          [(ngModel)]="producto.brand" 
+          placeholder="Marca del producto"
+          class="form-input">
+      </div>
+
+      <!-- Precio -->
+      <div class="form-group">
+        <label for="price" class="form-label required">
+          <span class="label-icon">💰</span>
+          Precio
+        </label>
+        <div class="input-with-symbol">
+          <span class="currency-symbol">$</span>
+          <input 
+            type="number" 
+            id="price"
+            [(ngModel)]="producto.price" 
+            placeholder="0.00"
+            class="form-input"
+            min="0"
+            step="0.01"
+            required>
+        </div>
+      </div>
+
+      <!-- Precio en puntos -->
+      <div class="form-group">
+        <label for="points_price" class="form-label">
+          <span class="label-icon">⭐</span>
+          Precio en puntos
+        </label>
+        <input 
+          type="number" 
+          id="points_price"
+          [(ngModel)]="producto.points_price" 
+          placeholder="1"
+          class="form-input"
+          min="0">
+      </div>
+
+      <!-- Cantidad -->
+      <div class="form-group">
+        <label for="quantity" class="form-label">
+          <span class="label-icon">📊</span>
+          Cantidad
+        </label>
+        <input 
+          type="number" 
+          id="quantity"
+          [(ngModel)]="producto.quantity" 
+          placeholder="0"
+          class="form-input"
+          min="0">
+      </div>
+
+      <!-- Categoría -->
+      <div class="form-group">
+        <label for="type" class="form-label">
+          <span class="label-icon">🏪</span>
+          Categoría
+        </label>
+        <select 
+          id="type"
+          [(ngModel)]="producto.type" 
+          class="form-select">
+          <option *ngFor="let tipo of tiposProducto" [value]="tipo.id">
+            {{ tipo.name }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Código de barras -->
+      <div *ngIf="showBarcodeField" class="form-group">
+        <label for="barcode" class="form-label">
+          <span class="label-icon">📱</span>
+          Código de barras
+        </label>
+        <input 
+          type="text" 
+          id="barcode"
+          [(ngModel)]="producto.barcode" 
+          placeholder="Código de barras"
+          class="form-input">
+      </div>
+
+      <!-- ID de tienda -->
+      <div *ngIf="showStoreIdField" class="form-group">
+        <label for="store_id" class="form-label">
+          <span class="label-icon">🏪</span>
+          ID de tienda
+        </label>
+        <input 
+          type="number" 
+          id="store_id"
+          [(ngModel)]="producto.store_id" 
+          placeholder="1"
+          class="form-input"
+          min="1">
+      </div>
+
+      <!-- Descripción -->
+      <div class="form-group full-width">
+        <label for="desc" class="form-label">
+          <span class="label-icon">📄</span>
+          Descripción
+        </label>
+        <textarea 
+          id="desc"
+          [(ngModel)]="producto.desc" 
+          placeholder="Descripción del producto"
+          class="form-textarea"
+          rows="3"></textarea>
+      </div>
+
+      <!-- Producto oculto -->
+      <div class="form-group">
+        <label class="checkbox-label">
+          <input 
+            type="checkbox" 
+            [(ngModel)]="producto.hidden">
+          <span class="checkbox-text">
+            <span class="checkbox-icon">👁️</span>
+            Producto oculto
+          </span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Acciones del formulario -->
+    <div class="form-actions">
+      <button (click)="submitForm()" [disabled]="isLoading" class="btn btn-primary">
+        <span class="btn-icon">{{ isLoading ? '⏳' : '✅' }}</span>
+        <span class="btn-text">{{ isLoading ? 'Procesando...' : submitButtonText }}</span>
+      </button>
+      
+      <button (click)="cancelForm()" class="btn btn-secondary">
+        <span class="btn-icon">❌</span>
+        <span class="btn-text">Cancelar</span>
+      </button>
+      
+      <button (click)="resetForm()" class="btn btn-warning">
+        <span class="btn-icon">🔄</span>
+        <span class="btn-text">Limpiar</span>
+      </button>
+    </div>
+  </div>
+</div>

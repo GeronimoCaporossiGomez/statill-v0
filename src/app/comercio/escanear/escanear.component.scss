@@ -1,47 +1,232 @@
 .contenedor-principal {
   display: flex;
-  gap: 20px;
-  padding: 20px;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 1.5rem;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+// Header de la página
+.page-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20px;
+  padding: 2rem;
+  color: white;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+
+  .header-content {
+    .page-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin: 0 0 0.5rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+
+      .icon {
+        font-size: 3rem;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+      }
+    }
+
+    .page-subtitle {
+      font-size: 1.2rem;
+      margin: 0;
+      opacity: 0.9;
+      font-weight: 300;
+    }
+  }
 }
 
 .seccion-camara {
-  flex: 1;
-  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 .seccion-formulario {
-  flex: 1;
-  max-width: 400px;
-  padding: 20px;
-  background: #f5f5f5;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.cuadrado-escanear {
-  margin-bottom: 20px;
-}
-
-.camera-controls {
-  margin: 20px 0;
+// Información de la tienda
+.store-info-card {
+  background: white;
+  border-radius: 15px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
   display: flex;
-  gap: 10px;
-  
-  button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    
-    &:disabled {
-      background-color: #cccccc;
-      cursor: not-allowed;
+  align-items: center;
+  gap: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+
+  .store-icon {
+    font-size: 2.5rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  }
+
+  .store-details {
+    h3 {
+      margin: 0 0 0.5rem 0;
+      color: #2c3e50;
+      font-size: 1.3rem;
+      font-weight: 600;
     }
-    
-    &:hover:not(:disabled) {
-      background-color: #0056b3;
+
+    p {
+      margin: 0;
+      color: #7f8c8d;
+      font-size: 0.95rem;
+    }
+  }
+}
+
+// Sección de la cámara
+.camera-section {
+  background: white;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+
+  .camera-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+
+    h2 {
+      margin: 0;
+      color: #2c3e50;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .camera-status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      border-radius: 25px;
+      font-weight: 500;
+      font-size: 0.9rem;
+
+      &.active {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
+
+      &.inactive {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      }
+
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: currentColor;
+        animation: pulse 2s infinite;
+      }
+    }
+  }
+}
+
+// Controles de la cámara
+.camera-controls {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  .control-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    min-width: 140px;
+    justify-content: center;
+
+    .btn-icon {
+      font-size: 1.2rem;
+    }
+
+    .btn-text {
+      font-size: 0.9rem;
+    }
+
+    &.camera-btn {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+
+      &:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+      }
+
+      &.active {
+        background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+      }
+    }
+
+    &.scan-btn {
+      background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+
+      &:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
+      }
+
+      &:disabled {
+        background: #bdc3c7;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+    }
+
+    &.stop-btn {
+      background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+
+      &:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+      }
+
+      &:disabled {
+        background: #bdc3c7;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
     }
   }
 }
@@ -230,18 +415,154 @@
   }
 }
 
-// Estilos para QuaggaJS
-#scanner-container {
+// Contenedor de video
+.video-container {
+  position: relative;
   width: 100%;
   height: 400px;
-  position: relative;
-  border-radius: 8px;
+  border-radius: 15px;
   overflow: hidden;
+  background: #f8f9fa;
+  border: 2px solid #e9ecef;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
 
-  canvas, video {
+  #scanner-container {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    position: relative;
+
+    canvas, video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 13px;
+    }
+  }
+
+  .video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(248, 249, 250, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 13px;
+
+    .overlay-content {
+      text-align: center;
+      color: #6c757d;
+
+      .overlay-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.7;
+      }
+
+      p {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin: 0 0 0.5rem 0;
+      }
+
+      small {
+        font-size: 0.9rem;
+        opacity: 0.8;
+      }
+    }
+  }
+
+  .scanning-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 13px;
+
+    .scanning-animation {
+      text-align: center;
+      color: white;
+
+      .scan-line {
+        width: 200px;
+        height: 3px;
+        background: linear-gradient(90deg, transparent, #00ff00, transparent);
+        margin: 0 auto 1rem;
+        animation: scan 2s linear infinite;
+      }
+
+      p {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin: 0;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+      }
+    }
+  }
+}
+
+// Mensajes de estado
+.status-message {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  margin-top: 1.5rem;
+  font-weight: 500;
+
+  .message-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .message-text {
+    flex: 1;
+    font-size: 0.95rem;
+  }
+
+  &.success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+  }
+
+  &.error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+  }
+
+  &.info {
+    background: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+  }
+}
+
+// Animaciones
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes scan {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
   }
 }
 
