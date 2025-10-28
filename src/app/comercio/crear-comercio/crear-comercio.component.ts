@@ -134,7 +134,7 @@ export class CrearComercioComponent {
       address: direccionFinal,
       category: categorias[form.value.tipo] || 0,
       preorder_enabled: form.value.preorder === true,
-      ps_enabled: form.value.psEnabled === true,
+      ps_value: 1 , //ESTO HAY QUE HACERLO BIEN, ES DECIR, QUE ESTE CON EL FORM PARA ESO ARREGLAR EL DISEÑO CON EL CSS PORQUE EL MAPA LO ESTA TAPANDO
       opening_times: openingTimes,
       closing_times: closingTimes,
       payment_methods: [
