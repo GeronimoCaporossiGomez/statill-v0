@@ -1,24 +1,33 @@
 import { CommonModule } from '@angular/common';
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { SidebarComponent } from 'src/app/Componentes/sidebar-statill/sidebar.component';
+import { MapaComponent } from 'src/app/mapa/mapa.component';
 import { MiApiService } from 'src/app/servicios/mi-api.service';
 
 @Component({
   selector: 'app-crear-comercio',
   standalone: true,
-  imports: [CommonModule, FormsModule, SidebarComponent, RouterLink],
+  imports: [CommonModule, FormsModule, SidebarComponent, RouterLink, MapaComponent],
   templateUrl: './crear-comercio.component.html',
   styleUrl: './crear-comercio.component.scss'
 })
 export class CrearComercioComponent {
+  @ViewChild(MapaComponent) mapaComponent!: MapaComponent;
+  
   creando: boolean = true;
   seccionPantalla: number = 0;
   dias: string[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
   imagenUrl: string | ArrayBuffer | null = null;
   archivoLogo: File | null = null;
   userId: number = 1;
+
+  // Variables para el mapa
+  direccionInput: string = '';
+  ubicacionConfirmada: string = '';
+  coordenadasSeleccionadas: [number, number] | null = null;
+  buscandoDireccion: boolean = false;
 
   constructor(
     private router: Router,
@@ -31,6 +40,16 @@ export class CrearComercioComponent {
     if(this.seccionPantalla > 3) {
       this.seccionPantalla = 3;
     }
+    
+    // ✅ Si llegamos a la pantalla 2 (donde está el mapa), actualizarlo
+    if (this.seccionPantalla === 2) {
+      setTimeout(() => {
+        if (this.mapaComponent && this.mapaComponent.map) {
+          this.mapaComponent.map.invalidateSize();
+        }
+      }, 200);
+    }
+    
     this.cdr.markForCheck();
   }
 
@@ -47,6 +66,32 @@ export class CrearComercioComponent {
     this.cdr.markForCheck();
   }
 
+  // Buscar dirección desde el input y mostrarla en el mapa
+  buscarDireccionEnMapa() {
+    if (this.mapaComponent) {
+      this.buscandoDireccion = true;
+      this.mapaComponent.direccionInput = this.direccionInput;
+      this.mapaComponent.buscarDireccion().finally(() => {
+        this.buscandoDireccion = false;
+        this.cdr.markForCheck();
+      });
+    }
+  }
+
+  // Cuando se selecciona una ubicación en el mapa (click o búsqueda)
+  onUbicacionSeleccionada(coords: [number, number]) {
+    this.coordenadasSeleccionadas = coords;
+    console.log('📍 Coordenadas seleccionadas:', coords);
+  }
+
+  // Cuando se confirma una dirección (desde búsqueda o geocoding inverso)
+  onDireccionSeleccionada(direccion: string) {
+    this.ubicacionConfirmada = direccion;
+    this.direccionInput = direccion;
+    console.log('✅ Dirección confirmada:', direccion);
+    this.cdr.markForCheck();
+  }
+
   onSubmit(form: NgForm) {
     console.log('📋 Datos del formulario (raw):', form.value);
 
@@ -60,13 +105,13 @@ export class CrearComercioComponent {
       const horaFin = form.value[`horaFin${i}`];
 
       if (abierto && horaInicio) {
-        openingTimes.push(horaInicio); // ✅ Enviar directamente "09:30"
+        openingTimes.push(horaInicio);
       } else {
         openingTimes.push(null);
       }
 
       if (abierto && horaFin) {
-        closingTimes.push(horaFin); // ✅ Enviar directamente "18:00"
+        closingTimes.push(horaFin);
       } else {
         closingTimes.push(null);
       }
@@ -80,10 +125,13 @@ export class CrearComercioComponent {
       'bar': 3
     };
 
+    // Usar la dirección confirmada del mapa o la del input
+    const direccionFinal = this.ubicacionConfirmada || this.direccionInput;
+
     // Construir el objeto en el formato del backend
     const datosParaBackend: any = {
       name: form.value.nombre || '',
-      address: form.value.ubicacion || '',
+      address: direccionFinal,
       category: categorias[form.value.tipo] || 0,
       preorder_enabled: form.value.preorder === true,
       ps_enabled: form.value.psEnabled === true,
@@ -98,12 +146,17 @@ export class CrearComercioComponent {
       user_id: form.value.localsito
     };
 
-    // ✅ Si ps_enabled es true, agregar ps_value
+    // Si ps_enabled es true, agregar ps_value
     if (datosParaBackend.ps_enabled) {
-      datosParaBackend.ps_value = form.value.psValue || 0; // Valor por defecto 0
+      datosParaBackend.ps_value = form.value.psValue || 0;
     }
 
-    console.log('a ver el id', this.userId);
+    // Agregar coordenadas si están disponibles
+    if (this.coordenadasSeleccionadas) {
+      datosParaBackend.latitude = this.coordenadasSeleccionadas[0];
+      datosParaBackend.longitude = this.coordenadasSeleccionadas[1];
+    }
+
     console.log('🏪 Datos para el backend:', datosParaBackend);
     console.log('📄 JSON:', JSON.stringify(datosParaBackend, null, 2));
 

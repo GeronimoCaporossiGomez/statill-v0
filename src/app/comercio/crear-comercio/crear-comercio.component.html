@@ -51,7 +51,34 @@
       </select>
 
       <h3>Ubicación</h3>
-      <input type="text" name="ubicacion" ngModel placeholder="Ubicación del local">
+      <div class="ubicacion-container">
+        <div class="input-buscar">
+          <input 
+            type="text" 
+            name="ubicacion" 
+            [(ngModel)]="direccionInput" 
+            placeholder="Ej: Av. Corrientes 1234, Buenos Aires"
+            #ubicacionInput>
+          <button 
+            type="button" 
+            (click)="buscarDireccionEnMapa()" 
+            [disabled]="buscandoDireccion">
+            {{ buscandoDireccion ? 'Buscando...' : 'Buscar en mapa' }}
+          </button>
+        </div>
+        
+        <p *ngIf="ubicacionConfirmada" class="ubicacion-confirmada">
+          📍 Ubicación confirmada: {{ ubicacionConfirmada }}
+        </p>
+
+        <!-- Mapa integrado -->
+        <app-mapa 
+          [modo]="'vendedor'"
+          [ubicacion]="coordenadasSeleccionadas"
+          (ubicacionSeleccionada)="onUbicacionSeleccionada($event)"
+          (direccionSeleccionada)="onDireccionSeleccionada($event)">
+        </app-mapa>
+      </div>
 
       <h3>Pre-Order?</h3>
       <label>
