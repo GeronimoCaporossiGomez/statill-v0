@@ -2,11 +2,45 @@
 
 <main class="home-container">
   <div class="search-container">
-    <input type="text" placeholder="Buscá tu tienda favorita..." class="search-input">
+    <input 
+      type="text" 
+      [(ngModel)]="searchTerm"
+      (input)="onSearchChange()"
+      placeholder="Buscá tu tienda favorita..." 
+      class="search-input">
+    <div class="search-icon">🔍</div>
   </div>
 
-  <section class="promotions-section">
-    <h2 class="promotions-title">¡Promociones imperdibles!🔥🤩</h2>
+  <!-- Resultados de búsqueda -->
+  <section *ngIf="showSearchResults" class="search-results-section">
+    <h3 class="results-title">Resultados de búsqueda</h3>
+    
+    <div *ngIf="isLoading" class="loading-container">
+      <p>Buscando tiendas...</p>
+    </div>
+    
+    <div *ngIf="!isLoading && filteredStores.length === 0" class="no-results">
+      <p>No se encontraron tiendas que coincidan con "{{searchTerm}}"</p>
+    </div>
+    
+    <div *ngIf="!isLoading && filteredStores.length > 0" class="stores-grid">
+      <div 
+        *ngFor="let store of filteredStores" 
+        class="store-card"
+        (click)="goToStore(store.id)">
+        <div class="store-info">
+          <h4 class="store-name">{{store.name}}</h4>
+          <span class="store-category">{{getCategoryName(store.category)}}</span>
+          <p class="store-address">📍 {{store.address}}</p>
+        </div>
+        <div class="store-arrow">→</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Promociones (solo se muestran cuando no hay búsqueda activa) -->
+  <section *ngIf="!showSearchResults" class="promotions-section">
+    <h2 class="promotions-title">¡Promociones imperdibles! 🔥🤩</h2>
     <div class="promotions-grid">
       <app-discounts-statill
         *ngFor="let promo of promotions"

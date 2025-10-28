@@ -1,5 +1,59 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+// Interfaces para la respuesta de puntos
+export interface Point {
+  id: number;
+  store_id: number;
+  user_id: number;
+  amount: number;
+}
+
+export interface PointsResponse {
+  successful: boolean;
+  data: Point[];
+  message: string;
+}
+
+// Interfaces para usuarios
+export interface User {
+  first_names: string;
+  last_name: string;
+  email: string;
+  password: string;
+  birthdate: string;
+  gender: string;
+  res_area: string;
+  id: number;
+  store_id: number;
+  store_role: string;
+}
+
+export interface UsersResponse {
+  successful: boolean;
+  data: User[];
+  message: string;
+}
+
+// Interfaces para tiendas
+export interface Store {
+  id: number;
+  name: string;
+  address: string;
+  category: number;
+  preorder_enabled: boolean;
+  ps_value: number;
+  opening_times: (string | null)[];
+  closing_times: (string | null)[];
+  payment_methods: boolean[];
+}
+
+export interface StoresResponse {
+  successful: boolean;
+  data: Store[];
+  message: string;
+}
 
 @Injectable({ providedIn: 'root' })
 export class MiApiService {
@@ -14,11 +68,11 @@ export class MiApiService {
   editarProducto(id: number, producto: any) {
     return this.http.put(this.apiUrl + '/api/v1/products/' + id + '/', producto);
   }
-  getUsers() {
-    return this.http.get(this.apiUrl + '/api/v1/users/');
+  getUsers(): Observable<UsersResponse> {
+    return this.http.get<UsersResponse>(this.apiUrl + '/api/v1/users/');
   }
-  getStores() {
-    return this.http.get(this.apiUrl + '/api/v1/stores/');
+  getStores(): Observable<StoresResponse> {
+    return this.http.get<StoresResponse>(this.apiUrl + '/api/v1/stores/');
   }
   postStores(tienda: any) {
     return this.http.post(this.apiUrl + '/api/v1/stores/', tienda);
@@ -31,6 +85,9 @@ export class MiApiService {
   }
   postSales(sale: any) {
     return this.http.post(this.apiUrl + '/api/v1/sales/', sale);
+  }
+  getPoints(): Observable<PointsResponse> {
+    return this.http.get<PointsResponse>(this.apiUrl + '/api/v1/points/');
   }
 }
 

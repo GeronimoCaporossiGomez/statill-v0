@@ -117,3 +117,100 @@ h1{
   font-weight: 800;
   margin: 2% 0;
 }
+
+// Estilos para el indicador de carga
+.loading-container {
+  text-align: center;
+  padding: 2rem;
+  width: 90vw;
+  
+  p {
+    font-size: 1.1rem;
+    color: #666;
+    margin: 0;
+  }
+}
+
+// Estilos para el mensaje cuando no hay puntos
+.no-points-message {
+  text-align: center;
+  padding: 2rem;
+  width: 90vw;
+  
+  p {
+    font-size: 1.1rem;
+    color: #888;
+    margin: 0;
+  }
+}
+
+// Estilo para el texto pequeño de la dirección
+.small-text {
+  font-size: 0.9rem !important;
+  opacity: 0.8;
+  margin-top: 0.2rem;
+}
+
+// Ajustar el contenido de puntos para mejor espaciado
+.cartel-puntos .contenido-puntos {
+  h3, h4, h5 {
+    margin: 0.2rem 0;
+    line-height: 1.2;
+  }
+}
+
+// Estilos para badges y elementos informativos
+.categoria-badge {
+  background-color: #e3f2fd;
+  color: #1976d2;
+  padding: 0.2rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: bold;
+  margin-left: 0.5rem;
+  display: inline-block;
+}
+
+.puntos-display {
+  color: #06B512 !important;
+  font-weight: bold;
+  float: right;
+}
+
+.rol-badge {
+  background-color: #fff3e0;
+  color: #f57f17;
+  padding: 0.1rem 0.4rem;
+  border-radius: 8px;
+  font-size: 0.6rem;
+  font-weight: bold;
+  margin-left: 0.5rem;
+  text-transform: capitalize;
+}
+
+
+// Mejorar la presentación de información del usuario
+.cartel-puntos .contenido-puntos {
+  h5 {
+    font-size: 0.8rem;
+    opacity: 0.7;
+    margin: 0.1rem 0;
+  }
+}
+
+// Responsive para badges en móviles
+@media (max-width: 600px) {
+  .categoria-badge {
+    font-size: 0.6rem;
+    padding: 0.1rem 0.3rem;
+  }
+  
+  .rol-badge {
+    font-size: 0.55rem;
+    padding: 0.05rem 0.3rem;
+  }
+  
+  .puntos-display {
+    font-size: 0.9rem;
+  }
+}
