@@ -30,16 +30,16 @@ export class EscanearComponent implements OnDestroy, OnInit {
   foundProducts: any[] = [];
   isLoading = false;
 
-  // Datos del formulario de crear producto
-  newProduct = {
+  // Datos del formulario de crear producto (basado en stock.component)
+  product = {
     name: '',
     brand: '',
     price: null,
     type: '',
-    quantity: null,
+    cantidad: null,
     description: '',
-    barcode: '',
-    store_id: 4 // Por defecto, se actualizará dinámicamente
+    code: '',
+    shop: ''
   };
 
   // Información de la tienda actual
@@ -79,7 +79,7 @@ export class EscanearComponent implements OnDestroy, OnInit {
           // Por ahora usamos la primera tienda disponible
           // En una implementación real, esto vendría de la autenticación o selección del usuario
           this.currentStore = stores[0];
-          this.newProduct.store_id = this.currentStore.id;
+          this.product.shop = this.currentStore.id.toString();
           console.log('Tienda actual cargada:', this.currentStore);
         }
       },
@@ -143,6 +143,7 @@ export class EscanearComponent implements OnDestroy, OnInit {
       // Simular detección de código de barras aleatorio
       if (Math.random() > 0.7) { // 30% de probabilidad cada segundo
         const simulatedBarcode = this.generateSimulatedBarcode();
+        console.log('🔍 Código de barras detectado:', simulatedBarcode);
         this.onBarcodeDetected(simulatedBarcode);
       }
     }, 1000);
@@ -184,20 +185,40 @@ export class EscanearComponent implements OnDestroy, OnInit {
         this.isLoading = false;
         
         if (response.successful && response.data && response.data.length > 0) {
-          // Productos encontrados - mostrar formulario de crear con datos prellenados
-          this.foundProducts = response.data;
-          this.showCreateProductFormWithData(barcode, response.data);
-          this.errorMessage = `Se encontraron ${response.data.length} producto(s) con este código. Datos prellenados para crear nuevo producto.`;
+          // Filtrar solo productos que realmente tienen código de barras (no null)
+          const productsWithBarcode = response.data.filter((product: any) => 
+            product.barcode && product.barcode !== null && product.barcode !== ''
+          );
+          
+          console.log('🔍 Productos encontrados con código de barras:', productsWithBarcode);
+          console.log('📊 Total productos en respuesta:', response.data.length);
+          console.log('✅ Productos con código de barras válido:', productsWithBarcode.length);
+          
+          if (productsWithBarcode.length > 0) {
+            // Productos encontrados - mostrar formulario de crear con datos prellenados
+            this.foundProducts = productsWithBarcode;
+            this.showCreateProductFormWithData(barcode, productsWithBarcode);
+            this.errorMessage = `Se encontraron ${productsWithBarcode.length} producto(s) con código de barras "${barcode}". Datos prellenados para crear nuevo producto.`;
+          } else {
+            // No hay productos con código de barras válido
+            this.foundProducts = [];
+            this.showCreateProductForm(barcode);
+            this.errorMessage = `No se encontraron productos con código de barras "${barcode}". Crear nuevo producto:`;
+          }
         } else {
           // No hay productos, mostrar formulario de crear vacío
+          this.foundProducts = [];
           this.showCreateProductForm(barcode);
+          this.errorMessage = `No se encontraron productos con código de barras "${barcode}". Crear nuevo producto:`;
         }
       },
       error: (error) => {
         console.error('Error buscando productos:', error);
         this.isLoading = false;
         // Si hay error en la búsqueda, asumir que no hay productos
+        this.foundProducts = [];
         this.showCreateProductForm(barcode);
+        this.errorMessage = `Error buscando productos. Crear nuevo producto con código "${barcode}":`;
       }
     });
   }
@@ -216,7 +237,7 @@ export class EscanearComponent implements OnDestroy, OnInit {
   }
 
   showCreateProductForm(barcode: string) {
-    this.newProduct.barcode = barcode;
+    this.product.code = barcode;
     this.showCreateForm = true;
     this.foundProducts = [];
     this.errorMessage = `No se encontraron productos con código ${barcode}. Crear nuevo producto:`;
@@ -226,51 +247,51 @@ export class EscanearComponent implements OnDestroy, OnInit {
     // Usar el primer producto encontrado para prellenar los datos
     const referenceProduct = foundProducts[0];
     
-    this.newProduct = {
+    this.product = {
       name: referenceProduct.name || '',
       brand: referenceProduct.brand || '',
       price: null, // No prellenar precio para que el usuario lo ingrese
       type: referenceProduct.type?.toString() || '',
-      quantity: null, // No prellenar cantidad
+      cantidad: null, // No prellenar cantidad
       description: referenceProduct.desc || '',
-      barcode: barcode,
-      store_id: this.newProduct.store_id // Mantener el store_id actual
+      code: barcode,
+      shop: this.product.shop // Mantener el shop actual
     };
     
     this.showCreateForm = true;
     this.errorMessage = `Productos similares encontrados. Datos prellenados con información de "${referenceProduct.name}" (${referenceProduct.brand}). Complete los campos faltantes:`;
   }
 
-  createProduct() {
-    if (!this.newProduct.name || !this.newProduct.price) {
+  GuardarData() {
+    if (!this.product.name || !this.product.price) {
       this.errorMessage = 'Complete al menos el nombre y precio del producto';
       return;
     }
 
-    const productData = {
-      name: this.newProduct.name,
-      brand: this.newProduct.brand || 'Sin marca',
-      price: this.newProduct.price,
-      type: Number(this.newProduct.type),
-      quantity: Number(this.newProduct.quantity) || 1,
-      desc: this.newProduct.description || '',
-      barcode: this.newProduct.barcode,
-      store_id: this.newProduct.store_id
+    const productoApi = {
+      name: this.product.name,
+      brand: this.product.brand || 'algo',
+      price: this.product.price,
+      type: 1, // Tipo por defecto
+      quantity: Number(this.product.cantidad) || 1,
+      desc: this.product.description || '',
+      barcode: this.scannedBarcode,
+      store_id: Number(this.product.shop) || 4
     };
 
     this.isLoading = true;
-    this.apiService.crearProducto(productData).subscribe({
+    this.apiService.crearProducto(productoApi).subscribe({
       next: (response) => {
         this.isLoading = false;
         this.errorMessage = '¡Producto creado exitosamente!';
         
         // Mostrar el producto recién creado
         this.displayData = {
-          nombre: this.newProduct.name,
-          marca: this.newProduct.brand || 'Sin marca',
-          codigo: this.newProduct.barcode,
-          precio: `$${this.newProduct.price}`,
-          tipo: this.getTypeNameById(Number(this.newProduct.type)),
+          nombre: this.product.name,
+          marca: this.product.brand || 'Sin marca',
+          codigo: this.scannedBarcode,
+          precio: `$${this.product.price}`,
+          tipo: 'Producto',
           fecha: new Date().toLocaleDateString()
         };
         
@@ -292,15 +313,15 @@ export class EscanearComponent implements OnDestroy, OnInit {
 
   resetForm() {
     this.showCreateForm = false;
-    this.newProduct = {
+    this.product = {
       name: '',
       brand: '',
       price: null,
       type: '',
-      quantity: null,
+      cantidad: null,
       description: '',
-      barcode: '',
-      store_id: 4
+      code: '',
+      shop: this.product.shop // Mantener el shop actual
     };
   }
 

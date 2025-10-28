@@ -69,10 +69,10 @@
       </div>
     </div>
 
-    <!-- Formulario de crear producto -->
+    <!-- Formulario de crear producto (basado en stock.component) -->
     <div *ngIf="showCreateForm" class="crear-producto-form">
       <h2>➕ Crear Nuevo Producto</h2>
-      <p class="form-description">Código escaneado: <strong>{{ newProduct.barcode }}</strong></p>
+      <p class="form-description">Código escaneado: <strong>{{ scannedBarcode }}</strong></p>
       <p *ngIf="currentStore" class="store-info">Creando producto para: <strong>{{ currentStore.name }}</strong> (ID: {{ currentStore.id }})</p>
       
       <!-- Mostrar información de productos similares encontrados -->
@@ -88,83 +88,50 @@
         <p class="similar-info">Los datos de nombre y marca se han prellenado automáticamente. Complete los campos faltantes.</p>
       </div>
       
-      <div class="form-grid">
-        <div class="form-group">
-          <label for="name">Nombre del producto *</label>
+      <!-- Formulario basado en stock.component -->
+      <div class="producto-card producto-form-card">
+        <div class="producto-img">
+          <div class="img-placeholder">
+            <span>🖼️</span>
+          </div>
+        </div>
+        <div class="producto-info">
           <input 
             type="text" 
-            id="name"
-            [(ngModel)]="newProduct.name" 
-            placeholder="Ingresa el nombre del producto"
-            class="form-input"
-            required>
-        </div>
-
-        <div class="form-group">
-          <label for="brand">Marca</label>
+            class="producto-nombre-input" 
+            placeholder="Nombre del producto..." 
+            [(ngModel)]="product.name" />
           <input 
             type="text" 
-            id="brand"
-            [(ngModel)]="newProduct.brand" 
-            placeholder="Marca del producto"
-            class="form-input">
+            class="producto-desc-input" 
+            placeholder="Describe el producto aquí..." 
+            [(ngModel)]="product.description" />
         </div>
-
-        <div class="form-group">
-          <label for="price">Precio *</label>
+        <div class="producto-precio">
+          <label for="precio-input" class="producto-nombre"> Precio:</label>
           <input 
             type="number" 
-            id="price"
-            [(ngModel)]="newProduct.price" 
-            placeholder="0.00"
-            class="form-input"
-            min="0"
-            step="0.01"
-            required>
+            id="precio-input"
+            class="producto-cantidad-input" 
+            placeholder="Precio..." 
+            [(ngModel)]="product.price" 
+            min="1"/>
         </div>
-
-        <div class="form-group">
-          <label for="quantity">Cantidad</label>
+        <div class="producto-cantidad">
+          <label for="cantidad-input" class="producto-nombre"> Cantidad:</label>
           <input 
             type="number" 
-            id="quantity"
-            [(ngModel)]="newProduct.quantity" 
-            placeholder="1"
-            class="form-input"
-            min="1">
+            id="cantidad-input" 
+            class="producto-cantidad-input" 
+            placeholder="Cantidad..." 
+            [(ngModel)]="product.cantidad" 
+            min="1" />
         </div>
-
-        <div class="form-group">
-          <label for="type">Categoría</label>
-          <select 
-            id="type"
-            [(ngModel)]="newProduct.type" 
-            class="form-select">
-            <option value="">Seleccionar categoría</option>
-            <option *ngFor="let tipo of tiposProducto" [value]="tipo.id">
-              {{ tipo.name }}
-            </option>
-          </select>
+        <div class="producto-editar">
+          <button class="submit-button" (click)="GuardarData()" [disabled]="isLoading">
+            <span>{{ isLoading ? '⏳' : '✔️' }}</span>
+          </button>
         </div>
-
-        <div class="form-group full-width">
-          <label for="description">Descripción</label>
-          <textarea 
-            id="description"
-            [(ngModel)]="newProduct.description" 
-            placeholder="Descripción del producto"
-            class="form-textarea"
-            rows="3"></textarea>
-        </div>
-      </div>
-
-      <div class="form-actions">
-        <button (click)="createProduct()" [disabled]="isLoading" class="btn-create">
-          {{ isLoading ? '⏳ Creando...' : '✅ Crear Producto' }}
-        </button>
-        <button (click)="resetForm()" class="btn-cancel">
-          ❌ Cancelar
-        </button>
       </div>
     </div>
 

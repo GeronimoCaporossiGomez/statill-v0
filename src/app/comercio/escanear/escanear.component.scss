@@ -533,6 +533,160 @@
   border-top: 1px solid #e0e0e0;
 }
 
+// Estilos del formulario de producto (basado en stock.component)
+.producto-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  width: 100%;
+  min-height: 90px;
+  padding: 12px 24px;
+  gap: 24px;
+  margin-bottom: 1rem;
+}
+
+.producto-form-card {
+  margin: 0 auto 24px auto;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  width: 100%;
+  min-height: 90px;
+  padding: 12px 24px;
+  gap: 24px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.producto-img {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0f0f0;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.img-placeholder {
+  font-size: 2rem;
+  color: #bbb;
+}
+
+.producto-info {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+}
+
+.producto-nombre {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 4px;
+  color: #2c3e50;
+}
+
+.producto-desc {
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: 1rem;
+  color: #444;
+}
+
+.producto-precio {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.1rem;
+  color: #000000;
+  min-width: 80px;
+  margin-right: 5px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.producto-cantidad {
+  min-width: 80px;
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.1rem;
+  color: #222;
+  margin-right: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.producto-editar {
+  min-width: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.producto-nombre-input, .producto-desc-input, .producto-precio-input {
+  width: 100%;
+  font-size: 1.1rem;
+  font-family: 'Roboto Condensed', sans-serif;
+  border: none;
+  background: transparent;
+  border-bottom: 1.5px solid #e0e0e0;
+  padding: 4px 0;
+  margin-left: 5px;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.producto-nombre-input:focus, .producto-desc-input:focus, .producto-precio-input:focus {
+  border-bottom: 1.5px solid #3498db;
+}
+
+.producto-cantidad-input {
+  width: 60px;
+  font-size: 1.1rem;
+  font-family: 'Roboto Condensed', sans-serif;
+  border: none;
+  margin-left: 5px;
+  background: transparent;
+  border-bottom: 1.5px solid #e0e0e0;
+  padding: 4px 0;
+  outline: none;
+  text-align: center;
+  transition: border 0.2s;
+}
+
+.producto-cantidad-input:focus {
+  border-bottom: 1.5px solid #3498db;
+}
+
+.submit-button {
+  background: #f6f6f6;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.submit-button:hover:not(:disabled) {
+  background: #e3f2fd;
+}
+
+.submit-button:disabled {
+  background: #cccccc;
+  cursor: not-allowed;
+}
+
 // Responsive design
 @media (max-width: 1024px) {
   .contenedor-principal {
