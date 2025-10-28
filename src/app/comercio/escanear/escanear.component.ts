@@ -215,22 +215,26 @@ export class EscanearComponent implements OnDestroy, OnInit {
         this.isLoading = false;
         
         if (response.successful && response.data && response.data.length > 0) {
-          // Filtrar solo productos que realmente tienen código de barras (no null)
-          const productsWithBarcode = response.data.filter((product: any) => 
-            product.barcode && product.barcode !== null && product.barcode !== ''
+          // Filtrar solo productos que tienen el MISMO código de barras que se escaneó
+          const productsWithMatchingBarcode = response.data.filter((product: any) => 
+            product.barcode && 
+            product.barcode !== null && 
+            product.barcode !== '' &&
+            product.barcode === barcode
           );
           
-          console.log('🔍 Productos encontrados con código de barras:', productsWithBarcode);
+          console.log('🔍 Código escaneado:', barcode);
           console.log('📊 Total productos en respuesta:', response.data.length);
-          console.log('✅ Productos con código de barras válido:', productsWithBarcode.length);
+          console.log('✅ Productos con código de barras coincidente:', productsWithMatchingBarcode.length);
+          console.log('🔍 Productos encontrados:', productsWithMatchingBarcode);
           
-          if (productsWithBarcode.length > 0) {
+          if (productsWithMatchingBarcode.length > 0) {
             // Productos encontrados - mostrar formulario de crear con datos prellenados
-            this.foundProducts = productsWithBarcode;
-            this.showCreateProductFormWithData(barcode, productsWithBarcode);
-            this.errorMessage = `Se encontraron ${productsWithBarcode.length} producto(s) con código de barras "${barcode}". Datos prellenados para crear nuevo producto.`;
+            this.foundProducts = productsWithMatchingBarcode;
+            this.showCreateProductFormWithData(barcode, productsWithMatchingBarcode);
+            this.errorMessage = `Se encontraron ${productsWithMatchingBarcode.length} producto(s) con código de barras "${barcode}". Datos prellenados para crear nuevo producto.`;
           } else {
-            // No hay productos con código de barras válido
+            // No hay productos con el mismo código de barras
             this.foundProducts = [];
             this.showCreateProductForm(barcode);
             this.errorMessage = `No se encontraron productos con código de barras "${barcode}". Crear nuevo producto:`;
