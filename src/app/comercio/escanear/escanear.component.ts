@@ -31,14 +31,6 @@ export class EscanearComponent implements OnDestroy, OnInit {
   isLoading = false;
   currentStore: any = null;
 
-  // Datos del formulario
-  datosEscaneados = {
-    nombre: '',
-    tipo: '',
-    codigo: '',
-    precio: '',
-    fecha: new Date().toLocaleDateString()
-  };
 
   // Producto para el formulario
   producto: ProductoData = {
@@ -54,14 +46,6 @@ export class EscanearComponent implements OnDestroy, OnInit {
     store_id: 1
   };
 
-  tiposProducto = [
-    'Alimento',
-    'Bebida',
-    'Electrónico',
-    'Ropa',
-    'Hogar',
-    'Otro'
-  ];
 
   constructor(
     private apiService: MiApiService,
@@ -320,33 +304,6 @@ export class EscanearComponent implements OnDestroy, OnInit {
     // La lógica de autocompletado se maneja en el componente del formulario
   }
 
-  simularEscaneo() {
-    // Datos de ejemplo para simular el escaneo
-    this.datosEscaneados = {
-      nombre: 'Producto Ejemplo ' + Math.floor(Math.random() * 100),
-      tipo: this.tiposProducto[Math.floor(Math.random() * this.tiposProducto.length)],
-      codigo: 'COD-' + Math.floor(Math.random() * 10000),
-      precio: (Math.random() * 100).toFixed(2),
-      fecha: new Date().toLocaleDateString()
-    };
-
-    this.errorMessage = 'Datos de ejemplo - Simulación de escaneo';
-    setTimeout(() => this.errorMessage = null, 3000);
-  }
-
-  imprimirDatos() {
-    window.print();
-  }
-
-  limpiarFormulario() {
-    this.datosEscaneados = {
-      nombre: '',
-      tipo: '',
-      codigo: '',
-      precio: '',
-      fecha: new Date().toLocaleDateString()
-    };
-  }
 
   ngOnDestroy() {
     this.stopCamera();

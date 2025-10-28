@@ -107,47 +107,5 @@
       <p><strong>Productos similares encontrados:</strong> {{ foundProducts.length }}</p>
     </div>
 
-    <!-- Datos escaneados para mostrar información -->
-    <div *ngIf="!showCreateForm" class="datos-escaneados">
-      <h2>Datos Escaneados</h2>
-      <div class="formulario-datos">
-        <div class="campo-dato">
-          <label>Nombre:</label>
-          <span>{{ datosEscaneados.nombre || '--' }}</span>
-        </div>
-
-        <div class="campo-dato">
-          <label>Tipo:</label>
-          <span>{{ datosEscaneados.tipo || '--' }}</span>
-        </div>
-
-        <div class="campo-dato">
-          <label>Código:</label>
-          <span>{{ datosEscaneados.codigo || '--' }}</span>
-        </div>
-
-        <div class="campo-dato">
-          <label>Precio:</label>
-          <span>{{ datosEscaneados.precio ? '$' + datosEscaneados.precio : '--' }}</span>
-        </div>
-
-        <div class="campo-dato">
-          <label>Fecha:</label>
-          <span>{{ datosEscaneados.fecha }}</span>
-        </div>
-      </div>
-
-      <div class="acciones-formulario">
-        <button (click)="simularEscaneo()" class="btn-simular">
-          🎲 Simular Escaneo
-        </button>
-        <button (click)="imprimirDatos()" [disabled]="!datosEscaneados.nombre" class="btn-imprimir">
-          🖨️ Imprimir
-        </button>
-        <button (click)="limpiarFormulario()" class="btn-limpiar">
-          🗑️ Limpiar
-        </button>
-      </div>
-    </div>
   </div>
 </div>
