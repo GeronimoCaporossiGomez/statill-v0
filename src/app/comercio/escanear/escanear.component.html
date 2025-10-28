@@ -1,69 +1,177 @@
 <app-sidebar></app-sidebar>
 
 <div class="contenedor-principal">
-  <!-- Sección de cámara -->
+  <!-- Sección de cámara y escáner -->
   <div class="seccion-camara">
     <div class="cuadrado-escanear">
-      <h1>Escanear</h1>
+      <h1>📷 Escanear Códigos de Barras</h1>
       <div class="color-box">
-        Escanear producto
+        <div class="scanner-info">
+          <span class="scanner-icon">📊</span>
+          <p>Escanea códigos de barras para buscar productos o crear nuevos</p>
+        </div>
       </div>
-      <img src="assets/img/logo.png" alt="Ingresar código QR" />
     </div>
 
-    <h2>Cámara</h2>
+    <div class="scanner-container">
+      <h2>Cámara y Escáner</h2>
 
-    <div *ngIf="errorMessage" class="error-message">
-      {{ errorMessage }}
-    </div>
+      <div *ngIf="errorMessage" class="message" 
+           [ngClass]="{'success': errorMessage.includes('exitosamente'), 'error': !errorMessage.includes('exitosamente') && !errorMessage.includes('Escaneando')}">
+        {{ errorMessage }}
+      </div>
 
-    <video #video autoplay playsinline width="600" height="500"></video>
+      <div class="video-container">
+        <video #video autoplay playsinline width="600" height="400" 
+               [class.scanning]="isScanning"></video>
+        <div *ngIf="isScanning" class="scanning-overlay">
+          <div class="scanning-line"></div>
+          <p>Escaneando código de barras...</p>
+        </div>
+      </div>
 
-    <div class="camera-controls">
-      <button (click)="toggleCamera()">
-        {{ isCameraOn ? 'Apagar cámara' : 'Encender cámara' }}
-      </button>
-      <button (click)="simularEscaneo()" [disabled]="!isCameraOn">Simular escaneo</button>
+      <div class="camera-controls">
+        <button (click)="toggleCamera()" class="btn-primary">
+          {{ isCameraOn ? '📹 Apagar cámara' : '📷 Encender cámara' }}
+        </button>
+        <button (click)="startScanning()" [disabled]="!isCameraOn || isScanning" class="btn-scan">
+          {{ isScanning ? '⏳ Escaneando...' : '🔍 Escanear código' }}
+        </button>
+        <button (click)="stopScanning()" [disabled]="!isScanning" class="btn-stop">
+          ⏹️ Detener escaneo
+        </button>
+      </div>
     </div>
   </div>
 
-  <!-- Sección del formulario -->
+  <!-- Sección de resultados y formularios -->
   <div class="seccion-formulario">
-    <h2>Datos Escaneados</h2>
-
-    <div class="formulario-datos">
-      <div class="campo-dato">
-        <label>Nombre:</label>
-        <span>{{ datosEscaneados.nombre || '--' }}</span>
+    
+    <!-- Mostrar productos encontrados -->
+    <div *ngIf="foundProducts.length > 0 && !showCreateForm" class="productos-encontrados">
+      <h2>✅ Productos Encontrados</h2>
+      <div class="producto-info">
+        <div class="producto-header">
+          <h3>{{ displayData.nombre }}</h3>
+          <span class="codigo-badge">{{ displayData.codigo }}</span>
+        </div>
+        <div class="producto-details">
+          <p><strong>Marca:</strong> {{ displayData.marca }}</p>
+          <p><strong>Precio:</strong> {{ displayData.precio }}</p>
+          <p><strong>Categoría:</strong> {{ displayData.tipo }}</p>
+          <p><strong>Fecha:</strong> {{ displayData.fecha }}</p>
+        </div>
       </div>
-
-      <div class="campo-dato">
-        <label>Tipo:</label>
-        <span>{{ datosEscaneados.tipo || '--' }}</span>
-      </div>
-
-      <div class="campo-dato">
-        <label>Código:</label>
-        <span>{{ datosEscaneados.codigo || '--' }}</span>
-      </div>
-
-      <div class="campo-dato">
-        <label>Precio:</label>
-        <span>{{ datosEscaneados.precio ? '$' + datosEscaneados.precio : '--' }}</span>
-      </div>
-
-      <div class="campo-dato">
-        <label>Fecha:</label>
-        <span>{{ datosEscaneados.fecha }}</span>
+      
+      <div class="multiple-products" *ngIf="foundProducts.length > 1">
+        <p><strong>{{ foundProducts.length - 1 }} producto(s) más con este código</strong></p>
+        <button class="btn-secondary">Ver todos</button>
       </div>
     </div>
 
+    <!-- Formulario de crear producto -->
+    <div *ngIf="showCreateForm" class="crear-producto-form">
+      <h2>➕ Crear Nuevo Producto</h2>
+      <p class="form-description">Código escaneado: <strong>{{ newProduct.barcode }}</strong></p>
+      
+      <div class="form-grid">
+        <div class="form-group">
+          <label for="name">Nombre del producto *</label>
+          <input 
+            type="text" 
+            id="name"
+            [(ngModel)]="newProduct.name" 
+            placeholder="Ingresa el nombre del producto"
+            class="form-input"
+            required>
+        </div>
+
+        <div class="form-group">
+          <label for="brand">Marca</label>
+          <input 
+            type="text" 
+            id="brand"
+            [(ngModel)]="newProduct.brand" 
+            placeholder="Marca del producto"
+            class="form-input">
+        </div>
+
+        <div class="form-group">
+          <label for="price">Precio *</label>
+          <input 
+            type="number" 
+            id="price"
+            [(ngModel)]="newProduct.price" 
+            placeholder="0.00"
+            class="form-input"
+            min="0"
+            step="0.01"
+            required>
+        </div>
+
+        <div class="form-group">
+          <label for="quantity">Cantidad</label>
+          <input 
+            type="number" 
+            id="quantity"
+            [(ngModel)]="newProduct.quantity" 
+            placeholder="1"
+            class="form-input"
+            min="1">
+        </div>
+
+        <div class="form-group">
+          <label for="type">Categoría</label>
+          <select 
+            id="type"
+            [(ngModel)]="newProduct.type" 
+            class="form-select">
+            <option value="">Seleccionar categoría</option>
+            <option *ngFor="let tipo of tiposProducto" [value]="tipo.id">
+              {{ tipo.name }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group full-width">
+          <label for="description">Descripción</label>
+          <textarea 
+            id="description"
+            [(ngModel)]="newProduct.description" 
+            placeholder="Descripción del producto"
+            class="form-textarea"
+            rows="3"></textarea>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button (click)="createProduct()" [disabled]="isLoading" class="btn-create">
+          {{ isLoading ? '⏳ Creando...' : '✅ Crear Producto' }}
+        </button>
+        <button (click)="resetForm()" class="btn-cancel">
+          ❌ Cancelar
+        </button>
+      </div>
+    </div>
+
+    <!-- Información básica cuando no hay datos -->
+    <div *ngIf="!showCreateForm && foundProducts.length === 0" class="info-inicial">
+      <h2>📊 Información del Escaneo</h2>
+      <div class="info-placeholder">
+        <div class="placeholder-icon">🔍</div>
+        <p>Enciende la cámara y escanea un código de barras para comenzar</p>
+        <div class="steps">
+          <div class="step">1️⃣ Enciende la cámara</div>
+          <div class="step">2️⃣ Inicia el escaneo</div>
+          <div class="step">3️⃣ Apunta al código de barras</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Botón de limpiar siempre visible -->
     <div class="acciones-formulario">
-      <button (click)="imprimirDatos()" [disabled]="!datosEscaneados.nombre">
-        Imprimir
-      </button>
-      <button (click)="limpiarFormulario()">
-        Limpiar
+      <button (click)="limpiarTodo()" class="btn-clean">
+        🧹 Limpiar Todo
       </button>
     </div>
   </div>
