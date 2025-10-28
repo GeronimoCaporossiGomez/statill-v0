@@ -36,6 +36,27 @@ export interface UsersResponse {
   message: string;
 }
 
+// Interfaces para productos
+export interface Product {
+  id: number;
+  store_id: number;
+  name: string;
+  brand: string;
+  price: number;
+  points_price: number | null;
+  type: number;
+  quantity: number;
+  desc: string;
+  hidden: boolean;
+  barcode: string;
+}
+
+export interface ProductsResponse {
+  successful: boolean;
+  data: Product[];
+  message: string;
+}
+
 // Interfaces para tiendas
 export interface Store {
   id: number;
@@ -79,6 +100,9 @@ export class MiApiService {
   }
   getProductosById(storeId: number) {
     return this.http.get(this.apiUrl + '/api/v1/products/?store_id=' + storeId);
+  }
+  getProductsByBarcode(barcode: string): Observable<ProductsResponse> {
+    return this.http.get<ProductsResponse>(this.apiUrl + '/api/v1/products/?barcode=' + barcode);
   }
   getSales() {
     return this.http.get(this.apiUrl + '/api/v1/sales/');

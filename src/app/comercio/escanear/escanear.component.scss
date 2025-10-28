@@ -115,6 +115,136 @@
   }
 }
 
+// Estilos para el formulario de crear producto
+.found-products-info {
+  background: #e8f5e8;
+  border: 1px solid #4caf50;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+
+  h4 {
+    color: #2e7d32;
+    margin: 0 0 0.5rem 0;
+  }
+
+  p {
+    margin: 0.5rem 0;
+    color: #2e7d32;
+  }
+}
+
+// Estilos para datos escaneados
+.datos-escaneados {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 1.5rem;
+  margin: 1rem 0;
+
+  h2 {
+    color: #3498db;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+
+  .formulario-datos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+
+    .campo-dato {
+      display: flex;
+      flex-direction: column;
+
+      label {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+      }
+
+      span {
+        padding: 0.8rem;
+        background: #f8f9fa;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        color: #495057;
+        min-height: 20px;
+      }
+    }
+  }
+
+  .acciones-formulario {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    button {
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      min-width: 120px;
+
+      &.btn-simular {
+        background: #3498db;
+        color: white;
+
+        &:hover {
+          background: #2980b9;
+          transform: translateY(-2px);
+        }
+      }
+
+      &.btn-imprimir {
+        background: #9b59b6;
+        color: white;
+
+        &:hover:not(:disabled) {
+          background: #8e44ad;
+          transform: translateY(-2px);
+        }
+
+        &:disabled {
+          background: #cccccc;
+          cursor: not-allowed;
+          transform: none;
+        }
+      }
+
+      &.btn-limpiar {
+        background: #e74c3c;
+        color: white;
+
+        &:hover {
+          background: #c0392b;
+          transform: translateY(-2px);
+        }
+      }
+    }
+  }
+}
+
+// Estilos para QuaggaJS
+#scanner-container {
+  width: 100%;
+  height: 400px;
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+
+  canvas, video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
 @media print {
   .seccion-camara, .camera-controls, .acciones-formulario, app-header-statill, app-comercio-header {
     display: none !important;

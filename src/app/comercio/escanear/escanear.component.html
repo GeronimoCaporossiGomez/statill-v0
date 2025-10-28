@@ -13,58 +13,101 @@
 
     <h2>Cámara</h2>
 
-    <div *ngIf="errorMessage" class="error-message">
-      {{ errorMessage }}
+    <div *ngIf="currentStore" class="store-info">
+      <h3>🏪 Tienda: {{ currentStore.name }}</h3>
+      <p>📍 {{ currentStore.address }}</p>
     </div>
 
-    <video #video autoplay playsinline width="600" height="500"></video>
+    <div class="video-container">
+      <div #video id="scanner-container"></div>
+      <div class="video-overlay" *ngIf="!isCameraOn">
+        <p>📷 Cámara desactivada</p>
+      </div>
+    </div>
 
     <div class="camera-controls">
-      <button (click)="toggleCamera()">
-        {{ isCameraOn ? 'Apagar cámara' : 'Encender cámara' }}
+      <button (click)="toggleCamera()" class="camera-btn" [class.active]="isCameraOn">
+        {{ isCameraOn ? '📷 Detener Cámara' : '📷 Activar Cámara' }}
       </button>
-      <button (click)="simularEscaneo()" [disabled]="!isCameraOn">Simular escaneo</button>
+      
+      <button (click)="startScanning()" class="scan-btn" [disabled]="!isCameraOn || isScanning">
+        {{ isScanning ? '⏳ Escaneando...' : '🔍 Iniciar Escaneo' }}
+      </button>
+      
+      <button (click)="stopScanning()" class="stop-btn" [disabled]="!isScanning">
+        ⏹️ Detener Escaneo
+      </button>
+    </div>
+
+    <div *ngIf="errorMessage" class="message" 
+         [ngClass]="{'success': errorMessage.includes('exitosamente'), 'error': !errorMessage.includes('exitosamente')}">
+      {{ errorMessage }}
     </div>
   </div>
 
-  <!-- Sección del formulario -->
+  <!-- Formulario de crear producto usando el componente reutilizable -->
   <div class="seccion-formulario">
-    <h2>Datos Escaneados</h2>
+    <app-crear-producto-form
+      [producto]="producto"
+      [isLoading]="isLoading"
+      [errorMessage]="errorMessage"
+      [showForm]="showCreateForm"
+      [title]="foundProducts.length > 0 ? 'Crear Producto (Datos Prellenados)' : 'Crear Nuevo Producto'"
+      [submitButtonText]="'Crear Producto'"
+      (onSubmit)="onProductoSubmit($event)"
+      (onCancel)="onCancelar()"
+      (onReset)="onReset()">
+    </app-crear-producto-form>
 
-    <div class="formulario-datos">
-      <div class="campo-dato">
-        <label>Nombre:</label>
-        <span>{{ datosEscaneados.nombre || '--' }}</span>
-      </div>
-
-      <div class="campo-dato">
-        <label>Tipo:</label>
-        <span>{{ datosEscaneados.tipo || '--' }}</span>
-      </div>
-
-      <div class="campo-dato">
-        <label>Código:</label>
-        <span>{{ datosEscaneados.codigo || '--' }}</span>
-      </div>
-
-      <div class="campo-dato">
-        <label>Precio:</label>
-        <span>{{ datosEscaneados.precio ? '$' + datosEscaneados.precio : '--' }}</span>
-      </div>
-
-      <div class="campo-dato">
-        <label>Fecha:</label>
-        <span>{{ datosEscaneados.fecha }}</span>
-      </div>
+    <!-- Información adicional cuando hay productos encontrados -->
+    <div *ngIf="foundProducts.length > 0 && showCreateForm" class="found-products-info">
+      <h4>🔍 Información del Escaneo</h4>
+      <p><strong>Código escaneado:</strong> {{ scannedBarcode }}</p>
+      <p><strong>Tienda:</strong> {{ currentStore?.name || 'No especificada' }}</p>
+      <p><strong>Productos similares encontrados:</strong> {{ foundProducts.length }}</p>
     </div>
 
-    <div class="acciones-formulario">
-      <button (click)="imprimirDatos()" [disabled]="!datosEscaneados.nombre">
-        Imprimir
-      </button>
-      <button (click)="limpiarFormulario()">
-        Limpiar
-      </button>
+    <!-- Datos escaneados para mostrar información -->
+    <div *ngIf="!showCreateForm" class="datos-escaneados">
+      <h2>Datos Escaneados</h2>
+      <div class="formulario-datos">
+        <div class="campo-dato">
+          <label>Nombre:</label>
+          <span>{{ datosEscaneados.nombre || '--' }}</span>
+        </div>
+
+        <div class="campo-dato">
+          <label>Tipo:</label>
+          <span>{{ datosEscaneados.tipo || '--' }}</span>
+        </div>
+
+        <div class="campo-dato">
+          <label>Código:</label>
+          <span>{{ datosEscaneados.codigo || '--' }}</span>
+        </div>
+
+        <div class="campo-dato">
+          <label>Precio:</label>
+          <span>{{ datosEscaneados.precio ? '$' + datosEscaneados.precio : '--' }}</span>
+        </div>
+
+        <div class="campo-dato">
+          <label>Fecha:</label>
+          <span>{{ datosEscaneados.fecha }}</span>
+        </div>
+      </div>
+
+      <div class="acciones-formulario">
+        <button (click)="simularEscaneo()" class="btn-simular">
+          🎲 Simular Escaneo
+        </button>
+        <button (click)="imprimirDatos()" [disabled]="!datosEscaneados.nombre" class="btn-imprimir">
+          🖨️ Imprimir
+        </button>
+        <button (click)="limpiarFormulario()" class="btn-limpiar">
+          🗑️ Limpiar
+        </button>
+      </div>
     </div>
   </div>
 </div>
