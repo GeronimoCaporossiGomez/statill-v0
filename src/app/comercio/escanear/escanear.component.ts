@@ -1,11 +1,10 @@
 import { Component, ElementRef, ViewChild, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
 import { SidebarComponent } from "src/app/Componentes/sidebar-statill/sidebar.component";
-import { MiApiService } from '../../servicios/mi-api.service';
+import { ProductoFormComponent, ProductoData } from 'src/app/Componentes/producto-form/producto-form.component';
+import { MiApiService, ProductsResponse } from '../../servicios/mi-api.service';
 import { ComercioService } from '../../servicios/comercio.service';
 
-// Importar QuaggaJS
 // Declarar QuaggaJS
 declare const Quagga: any;
 
@@ -14,9 +13,9 @@ declare const Quagga: any;
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
-    SidebarComponent
-],
+    SidebarComponent,
+    ProductoFormComponent
+  ],
   templateUrl: './escanear.component.html',
   styleUrls: ['./escanear.component.scss']
 })
@@ -26,37 +25,25 @@ export class EscanearComponent implements OnDestroy, OnInit {
   isCameraOn = false;
   errorMessage: string | null = null;
   isScanning = false;
-  scanInterval: any;
-
-  // Estados del componente
   showCreateForm = false;
   scannedBarcode: string = '';
   foundProducts: any[] = [];
   isLoading = false;
-
-  // Datos del formulario de crear producto (basado en stock.component)
-  product = {
-    name: '',
-    brand: '',
-    price: null,
-    type: '',
-    cantidad: null,
-    description: '',
-    code: '',
-    shop: ''
-  };
-
-  // Información de la tienda actual
   currentStore: any = null;
 
-  // Datos mostrados (productos encontrados o escaneados)
-  displayData = {
-    nombre: '',
-    marca: '',
-    codigo: '',
-    precio: '',
-    tipo: '',
-    fecha: new Date().toLocaleDateString()
+
+  // Producto para el formulario
+  producto: ProductoData = {
+    name: '',
+    brand: '',
+    price: 0,
+    points_price: 1,
+    type: 1,
+    quantity: 0,
+    desc: '',
+    barcode: '',
+    hidden: false,
+    store_id: 1
   };
 
 
@@ -66,7 +53,6 @@ export class EscanearComponent implements OnDestroy, OnInit {
   ) {}
 
   ngOnInit() {
-    // Obtener la tienda actual (por ahora usamos la primera tienda disponible)
     this.loadCurrentStore();
   }
 
@@ -74,16 +60,13 @@ export class EscanearComponent implements OnDestroy, OnInit {
     this.comercioService.getStores().subscribe({
       next: (stores) => {
         if (stores && stores.length > 0) {
-          // Por ahora usamos la primera tienda disponible
-          // En una implementación real, esto vendría de la autenticación o selección del usuario
           this.currentStore = stores[0];
-          this.product.shop = this.currentStore.id.toString();
+          this.producto.store_id = this.currentStore.id;
           console.log('Tienda actual cargada:', this.currentStore);
         }
       },
       error: (error) => {
         console.error('Error cargando tiendas:', error);
-        // Mantener el store_id por defecto si hay error
       }
     });
   }
@@ -118,7 +101,7 @@ export class EscanearComponent implements OnDestroy, OnInit {
           constraints: {
             width: 640,
             height: 480,
-            facingMode: "environment" // Usar cámara trasera
+            facingMode: "environment"
           }
         },
         locator: {
@@ -156,14 +139,13 @@ export class EscanearComponent implements OnDestroy, OnInit {
         const code = result.codeResult.code;
         console.log('🔍 Código de barras detectado:', code);
         this.onBarcodeDetected(code);
-        this.stopScanning(); // Detener el escaneo después de detectar
+        this.stopScanning();
       });
     });
   }
 
   stopCamera() {
     if (this.isCameraOn) {
-      // Detener QuaggaJS
       Quagga.stop();
       this.isCameraOn = false;
       this.stopScanning();
@@ -180,7 +162,6 @@ export class EscanearComponent implements OnDestroy, OnInit {
     this.isScanning = true;
     this.errorMessage = 'Escaneando... Apunta la cámara hacia el código de barras';
     
-    // Iniciar QuaggaJS para escaneo real
     Quagga.start();
     console.log("Escaneo iniciado - QuaggaJS activo");
   }
@@ -193,7 +174,6 @@ export class EscanearComponent implements OnDestroy, OnInit {
     }
   }
 
-
   onBarcodeDetected(barcode: string) {
     this.stopScanning();
     this.scannedBarcode = barcode;
@@ -205,7 +185,7 @@ export class EscanearComponent implements OnDestroy, OnInit {
     this.errorMessage = `Buscando productos con código: ${barcode}`;
     
     this.apiService.getProductsByBarcode(barcode).subscribe({
-      next: (response) => {
+      next: (response: ProductsResponse) => {
         this.isLoading = false;
         
         if (response.successful && response.data && response.data.length > 0) {
@@ -223,10 +203,10 @@ export class EscanearComponent implements OnDestroy, OnInit {
           console.log('🔍 Productos encontrados:', productsWithMatchingBarcode);
           
           if (productsWithMatchingBarcode.length > 0) {
-            // Productos encontrados - mostrar formulario de crear con datos prellenados
+            // Productos encontrados - mostrar formulario con datos sugeridos
             this.foundProducts = productsWithMatchingBarcode;
-            this.showCreateProductFormWithData(barcode, productsWithMatchingBarcode);
-            this.errorMessage = `Se encontraron ${productsWithMatchingBarcode.length} producto(s) con código de barras "${barcode}". Datos prellenados para crear nuevo producto.`;
+            this.showCreateProductFormWithSuggestedData(barcode, productsWithMatchingBarcode);
+            this.errorMessage = `Se encontraron ${productsWithMatchingBarcode.length} producto(s) con código de barras "${barcode}". Puedes usar los datos más comunes o crear uno nuevo.`;
           } else {
             // No hay productos con el mismo código de barras
             this.foundProducts = [];
@@ -243,7 +223,6 @@ export class EscanearComponent implements OnDestroy, OnInit {
       error: (error) => {
         console.error('Error buscando productos:', error);
         this.isLoading = false;
-        // Si hay error en la búsqueda, asumir que no hay productos
         this.foundProducts = [];
         this.showCreateProductForm(barcode);
         this.errorMessage = `Error buscando productos. Crear nuevo producto con código "${barcode}":`;
@@ -251,134 +230,83 @@ export class EscanearComponent implements OnDestroy, OnInit {
     });
   }
 
-  displayFoundProducts() {
-    const product = this.foundProducts[0]; // Mostrar el primer producto encontrado
-    this.displayData = {
-      nombre: product.name || 'Sin nombre',
-      marca: product.brand || 'Sin marca',
-      codigo: this.scannedBarcode,
-      precio: product.price ? `$${product.price}` : 'Sin precio',
-      tipo: this.getTypeNameById(product.type),
-      fecha: new Date().toLocaleDateString()
-    };
-    this.showCreateForm = false;
-  }
-
   showCreateProductForm(barcode: string) {
-    this.product.code = barcode;
+    this.producto.barcode = barcode;
     this.showCreateForm = true;
     this.foundProducts = [];
-    this.errorMessage = `No se encontraron productos con código ${barcode}. Crear nuevo producto:`;
   }
 
-  showCreateProductFormWithData(barcode: string, foundProducts: any[]) {
-    // Usar el primer producto encontrado para prellenar los datos
-    const referenceProduct = foundProducts[0];
-    
-    this.product = {
-      name: referenceProduct.name || '',
-      brand: referenceProduct.brand || '',
-      price: null, // No prellenar precio para que el usuario lo ingrese
-      type: referenceProduct.type?.toString() || '',
-      cantidad: null, // No prellenar cantidad
-      description: referenceProduct.desc || '',
-      code: barcode,
-      shop: this.product.shop // Mantener el shop actual
+  showCreateProductFormWithSuggestedData(barcode: string, foundProducts: any[]) {
+    this.producto = {
+      name: '',
+      brand: '',
+      price: 0,
+      points_price: 1,
+      type: 1,
+      quantity: 0,
+      desc: '',
+      barcode: barcode,
+      hidden: false,
+      store_id: this.producto.store_id
     };
     
     this.showCreateForm = true;
-    this.errorMessage = `Productos similares encontrados. Datos prellenados con información de "${referenceProduct.name}" (${referenceProduct.brand}). Complete los campos faltantes:`;
   }
 
-  GuardarData() {
-    if (!this.product.name || !this.product.price) {
-      this.errorMessage = 'Complete al menos el nombre y precio del producto';
-      return;
-    }
-
-    const productoApi = {
-      name: this.product.name,
-      brand: 'Sin marca', // Valor por defecto
-      price: this.product.price,
-      points_price: 1,
-      type: 1, // Tipo por defecto
-      quantity: Number(this.product.cantidad) || 1,
-      desc: this.product.description || '',
-      barcode: this.scannedBarcode,
-      hidden: false,
-      store_id: this.currentStore?.id || 1
-    };
-
+  onProductoSubmit(productoData: ProductoData) {
     this.isLoading = true;
-    this.apiService.crearProducto(productoApi).subscribe({
+    this.errorMessage = null;
+
+    this.apiService.crearProducto(productoData).subscribe({
       next: (response) => {
         this.isLoading = false;
         this.errorMessage = '¡Producto creado exitosamente!';
-        
-        // Mostrar el producto recién creado
-        this.displayData = {
-          nombre: this.product.name,
-          marca: 'Sin marca',
-          codigo: this.scannedBarcode,
-          precio: `$${this.product.price}`,
-          tipo: 'Producto',
-          fecha: new Date().toLocaleDateString()
-        };
-        
+        console.log('✅ Producto creado:', response);
         this.resetForm();
         setTimeout(() => this.errorMessage = null, 3000);
       },
       error: (error) => {
-        console.error('Error creando producto:', error);
+        console.error('❌ Error creando producto:', error);
         this.isLoading = false;
-        this.errorMessage = 'Error al crear el producto. Inténtelo de nuevo.';
+        this.errorMessage = `Error al crear el producto: ${error.error?.message || error.message || 'Error desconocido'}`;
       }
     });
   }
 
-  getTypeNameById(typeId: number): string {
-    const tipos = [
-      { id: 0, name: 'Restaurante' },
-      { id: 1, name: 'Kiosco' },
-      { id: 2, name: 'Supermercado' },
-      { id: 3, name: 'Panadería' }
-    ];
-    const tipo = tipos.find(t => t.id === typeId);
-    return tipo ? tipo.name : 'Sin categoría';
+  onCancelar() {
+    this.resetForm();
+  }
+
+  onReset() {
+    this.resetForm();
   }
 
   resetForm() {
     this.showCreateForm = false;
-    this.product = {
+    this.producto = {
       name: '',
       brand: '',
-      price: null,
-      type: '',
-      cantidad: null,
-      description: '',
-      code: '',
-      shop: this.product.shop // Mantener el shop actual
-    };
-  }
-
-  limpiarTodo() {
-    this.displayData = {
-      nombre: '',
-      marca: '',
-      codigo: '',
-      precio: '',
-      tipo: '',
-      fecha: new Date().toLocaleDateString()
+      price: 0,
+      points_price: 1,
+      type: 1,
+      quantity: 0,
+      desc: '',
+      barcode: '',
+      hidden: false,
+      store_id: this.producto.store_id
     };
     this.foundProducts = [];
     this.scannedBarcode = '';
-    this.resetForm();
-    this.errorMessage = null;
   }
+
+  onUseSuggestedData(useSuggested: boolean) {
+    console.log('Usar datos sugeridos:', useSuggested);
+    // La lógica de autocompletado se maneja en el componente del formulario
+  }
+
 
   ngOnDestroy() {
     this.stopCamera();
-    this.stopScanning();
     
     // Limpiar QuaggaJS completamente
     if (typeof Quagga !== 'undefined') {
