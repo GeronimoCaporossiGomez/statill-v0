@@ -11,31 +11,21 @@
     <div class="agregar-texto">{{ SePuedeVerElformulario ? 'Cancelar' : 'Añadir Producto' }}</div>
   </div>
 
-  <div *ngIf="SePuedeVerElformulario" class="producto-card producto-form-card">
-    <div class="producto-img">
-      <img *ngIf="product.img" [src]="product.img" alt="Imagen de producto" />
-      <div *ngIf="!product.img" class="img-placeholder">
-        <span>🖼️</span>
-      </div>
-    </div>
-    <div class="producto-info">
-      <input type="text" class="producto-nombre-input" placeholder="Agregar un texto..." [(ngModel)]="product.name" />
-      <input type="text" class="producto-desc-input" placeholder="Describe el producto aquí..." [(ngModel)]="product.description" />
-    </div>
-    <div class="producto-precio">
-      <label for="precio-input" class="producto-nombre"> Precio:</label>
-      <input type="number" id="precio-input"class="producto-cantidad-input" placeholder="Precio..." [(ngModel)]="product.price" min="1"/>
-    </div>
-    <div class="producto-cantidad">
-      <label for="cantidad-input" class="producto-nombre"> Cantidad:</label>
-      <input type="number" id="cantidad-input" class="producto-cantidad-input" placeholder="Cantidad..." [(ngModel)]="product.cantidad" min="1" />
-    </div>
-    <div class="producto-editar">
-      <button class="submit-button" (click)="GuardarData()">
-        <span>✔️</span>
-      </button>
-    </div>
-  </div>
+  <app-producto-form
+    [producto]="producto"
+    [isLoading]="isLoading"
+    [errorMessage]="errorMessage"
+    [showForm]="SePuedeVerElformulario"
+    [title]="productoEditandoId ? 'Editar Producto' : 'Crear Producto'"
+    [submitButtonText]="productoEditandoId ? 'Actualizar Producto' : 'Crear Producto'"
+    [showBarcodeField]="true"
+    [showStoreIdField]="true"
+    [suggestedData]="null"
+    (onSubmit)="onProductoSubmit($event)"
+    (onCancel)="onCancelar()"
+    (onReset)="onReset()"
+    (onUseSuggestedData)="onUseSuggestedData($event)">
+  </app-producto-form>
 
   <div *ngIf="SePuedeVerElformulario == false" class="productos-container">
     <div *ngFor="let producto of productos; let i = index" class="producto-card">

@@ -107,10 +107,9 @@ export class EscanearComponent implements OnDestroy, OnInit {
       await this.initializeQuagga();
       this.isCameraOn = true;
       this.errorMessage = null;
-    } catch (err) {
-      console.error('Error accessing camera:', err);
-      this.errorMessage = 'No se pudo acceder a la cámara.';
-      this.isCameraOn = false;
+    } catch (error) {
+      console.error('Error accessing camera:', error);
+      this.errorMessage = 'No se pudo acceder a la cámara';
     }
   }
 
