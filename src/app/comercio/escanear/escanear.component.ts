@@ -5,6 +5,9 @@ import { SidebarComponent } from "src/app/Componentes/sidebar-statill/sidebar.co
 import { MiApiService } from '../../servicios/mi-api.service';
 import { ComercioService } from '../../servicios/comercio.service';
 
+// Importar QuaggaJS
+import * as Quagga from 'quagga';
+
 @Component({
   selector: 'app-escanear',
   standalone: true,
@@ -100,16 +103,8 @@ export class EscanearComponent implements OnDestroy, OnInit {
 
   async startCamera() {
     try {
-      this.stream = await navigator.mediaDevices.getUserMedia({
-        video: {
-          width: { ideal: 600 },
-          height: { ideal: 500 },
-          facingMode: 'environment'
-        },
-        audio: false
-      });
-
-      this.videoElement.nativeElement.srcObject = this.stream;
+      // Inicializar QuaggaJS con la cámara
+      await this.initializeQuagga();
       this.isCameraOn = true;
       this.errorMessage = null;
     } catch (err) {
@@ -119,13 +114,66 @@ export class EscanearComponent implements OnDestroy, OnInit {
     }
   }
 
+  async initializeQuagga() {
+    return new Promise((resolve, reject) => {
+      Quagga.init({
+        inputStream: {
+          name: "Live",
+          type: "LiveStream",
+          target: this.videoElement.nativeElement,
+          constraints: {
+            width: 640,
+            height: 480,
+            facingMode: "environment" // Usar cámara trasera
+          }
+        },
+        locator: {
+          patchSize: "medium",
+          halfSample: true
+        },
+        numOfWorkers: 2,
+        frequency: 10,
+        decoder: {
+          readers: [
+            "code_128_reader",
+            "ean_reader",
+            "ean_8_reader",
+            "code_39_reader",
+            "code_39_vin_reader",
+            "codabar_reader",
+            "upc_reader",
+            "upc_e_reader",
+            "i2of5_reader"
+          ]
+        },
+        locate: true
+      }, (err: any) => {
+        if (err) {
+          console.error('Error initializing Quagga:', err);
+          reject(err);
+          return;
+        }
+        console.log("QuaggaJS initialized successfully");
+        resolve(true);
+      });
+
+      // Configurar el evento de detección
+      Quagga.onDetected((result: any) => {
+        const code = result.codeResult.code;
+        console.log('🔍 Código de barras detectado:', code);
+        this.onBarcodeDetected(code);
+        this.stopScanning(); // Detener el escaneo después de detectar
+      });
+    });
+  }
+
   stopCamera() {
-    if (this.stream) {
-      this.stream.getTracks().forEach(track => track.stop());
-      this.videoElement.nativeElement.srcObject = null;
-      this.stream = null;
-      this.isCameraOn = false; 
+    if (this.isCameraOn) {
+      // Detener QuaggaJS
+      Quagga.stop();
+      this.isCameraOn = false;
       this.stopScanning();
+      console.log("Cámara detenida");
     }
   }
 
@@ -138,37 +186,19 @@ export class EscanearComponent implements OnDestroy, OnInit {
     this.isScanning = true;
     this.errorMessage = 'Escaneando... Apunta la cámara hacia el código de barras';
     
-    // Simulación de escaneo (aquí iría QuaggaJS en implementación real)
-    this.scanInterval = setInterval(() => {
-      // Simular detección de código de barras aleatorio
-      if (Math.random() > 0.7) { // 30% de probabilidad cada segundo
-        const simulatedBarcode = this.generateSimulatedBarcode();
-        console.log('🔍 Código de barras detectado:', simulatedBarcode);
-        this.onBarcodeDetected(simulatedBarcode);
-      }
-    }, 1000);
+    // Iniciar QuaggaJS para escaneo real
+    Quagga.start();
+    console.log("Escaneo iniciado - QuaggaJS activo");
   }
 
   stopScanning() {
     this.isScanning = false;
-    if (this.scanInterval) {
-      clearInterval(this.scanInterval);
-      this.scanInterval = null;
+    if (this.isCameraOn) {
+      Quagga.stop();
+      console.log("Escaneo detenido");
     }
   }
 
-  generateSimulatedBarcode(): string {
-    // Generar código de barras simulado
-    const barcodes = [
-      '+', // Código del ejemplo proporcionado
-      '7890123456789',
-      '1234567890123', 
-      '9876543210987',
-      '5555666677778',
-      '1111222233334'
-    ];
-    return barcodes[Math.floor(Math.random() * barcodes.length)];
-  }
 
   onBarcodeDetected(barcode: string) {
     this.stopScanning();
@@ -343,5 +373,11 @@ export class EscanearComponent implements OnDestroy, OnInit {
   ngOnDestroy() {
     this.stopCamera();
     this.stopScanning();
+    
+    // Limpiar QuaggaJS completamente
+    if (typeof Quagga !== 'undefined') {
+      Quagga.stop();
+      Quagga.offDetected();
+    }
   }
 }

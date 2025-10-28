@@ -22,8 +22,8 @@
       </div>
 
       <div class="video-container">
-        <video #video autoplay playsinline width="600" height="400" 
-               [class.scanning]="isScanning"></video>
+        <div #video id="scanner-container" 
+             [class.scanning]="isScanning"></div>
         <div *ngIf="isScanning" class="scanning-overlay">
           <div class="scanning-line"></div>
           <p>Escaneando código de barras...</p>

@@ -73,7 +73,7 @@
               "node_modules/leaflet/dist/leaflet.css"
             ],
             "scripts": [
-
+              "node_modules/quagga/dist/quagga.min.js"
             ]
           },
           "configurations": {
@@ -145,6 +145,7 @@
               "node_modules/leaflet/dist/leaflet.css"
             ],
             "scripts": [
+              "node_modules/quagga/dist/quagga.min.js"
             ]
           }
         }

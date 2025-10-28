@@ -11,7 +11,8 @@
     "resolveJsonModule": true,
     "target": "esnext",             // ✅ moderno y aceptado por TypeScript
     "useDefineForClassFields": false,
-    "lib": ["esnext", "dom"]        // ✅ bibliotecas para JS moderno + navegador
+    "lib": ["esnext", "dom"],       // ✅ bibliotecas para JS moderno + navegador
+    "typeRoots": ["./node_modules/@types", "./src/types"]
   },
   "exclude": ["node_modules", "dist"]
 }
