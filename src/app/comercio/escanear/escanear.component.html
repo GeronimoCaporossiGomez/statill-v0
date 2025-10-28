@@ -69,70 +69,29 @@
       </div>
     </div>
 
-    <!-- Formulario de crear producto (basado en stock.component) -->
-    <div *ngIf="showCreateForm" class="crear-producto-form">
-      <h2>➕ Crear Nuevo Producto</h2>
-      <p class="form-description">Código escaneado: <strong>{{ scannedBarcode }}</strong></p>
-      <p *ngIf="currentStore" class="store-info">Creando producto para: <strong>{{ currentStore.name }}</strong> (ID: {{ currentStore.id }})</p>
-      
-      <!-- Mostrar información de productos similares encontrados -->
-      <div *ngIf="foundProducts.length > 0" class="productos-similares">
-        <h3>📋 Productos similares encontrados:</h3>
-        <div class="similar-products-list">
-          <div *ngFor="let product of foundProducts" class="similar-product">
-            <span class="product-name">{{ product.name }}</span>
-            <span class="product-brand">{{ product.brand }}</span>
-            <span class="product-store">Tienda #{{ product.store_id }}</span>
-          </div>
-        </div>
-        <p class="similar-info">Los datos de nombre y marca se han prellenado automáticamente. Complete los campos faltantes.</p>
-      </div>
-      
-      <!-- Formulario basado en stock.component -->
-      <div class="producto-card producto-form-card">
-        <div class="producto-img">
-          <div class="img-placeholder">
-            <span>🖼️</span>
-          </div>
-        </div>
-        <div class="producto-info">
-          <input 
-            type="text" 
-            class="producto-nombre-input" 
-            placeholder="Nombre del producto..." 
-            [(ngModel)]="product.name" />
-          <input 
-            type="text" 
-            class="producto-desc-input" 
-            placeholder="Describe el producto aquí..." 
-            [(ngModel)]="product.description" />
-        </div>
-        <div class="producto-precio">
-          <label for="precio-input" class="producto-nombre"> Precio:</label>
-          <input 
-            type="number" 
-            id="precio-input"
-            class="producto-cantidad-input" 
-            placeholder="Precio..." 
-            [(ngModel)]="product.price" 
-            min="1"/>
-        </div>
-        <div class="producto-cantidad">
-          <label for="cantidad-input" class="producto-nombre"> Cantidad:</label>
-          <input 
-            type="number" 
-            id="cantidad-input" 
-            class="producto-cantidad-input" 
-            placeholder="Cantidad..." 
-            [(ngModel)]="product.cantidad" 
-            min="1" />
-        </div>
-        <div class="producto-editar">
-          <button class="submit-button" (click)="GuardarData()" [disabled]="isLoading">
-            <span>{{ isLoading ? '⏳' : '✔️' }}</span>
-          </button>
-        </div>
-      </div>
+    <!-- Formulario de crear producto usando ProductoFormComponent -->
+    <app-producto-form
+      [producto]="producto"
+      [isLoading]="isLoading"
+      [errorMessage]="errorMessage"
+      [showForm]="showCreateForm"
+      [title]="foundProducts.length > 0 ? 'Crear Producto (Datos Sugeridos)' : 'Crear Nuevo Producto'"
+      [submitButtonText]="'Crear Producto'"
+      [showBarcodeField]="true"
+      [showStoreIdField]="true"
+      [suggestedData]="foundProducts"
+      (onSubmit)="onProductoSubmit($event)"
+      (onCancel)="onCancelar()"
+      (onReset)="onReset()"
+      (onUseSuggestedData)="onUseSuggestedData($event)">
+    </app-producto-form>
+
+    <!-- Información adicional cuando hay productos encontrados -->
+    <div *ngIf="foundProducts.length > 0 && showCreateForm" class="found-products-info">
+      <h4>🔍 Información del Escaneo</h4>
+      <p><strong>Código escaneado:</strong> {{ scannedBarcode }}</p>
+      <p><strong>Tienda:</strong> {{ currentStore?.name || 'No especificada' }}</p>
+      <p><strong>Productos similares encontrados:</strong> {{ foundProducts.length }}</p>
     </div>
 
     <!-- Información básica cuando no hay datos -->
@@ -151,7 +110,7 @@
 
     <!-- Botón de limpiar siempre visible -->
     <div class="acciones-formulario">
-      <button (click)="limpiarTodo()" class="btn-clean">
+      <button (click)="resetForm()" class="btn-clean">
         🧹 Limpiar Todo
       </button>
     </div>
