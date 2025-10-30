@@ -73,3 +73,25 @@
     <button (click)="volver()">Volver</button>
   </div>
 }
+
+<header class="Abajo">
+  <div class="Reseña">
+    <span class="textoReseña">Reseña</span>
+    <div class="Estrellas">
+      <span>Bueno</span>
+      <button (click)="setValue(1)" [class.active]="estrellas >= 1" class="Estrella">estrella</button>
+      <button (click)="setValue(2)" [class.active]="estrellas >= 2" class="Estrella">estrella</button>
+      <button (click)="setValue(3)" [class.active]="estrellas >= 3" class="Estrella">estrella</button>
+      <button (click)="setValue(4)" [class.active]="estrellas >= 4" class="Estrella">estrella</button>
+      <button (click)="setValue(5)" [class.active]="estrellas >= 5" class="Estrella">estrella</button>
+      <span>Malo</span>
+    </div>
+    <input type="text" placeholder="Ingrese su reseña aquí" class="ReseñaTextBox" [(ngModel)]="textValue">
+    <button>OK</button>
+    <h1>{{estrellas}}</h1>
+  </div>
+</header>
+
+
+
+

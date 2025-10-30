@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ComercioService } from '../servicios/comercio.service';
 import { HeaderStatillComponent } from '../Componentes/header-statill/header-statill.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-negocio',
-  imports: [CommonModule, HeaderStatillComponent],
+  imports: [CommonModule, HeaderStatillComponent, FormsModule],
   templateUrl: './negocio.component.html',
   styleUrl: './negocio.component.scss',
 })
@@ -15,10 +16,18 @@ export class NegocioComponent implements OnInit {
   private router = inject(Router);
   private comercioService = inject(ComercioService);
 
+  textValue = ""
+
   comercio: any;
   productos: any[] = [];
   cargando = true;
   carrito: { [key: number]: number } = {}; // { productoId: cantidad }
+
+  estrellas: number = 0;
+
+  setValue(value: number): void {
+    this.estrellas = value;
+  }
 
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
