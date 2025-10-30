@@ -53,7 +53,7 @@
       <h3>Ubicación</h3>
       <div class="ubicacion-container">
         <div class="input-buscar">
-          <input 
+          <input class="inputUbicacion"
             type="text" 
             name="ubicacion" 
             [(ngModel)]="direccionInput" 
@@ -61,23 +61,26 @@
             #ubicacionInput>
           <button 
             type="button" 
+            class="btn-buscar-mapa"
             (click)="buscarDireccionEnMapa()" 
             [disabled]="buscandoDireccion">
-            {{ buscandoDireccion ? 'Buscando...' : 'Buscar en mapa' }}
+            {{ buscandoDireccion ? 'Buscando...' : 'Buscar' }}
           </button>
         </div>
         
         <p *ngIf="ubicacionConfirmada" class="ubicacion-confirmada">
-          📍 Ubicación confirmada: {{ ubicacionConfirmada }}
+          📍 {{ ubicacionConfirmada }}
         </p>
 
         <!-- Mapa integrado -->
-        <app-mapa 
-          [modo]="'vendedor'"
-          [ubicacion]="coordenadasSeleccionadas"
-          (ubicacionSeleccionada)="onUbicacionSeleccionada($event)"
-          (direccionSeleccionada)="onDireccionSeleccionada($event)">
-        </app-mapa>
+        <div class="mapa-wrapper">
+          <app-mapa 
+            [modo]="'vendedor'"
+            [ubicacion]="coordenadasSeleccionadas"
+            (ubicacionSeleccionada)="onUbicacionSeleccionada($event)"
+            (direccionSeleccionada)="onDireccionSeleccionada($event)">
+          </app-mapa>
+        </div>
       </div>
 
       <h3>Pre-Order?</h3>
@@ -97,25 +100,29 @@
       </div>
 
       <h3>Métodos de Pago</h3>
-      <label>
-        <input type="checkbox" name="pagoEfectivo" ngModel [checked]="true">
-        Efectivo
-      </label>
-      <label>
-        <input type="checkbox" name="pagoDebito" ngModel [checked]="true">
-        Débito
-      </label>
-      <label>
-        <input type="checkbox" name="pagoCredito" ngModel [checked]="true">
-        Crédito
-      </label>
-      <label>
-        <input type="checkbox" name="pagoTransferencia" ngModel [checked]="true">
-        Transferencia
-      </label>
+      <div class="metodos-pago-group">
+        <label>
+          <input type="checkbox" name="pagoEfectivo" ngModel [checked]="true">
+          Efectivo
+        </label>
+        <label>
+          <input type="checkbox" name="pagoDebito" ngModel [checked]="true">
+          Débito
+        </label>
+        <label>
+          <input type="checkbox" name="pagoCredito" ngModel [checked]="true">
+          Crédito
+        </label>
+        <label>
+          <input type="checkbox" name="pagoTransferencia" ngModel [checked]="true">
+          Transferencia
+        </label>
+      </div>
 
-      <button type="button" (click)="bajarPantalla()">Anterior</button>
-      <button type="button" (click)="aumentarPantalla()">Siguiente</button>
+      <div class="botones-navegacion">
+        <button type="button" (click)="bajarPantalla()">Anterior</button>
+        <button type="button" class="btn-siguiente" (click)="aumentarPantalla()">Siguiente</button>
+      </div>
     </div>
 
     <!-- PANTALLA 3 -->

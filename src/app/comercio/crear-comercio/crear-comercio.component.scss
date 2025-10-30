@@ -45,7 +45,7 @@ $border-color: #e0e0e0;
 // Contenedor del contenido
 .contenedor,
 form {
-  max-width: 480px;
+  max-width: 520px;
   background-color: $white;
   border-radius: 24px;
   padding: 40px 30px;
@@ -115,6 +115,7 @@ form {
 }
 
 .primera-parte input[type="text"],
+.primera-parte input[type="number"],
 .primera-parte input[type="file"] {
   width: 100%;
   padding: 12px 14px;
@@ -152,19 +153,20 @@ form {
 .segunda-parte {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 18px;
 }
 
 .segunda-parte h3 {
   font-size: 14px;
   font-weight: 600;
   color: $text-dark;
-  margin: 0;
+  margin: 8px 0 0 0;
   text-transform: uppercase;
 }
 
 .segunda-parte select,
-.segunda-parte input[type="text"] {
+.segunda-parte input[type="text"],
+.segunda-parte input[type="number"] {
   width: 100%;
   padding: 12px 14px;
   border: 1px solid $border-color;
@@ -193,6 +195,118 @@ form {
   cursor: pointer;
   width: 18px;
   height: 18px;
+}
+
+// 🗺️ Estilos del mapa
+.ubicacion-container {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  width: 100%;
+}
+
+.input-buscar {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 12px;
+  align-items: stretch;
+  
+  input {
+    flex: 1;
+    min-width: 0;
+    padding: 12px 16px !important;
+    border: 2px solid $border-color !important;
+    border-radius: 12px !important;
+    font-size: 14px !important;
+    transition: all 0.3s ease;
+    
+    &:focus {
+      border-color: $primary-color !important;
+      box-shadow: 0 0 0 4px rgba($primary-color, 0.1) !important;
+    }
+    
+    &::placeholder {
+      color: #999;
+    }
+  }
+
+  .btn-buscar-mapa {
+    padding: 12px 20px !important;
+    margin: 0 !important;
+    white-space: nowrap;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    flex-shrink: 0;
+    background-color: $primary-color !important;
+    color: $white !important;
+    border-radius: 12px !important;
+    transition: all 0.3s ease;
+    min-width: 100px;
+    
+    &:hover:not(:disabled) {
+      background-color: darken($primary-color, 8%) !important;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba($primary-color, 0.3);
+    }
+    
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+  }
+}
+
+.ubicacion-confirmada {
+  color: #28a745;
+  font-size: 13px;
+  font-weight: 500;
+  margin: 0 0 10px 0;
+  padding: 8px 12px;
+  background-color: #e8f5e9;
+  border-radius: 6px;
+  border-left: 3px solid #28a745;
+}
+
+.mapa-wrapper {
+  width: 100%;
+  height: 300px;
+  border: 2px solid $border-color;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 0;
+  
+  app-mapa {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+// Métodos de pago
+.metodos-pago-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: -8px;
+}
+
+// Botones de navegación
+.botones-navegacion {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+
+  button {
+    flex: 1;
+    margin: 0 !important;
+  }
+
+  .btn-siguiente {
+    background-color: $primary-color !important;
+    color: $white !important;
+  }
 }
 
 // Tercera parte
@@ -279,14 +393,12 @@ button[type="submit"]:hover {
 }
 
 // Botón anterior (gris)
-button[type="button"]:first-of-type,
-button:first-of-type {
+button[type="button"]:first-of-type {
   background-color: #f0f0f0;
   color: $text-dark;
 }
 
-button[type="button"]:first-of-type:hover,
-button:first-of-type:hover {
+button[type="button"]:first-of-type:hover {
   background-color: #e0e0e0;
   color: $text-dark;
 }
@@ -321,6 +433,7 @@ form input[type="text"]:focus {
   form {
     padding: 30px 20px;
     border-radius: 16px;
+    max-width: 100%;
   }
 
   .boton {
@@ -334,4 +447,20 @@ form input[type="text"]:focus {
   .TodaEstaCosa input[type="time"] {
     width: 100%;
   }
+
+  .mapa-wrapper {
+    height: 250px;
+  }
+
+  .input-buscar {
+    flex-direction: column;
+    
+    .btn-buscar-mapa {
+      width: 100%;
+    }
+  }
+}
+
+.inputUbicacion{
+  width: 100%;
 }
