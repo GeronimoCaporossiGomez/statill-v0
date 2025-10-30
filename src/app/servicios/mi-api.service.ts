@@ -57,6 +57,22 @@ export interface ProductsResponse {
   message: string;
 }
 
+// Interfaces para reseñas
+
+export interface Review {
+  id: number;
+  store_id: number;
+  user_id: number;
+  stars: number;
+  desc: string;
+}
+
+export interface ReviewsResponse {
+  successful: boolean;
+  data: Review[];
+  message: string;
+}
+
 // Interfaces para tiendas
 export interface Store {
   id: number;
@@ -112,6 +128,15 @@ export class MiApiService {
   }
   getPoints(): Observable<PointsResponse> {
     return this.http.get<PointsResponse>(this.apiUrl + '/api/v1/points/');
+  }
+  getReviews(): Observable<ReviewsResponse> {
+    return this.http.get<ReviewsResponse>(this.apiUrl + '/api/v1/reviews/');
+  }
+  getReviewsByStoreId(storeId: number) {
+    return this.http.get(this.apiUrl + '/api/v1/reviews/store/' + storeId);
+  }
+  postReviews(review: any) {
+    return this.http.post(this.apiUrl + '/api/v1/review/', review);
   }
 }
 
