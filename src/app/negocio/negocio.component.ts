@@ -20,6 +20,7 @@ export class NegocioComponent implements OnInit {
 
   comercio: any;
   productos: any[] = [];
+  reseñas: any[] = [];
   cargando = true;
   carrito: { [key: number]: number } = {}; // { productoId: cantidad }
 
@@ -53,6 +54,18 @@ export class NegocioComponent implements OnInit {
         this.cargando = false;
       }
     });
+
+    // Cargar reseña de la tienda
+     this.comercioService.getReviewsByStore(id).subscribe({
+      next: (reviews) => {
+        this.reseñas = reviews;
+        this.cargando = false;
+      },
+      error: (err) => {
+        console.error('Error al cargar productos:', err);
+        this.cargando = false;
+      }
+    });
   }
 
   getCantidad(productoId: number): number {
@@ -79,6 +92,31 @@ export class NegocioComponent implements OnInit {
     return Object.values(this.carrito).reduce((sum, cant) => sum + cant, 0);
   }
 
+  submitReview(): void {
+    if (this.textValue.trim() === '') {
+      alert('Por favor, escribe una reseña.');
+      return;
+    }
+  
+    const review = {
+      store_id: this.comercio.id,
+      user_id: 1, // Assuming this is the logged-in user
+      stars: this.estrellas,
+      desc: this.textValue
+    };
+  
+    this.comercioService.postReview(review).subscribe({
+      next: (response) => {
+        console.log('Review realizada:', response);
+        alert('Reseña enviada con éxito!');
+      },
+      error: (err) => {
+        console.error('Error al realizar la reseña:', err);
+        alert('Error al enviar la reseña');
+      }
+    });
+  }
+
   finalizarCompra() {
     if (this.getTotalItems() === 0) {
       alert('Agregue productos al carrito');
@@ -96,23 +134,6 @@ export class NegocioComponent implements OnInit {
       payment_method: 3,
       user_id: 1
     };
-
-    const review = {
-      store_id: this.comercio.id,
-      user_id: 1,
-      stars: this.estrellas,
-      desc: this.textValue
-    }
-
-    this.comercioService.postReview(review).subscribe({
-      next: (response) => {
-        console.log('review realizada:', response);
-      },
-      error: (err) => {
-        console.error('Error al realizar la review:', err);
-        alert('Error al realizar la review');
-      }
-    });
 
     this.comercioService.postSales(venta).subscribe({
       next: (response) => {

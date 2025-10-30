@@ -87,8 +87,10 @@
       <span>Malo</span>
     </div>
     <input type="text" placeholder="Ingrese su reseña aquí" class="ReseñaTextBox" [(ngModel)]="textValue">
-    <button>OK</button>
-    <h1>{{estrellas}}</h1>
+    <button (click)="submitReview()">OK</button>
+  </div>
+
+  <div class = "reseñasGrid">
   </div>
 </header>
 
