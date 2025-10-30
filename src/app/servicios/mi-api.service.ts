@@ -113,6 +113,9 @@ export class MiApiService {
   getPoints(): Observable<PointsResponse> {
     return this.http.get<PointsResponse>(this.apiUrl + '/api/v1/points/');
   }
+  postReviews(review: any) {
+    return this.http.post(this.apiUrl + '/api/v1/review/', review);
+  }
 }
 
 

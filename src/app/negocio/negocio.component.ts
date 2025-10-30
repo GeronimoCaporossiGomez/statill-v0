@@ -97,6 +97,23 @@ export class NegocioComponent implements OnInit {
       user_id: 1
     };
 
+    const review = {
+      store_id: this.comercio.id,
+      user_id: 1,
+      stars: this.estrellas,
+      desc: this.textValue
+    }
+
+    this.comercioService.postReview(review).subscribe({
+      next: (response) => {
+        console.log('review realizada:', response);
+      },
+      error: (err) => {
+        console.error('Error al realizar la review:', err);
+        alert('Error al realizar la review');
+      }
+    });
+
     this.comercioService.postSales(venta).subscribe({
       next: (response) => {
         console.log('Venta realizada:', response);

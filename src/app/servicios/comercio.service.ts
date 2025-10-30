@@ -34,6 +34,10 @@ export class ComercioService {
     return this.miApiService.postSales(sale);
   }
 
+  postReview(review: any): Observable<any> {
+    return this.miApiService.postReviews(review);
+  }
+
   getSales(): Observable<any[]> {
     return this.miApiService.getSales()
       .pipe(map((response: any) => response.data));
