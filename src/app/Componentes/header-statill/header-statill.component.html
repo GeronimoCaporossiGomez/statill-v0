@@ -9,18 +9,16 @@
         <span>▼</span>
       </button>
       <div class="menu-perfil" *ngIf="menuAbierto">
-        <button type="button" routerLink="/preordenes">
-          <img src="assets/img/perfil-statill.png" alt="">
-          <span class="icono-menu"></span>
+        <button type="button" routerLink="/perfil">
+          <img src="assets/img/perfil-statill.png" alt="icono cuenta" class="icono-menu-dropdown" />
           Cuenta
         </button>
         <button type="button" routerLink="/puntos">
-          <span class="icono-menu"></span>
-          <img src="assets/img/icono-puntos.png" alt="">
+          <img src="assets/img/icono-puntos.png" alt="icono puntos" class="icono-menu-dropdown" />
           Puntos
         </button>
         <button type="button" routerLink="/crear-comercio" class="boton-rojo">
-          <img src="assets/img/Cambiar-modo.png" alt="">
+          <img src="assets/img/vendedor-statill.png" alt="icono vendedor" class="icono-vendedor" />
           Vendedor
         </button>
       </div>
@@ -38,4 +36,3 @@
     </div>
   </div>
 </div>
-

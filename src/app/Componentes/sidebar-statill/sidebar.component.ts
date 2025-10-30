@@ -34,7 +34,7 @@ export class SidebarComponent {
     },
     {
       path: '/escanear',
-      icon: 'fas fa-barcode',
+      icon: '',
       text: 'Escanear',
       id: 'escanear'
     },
