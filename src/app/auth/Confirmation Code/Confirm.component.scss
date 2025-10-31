@@ -1,0 +1,41 @@
+.confirm-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: 16px;
+}
+
+.confirm-card {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+  padding: 24px;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+}
+
+.confirm-card h1 {
+  margin: 0 0 8px;
+  font-size: 24px;
+}
+
+.confirm-card p {
+  margin: 0 0 16px;
+  color: #555;
+}
+
+.primary {
+  display: inline-block;
+  border: none;
+  background: #3b82f6;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.primary:hover {
+  background: #2563eb;
+}

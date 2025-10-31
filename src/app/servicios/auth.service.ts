@@ -28,6 +28,22 @@ export class AuthService {
   }): Observable<any> {
     return this.http.post(this.apiUrl + '/api/v1/login/', credentials);
   }
+  
+  // Request an access token using email + code (token-as-password)
+  requestToken(payload: {
+    grant_type: 'password';
+    username: string; // email
+    password: string; // activation code
+  }): Observable<any> {
+    return this.http.post(this.apiUrl + '/api/v1/token', payload);
+  }
+
+  // Activate account using code sent by email
+  activateAccount(code: string): Observable<any> {
+    return this.http.get(this.apiUrl + '/api/v1/auth/activate', {
+      params: { code }
+    });
+  }
   // Additional methods can be added here
   getUsers(): Observable<any> {
     return this.http.get(this.apiUrl + '/api/v1/users/');

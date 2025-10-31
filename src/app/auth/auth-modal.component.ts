@@ -31,6 +31,7 @@ export class AuthModalComponent {
   @Output() close = new EventEmitter<void>();
 
   isLogin = true;
+  isVerifyingCode = false;
   // Registration fields
   first_names = '';
   last_name = '';
@@ -39,6 +40,7 @@ export class AuthModalComponent {
   birthdate = '';
   gender = '';
   res_area = '';
+  activationCode = '';
 
   // For error/success messages
   message = '';
@@ -49,29 +51,55 @@ export class AuthModalComponent {
   toggleMode(value: boolean) {
     this.isLogin = value;
     this.message = '';
+    this.isVerifyingCode = false;
+    this.activationCode = '';
   }
 
   submitForm() {
     this.message = '';
     this.loading = true;
-    if (this.isLogin) {
-      // Check credentials locally before attempting login
-      this.authService.getUsers().subscribe({
-        next: (res: any) => {
-          const users = res.data || res;
-          const user = users.find((u: any) => u.email === this.email && u.password === this.password);
-          if (user) {
-            this.loading = false;
-            this.close.emit();
-            this.router.navigate(['/home']);
-          } else {
-            this.loading = false;
-            alert('Email o contraseña incorrectos.');
-          }
+    if (this.isVerifyingCode) {
+      // Submit activation code to activation endpoint
+      this.authService.activateAccount(this.activationCode).subscribe({
+        next: () => {
+          // Después de activar, loguearse automáticamente con el código
+          this.authService.requestToken({
+            grant_type: 'password',
+            username: this.email,
+            password: this.activationCode,
+          }).subscribe({
+            next: () => {
+              this.loading = false;
+              this.close.emit();
+              this.router.navigate(['/home']);
+            },
+            error: () => {
+              this.loading = false;
+              alert('Cuenta activada, pero falló el login automático. Inicie sesión manualmente.');
+              this.router.navigate(['/confirmacion-codigo']);
+            }
+          });
         },
-        error: (err) => {
+        error: () => {
           this.loading = false;
-          alert('Error al verificar usuarios.');
+          alert('Código inválido. Reintente.');
+        }
+      });
+    } else if (this.isLogin) {
+      // Token-based login: use activation code as password
+      this.authService.requestToken({
+        grant_type: 'password',
+        username: this.email,
+        password: this.password,
+      }).subscribe({
+        next: () => {
+          this.loading = false;
+          this.close.emit();
+          this.router.navigate(['/home']);
+        },
+        error: () => {
+          this.loading = false;
+          alert('Error de autenticación. Verifique el email y el código.');
         }
       });
     } else {
@@ -87,8 +115,9 @@ export class AuthModalComponent {
       }).subscribe({
         next: (res) => {
           this.loading = false;
-          this.message = 'Registro exitoso. Ahora puede iniciar sesión.';
-          this.toggleMode(true);
+          this.message = 'Registro exitoso. Ingresá el código que te enviamos.';
+          // Mantener email cargado y pasar a verificación de código
+          this.isVerifyingCode = true;
         },
         error: (err) => {
           this.loading = false;

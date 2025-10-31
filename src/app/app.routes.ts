@@ -7,6 +7,11 @@ export const routes: Routes = [
     pathMatch: 'full'
   },
   {
+    path: 'confirmacion-codigo',
+    loadComponent: () =>
+      import('./auth/Confirmation Code/Confirm.component').then(m => m.ConfirmComponent)
+  },
+  {
     path: 'landing',
     loadComponent: () =>
     import('./home/landing/landing.component').then(m => m.LandingComponent)

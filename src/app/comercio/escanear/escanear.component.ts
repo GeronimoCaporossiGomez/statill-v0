@@ -1,5 +1,6 @@
 import { Component, ElementRef, ViewChild, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { SidebarComponent } from "src/app/Componentes/sidebar-statill/sidebar.component";
 import { ProductoFormComponent, ProductoData } from 'src/app/Componentes/producto-form/producto-form.component';
 import { MiApiService, ProductsResponse } from '../../servicios/mi-api.service';
@@ -13,6 +14,7 @@ declare const Quagga: any;
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     SidebarComponent,
     ProductoFormComponent
   ],
@@ -30,6 +32,9 @@ export class EscanearComponent implements OnDestroy, OnInit {
   foundProducts: any[] = [];
   isLoading = false;
   currentStore: any = null;
+  manualBarcode: string = '';
+  private lastDetectedAt = 0;
+  private readonly detectionCooldownMs = 2500;
 
 
   // Producto para el formulario
@@ -134,12 +139,18 @@ export class EscanearComponent implements OnDestroy, OnInit {
         resolve(true);
       });
 
-      // Configurar el evento de detección
+      // Configurar el evento de detección sin apagar la cámara
       Quagga.onDetected((result: any) => {
-        const code = result.codeResult.code;
+        const code = result.codeResult?.code;
+        const now = Date.now();
+        if (!code) { return; }
+
+        // Debounce para evitar múltiples disparos del mismo código
+        if (now - this.lastDetectedAt < this.detectionCooldownMs) { return; }
+        this.lastDetectedAt = now;
+
         console.log('🔍 Código de barras detectado:', code);
         this.onBarcodeDetected(code);
-        this.stopScanning();
       });
     });
   }
@@ -168,14 +179,13 @@ export class EscanearComponent implements OnDestroy, OnInit {
 
   stopScanning() {
     this.isScanning = false;
-    if (this.isCameraOn) {
-      Quagga.stop();
-      console.log("Escaneo detenido");
-    }
+    // No detenemos la cámara; solo dejamos de procesar si se necesita
+    try { Quagga.pause && Quagga.pause(); } catch {}
+    console.log("Escaneo detenido");
   }
 
   onBarcodeDetected(barcode: string) {
-    this.stopScanning();
+    // Mantener la cámara encendida; opcionalmente podemos pausar detecciones brevemente por debounce
     this.scannedBarcode = barcode;
     this.searchProductsByBarcode(barcode);
   }
@@ -313,5 +323,12 @@ export class EscanearComponent implements OnDestroy, OnInit {
       Quagga.stop();
       Quagga.offDetected();
     }
+  }
+
+  onManualSubmit() {
+    const code = (this.manualBarcode || '').trim();
+    if (!code) { return; }
+    this.scannedBarcode = code;
+    this.searchProductsByBarcode(code);
   }
 }

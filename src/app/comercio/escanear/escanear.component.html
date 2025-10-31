@@ -3,44 +3,45 @@
 <div class="contenedor-principal">
   <!-- Sección de cámara y escáner -->
   <div class="seccion-camara">
-    <div class="cuadrado-escanear">
-      <h1>📷 Escanear Códigos de Barras</h1>
-      <div class="color-box">
-        <div class="scanner-info">
-          <span class="scanner-icon">📊</span>
-          <p>Escanea códigos de barras para buscar productos o crear nuevos</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="scanner-container">
-      <h2>Cámara y Escáner</h2>
-
-      <div *ngIf="errorMessage" class="message" 
-           [ngClass]="{'success': errorMessage.includes('exitosamente'), 'error': !errorMessage.includes('exitosamente') && !errorMessage.includes('Escaneando')}">
-        {{ errorMessage }}
-      </div>
-
+    <div class="scanner-frame">
       <div class="video-container">
-        <div #video id="scanner-container" 
-             [class.scanning]="isScanning"></div>
+        <div #video id="scanner-container" [class.scanning]="isScanning"></div>
+        <div *ngIf="!isCameraOn" class="frame-placeholder">
+          <div class="barcode-icon">▦▦▦</div>
+        </div>
         <div *ngIf="isScanning" class="scanning-overlay">
           <div class="scanning-line"></div>
           <p>Escaneando código de barras...</p>
         </div>
       </div>
+    </div>
 
-      <div class="camera-controls">
-        <button (click)="toggleCamera()" class="btn-primary">
-          {{ isCameraOn ? '📹 Apagar cámara' : '📷 Encender cámara' }}
-        </button>
-        <button (click)="startScanning()" [disabled]="!isCameraOn || isScanning" class="btn-scan">
-          {{ isScanning ? '⏳ Escaneando...' : '🔍 Escanear código' }}
-        </button>
-        <button (click)="stopScanning()" [disabled]="!isScanning" class="btn-stop">
-          ⏹️ Detener escaneo
-        </button>
-      </div>
+    <div class="camera-controls">
+      <button (click)="toggleCamera()" class="btn-pill btn-red">
+        {{ isCameraOn ? 'Apagar Cámara' : 'Prender Cámara' }}
+      </button>
+      <button (click)="startScanning()" [disabled]="!isCameraOn || isScanning" class="btn-pill btn-red-outline">
+        {{ isScanning ? 'Escaneando…' : 'Escanear productos' }}
+      </button>
+      <button (click)="stopScanning()" [disabled]="!isScanning" class="btn-pill btn-gray">
+        Detener escaneo
+      </button>
+    </div>
+
+    <div class="manual-input">
+      <input
+        type="text"
+        class="manual-field"
+        maxlength="32"
+        placeholder="Ingresar código de barras manualmente"
+        [(ngModel)]="manualBarcode"
+      />
+      <button class="btn-pill btn-dark" (click)="onManualSubmit()" [disabled]="!manualBarcode?.trim()">Buscar</button>
+    </div>
+
+    <div *ngIf="errorMessage" class="message"
+         [ngClass]="{'success': errorMessage.includes('exitosamente'), 'error': !errorMessage.includes('exitosamente') && !errorMessage.includes('Escaneando')}">
+      {{ errorMessage }}
     </div>
   </div>
 
@@ -99,12 +100,7 @@
       <h2>📊 Información del Escaneo</h2>
       <div class="info-placeholder">
         <div class="placeholder-icon">🔍</div>
-        <p>Enciende la cámara y escanea un código de barras para comenzar</p>
-        <div class="steps">
-          <div class="step">1️⃣ Enciende la cámara</div>
-          <div class="step">2️⃣ Inicia el escaneo</div>
-          <div class="step">3️⃣ Apunta al código de barras</div>
-        </div>
+        <p>Prende la cámara y escanea, o ingresa el código manualmente.</p>
       </div>
     </div>
 
