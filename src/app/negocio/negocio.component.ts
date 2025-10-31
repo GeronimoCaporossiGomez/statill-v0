@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ComercioService } from '../servicios/comercio.service';
 import { HeaderStatillComponent } from '../Componentes/header-statill/header-statill.component';
 import { FormsModule } from '@angular/forms';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-negocio',
@@ -33,36 +34,21 @@ export class NegocioComponent implements OnInit {
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
 
-    // Cargar la tienda
-    this.comercioService.getStoreById(id).subscribe({
-      next: (store) => {
-        this.comercio = store;
+    // Cargar todo junto con forkJoin
+    forkJoin({
+      store: this.comercioService.getStoreById(id),
+      productos: this.comercioService.getProductosByStore(id),
+      reviews: this.comercioService.getReviewsByStore(id)
+    }).subscribe({
+      next: (result) => {
+        this.comercio = result.store;
+        this.productos = result.productos;
+        this.reseñas = result.reviews;
+        this.cargando = false;
+        console.log('Datos cargados:', result);
       },
       error: (err) => {
-        console.error('Error al cargar tienda:', err);
-      }
-    });
-
-    // Cargar productos de la tienda
-    this.comercioService.getProductosByStore(id).subscribe({
-      next: (productos) => {
-        this.productos = productos;
-        this.cargando = false;
-      },
-      error: (err) => {
-        console.error('Error al cargar productos:', err);
-        this.cargando = false;
-      }
-    });
-
-    // Cargar reseña de la tienda
-     this.comercioService.getReviewsByStore(id).subscribe({
-      next: (reviews) => {
-        this.reseñas = reviews;
-        this.cargando = false;
-      },
-      error: (err) => {
-        console.error('Error al cargar productos:', err);
+        console.error('Error al cargar datos:', err);
         this.cargando = false;
       }
     });
@@ -97,22 +83,31 @@ export class NegocioComponent implements OnInit {
       alert('Por favor, escribe una reseña.');
       return;
     }
-  
+
     const review = {
       store_id: this.comercio.id,
-      user_id: 1, // Assuming this is the logged-in user
+      user_id: 37,
       stars: this.estrellas,
       desc: this.textValue
     };
-  
+
     this.comercioService.postReview(review).subscribe({
       next: (response) => {
         console.log('Review realizada:', response);
         alert('Reseña enviada con éxito!');
+        // Recargar las reseñas después de enviar una nueva
+        this.comercioService.getReviewsByStore(this.comercio.id).subscribe({
+          next: (reviews) => {
+            this.reseñas = reviews;
+            this.textValue = '';
+            this.estrellas = 0;
+          }
+        });
       },
       error: (err) => {
         console.error('Error al realizar la reseña:', err);
-        alert('Error al enviar la reseña');
+        console.error('Error al realizar la reseña:', err.status, err.message, err.error);
+        console.log('Review payload:', review, this.comercio.id);
       }
     });
   }
@@ -139,7 +134,7 @@ export class NegocioComponent implements OnInit {
       next: (response) => {
         console.log('Venta realizada:', response);
         alert('Compra realizada exitosamente!');
-        this.carrito = {}; // Limpiar carrito
+        this.carrito = {};
       },
       error: (err) => {
         console.error('Error al realizar la venta:', err);
