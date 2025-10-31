@@ -34,8 +34,23 @@ export class ComercioService {
     return this.miApiService.postSales(sale);
   }
 
+  postReview(review: any): Observable<any> {
+    return this.miApiService.postReviews(review);
+  }
+
   getSales(): Observable<any[]> {
     return this.miApiService.getSales()
       .pipe(map((response: any) => response.data));
+  }
+
+  getReviews(): Observable<any[]> {
+    return this.miApiService.getSales()
+      .pipe(map((response: any) => response.data));
+  }
+
+  getReviewsByStore(storeId: number): Observable<any[]> {
+    return this.getReviews().pipe(
+      map(productos => productos.filter((p: any) => p.store_id === storeId))
+    );
   }
 }

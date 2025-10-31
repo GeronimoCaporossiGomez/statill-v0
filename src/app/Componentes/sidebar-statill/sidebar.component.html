@@ -7,13 +7,17 @@
           <ng-container *ngIf="activeItem === item.id">
             <span class="active-dot"></span>
           </ng-container>
+          
           <a
             [routerLink]="item.path"
             routerLinkActive="active"
             [class.active]="activeItem === item.id"
             (click)="setActive(item.id)"
           >
-            <i [class]="item.icon"></i>
+            <!-- Acá va la imagen correspondiente a "{{item.id}}" -->
+            <div class="icon-placeholder">
+              <i [class]="item.icon"></i>
+            </div>
             <span>{{ item.text }}</span>
           </a>
         </li>
@@ -23,13 +27,17 @@
           <ng-container *ngIf="activeItem === item.id">
             <span class="active-dot"></span>
           </ng-container>
+          
           <a
             [routerLink]="item.path"
             routerLinkActive="active"
             [class.active]="activeItem === item.id"
             (click)="setActive(item.id)"
           >
-            <i [class]="item.icon"></i>
+            <!-- Acá va la imagen correspondiente a "{{item.id}}" -->
+            <div class="icon-placeholder">
+              <i [class]="item.icon"></i>
+            </div>
             <span>{{ item.text }}</span>
           </a>
         </li>
@@ -37,7 +45,8 @@
     </ul>
     <div class="comprador-btn-container">
       <button class="comprador-btn" (click)="toggleVendedor()">
-        <i class="fas fa-person-walking"></i> {{vendedor ? 'Comprador' : 'Vendedor'}}
+        <!-- Acá va la imagen correspondiente a "comprador" -->
+        <span>{{vendedor ? 'Comprador' : 'Vendedor'}}</span>
       </button>
     </div>
   </div>

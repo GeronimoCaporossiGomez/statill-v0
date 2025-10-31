@@ -1,4 +1,4 @@
-.header-pagina{
+.header-pagina {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -8,14 +8,11 @@
 .header-nav {
   display: flex;
   align-items: center;
-  justify-content: center;
   width: 90%;
   height: 100px;
   justify-content: space-between;
-  box-shadow: none;
-  border-bottom: 2px solid #e0e0e0;
   position: relative;
-  border-bottom: #8F8F8F 3px solid;
+  border-bottom: 3px solid #8F8F8F;
   box-shadow: 0 1px 0 0 rgba(0, 0, 0, 0.25);
 }
 
@@ -25,127 +22,136 @@
   left: 0;
   background: #fff;
   border-radius: 16px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
   display: flex;
   flex-direction: column;
-  min-width: 210px;
+  min-width: 200px;
   z-index: 1000;
   margin-top: 8px;
-  padding: 18px 0 12px 0;
-  align-items: stretch;
-  border: none;
-  gap: 0;
+  padding: 12px 0;
+  border: 2px solid #e0e0e0;
 
   button {
     background: none;
     border: none;
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 0 24px;
-    height: 48px;
-    font-size: 1.18rem;
+    gap: 14px;
+    padding: 14px 20px;
+    height: auto;
+    min-height: 50px;
+    font-size: 1.1rem;
     font-family: 'Poppins', 'Roboto Condensed', Arial, sans-serif;
-    font-weight: 700;
+    font-weight: 600;
     color: #111;
     cursor: pointer;
-    transition: background 0.18s;
-    border-radius: 0;
-    margin: 0;
-    text-align: left;
-    position: relative;
+    transition: background 0.2s ease;
+    text-align: center;
 
     &:hover {
-      background: #f5f5f5;
+      background: #f8f8f8;
     }
 
     &.boton-rojo {
       background: #ff3c32;
       color: #111;
-      border-radius: 12px;
-      margin: 16px 16px 0 16px;
-      height: 52px;
-      font-size: 1.18rem;
+      border-radius: 10px;
+      margin: 12px 12px 6px 12px;
+      height: auto;
+      min-height: 54px;
+      font-size: 1.15rem;
       font-weight: 700;
-      border: 2.5px solid #111;
-      display: flex;
-      align-items: center;
+      border: 3px solid #111;
       justify-content: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+      gap: 10px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
 
       &:hover {
-        background: #e60000;
-        color: #fff;
-        border-color: #e60000;
+        background: #e63028;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
       }
     }
   }
 
   button:not(:last-child):not(.boton-rojo) {
-    border-bottom: 2px solid #ededed;
+    border-bottom: 2px solid #f0f0f0;
   }
 
-  .icono-menu {
+  .icono-menu-dropdown {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+
+  .icono-vendedor {
     width: 28px;
     height: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     object-fit: contain;
-    margin-right: 12px;
+    flex-shrink: 0;
   }
 }
 
 .boton-header {
-  margin-right: 5%;
-  margin-left: 5%;
   background: none;
   border: none;
-  padding: 0 8px;
-  font-size: 2rem;
+  padding: 8px 12px;
+  font-size: 1.4rem;
   font-family: 'Poppins', 'Roboto Condensed', Arial, sans-serif;
   font-weight: 700;
   color: #111;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 4px;
-  transition: opacity 0.2s;
+  gap: 8px;
+  transition: opacity 0.2s ease;
 
   &:hover {
     opacity: 0.7;
   }
 
   .icono-menu {
-    width: 28px;
-    height: 28px;
-    margin-right: 6px;
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
   }
 }
 
 .boton-toggle {
   background: none;
   border: none;
-  padding: 0 4px;
+  padding: 4px 8px;
   cursor: pointer;
   display: flex;
   align-items: center;
-  font-size: 1.1rem;
+  font-size: 1rem;
+  color: #111;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  span {
+    display: block;
+    line-height: 1;
+  }
 }
 
 .seccion-izquierda {
   display: flex;
   align-items: center;
   position: relative;
-  gap: 8px;
-  min-width: 160px; // Menor min-width
+  gap: 6px;
+  min-width: 180px;
   z-index: 3;
 }
 
 .seccion-derecha {
   display: flex;
   align-items: center;
-  min-width: 80px; // Menor min-width
+  min-width: 100px;
   justify-content: flex-end;
   z-index: 3;
 }
@@ -158,17 +164,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: max-content;
   z-index: 2;
 
   img {
-    height: 80px;
+    height: 70px;
     object-fit: contain;
     display: block;
   }
-}
-
-.espacio {
-  width: 80%; //hola
-  height: 100%;
 }
