@@ -1,14 +1,14 @@
 // Formulario de producto mejorado
 .producto-form {
   background: white;
-  border-radius: 20px;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: 16px;
+  border: 2px solid #FD2A2C;
+  box-shadow: 0 4px 12px rgba(253, 42, 44, 0.15);
   overflow: hidden;
   margin: 1rem 0;
 
   .form-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #FD2A2C;
     color: white;
     padding: 2rem;
     text-align: center;
@@ -25,7 +25,7 @@
       justify-content: center;
       gap: 0.5rem;
       font-size: 1rem;
-      opacity: 0.9;
+      opacity: 0.95;
 
       .icon {
         font-size: 1.2rem;
@@ -57,9 +57,9 @@
     }
 
     &.error {
-      background: #f8d7da;
-      color: #721c24;
-      border-bottom: 1px solid #f5c6cb;
+      background: #fff5f5;
+      color: #FD2A2C;
+      border-bottom: 1px solid #FD2A2C;
     }
   }
 
@@ -161,7 +161,7 @@
 
           &.required::after {
             content: ' *';
-            color: #e74c3c;
+            color: #FD2A2C;
             font-weight: bold;
           }
         }
@@ -187,26 +187,26 @@
         .form-input,
         .form-select,
         .form-textarea {
-          padding: 0.9rem 1rem;
-          border: 2px solid #e0e0e0;
-          border-radius: 10px;
-          font-size: 0.95rem;
+          padding: 0.75rem 1rem;
+          border: 2px solid #ddd;
+          border-radius: 12px;
+          font-size: 1rem;
           transition: all 0.3s ease;
-          background: #fafafa;
+          background: #f8f8f8;
 
           &:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #FD2A2C;
+            box-shadow: 0 0 0 4px rgba(253, 42, 44, 0.1);
             background: white;
           }
 
           &::placeholder {
-            color: #bdc3c7;
+            color: #bbb;
           }
 
           &:hover:not(:focus) {
-            border-color: #bdc3c7;
+            border-color: #ccc;
             background: white;
           }
         }
@@ -233,7 +233,7 @@
           input[type="checkbox"] {
             width: 18px;
             height: 18px;
-            accent-color: #667eea;
+            accent-color: #FD2A2C;
           }
 
           .checkbox-text {
@@ -292,32 +292,38 @@
         }
 
         &.btn-primary {
-          background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+          background: #FD2A2C;
           color: white;
-          box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+          box-shadow: 0 2px 8px rgba(253, 42, 44, 0.3);
 
           &:hover:not(:disabled) {
-            box-shadow: 0 6px 20px rgba(39, 174, 96, 0.4);
+            background: #c82021;
+            box-shadow: 0 4px 12px rgba(253, 42, 44, 0.4);
           }
         }
 
         &.btn-secondary {
-          background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-          color: white;
-          box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+          background: white;
+          color: #FD2A2C;
+          border: 2px solid #FD2A2C;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
           &:hover:not(:disabled) {
-            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+            background: #fff5f5;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
           }
         }
 
         &.btn-warning {
-          background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
-          color: white;
-          box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);
+          background: #f8f8f8;
+          color: #666;
+          border: 2px solid #ddd;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 
           &:hover:not(:disabled) {
-            box-shadow: 0 6px 20px rgba(243, 156, 18, 0.4);
+            background: #f0f0f0;
+            border-color: #bbb;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
           }
         }
       }

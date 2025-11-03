@@ -29,13 +29,27 @@ export class AuthService {
     return this.http.post(this.apiUrl + '/api/v1/login/', credentials);
   }
   
-  // Request an access token using email + code (token-as-password)
+  // Request an access token using email + password
   requestToken(payload: {
-    grant_type: 'password';
-    username: string; // email
-    password: string; // activation code
+    grant_type: string;
+    username: string;
+    password: string;
+    scope?: string;
+    client_id?: string;
+    client_secret?: string;
   }): Observable<any> {
-    return this.http.post(this.apiUrl + '/api/v1/token', payload);
+    // Create URLSearchParams for form-urlencoded format
+    const body = new URLSearchParams();
+    body.set('grant_type', payload.grant_type || 'password');
+    body.set('username', payload.username);
+    body.set('password', payload.password);
+    if (payload.scope) body.set('scope', payload.scope);
+    if (payload.client_id) body.set('client_id', payload.client_id);
+    if (payload.client_secret) body.set('client_secret', payload.client_secret);
+    
+    return this.http.post(this.apiUrl + '/api/v1/auth/token', body.toString(), {
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+    });
   }
 
   // Activate account using code sent by email

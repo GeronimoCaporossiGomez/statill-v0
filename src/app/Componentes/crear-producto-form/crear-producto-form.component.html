@@ -118,13 +118,13 @@
 
   <div class="form-actions">
     <button (click)="submitForm()" [disabled]="isLoading" class="btn-create">
-      {{ isLoading ? '⏳ Procesando...' : submitButtonText }}
+      {{ isLoading ? 'Procesando...' : submitButtonText }}
     </button>
     <button (click)="cancelForm()" class="btn-cancel">
-      ❌ Cancelar
+      Cancelar
     </button>
     <button (click)="resetForm()" class="btn-reset">
-      🔄 Limpiar
+      Limpiar
     </button>
   </div>
 </div>
