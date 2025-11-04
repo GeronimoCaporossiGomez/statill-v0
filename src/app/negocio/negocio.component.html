@@ -79,19 +79,34 @@
     <span class="textoReseña">Reseña</span>
     <div class="Estrellas">
       <span>Bueno</span>
-      <button (click)="setValue(1)" [class.active]="estrellas >= 1" class="Estrella">estrella</button>
-      <button (click)="setValue(2)" [class.active]="estrellas >= 2" class="Estrella">estrella</button>
-      <button (click)="setValue(3)" [class.active]="estrellas >= 3" class="Estrella">estrella</button>
-      <button (click)="setValue(4)" [class.active]="estrellas >= 4" class="Estrella">estrella</button>
-      <button (click)="setValue(5)" [class.active]="estrellas >= 5" class="Estrella">estrella</button>
+      <button (click)="setValue(1)" [class.active]="estrellas >= 1" class="Estrella"><img src="assets/img/estrella.png" class="estrellaFoto"></button>
+      <button (click)="setValue(2)" [class.active]="estrellas >= 2" class="Estrella"><img src="assets/img/estrella.png" class="estrellaFoto"></button>
+      <button (click)="setValue(3)" [class.active]="estrellas >= 3" class="Estrella"><img src="assets/img/estrella.png" class="estrellaFoto"></button>
+      <button (click)="setValue(4)" [class.active]="estrellas >= 4" class="Estrella"><img src="assets/img/estrella.png" class="estrellaFoto"></button>
+      <button (click)="setValue(5)" [class.active]="estrellas >= 5" class="Estrella"><img src="assets/img/estrella.png" class="estrellaFoto"></button>
       <span>Malo</span>
     </div>
     <input type="text" placeholder="Ingrese su reseña aquí" class="ReseñaTextBox" [(ngModel)]="textValue">
     <button (click)="submitReview()">OK</button>
   </div>
 
-  <div class = "reseñasGrid">
-  </div>
+  <table *ngIf="resenas.length" class="grid-reviews">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Usuario</th>
+        <th>Estrellas</th>
+        <th>Descripcion</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let review of resenas">
+        <td>{{ review.id }}</td>
+        <td>{{ review.user_id }}</td>
+        <td>{{ review.stars }}</td>
+      </tr>
+    </tbody>
+  </table>
 </header>
 
 

@@ -21,7 +21,7 @@ export class NegocioComponent implements OnInit {
 
   comercio: any;
   productos: any[] = [];
-  reseñas: any[] = [];
+  resenas: any[] = [];
   cargando = true;
   carrito: { [key: number]: number } = {}; // { productoId: cantidad }
 
@@ -43,7 +43,7 @@ export class NegocioComponent implements OnInit {
       next: (result) => {
         this.comercio = result.store;
         this.productos = result.productos;
-        this.reseñas = result.reviews;
+        this.resenas = result.reviews;
         this.cargando = false;
         console.log('Datos cargados:', result);
       },
@@ -95,10 +95,10 @@ export class NegocioComponent implements OnInit {
       next: (response) => {
         console.log('Review realizada:', response);
         alert('Reseña enviada con éxito!');
-        // Recargar las reseñas después de enviar una nueva
+        // Recargar las resenas después de enviar una nueva
         this.comercioService.getReviewsByStore(this.comercio.id).subscribe({
           next: (reviews) => {
-            this.reseñas = reviews;
+            this.resenas = reviews;
             this.textValue = '';
             this.estrellas = 0;
           }
