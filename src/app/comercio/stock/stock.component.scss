@@ -10,16 +10,280 @@ $font-contenido: 'Roboto Condensed', sans-serif;
   padding: 0;
   box-sizing: border-box;
 }
+
+.pagina-stock {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  padding-top: 140px;
+  padding-bottom: 40px;
+  background-color: #EEEEEE;
+  overflow-x: hidden;
+}
+
+.contenido-centrado {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
 .Stock-Title {
   font-family: $font-titulo;
   text-align: center;
   padding: 20px 0 30px;
   color: #000000;
   background-color: #EEEEEE;
-  font-size: 2.5rem;
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
   letter-spacing: 1px;
+  margin: 0;
 }
 
+.agregar-producto-card {
+  position: fixed;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  width: 100%;
+  max-width: 860px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 14px 20px;
+  cursor: pointer;
+  border: 2px solid #e0e0e0;
+  transition: box-shadow 0.2s, border 0.2s;
+}
+
+.agregar-producto-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  border: 2px solid $color-primario;
+}
+
+.agregar-icono {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-family: $font-titulo;
+  color: #222;
+  line-height: 1;
+}
+
+.agregar-texto {
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  font-family: $font-titulo;
+  color: #222;
+}
+
+.productos-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  background: transparent;
+  padding: 20px 0;
+}
+
+.producto-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  width: 100%;
+  min-height: 90px;
+  padding: 12px 16px;
+  gap: 12px;
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+  }
+}
+
+.producto-img {
+  width: 60px;
+  height: 60px;
+  min-width: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0f0f0;
+  border-radius: 12px;
+  overflow: hidden;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.img-placeholder {
+  font-size: 1.8rem;
+  color: #bbb;
+}
+
+.producto-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.producto-nombre {
+  font-family: $font-titulo;
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
+  font-weight: bold;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.producto-desc {
+  font-family: $font-contenido;
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.producto-precio {
+  font-family: $font-titulo;
+  font-size: clamp(1rem, 2.5vw, 1.3rem);
+  color: #000000;
+  min-width: 60px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.producto-editar {
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edit-btn {
+  background: #f6f6f6;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background: lighten($color-primario, 40%);
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.producto-cantidad {
+  min-width: 60px;
+  text-align: center;
+  font-family: $font-titulo;
+  font-size: clamp(1rem, 2.5vw, 1.1rem);
+  color: #222;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .pagina-stock {
+    padding-top: 160px;
+  }
+
+  .agregar-producto-card {
+    width: 95%;
+    padding: 12px 16px;
+    gap: 12px;
+  }
+
+  .producto-card {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+
+  .producto-img {
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+  }
+
+  .producto-precio {
+    min-width: 50px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .pagina-stock {
+    padding-top: 180px;
+  }
+
+  .Stock-Title {
+    padding: 15px 0 20px;
+  }
+
+  .agregar-producto-card {
+    top: 70px;
+    padding: 10px 12px;
+  }
+
+  .producto-card {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .producto-info {
+    flex: 1 1 100%;
+    order: 2;
+  }
+
+  .producto-img {
+    order: 1;
+  }
+
+  .producto-precio {
+    order: 3;
+    min-width: auto;
+    
+    &:first-of-type {
+      flex: 1;
+      text-align: left;
+    }
+    
+    &:last-of-type {
+      flex: 1;
+      text-align: center;
+    }
+  }
+
+  .producto-editar {
+    order: 4;
+  }
+}
+
+// Estilos anteriores del formulario (sin cambios)
 .BotonForm {
   display: block;
   margin: 0 auto 30px;
@@ -34,7 +298,6 @@ $font-contenido: 'Roboto Condensed', sans-serif;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-
 
   &:hover {
     background-color: darken($color-primario, 10%);
@@ -123,109 +386,6 @@ $font-contenido: 'Roboto Condensed', sans-serif;
   }
 }
 
-.productos-container {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 18px;
-  background: #EEEEEE;
-  padding: 20px 0;
-}
-
-.producto-card {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-  width: 80%;
-  min-height: 90px;
-  padding: 12px 24px;
-  gap: 24px;
-}
-
-.producto-img {
-  width: 64px;
-  height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #f0f0f0;
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.producto-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.img-placeholder {
-  font-size: 2rem;
-  color: #bbb;
-}
-
-.producto-info {
-  flex: 2;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.producto-nombre {
-  font-family: $font-titulo;
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin-bottom: 4px;
-}
-
-.producto-desc {
-  font-family: $font-contenido;
-  font-size: 1rem;
-  color: #444;
-}
-
-.producto-precio {
-  font-family: $font-titulo;
-  font-size: 1.3rem;
-  color: #000000;
-  min-width: 80px;
-  margin-right: 5px;
-  text-align: right;
-}
-
-.producto-editar {
-  min-width: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.edit-btn {
-  background: #f6f6f6;
-  border: none;
-  border-radius: 10px;
-  padding: 8px 10px;
-  font-size: 1.3rem;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.edit-btn:hover {
-  background: lighten($color-primario, 40%);
-}
-
-.pagina-stock{
-  position: relative;
-  height: 100vh;
-  width: 100wh;
-  padding-top: 90px; // Espacio para el botón fijo arriba
-  background-color: #EEEEEE;
-}
-
 .productos-table {
   width: 80%;
   border-collapse: separate;
@@ -235,62 +395,32 @@ $font-contenido: 'Roboto Condensed', sans-serif;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   border-radius: 12px;
   overflow: hidden;
-}
-.productos-table th, .productos-table td {
-  padding: 18px 12px;
-  text-align: left;
-  font-family: $font-contenido;
-  font-size: 1.1rem;
-  border-bottom: 1px solid #eee;
-}
-.productos-table th {
-  background: $color-primario;
-  color: #fff;
-  font-family: $font-titulo;
-  font-size: 1.2rem;
-  letter-spacing: 1px;
-}
-.productos-table tr:last-child td {
-  border-bottom: none;
-}
-.productos-table tr:hover {
-  background: lighten($color-primario, 45%);
+
+  th, td {
+    padding: 18px 12px;
+    text-align: left;
+    font-family: $font-contenido;
+    font-size: 1.1rem;
+    border-bottom: 1px solid #eee;
+  }
+
+  th {
+    background: $color-primario;
+    color: #fff;
+    font-family: $font-titulo;
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  tr:hover {
+    background: lighten($color-primario, 45%);
+  }
 }
 
-.agregar-producto-card {
-  position: fixed;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 999;
-  width: 80%;
-  margin: 0 auto 24px auto;
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  padding: 18px 32px;
-  cursor: pointer;
-  border: 2px solid #e0e0e0;
-  transition: box-shadow 0.2s, border 0.2s;
-}
-.agregar-producto-card:hover {
-  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-  border: 2px solid $color-primario;
-}
-.agregar-icono {
-  font-size: 3rem;
-  font-family: $font-titulo;
-  color: #222;
-  margin-right: 12px;
-}
-.agregar-texto {
-  font-size: 2rem;
-  font-family: $font-titulo;
-  color: #222;
-}
 .producto-form-card {
   margin: 0 auto 24px auto;
   background: #fff;
@@ -304,7 +434,11 @@ $font-contenido: 'Roboto Condensed', sans-serif;
   flex-direction: row;
   align-items: center;
 }
-.producto-nombre-input, .producto-desc-input, .producto-precio-input {
+
+.producto-nombre-input, 
+.producto-desc-input, 
+.producto-precio-input,
+.producto-cantidad-input {
   width: 100%;
   font-size: 1.1rem;
   font-family: $font-contenido;
@@ -315,47 +449,13 @@ $font-contenido: 'Roboto Condensed', sans-serif;
   margin-left: 5px;
   outline: none;
   transition: border 0.2s;
-}
-.producto-nombre-input:focus, .producto-desc-input:focus, .producto-precio-input:focus {
-  border-bottom: 1.5px solid $color-primario;
-}
-.submit-button {
-  background: #f6f6f6;
-  border: none;
-  border-radius: 10px;
-  padding: 8px 10px;
-  font-size: 1.3rem;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-.submit-button:hover {
-  background: lighten($color-primario, 40%);
+
+  &:focus {
+    border-bottom: 1.5px solid $color-primario;
+  }
 }
 
-.producto-cantidad {
-  min-width: 80px;
-  text-align: center;
-  font-family: $font-titulo;
-  font-size: 1.1rem;
-  color: #222;
-  margin-right: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 .producto-cantidad-input {
   width: 60px;
-  font-size: 1.1rem;
-  font-family: $font-contenido;
-  border: none;
-  margin-left: 5px;
-  background: transparent;
-  border-bottom: 1.5px solid #e0e0e0;
-  padding: 4px 0;
-  outline: none;
   text-align: center;
-  transition: border 0.2s;
-}
-.producto-cantidad-input:focus {
-  border-bottom: 1.5px solid $color-primario;
 }
