@@ -40,15 +40,7 @@ export class NegocioComponent implements OnInit {
       productos: this.comercioService.getProductosByStore(id),
       reviews: this.comercioService.getReviewsByStore(id)
     }).subscribe({
-      next: (result) => {
-        this.comercio = result.store;
-        this.productos = result.productos;
-        this.reseñas = result.reviews;
-        this.cargando = false;
-        console.log('Datos cargados:', result);
-      },
       error: (err) => {
-        console.error('Error al cargar datos:', err);
         this.cargando = false;
       }
     });

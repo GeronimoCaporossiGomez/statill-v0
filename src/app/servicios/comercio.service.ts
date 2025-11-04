@@ -44,7 +44,7 @@ export class ComercioService {
   }
 
   getReviews(): Observable<any[]> {
-    return this.miApiService.getSales()
+    return this.miApiService.getReviews()
       .pipe(map((response: any) => response.data));
   }
 
