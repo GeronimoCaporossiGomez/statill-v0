@@ -34,7 +34,7 @@ export class SidebarComponent {
     },
     {
       path: '/escanear',
-      icon: '',
+      icon: 'no se que va aca',
       text: 'Escanear',
       id: 'escanear'
     },

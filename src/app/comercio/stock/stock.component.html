@@ -4,51 +4,53 @@
     <app-sidebar></app-sidebar>
   </nav>
 
-  <h1 class="Stock-Title">Productos</h1>
-  <div class="agregar-producto-card" (click)="FormChange()">
+  <div class="contenido-centrado">
+    <h1 class="Stock-Title">Productos</h1>
+    <div class="agregar-producto-card" (click)="FormChange()">
 
-    <div class="agregar-icono">{{SePuedeVerElformulario ? '' : '+'}}</div>
-    <div class="agregar-texto">{{ SePuedeVerElformulario ? 'Cancelar' : 'Añadir Producto' }}</div>
-  </div>
+      <div class="agregar-icono">{{SePuedeVerElformulario ? '' : '+'}}</div>
+      <div class="agregar-texto">{{ SePuedeVerElformulario ? 'Cancelar' : 'Añadir Producto' }}</div>
+    </div>
 
-  <app-producto-form
-    [producto]="producto"
-    [isLoading]="isLoading"
-    [errorMessage]="errorMessage"
-    [showForm]="SePuedeVerElformulario"
-    [title]="productoEditandoId ? 'Editar Producto' : 'Crear Producto'"
-    [submitButtonText]="productoEditandoId ? 'Actualizar Producto' : 'Crear Producto'"
-    [showBarcodeField]="true"
-    [showStoreIdField]="true"
-    [suggestedData]="null"
-    (onSubmit)="onProductoSubmit($event)"
-    (onCancel)="onCancelar()"
-    (onReset)="onReset()"
-    (onUseSuggestedData)="onUseSuggestedData($event)">
-  </app-producto-form>
+    <app-producto-form
+      [producto]="producto"
+      [isLoading]="isLoading"
+      [errorMessage]="errorMessage"
+      [showForm]="SePuedeVerElformulario"
+      [title]="productoEditandoId ? 'Editar Producto' : 'Crear Producto'"
+      [submitButtonText]="productoEditandoId ? 'Actualizar Producto' : 'Crear Producto'"
+      [showBarcodeField]="true"
+      [showStoreIdField]="true"
+      [suggestedData]="null"
+      (onSubmit)="onProductoSubmit($event)"
+      (onCancel)="onCancelar()"
+      (onReset)="onReset()"
+      (onUseSuggestedData)="onUseSuggestedData($event)">
+    </app-producto-form>
 
-  <div *ngIf="SePuedeVerElformulario == false" class="productos-container">
-    <div *ngFor="let producto of productos; let i = index" class="producto-card">
-      <div class="producto-img">
-        <img *ngIf="producto.img" [src]="producto.img" alt="Imagen de {{ producto.name }}" />
-        <div *ngIf="!producto.img" class="img-placeholder">
-          <span>🖼️</span>
+    <div *ngIf="SePuedeVerElformulario == false" class="productos-container">
+      <div *ngFor="let producto of productos; let i = index" class="producto-card">
+        <div class="producto-img">
+          <img *ngIf="producto.img" [src]="producto.img" alt="Imagen de {{ producto.name }}" />
+          <div *ngIf="!producto.img" class="img-placeholder">
+            <span>🖼️</span>
+          </div>
         </div>
-      </div>
-      <div class="producto-info">
-        <div class="producto-nombre">{{ producto.name }}</div>
-        <div class="producto-desc">{{ producto.desc }}</div>
-      </div>
-      <div class="producto-precio">
-        x{{ producto.quantity }}
-      </div>
-      <div class="producto-precio">
-        ${{ producto.price }}
-      </div>
-      <div class="producto-editar">
-        <button class="edit-btn" (click)="onEdit(producto, i)">
-          <span>✏️</span>
-        </button>
+        <div class="producto-info">
+          <div class="producto-nombre">{{ producto.name }}</div>
+          <div class="producto-desc">{{ producto.desc }}</div>
+        </div>
+        <div class="producto-precio">
+          x{{ producto.quantity }}
+        </div>
+        <div class="producto-precio">
+          ${{ producto.price }}
+        </div>
+        <div class="producto-editar">
+          <button class="edit-btn" (click)="onEdit(producto, i)">
+            <span>✏️</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
