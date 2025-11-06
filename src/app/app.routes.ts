@@ -38,63 +38,63 @@ export const routes: Routes = [
     path: 'confirmacion-codigo',
     loadComponent: () =>
       import('./auth/Confirmation Code/Confirm.component').then(m => m.ConfirmComponent),
-    canActivate: [authGuard]
+    //canActivate: [authGuard]
   },
   {
     path: 'perfil',
     loadComponent: () =>
       import('../app/perfil/perfil.component').then(m => m.PerfilComponent),
-    canActivate: [authGuard]
+    //canActivate: [authGuard]
   },
   {
     path: 'puntos',
     loadComponent: () =>
       import('../app/puntos/puntos.component').then(m => m.PuntosComponent),
-    canActivate: [authGuard]
+    //canActivate: [authGuard]
   },
   {
     path: 'preordenes',
     loadComponent: () =>
       import('../app/preordenes/preordenes.component').then(m => m.PreordenesComponent),
-    canActivate: [authGuard]
+    //canActivate: [authGuard]
   },
   // Requires active user (authenticated + email verified)
   {
     path: 'home',
     loadComponent: () =>
       import('./home/home/home.component').then(m => m.HomeComponent),
-    canActivate: [activeUserGuard]
+    //canActivate: [activeUserGuard]
   },
   {
     path: 'crear-comercio',
     loadComponent: () =>
       import('../app/comercio/crear-comercio/crear-comercio.component').then(m => m.CrearComercioComponent),
-    canActivate: [activeUserGuard]
+    //canActivate: [activeUserGuard]
   },
   // Requires store owner role
   {
     path: 'stock',
     loadComponent: () =>
       import('../app/comercio/stock/stock.component').then(m => m.StockComponent),
-    canActivate: [ownerGuard]
+    //canActivate: [ownerGuard]
   },
   {
     path: 'escanear',
     loadComponent: () =>
       import('../app/comercio/escanear/escanear.component').then(m => m.EscanearComponent),
-    canActivate: [storeAccessGuard] // Owner or cashier
+    //canActivate: [storeAccessGuard] // Owner or cashier
   },
   {
     path: 'estadisticas',
     loadComponent: () =>
       import('../app/comercio/estadisticas/estadisticas.component').then(m => m.EstadisticasComponent),
-    canActivate: [ownerGuard]
+    //canActivate: [ownerGuard]
   },
   {
     path: 'configuracion',
     loadComponent: () =>
       import('../app/configuracion/configuracion.component').then(m => m.ConfiguracionComponent),
-    canActivate: [ownerGuard]
+    //canActivate: [ownerGuard]
   },
   {
     path: 'ayuda',

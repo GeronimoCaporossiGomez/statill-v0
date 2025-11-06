@@ -17,7 +17,7 @@ import { GeneralService } from 'src/app/servicios/general.service';
 })
 export class CrearComercioComponent {
   @ViewChild(MapaComponent) mapaComponent!: MapaComponent;
-  
+
   creando: boolean = true;
   seccionPantalla: number = 0;
   dias: string[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
@@ -31,6 +31,10 @@ export class CrearComercioComponent {
   ubicacionConfirmada: string = '';
   coordenadasSeleccionadas: [number, number] | null = null;
   buscandoDireccion: boolean = false;
+
+  // 🔥 CLOUDINARY CONFIG - CAMBIÁ ESTOS VALORES
+  private readonly CLOUDINARY_CLOUD_NAME = 'aaa'; // 👈 Cambiá esto
+  private readonly CLOUDINARY_UPLOAD_PRESET = 'aaa'; // 👈 Cambiá estoa
 
   constructor(
     private router: Router,
@@ -59,7 +63,7 @@ export class CrearComercioComponent {
     if(this.seccionPantalla > 3) {
       this.seccionPantalla = 3;
     }
-    
+
     // ✅ Si llegamos a la pantalla 2 (donde está el mapa), actualizarlo
     if (this.seccionPantalla === 2) {
       setTimeout(() => {
@@ -68,7 +72,7 @@ export class CrearComercioComponent {
         }
       }, 200);
     }
-    
+
     this.cdr.markForCheck();
   }
 
@@ -129,7 +133,7 @@ export class CrearComercioComponent {
 
     // Usar la dirección confirmada del mapa o la del input
     const direccionFinal = this.ubicacionConfirmada || this.direccionInput || '';
-    
+
     // Validar que haya una dirección
     if (!direccionFinal || direccionFinal.trim() === '') {
       alert('Por favor, selecciona una ubicación en el mapa o ingresa una dirección.');
@@ -210,7 +214,7 @@ export class CrearComercioComponent {
       error: (error) => {
         console.error('❌ Error al crear comercio:', error);
         console.error('Detalles:', error.error);
-        
+
         // Mostrar mensaje de error más descriptivo
         let errorMessage = 'Error al crear el comercio. ';
         if (error.error && error.error.message) {
@@ -220,7 +224,7 @@ export class CrearComercioComponent {
         } else {
           errorMessage += 'Por favor, verifica que todos los campos estén completos.';
         }
-        
+
         alert(errorMessage);
       }
     });
@@ -236,12 +240,48 @@ export class CrearComercioComponent {
     if (input.files && input.files[0]) {
       this.archivoLogo = input.files[0];
 
+      // Preview local en el navegador
       const reader = new FileReader();
       reader.onload = () => {
         this.imagenUrl = reader.result;
         this.cdr.markForCheck();
       };
       reader.readAsDataURL(input.files[0]);
+
+      // 🚀 SUBIR DIRECTO A CLOUDINARY
+      this.subirDirectoCloudinary(this.archivoLogo);
     }
+  }
+
+  // 🔥 MÉTODO PARA SUBIR DIRECTO A CLOUDINARY
+  subirDirectoCloudinary(file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', this.CLOUDINARY_UPLOAD_PRESET);
+    formData.append('cloud_name', this.CLOUDINARY_CLOUD_NAME);
+    formData.append('folder', 'stores'); // Opcional: organizar en carpeta
+
+    console.log('🚀 Subiendo imagen directo a Cloudinary...');
+
+    // Usar fetch para subir directo a Cloudinary (sin pasar por tu backend)
+    fetch(`https://api.cloudinary.com/v1_1/${this.CLOUDINARY_CLOUD_NAME}/image/upload`, {
+      method: 'POST',
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('✅ Imagen subida exitosamente a Cloudinary!');
+      console.log('📸 URL de la imagen:', data.secure_url);
+      console.log('🆔 Public ID:', data.public_id);
+
+      alert(`✅ ¡Imagen subida!\n\nURL: ${data.secure_url}`);
+
+      // Aquí podés guardar la URL si querés usarla después
+      // this.urlImagenCloudinary = data.secure_url;
+    })
+    .catch(error => {
+      console.error('❌ Error al subir imagen a Cloudinary:', error);
+      alert('❌ Error al subir la imagen. Revisá la consola.');
+    });
   }
 }

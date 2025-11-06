@@ -51,26 +51,26 @@ export class SidebarComponent {
   menuItemsComprador = [
     {
       path: '/home',
-      icon: 'assets/img/home-icono.png',
+      icon: 'assets/img/home-statill.png',
       text: 'Home',
       id: 'home'
     },
     {
       path: '/perfil',
-      icon: 'assets/img/perfil-icono.png',
+      icon: 'assets/img/perfil-statill.png',
       text: 'Perfil',
       id: 'perfil'
     },
     {
       path: '/mapa',
-      icon: 'assets/img/mapa-icono.png',
+      icon: 'assets/img/mapa-pin-statill.png',
       text: 'Mapa',
       id: 'mapa'
     },
     {
       path: '/puntos',
-      icon: 'assets/img/puntos-icono.png',
-      text: 'Puntos(no manda a nada)',
+      icon: 'assets/img/puntos-statill.png',
+      text: 'Puntos',
       id: 'puntos'
     }
   ];
