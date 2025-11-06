@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { AuthModalComponent } from '../../auth/auth-modal.component';
+import { GeneralService } from '../../servicios/general.service';
 
 @Component({
   selector: 'app-landing',
@@ -12,7 +13,14 @@ import { AuthModalComponent } from '../../auth/auth-modal.component';
 })
 export class LandingComponent {
   showAuthModal = false;
-
+  users: any[] = [];
+  
+  constructor(private generalService: GeneralService) {
+    this.generalService.getUsers().subscribe((users: any) => {
+      this.users = users;
+    });
+  }
+  
   openAuthModal() {
     this.showAuthModal = true;
   }
