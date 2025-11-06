@@ -132,11 +132,20 @@ export class MiApiService {
   getReviews(): Observable<ReviewsResponse> {
     return this.http.get<ReviewsResponse>(this.apiUrl + '/api/v1/reviews/');
   }
-  getReviewsByStoreId(storeId: number) {
-    return this.http.get(this.apiUrl + '/api/v1/reviews/?store_id=' + storeId);
+  getStoreById(id: number): Observable<any> {
+    return this.http.get(this.apiUrl + '/api/v1/stores/' + id);
+  }
+  
+  getReviewsByStoreId(storeId: number): Observable<ReviewsResponse> {
+    return this.http.get<ReviewsResponse>(this.apiUrl + '/api/v1/reviews/store/' + storeId);
   }
   postReviews(review: any) {
     return this.http.post(this.apiUrl + '/api/v1/reviews/', review);
+  }
+
+  // Orders endpoints
+  getMyOrders(): Observable<any> {
+    return this.http.get(this.apiUrl + '/api/v1/orders/my');
   }
 }
 

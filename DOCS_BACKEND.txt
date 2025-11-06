@@ -1,0 +1,4629 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Statill API",
+    "version": "1.5.0"
+  },
+  "paths": {
+    "/api/v1/auth/token": {
+      "post": {
+        "tags": [
+          "auth",
+          "public"
+        ],
+        "summary": "Issue Token",
+        "description": "Authenticate a user and issue an access token.\n\nThis endpoint handler performs authentication using form-encoded credentials\n(compatible with OAuth2PasswordRequestForm). It looks up the user by email,\nverifies the provided password against the stored hash, and, if valid,\ncreates and returns a token wrapped in a LoginResponse.\n\nArgs:\n    form_data (OAuth2PasswordRequestForm): Dependency-injected form with\n            'username' (email) and 'password' fields.\n    session (Session): Database session dependency (provided by get_db).\n\nReturns:\n    LoginResponse: On success, contains the issued token in `data` and a\n        human-readable message describing the login success.\n\nRaises:\n    HTTPException (401 Unauthorized): Raised when the user is not found or the\n        password verification fails. The response includes a\n        \"WWW-Authenticate: Bearer\" header.\nNotes:\n    - Uses crud.get_by_email to retrieve the user record.\n    - Uses verify_password to compare the plaintext password with the stored hash.\n    - Uses create_token with the user's id as the token subject.\n    - The returned message includes the user's email and indicates where the\n      token is provided (in the `data` field).\n    - Authentication and token creation side effects occur within this function.",
+        "operationId": "issue_token_api_v1_auth_token_post",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_issue_token_api_v1_auth_token_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/activate": {
+      "patch": {
+        "tags": [
+          "auth",
+          "requires_auth"
+        ],
+        "summary": "Activate",
+        "operationId": "activate_api_v1_auth_activate_patch",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Code"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessfulResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/send-email-verification-code": {
+      "get": {
+        "tags": [
+          "auth",
+          "requires_auth"
+        ],
+        "summary": "Send Email Verification Code Endpoint",
+        "description": "Send an email verification code to the authenticated user.\n\nThis endpoint triggers sending a verification code to the current user's\nemail address by calling the helper send_verification_code. It is intended\nto be used as a FastAPI route handler relying on dependency-injected\ndatabase session and authenticated user.\n\nArgs:\n    session (Session): Database session provided by the get_db dependency.\n    user (User): Authenticated user object provided by the get_current_user dependency.\n\nReturns:\n    SuccessfulResponse: A response object with message \"Activation email sent.\"\n    and no data payload.\n\nSide effects:\n    - Sends an email (via send_verification_code).\n    - May create or update verification-related records in the database.\n\nRaises:\n    HTTPException or other exceptions propagated from send_verification_code\n    on failure to generate or deliver the verification email.",
+        "operationId": "send_email_verification_code_endpoint_api_v1_auth_send_email_verification_code_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessfulResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/status/": {
+      "get": {
+        "tags": [
+          "status",
+          "public"
+        ],
+        "summary": "Get Status",
+        "description": "Checks the status of the API.\n\nReturns a simple status message indicating that the API is operational.\n\nReturns:\n    APIResponse: A response indicating the API status.",
+        "operationId": "get_status_api_v1_status__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/products/": {
+      "get": {
+        "tags": [
+          "products",
+          "public"
+        ],
+        "summary": "Get All Products",
+        "description": "Retrieves all products from the database.\nArgs:\n    session (Session): The SQLAlchemy session to use for the query.\n    include_anonymized (bool): If set to `False`, soft-deleted products marked as `\"Deleted Product\"` will not be included in the result list. Default is `False`.\n\nReturns:\n    GetAllProductsResponse: A response containing a list of all products.",
+        "operationId": "get_all_products_api_v1_products__get",
+        "parameters": [
+          {
+            "name": "include_anonymized",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Include Anonymized"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllProductsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "products",
+          "requires_active_user"
+        ],
+        "summary": "Create Product",
+        "description": "Creates a product in the authenticated user's store.\n\nArgs:\n    product (ProductCreate): The product data.\n    session (Session): The SQLAlchemy session to use for the query.\n    store_owner (User): The current authenticated active user who owns the store where the product will be created.\nReturns:\n    APIResponse: A response containing the ID of the created product.",
+        "operationId": "create_product_api_v1_products__post",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/products/{id}": {
+      "get": {
+        "tags": [
+          "products",
+          "public"
+        ],
+        "summary": "Get Product By Id",
+        "description": "Retrieves a product by its ID.\n\nArgs:\n    id (int): The ID of the product to retrieve.\n    allow_anonymized (bool): If set to `False`, a 404 error will be raised if the product with the specified ID is marked as `\"Deleted Product\"`, just as if the product did not exist in the database. Default is `False`.\n    session (Session): The SQLAlchemy session to use for the query.\n\nReturns:\n    GetProductResponse: A response containing the product with the specified ID.\n\nRaises:\n    HTTPException(400): If the provided ID is invalid (less than or equal to 0).\n    HTTPException(404): If the product with the specified ID does not exist.",
+        "operationId": "get_product_by_id_api_v1_products__id__get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Id"
+            }
+          },
+          {
+            "name": "allow_anonymized",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Allow Anonymized"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetProductResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "products",
+          "requires_active_user"
+        ],
+        "summary": "Update Product",
+        "description": "Updates a product by its ID.\n\nArgs:\n    id (int): The ID of the product to update.\n    product (ProductUpdate): The updated product data.\n    session (Session): The SQLAlchemy session to use for the update.\n    store_owner (User): The current authenticated active user who owns the store where the product will be updated.\n\nReturns:\n    APIResponse: A response indicating the success of the update operation.\n\nRaises:\n    HTTPException(400): If the provided ID is invalid (less than or equal to 0).\n    HTTPException(404): If the product with the specified ID does not exist.\n    HTTPException(403): If the authenticated user is not the owner of the store.",
+        "operationId": "update_product_api_v1_products__id__put",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "products",
+          "requires_active_user"
+        ],
+        "summary": "Delete Product",
+        "description": "Deletes a product by its ID.\nIf the product is not in any sale, it will be erased from the database.\nIf any sale contains any amount of the product, it will be anonymized instead.\n\nArgs:\n    id (int): The ID of the product to delete.\n    session (Session): The SQLAlchemy session to use for the delete.\n\nReturns:\n    APIResponse: A response indicating the success of the delete operation.\n\nRaises:\n    HTTPException(400): If the provided ID is invalid (less than or equal to 0).\n    HTTPException(404): If the product with the specified ID does not exist.",
+        "operationId": "delete_product_api_v1_products__id__delete",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/products/store/{id}": {
+      "get": {
+        "tags": [
+          "products",
+          "public"
+        ],
+        "summary": "Get Products By Store Id",
+        "description": "Retrieves a product by its store ID.\n\nArgs:\n    id (int): The ID of the store to retrieve its products.\n    allow_anonymized (bool): If set to `False`, a 404 error will be raised if the product with the specified ID is marked as `\"Deleted Product\"`, just as if the product did not exist in the database. Default is `False`.\n    session (Session): The SQLAlchemy session to use for the query.\n\nReturns:\n    GetProductResponse: A response containing a list of products with the specified store ID.\n\nRaises:\n    HTTPException(400): If the provided ID is invalid (less than or equal to 0).\n    HTTPException(404): If the store with the specified ID does not exist.",
+        "operationId": "get_products_by_store_id_api_v1_products_store__id__get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Id"
+            }
+          },
+          {
+            "name": "include_anonymized",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Include Anonymized"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllProductsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sales/": {
+      "get": {
+        "tags": [
+          "sales",
+          "requires_admin"
+        ],
+        "summary": "Get All Sales",
+        "description": "Retrieves all sales from the database.\n\nArgs:\n    db (Session): The SQLAlchemy session to use for the query.\n    _ (User): The current active admin user. Unused, is only there to enforce admin requirement.\nReturns:\n    GetAllSalesResponse: A response containing a list of all sales.",
+        "operationId": "get_all_sales_api_v1_sales__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllSalesResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "sales",
+          "requires_active_user"
+        ],
+        "summary": "Create Sale",
+        "description": "Creates a sale.\n\nArgs:\n    sale (SaleCreate): The sale data.\n    db (Session): The SQLAlchemy session to use for the query.\n    cashier (User): The current authenticated user creating the sale. They must be a store cashier or owner in the store where the sale is being created.\nRaises:\n    HTTPException(404): If the store with the specified ID does not exist.\n    HTTPException(404): If the user with the specified ID does not exist.\n    HTTPException(400): If a product does not belong to the store.\n    HTTPException(400): If there is insufficient stock for a product.\n    HTTPException(400): If the sale has no products.\nReturns:\n    APIResponse: A response containing the ID of the created sale.",
+        "operationId": "create_sale_api_v1_sales__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SaleCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/sales/{id}": {
+      "get": {
+        "tags": [
+          "sales",
+          "requires_admin"
+        ],
+        "summary": "Get Sale By Id",
+        "description": "Retrieves a sale by its ID.\n\nArgs:\n    id (int): The ID of the sale to retrieve.\n    db (Session): The SQLAlchemy session to use for the query.\n\nReturns:\n    GetSaleResponse: A response containing the sale with the specified ID.\n\nRaises:\n    HTTPException(404): If the sale with the specified ID does not exist.",
+        "operationId": "get_sale_by_id_api_v1_sales__id__get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetSaleResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sales/store/my": {
+      "get": {
+        "tags": [
+          "sales",
+          "requires_active_user"
+        ],
+        "summary": "Get My Store Sales",
+        "description": "Retrieves all sales for the store owned by the current user.\n\nArgs:\n    db (Session): The SQLAlchemy session to use for the query.\n    store_owner (User): The current authenticated user.\nReturns:\n    GetAllSalesResponse: A response containing a list of all sales for the admin's store.",
+        "operationId": "get_my_store_sales_api_v1_sales_store_my_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllSalesResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/users/": {
+      "get": {
+        "tags": [
+          "users",
+          "requires_admin"
+        ],
+        "summary": "Get All Users",
+        "description": "Retrieves all users from the database.\n\nArgs:\n    include_anonymized (bool): Whether to include users anonymized as \"Deleted User\".\n    session (Session): The SQLAlchemy session to use for the query.\n    _ (User): The current active admin user. Unused, is only there to enforce admin requirement.\nReturns:\n    GetAllUsersResponse: A response containing a list of all users.",
+        "operationId": "get_all_users_api_v1_users__get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "include_anonymized",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Include Anonymized"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllUsersResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "users",
+          "public"
+        ],
+        "summary": "Create User",
+        "description": "Creates a user.\nArgs:\n    user (UserCreate): The User data.\n    db (Session): The SQLAlchemy session to use for the query.\n\nReturns:\n    APIResponse: A response indicating that the user was created successfully.",
+        "operationId": "create_user_api_v1_users__post",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/me": {
+      "get": {
+        "tags": [
+          "users",
+          "requires_auth"
+        ],
+        "summary": "Get Current User Endpoint",
+        "description": "Get the current authenticated user.\nThis endpoint retrieves the User object for the currently authenticated user.\nArgs:\n    user (User): The current authenticated user object, obtained through dependency injection.\n                 This is extracted from the JWT token in the request.\nReturns:\n    User: The User object containing the authenticated user's information.",
+        "operationId": "get_current_user_endpoint_api_v1_users_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUserResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "users",
+          "requires_active_user"
+        ],
+        "summary": "Update Current User",
+        "description": "Updates the current authenticated user's information.\n\nImportant:\n    * if the email is changed, the user will need to verify their new email address.\n    * **the password cannot be changed via this endpoint!** Use reset-password instead.\n\nArgs:\n    user_update (UserUpdate): The updated user data.\n    db (Session): The SQLAlchemy session to use for the update.\n    current_user (User): The current authenticated active user.\n\nReturns:\n    APIResponse: A response indicating the success of the update operation.\n\nRaises:\n    HTTPException(404): If the current user does not exist (should not happen).",
+        "operationId": "update_current_user_api_v1_users_me_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "users",
+          "requires_auth"
+        ],
+        "summary": "Delete Current User",
+        "description": "Deletes the current authenticated user, or anonymizes them if referenced in ProductsSales.\n\nArgs:\n    session (Session): The SQLAlchemy session to use for the delete.\n    current_user (User): The current authenticated user.\nReturns:\n    APIResponse: A response indicating the success of the delete operation.",
+        "operationId": "delete_current_user_api_v1_users_me_delete",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/users/{id}": {
+      "get": {
+        "tags": [
+          "users",
+          "requires_admin"
+        ],
+        "summary": "Get User By Id",
+        "description": "Retrieves a user by their ID.\n\nArgs:\n    id (int): The ID of the user to retrieve.\n    allow_anonymized (bool): Whether to include users anonymized as \"Deleted User\".\n    session (Session): The SQLAlchemy session to use for the query.\n    _ (User): The current active admin user. Unused, is only there to enforce admin requirement.\n\nReturns:\n    GetUserResponse: A response containing the user with the specified ID.\n\nRaises:\n    HTTPException(400): If the provided ID is invalid (less than or equal to 0).\n    HTTPException(404): If the user with the specified ID does not exist.",
+        "operationId": "get_user_by_id_api_v1_users__id__get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Id"
+            }
+          },
+          {
+            "name": "allow_anonymized",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Allow Anonymized"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUserResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "users",
+          "requires_admin"
+        ],
+        "summary": "Update User By Id",
+        "description": "Updates a user by its ID.\n\nImportant:\n    * if the email is changed, the user will need to verify their new email address.\n    * **the password cannot be changed via this endpoint!** Use reset-password instead.\n\nArgs:\n    id (int): The ID of the user to update.\n    user (UserUpdate): The updated user data.\n    db (Session): The SQLAlchemy session to use for the update.\n    _ (User): The current active admin user. Unused, is only there to enforce admin requirement.\n\nReturns:\n    APIResponse: A response indicating the success of the update operation.\n\nRaises:\n    HTTPException(400): If the provided ID is invalid (less than or equal to 0).\n    HTTPException(404): If the user with the specified ID does not exist.",
+        "operationId": "update_user_by_id_api_v1_users__id__put",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "users",
+          "requires_admin"
+        ],
+        "summary": "Delete User By Id",
+        "description": "Deletes a user by its ID, or anonymizes them if referenced in ProductsSales.\n\nArgs:\n    id (int): The ID of the user to delete.\n    session (Session): The SQLAlchemy session to use for the delete.\n    _ (User): The current active admin user. Unused, is only there to enforce admin requirement.\n\nReturns:\n    APIResponse: A response indicating the success of the delete operation.\n\nRaises:\n    HTTPException(400): If the provided ID is invalid (less than or equal to 0).\n    HTTPException(404): If the user  with the specified ID does not exist.",
+        "operationId": "delete_user_by_id_api_v1_users__id__delete",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/store/{id}": {
+      "get": {
+        "tags": [
+          "users",
+          "requires_admin"
+        ],
+        "summary": "Get Users By Store Id",
+        "description": "Retrieves a list of users by their store ID.\n\nArgs:\n    id (int): The ID of the store.\n    allow_anonymized (bool): Whether to include users anonymized as \"Deleted User\".\n    session (Session): The SQLAlchemy session to use for the query.\n    _ (User): The current active admin user. Unused, is only there to enforce admin requirement.\n\nReturns:\n    GetAllUsersResponse: A response containing the users with the specified store ID.\n\nRaises:\n    HTTPException(404): If the store with the specified ID does not exist.",
+        "operationId": "get_users_by_store_id_api_v1_users_store__id__get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Id"
+            }
+          },
+          {
+            "name": "allow_anonymized",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Allow Anonymized"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllUsersResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/store/my": {
+      "get": {
+        "tags": [
+          "users",
+          "requires_active_user"
+        ],
+        "summary": "Get My Store Users",
+        "description": "Retrieves all users for the store owned by the current user.\n\nArgs:\n    session (Session): The SQLAlchemy session to use for the query.\n    store_owner (User): The current authenticated user.\nReturns:\n    GetAllUsersResponse: A response containing a list of all users for the store owned by the user.",
+        "operationId": "get_my_store_users_api_v1_users_store_my_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllUsersResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/users/email/{email}": {
+      "get": {
+        "tags": [
+          "users",
+          "requires_admin"
+        ],
+        "summary": "Get User By Email",
+        "description": "Retrieves the user with the specified email address.\n\nArgs:\n    email (EmailStr): The email address.\n    session (Session): The SQLAlchemy session to use for the query.\n    _ (User): The current active admin user. Unused, is only there to enforce admin requirement.\n\nReturns:\n    GetUserResponse: A response containing the user with the specified email address.\n\nRaises:\n    HTTPException(404): If the specified email does not exist.",
+        "operationId": "get_user_by_email_api_v1_users_email__email__get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "email",
+              "title": "Email"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUserResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/stores/": {
+      "get": {
+        "tags": [
+          "stores",
+          "public"
+        ],
+        "summary": "Get All Stores",
+        "description": "Retrieves all stores from the database.\n\nArgs:\n    db (Session): The SQLAlchemy session to use for the query.\n\nReturns:\n    GetAllStoresResponse: A response containing a list of all stores.",
+        "operationId": "get_all_stores_api_v1_stores__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllStoresResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "stores",
+          "requires_active_user"
+        ],
+        "summary": "Create Store",
+        "description": "Creates a store.\n\nArgs:\n    store (StoreCreate): The store data.\n    db (Session): The SQLAlchemy session to use for the query.\n    owner_user (User): The authenticated and active user creating the store.\nRaises:\n    HTTPException(400): If the user already owns a store or if the store hours are invalid (raised by crud.create)",
+        "operationId": "create_store_api_v1_stores__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StoreCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/stores/{id}": {
+      "get": {
+        "tags": [
+          "stores",
+          "public"
+        ],
+        "summary": "Get Store By Id",
+        "description": "Retrieves a store by its ID.\n\nArgs:\n    id (int): The ID of the store to retrieve.\n    db (Session): The SQLAlchemy session to use for the query.\nReturns:\n    GetStoreResponse: A response containing the store with the specified ID.\n\nRaises:\n    HTTPException(400): If the provided ID is invalid (less than or equal to 0).\n    HTTPException(404): If the store with the specified ID does not exist.",
+        "operationId": "get_store_by_id_api_v1_stores__id__get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetStoreResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "stores",
+          "requires_admin"
+        ],
+        "summary": "Update Store By Id",
+        "description": "Updates a store by its ID.\n\nArgs:\n    id (int): The ID of the store to update.\n    store (StoreUpdate): The updated store data.\n    db (Session): The SQLAlchemy session to use for the update.\n    _ (User): The current authenticated admin user. Unused, is only there to enforce admin auth.\n\nReturns:\n    APIResponse: A response indicating the success of the update operation.\n\nRaises:\n    HTTPException(400): If the provided ID is invalid (less than or equal to 0).\n    HTTPException(404): If the store with the specified ID does not exist.",
+        "operationId": "update_store_by_id_api_v1_stores__id__put",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StoreUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "stores",
+          "requires_admin"
+        ],
+        "summary": "Delete Store By Id",
+        "description": "Deletes a store by its ID.\n\nArgs:\n    id (int): The ID of the store to delete.\n    db (Session): The SQLAlchemy session to use for the delete.\n    _ (User): The current authenticated admin user. Unused, is only there to enforce admin auth.\n\nReturns:\n    APIResponse: A response indicating the success of the delete operation.\n\nRaises:\n    HTTPException(400): If the provided ID is invalid (less than or equal to 0).\n    HTTPException(404): If the store  with the specified ID does not exist.",
+        "operationId": "delete_store_by_id_api_v1_stores__id__delete",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/stores/my": {
+      "put": {
+        "tags": [
+          "stores",
+          "requires_active_user"
+        ],
+        "summary": "Update Own Store",
+        "description": "Updates the store owned by the current authenticated active user.\n\nArgs:\n    store (StoreUpdate): The updated store data.\n    session (Session): The SQLAlchemy session to use for the update.\n    owner_user (User): The authenticated and active user who owns the store.\n\nReturns:\n    APIResponse: A response indicating the success of the update operation.\n\nRaises:\n    HTTPException(400): If the user does not own a store (raised by crud.update)",
+        "operationId": "update_own_store_api_v1_stores_my_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StoreUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "stores",
+          "requires_active_user"
+        ],
+        "summary": "Delete Own Store",
+        "description": "Deletes the store owned by the current authenticated active user.\n\nArgs:\n    session (Session): The SQLAlchemy session to use for the delete.\n    owner_user (User): The authenticated and active user who owns the store.\n\nReturns:\n    APIResponse: A response indicating the success of the delete operation.\n\nRaises:\n    HTTPException(400): If the user does not own a store (raised by crud.delete)",
+        "operationId": "delete_own_store_api_v1_stores_my_delete",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/stores/cashier": {
+      "post": {
+        "tags": [
+          "stores",
+          "requires_active_user"
+        ],
+        "summary": "Add Cashier",
+        "operationId": "add_cashier_api_v1_stores_cashier_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddCashier"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessfulResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/stores/cashier/accept": {
+      "patch": {
+        "tags": [
+          "stores",
+          "requires_active_user"
+        ],
+        "summary": "Accept Cashier Add",
+        "operationId": "accept_cashier_add_api_v1_stores_cashier_accept_patch",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "code",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Code"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessfulResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/orders/": {
+      "get": {
+        "tags": [
+          "orders",
+          "requires_admin"
+        ],
+        "summary": "Get All Orders",
+        "description": "Retrieves all orders from the database.\nArgs:\n    session (Session): The SQLAlchemy session to use for the query.\n    _ (User): The current active admin user. Unused, is only there to enforce admin requirement.\nReturns:\n    GetAllOrdersResponse: A response containing a list of all orders.",
+        "operationId": "get_all_orders_api_v1_orders__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllOrdersResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "orders",
+          "requires_active_user"
+        ],
+        "summary": "Create Order",
+        "description": "Creates an order.\n\nArgs:\n    sale (OrderCreate): The order data.\n    db (Session): The SQLAlchemy session to use for the query.\n    user (User): The current authenticated active user.\nReturns:\n    APIResponse: A response containing the ID of the created order.",
+        "operationId": "create_order_api_v1_orders__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/orders/{id}": {
+      "get": {
+        "tags": [
+          "orders",
+          "requires_admin"
+        ],
+        "summary": "Get Order By Id",
+        "description": "Retrieves an order by its ID.\n\nArgs:\n    id (int): The ID of the order to retrieve.\n    db (Session): The SQLAlchemy session to use for the query.\n    _ (User): The current authenticated admin user. Unused, is only there to enforce admin requiremebnt.\nReturns:\n    GetOrderResponse: A response containing the order with the specified ID.\n\nRaises:\n    HTTPException(400): If the provided ID is invalid (less than or equal to 0).\n    HTTPException(404): If the order with the specified ID does not exist.",
+        "operationId": "get_order_by_id_api_v1_orders__id__get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetOrderResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/orders/my": {
+      "get": {
+        "tags": [
+          "orders",
+          "requires_active_user"
+        ],
+        "summary": "Get My Orders",
+        "description": "Retrieves all orders for the current authenticated user.\n\nArgs:\n    session (Session): The SQLAlchemy session to use for the query.\n    current_user (User): The current authenticated active user.\nReturns:\n    GetAllOrdersResponse: A response containing a list of all orders for the current user.",
+        "operationId": "get_my_orders_api_v1_orders_my_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllOrdersResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/orders/my/store": {
+      "get": {
+        "tags": [
+          "orders",
+          "requires_active_user"
+        ],
+        "summary": "Get My Store Orders",
+        "description": "Retrieves all orders for the store owned/managed by the current authenticated user.\n\nArgs:\n    session (Session): The SQLAlchemy session to use for the query.\n    current_user (User): The current authenticated active user.\nReturns:\n    GetAllOrdersResponse: A response containing a list of all orders for the current user's store.",
+        "operationId": "get_my_store_orders_api_v1_orders_my_store_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllOrdersResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/orders/store/{store_id}": {
+      "get": {
+        "tags": [
+          "orders",
+          "requires_admin"
+        ],
+        "summary": "Get Orders By Store Id",
+        "description": "Retrieves all orders for a specific store.\n\nArgs:\n    store_id (int): The ID of the store to retrieve orders for.\n    db (Session): The SQLAlchemy session to use for the query.\n    _ (User): The current authenticated admin user. Unused, is only there to enforce admin requirement.\n\nReturns:\n    GetAllOrdersResponse: A response containing all orders for the specified store.",
+        "operationId": "get_orders_by_store_id_api_v1_orders_store__store_id__get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "store_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Store Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllOrdersResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/orders/user/{user_id}": {
+      "get": {
+        "tags": [
+          "orders",
+          "requires_admin"
+        ],
+        "summary": "Get Orders By User Id",
+        "description": "Retrieves all orders for a specific user.\n\nArgs:\n    user_id (int): The ID of the user to retrieve orders for.\n    db (Session): The SQLAlchemy session to use for the query.\n    _ (User): The current authenticated admin user. Unused, is only there to enforce admin requiremebnt.\n\nReturns:\n    GetAllOrdersResponse: A response containing all orders for the specified user.",
+        "operationId": "get_orders_by_user_id_api_v1_orders_user__user_id__get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "User Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllOrdersResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/orders/{id}/products": {
+      "get": {
+        "tags": [
+          "orders",
+          "requires_active_user"
+        ],
+        "summary": "Get Order Products",
+        "description": "Retrieves all products for a specific order.\n\nArgs:\n    id (int): The ID of the order to retrieve products for.\n    db (Session): The SQLAlchemy session to use for the query.\n    user (User): The current authenticated active user. They must either be the user who placed the order or the owner/cashier of the store the order was placed from.\nReturns:\n    GetOrderProductsResponse: A response containing all products for the specified order.",
+        "operationId": "get_order_products_api_v1_orders__id__products_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetOrderProductsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "orders",
+          "requires_active_user"
+        ],
+        "summary": "Update Order Products",
+        "description": "Updates the products of an order by its ID.\n\nArgs:\n    id (int): The ID of the order to update.\n    updates (OrderUpdate): The order updates.\n    session (Session): The SQLAlchemy session to use for the update.\n    user (User): The current authenticated active user. They must be the user who placed the order.\n\nArgs:\n    updates (OrderUpdate): The order updates.\n    session (Session): The SQLAlchemy session to use for the update.\n\nReturns:\n    APIResponse: A response indicating the success of the update operation.\n\nRaises:\n    HTTPException(400): If the order's status was not 'pending'.\n    HTTPException(404): If the order with the specified ID does not exist.",
+        "operationId": "update_order_products_api_v1_orders__id__products_patch",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/orders/{id}/status": {
+      "patch": {
+        "tags": [
+          "orders",
+          "requires_active_user"
+        ],
+        "summary": "Update Order Status",
+        "description": "Updates the status of an order by its ID.\n\nArgs:\n    id (int): The ID of the order to update.\n    db (Session): The SQLAlchemy session to use for the update.\n    user (User): The current authenticated active user. They must be an owner/cashier of the store the order was placed from.\n\nReturns:\n    APIResponse: A response indicating the success of the update operation.\n\nRaises:\n    HTTPException(400): If the provided ID is invalid (less than or equal to 0).\n    HTTPException(404): If the order with the specified ID does not exist.",
+        "operationId": "update_order_status_api_v1_orders__id__status_patch",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/orders/{id}/cancel": {
+      "patch": {
+        "tags": [
+          "orders",
+          "requires_active_user"
+        ],
+        "summary": "Cancel Order",
+        "operationId": "cancel_order_api_v1_orders__id__cancel_patch",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/discounts/": {
+      "get": {
+        "tags": [
+          "discounts",
+          "requires_admin"
+        ],
+        "summary": "Get All Discounts",
+        "description": "Retrieves all discount data from the database.\nArgs:\n    session (Session): The SQLAlchemy session to use for the query.\n    _ (User): The current authenticated admin user. Unused, is only there to enforce admin requiremebnt.\n\nReturns:\n    GetAllDiscountsResponse: A response containing a list of all orders.",
+        "operationId": "get_all_discounts_api_v1_discounts__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllDiscountsResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "discounts",
+          "requires_active_user"
+        ],
+        "summary": "Create Discount",
+        "description": "Creates a discount.\n\nArgs:\n    discount (DiscountCreate): The discount data.\n    session (Session): The SQLAlchemy session to use for the query.\n    store_owner (User): The current authenticated active user creating the discount.\nReturns:\n    (APIResponse) An APIResponse containing the new discount's id.",
+        "operationId": "create_discount_api_v1_discounts__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DiscountCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/discounts/store/{store_id}": {
+      "get": {
+        "tags": [
+          "discounts",
+          "public"
+        ],
+        "summary": "Get All Discounts From Store",
+        "description": "Retrieves all discount data from the database for products belonging to the specified store.\nArgs:\n    store_id (int): The ID of the store whose discounts to retrieve.\n    session (Session): The SQLAlchemy session to use for the query.\nReturns:\n    GetAllDiscountsResponse: A response containing a list of all discounts for the specified store",
+        "operationId": "get_all_discounts_from_store_api_v1_discounts_store__store_id__get",
+        "parameters": [
+          {
+            "name": "store_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Store Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllDiscountsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/discounts/{id}": {
+      "get": {
+        "tags": [
+          "discounts",
+          "public"
+        ],
+        "summary": "Get Discount By Id",
+        "description": "Retrieves a discount by its ID.\n\nArgs:\n    id (int): The ID of the discount to retrieve.\n    db (Session): The SQLAlchemy session to use for the query.\n\nReturns:\n    GetDiscountResponse: A response containing the discount with the specified ID.\n\nRaises:\n    HTTPException(404): If the discount with the specified ID does not exist.",
+        "operationId": "get_discount_by_id_api_v1_discounts__id__get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetDiscountResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/discounts/product/{product_id}": {
+      "get": {
+        "tags": [
+          "discounts",
+          "public"
+        ],
+        "summary": "Get Discount By Product Id",
+        "description": "Retrieves the discount for the product with the specified id. If that product does not have an active discount, it raises an `HTTPException(404)`.",
+        "operationId": "get_discount_by_product_id_api_v1_discounts_product__product_id__get",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Product Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/discounts/product/{product_id}/allownull": {
+      "get": {
+        "tags": [
+          "discounts",
+          "public"
+        ],
+        "summary": "Get Discount By Product Id Allow Null",
+        "operationId": "get_discount_by_product_id_allow_null_api_v1_discounts_product__product_id__allownull_get",
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Product Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/points/": {
+      "get": {
+        "tags": [
+          "points",
+          "requires_admin"
+        ],
+        "summary": "Get All Points",
+        "description": "Returns all points entries from the database.\n\nArgs:\n    session (Session): The SQLAlchemy session to use for the query.\n    _ (User): The current authenticated admin user. Unused, is only there to enforce admin requirement.\nReturns:\n    GetAllPointsResponse: A response model containing all points entries.",
+        "operationId": "get_all_points_api_v1_points__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllPointsResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/points/store/{store_id}": {
+      "get": {
+        "tags": [
+          "points",
+          "requires_admin"
+        ],
+        "summary": "Get User Points",
+        "description": "Retrieves the points of a user in a specific store.\n\nArgs:\n    store_id (int): The ID of the store.\n    user_id (int): The ID of the user.\n    session (Session): The SQLAlchemy session to use for the query.\n    _ (User): The current authenticated active user. Unused, is only there to enforce active user requirement.\nReturns:\n    GetUserPointsResponse: A response model containing the user's points in the specified store.\nRaises:\n    HTTPException(404): If the user or store does not exist, or if the user has no points in the store.",
+        "operationId": "get_user_points_api_v1_points_store__store_id__get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "store_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Store Id"
+            }
+          },
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "User Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUserPointsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/points/my/store/{store_id}": {
+      "get": {
+        "tags": [
+          "points",
+          "requires_active_user"
+        ],
+        "summary": "Get My Points In Store",
+        "description": "Retrieves the points of the authenticated user in a specific store.\n\nArgs:\n    store_id (int): The ID of the store.\n    session (Session): The SQLAlchemy session to use for the query.\n    user (User): The authenticated user object obtained from get_current_user_require_active.\nReturns:\n    GetUserPointsResponse: A response model containing the user's points in the specified store.\nRaises:\n    HTTPException(404): If the store does not exist, or if the user has no points in the store.",
+        "operationId": "get_my_points_in_store_api_v1_points_my_store__store_id__get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "store_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Store Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetUserPointsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/points/product/{product_id}": {
+      "post": {
+        "tags": [
+          "points",
+          "requires_active_user"
+        ],
+        "summary": "Buy With Points",
+        "description": "Creates a sale where the user buys is buying the product using their points.\n\nArgs:\n    product_id (int): The ID of the product to buy with points.\n    session (Session): The SQLAlchemy session to use for the query.\n    purchaser (User): The authenticated user object obtained from get_current_user_require_active.\nReturns:\n    SuccessfulResponse: A response model indicating the success of the operation.\nRaises:\n    (various, including 400 and 404): If the user, product, or points entry does not exist, if the user does not have enough points, if the store does not have a points system, or if the specific product cannot be purchased with points.",
+        "operationId": "buy_with_points_api_v1_points_product__product_id__post",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "product_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Product Id"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessfulResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reviews/": {
+      "get": {
+        "tags": [
+          "reviews",
+          "public"
+        ],
+        "summary": "Get All Reviews",
+        "description": "Retrieves all reviews from the database.\nArgs:\n    session (Session): The SQLAlchemy session to use for the query.\n    _ (User): The current authenticated admin user. Unused, is only there to enforce admin requirement.\nReturns:\n    GetAllReviewsResponse: A response containing a list of all reviews.",
+        "operationId": "get_all_reviews_api_v1_reviews__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllReviewsResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "reviews",
+          "requires_active_user"
+        ],
+        "summary": "Create Review",
+        "description": "Creates a review.\n\nArgs:\n    review (ReviewCreate): The review data.\n    session (Session): The SQLAlchemy session to use for the query.",
+        "operationId": "create_review_api_v1_reviews__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReviewCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/reviews/{id}": {
+      "get": {
+        "tags": [
+          "reviews",
+          "public"
+        ],
+        "summary": "Get Review By Id",
+        "description": "Retrieves a review by its ID.\n\nArgs:\n    id (int): The ID of the review to retrieve.\n    session (Session): The SQLAlchemy session to use for the query.\n\nReturns:\n    GetReviewResponse: A response containing the review with the specified ID.\n\nRaises:\n    HTTPException(400): If the provided ID is invalid (less than or equal to 0).\n    HTTPException(404): If the review with the specified ID does not exist.",
+        "operationId": "get_review_by_id_api_v1_reviews__id__get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetReviewResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "reviews",
+          "requires_active_user"
+        ],
+        "summary": "Delete Review",
+        "description": "Deletes a review by its ID.\n\nArgs:\n    id (int): The ID of the review to delete.\n    db (Session): The SQLAlchemy session to use for the delete.\n    creator (User): The authenticated user object obtained from get_current_user_require_active. They must have created the review (or be an admin)\nReturns:\n    APIResponse: A response indicating the success of the delete operation.\n\nRaises:\n    HTTPException(400): If the provided ID is invalid (less than or equal to 0).\n    HTTPException(404): If the review with the specified ID does not exist.",
+        "operationId": "delete_review_api_v1_reviews__id__delete",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/APIResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reviews/store/{id}": {
+      "get": {
+        "tags": [
+          "reviews",
+          "public"
+        ],
+        "summary": "Get Reviews By Store Id",
+        "description": "Retrieves a list of reviews by its store ID.\n\nArgs:\n    id (int): The ID of the store to retrieve its reviews.\n    session (Session): The SQLAlchemy session to use for the query.\n\nReturns:\n    GetAllReviewsResponse: A response containing a list of reviews with the specified store ID.\n\nRaises:\n    HTTPException(400): If the provided ID is invalid (less than or equal to 0).\n    HTTPException(404): If the store with the specified ID does not exist.",
+        "operationId": "get_reviews_by_store_id_api_v1_reviews_store__id__get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllReviewsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/reviews/user/{id}": {
+      "get": {
+        "tags": [
+          "reviews",
+          "public"
+        ],
+        "summary": "Get Reviews By User Id",
+        "description": "Retrieves a list of reviews by its user ID.\n\nArgs:\n    id (int): The ID of the user to retrieve its reviews.\n    session (Session): The SQLAlchemy session to use for the query.\n\nReturns:\n    GetAllReviewsResponse: A response containing a list of reviews with the specified user ID.\n\nRaises:\n    HTTPException(400): If the provided ID is invalid (less than or equal to 0).\n    HTTPException(404): If the user with the specified ID does not exist.",
+        "operationId": "get_reviews_by_user_id_api_v1_reviews_user__id__get",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllReviewsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "APIResponse": {
+        "properties": {
+          "successful": {
+            "type": "boolean",
+            "title": "Successful"
+          },
+          "data": {
+            "anyOf": [
+              {
+
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Data"
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "successful",
+          "data",
+          "message"
+        ],
+        "title": "APIResponse",
+        "description": "A generic, standard API response model to be used as the base for all API responses.\nAttributes:\n    successful (bool): Indicates whether the API call was successful.\n    data (Optional[Any]): The data returned by the API, if any (will mostly be `dict[str, any]`, `list[dict[str, any]]`, or `None`).\n    message (str): A message providing additional information about the API call."
+      },
+      "AddCashier": {
+        "properties": {
+          "email_address": {
+            "type": "string",
+            "format": "email",
+            "title": "Email Address"
+          }
+        },
+        "type": "object",
+        "required": [
+          "email_address"
+        ],
+        "title": "AddCashier"
+      },
+      "Body_issue_token_api_v1_auth_token_post": {
+        "properties": {
+          "grant_type": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^password$"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Grant Type"
+          },
+          "username": {
+            "type": "string",
+            "title": "Username"
+          },
+          "password": {
+            "type": "string",
+            "title": "Password"
+          },
+          "scope": {
+            "type": "string",
+            "title": "Scope",
+            "default": ""
+          },
+          "client_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Client Id"
+          },
+          "client_secret": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Client Secret"
+          }
+        },
+        "type": "object",
+        "required": [
+          "username",
+          "password"
+        ],
+        "title": "Body_issue_token_api_v1_auth_token_post"
+      },
+      "DiscountCreate": {
+        "properties": {
+          "product_id": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "Product Id"
+          },
+          "pct_off": {
+            "type": "integer",
+            "maximum": 100,
+            "minimum": 1,
+            "title": "Pct Off"
+          },
+          "start_date": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Start Date",
+            "default": "2025-11-05"
+          },
+          "end_date": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "End Date"
+          },
+          "days_usable": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array",
+            "maxItems": 7,
+            "minItems": 7,
+            "title": "Days Usable"
+          },
+          "min_amount": {
+            "type": "integer",
+            "maximum": 2147483647,
+            "minimum": 1,
+            "title": "Min Amount",
+            "default": 1
+          },
+          "max_amount": {
+            "type": "integer",
+            "maximum": 2147483647,
+            "minimum": 1,
+            "title": "Max Amount",
+            "default": 2147483647
+          }
+        },
+        "type": "object",
+        "required": [
+          "product_id",
+          "pct_off",
+          "end_date",
+          "days_usable"
+        ],
+        "title": "DiscountCreate"
+      },
+      "DiscountRead": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "Id"
+          },
+          "product_id": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "Product Id"
+          },
+          "pct_off": {
+            "type": "integer",
+            "maximum": 100,
+            "minimum": 1,
+            "title": "Pct Off"
+          },
+          "start_date": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Start Date"
+          },
+          "end_date": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "End Date"
+          },
+          "days_usable": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array",
+            "maxItems": 7,
+            "minItems": 7,
+            "title": "Days Usable"
+          },
+          "min_amount": {
+            "type": "integer",
+            "maximum": 2147483647,
+            "minimum": 1,
+            "title": "Min Amount",
+            "default": 1
+          },
+          "max_amount": {
+            "type": "integer",
+            "maximum": 2147483647,
+            "minimum": 1,
+            "title": "Max Amount",
+            "default": 2147483647
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "product_id",
+          "pct_off",
+          "start_date",
+          "end_date",
+          "days_usable"
+        ],
+        "title": "DiscountRead"
+      },
+      "GetAllDiscountsResponse": {
+        "properties": {
+          "successful": {
+            "type": "boolean",
+            "title": "Successful"
+          },
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/DiscountRead"
+            },
+            "type": "array",
+            "title": "Data"
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "successful",
+          "data",
+          "message"
+        ],
+        "title": "GetAllDiscountsResponse"
+      },
+      "GetAllOrdersResponse": {
+        "properties": {
+          "successful": {
+            "type": "boolean",
+            "title": "Successful"
+          },
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/OrderRead"
+            },
+            "type": "array",
+            "title": "Data"
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "successful",
+          "data",
+          "message"
+        ],
+        "title": "GetAllOrdersResponse"
+      },
+      "GetAllPointsResponse": {
+        "properties": {
+          "successful": {
+            "type": "boolean",
+            "const": true,
+            "title": "Successful",
+            "default": true
+          },
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/PointsRead"
+            },
+            "type": "array",
+            "title": "Data"
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "data",
+          "message"
+        ],
+        "title": "GetAllPointsResponse"
+      },
+      "GetAllProductsResponse": {
+        "properties": {
+          "successful": {
+            "type": "boolean",
+            "const": true,
+            "title": "Successful"
+          },
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/ProductRead"
+            },
+            "type": "array",
+            "title": "Data"
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "successful",
+          "data",
+          "message"
+        ],
+        "title": "GetAllProductsResponse"
+      },
+      "GetAllReviewsResponse": {
+        "properties": {
+          "successful": {
+            "type": "boolean",
+            "const": true,
+            "title": "Successful"
+          },
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/ReviewRead"
+            },
+            "type": "array",
+            "title": "Data"
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "successful",
+          "data",
+          "message"
+        ],
+        "title": "GetAllReviewsResponse"
+      },
+      "GetAllSalesResponse": {
+        "properties": {
+          "successful": {
+            "type": "boolean",
+            "title": "Successful"
+          },
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/SaleRead"
+            },
+            "type": "array",
+            "title": "Data"
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "successful",
+          "data",
+          "message"
+        ],
+        "title": "GetAllSalesResponse"
+      },
+      "GetAllStoresResponse": {
+        "properties": {
+          "successful": {
+            "type": "boolean",
+            "const": true,
+            "title": "Successful"
+          },
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/StoreRead"
+            },
+            "type": "array",
+            "title": "Data"
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "successful",
+          "data",
+          "message"
+        ],
+        "title": "GetAllStoresResponse"
+      },
+      "GetAllUsersResponse": {
+        "properties": {
+          "successful": {
+            "type": "boolean",
+            "title": "Successful"
+          },
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/UserRead"
+            },
+            "type": "array",
+            "title": "Data"
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "successful",
+          "data",
+          "message"
+        ],
+        "title": "GetAllUsersResponse"
+      },
+      "GetDiscountResponse": {
+        "properties": {
+          "successful": {
+            "type": "boolean",
+            "title": "Successful"
+          },
+          "data": {
+            "$ref": "#/components/schemas/DiscountRead"
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "successful",
+          "data",
+          "message"
+        ],
+        "title": "GetDiscountResponse"
+      },
+      "GetOrderProductsResponse": {
+        "properties": {
+          "successful": {
+            "type": "boolean",
+            "title": "Successful"
+          },
+          "data": {
+            "items": {
+              "$ref": "#/components/schemas/ProductOrder"
+            },
+            "type": "array",
+            "title": "Data"
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "successful",
+          "data",
+          "message"
+        ],
+        "title": "GetOrderProductsResponse"
+      },
+      "GetOrderResponse": {
+        "properties": {
+          "successful": {
+            "type": "boolean",
+            "title": "Successful"
+          },
+          "data": {
+            "$ref": "#/components/schemas/OrderRead"
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "successful",
+          "data",
+          "message"
+        ],
+        "title": "GetOrderResponse"
+      },
+      "GetProductResponse": {
+        "properties": {
+          "successful": {
+            "type": "boolean",
+            "const": true,
+            "title": "Successful"
+          },
+          "data": {
+            "$ref": "#/components/schemas/ProductRead"
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "successful",
+          "data",
+          "message"
+        ],
+        "title": "GetProductResponse"
+      },
+      "GetReviewResponse": {
+        "properties": {
+          "successful": {
+            "type": "boolean",
+            "const": true,
+            "title": "Successful"
+          },
+          "data": {
+            "$ref": "#/components/schemas/ReviewRead"
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "successful",
+          "data",
+          "message"
+        ],
+        "title": "GetReviewResponse"
+      },
+      "GetSaleResponse": {
+        "properties": {
+          "successful": {
+            "type": "boolean",
+            "title": "Successful"
+          },
+          "data": {
+            "$ref": "#/components/schemas/SaleRead"
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "successful",
+          "data",
+          "message"
+        ],
+        "title": "GetSaleResponse"
+      },
+      "GetStoreResponse": {
+        "properties": {
+          "successful": {
+            "type": "boolean",
+            "title": "Successful"
+          },
+          "data": {
+            "$ref": "#/components/schemas/StoreRead"
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "successful",
+          "data",
+          "message"
+        ],
+        "title": "GetStoreResponse"
+      },
+      "GetUserPointsResponse": {
+        "properties": {
+          "successful": {
+            "type": "boolean",
+            "const": true,
+            "title": "Successful",
+            "default": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/PointsRead"
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "data",
+          "message"
+        ],
+        "title": "GetUserPointsResponse"
+      },
+      "GetUserResponse": {
+        "properties": {
+          "successful": {
+            "type": "boolean",
+            "title": "Successful"
+          },
+          "data": {
+            "$ref": "#/components/schemas/UserRead"
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "successful",
+          "data",
+          "message"
+        ],
+        "title": "GetUserResponse"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "LoginResponse": {
+        "properties": {
+          "successful": {
+            "type": "boolean",
+            "const": true,
+            "title": "Successful",
+            "default": true
+          },
+          "data": {
+            "$ref": "#/components/schemas/Token"
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "data",
+          "message"
+        ],
+        "title": "LoginResponse"
+      },
+      "OrderCreate": {
+        "properties": {
+          "store_id": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "Store Id"
+          },
+          "products": {
+            "items": {
+              "$ref": "#/components/schemas/ProductOrder"
+            },
+            "type": "array",
+            "title": "Products"
+          },
+          "payment_method": {
+            "type": "integer",
+            "maximum": 3,
+            "minimum": 0,
+            "title": "Payment Method"
+          }
+        },
+        "type": "object",
+        "required": [
+          "store_id",
+          "products",
+          "payment_method"
+        ],
+        "title": "OrderCreate"
+      },
+      "OrderRead": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "Id"
+          },
+          "user_id": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "User Id"
+          },
+          "store_id": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "Store Id"
+          },
+          "created_at": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Created At"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "accepted",
+              "received",
+              "cancelled"
+            ],
+            "title": "Status"
+          },
+          "received_at": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Received At"
+          },
+          "payment_method": {
+            "type": "integer",
+            "maximum": 3,
+            "minimum": 0,
+            "title": "Payment Method"
+          },
+          "products": {
+            "items": {
+              "$ref": "#/components/schemas/ProductOrder"
+            },
+            "type": "array",
+            "title": "Products"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "user_id",
+          "store_id",
+          "created_at",
+          "status",
+          "received_at",
+          "payment_method",
+          "products"
+        ],
+        "title": "OrderRead"
+      },
+      "OrderUpdate": {
+        "properties": {
+          "products": {
+            "items": {
+              "$ref": "#/components/schemas/ProductOrder"
+            },
+            "type": "array",
+            "title": "Products"
+          }
+        },
+        "type": "object",
+        "required": [
+          "products"
+        ],
+        "title": "OrderUpdate"
+      },
+      "PointsRead": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "Id"
+          },
+          "store_id": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "Store Id"
+          },
+          "amount": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "Amount"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "store_id",
+          "amount"
+        ],
+        "title": "PointsRead"
+      },
+      "ProductCreate": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Name"
+          },
+          "brand": {
+            "type": "string",
+            "maxLength": 30,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Brand"
+          },
+          "price": {
+            "type": "number",
+            "title": "Price"
+          },
+          "points_price": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Points Price"
+          },
+          "type": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "Type"
+          },
+          "quantity": {
+            "type": "number",
+            "minimum": 0,
+            "title": "Quantity"
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Desc"
+          },
+          "barcode": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Barcode"
+          },
+          "hidden": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hidden",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "brand",
+          "price",
+          "points_price",
+          "type",
+          "quantity",
+          "desc",
+          "barcode"
+        ],
+        "title": "ProductCreate"
+      },
+      "ProductOrder": {
+        "properties": {
+          "product_id": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "Product Id"
+          },
+          "quantity": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "title": "Quantity"
+          }
+        },
+        "type": "object",
+        "required": [
+          "product_id",
+          "quantity"
+        ],
+        "title": "ProductOrder"
+      },
+      "ProductRead": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "Id"
+          },
+          "store_id": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "Store Id"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 100,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Name"
+          },
+          "brand": {
+            "type": "string",
+            "maxLength": 30,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Brand"
+          },
+          "price": {
+            "type": "number",
+            "title": "Price"
+          },
+          "points_price": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Points Price"
+          },
+          "type": {
+            "type": "integer",
+            "minimum": 0,
+            "title": "Type"
+          },
+          "quantity": {
+            "type": "number",
+            "minimum": 0,
+            "title": "Quantity"
+          },
+          "desc": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Desc"
+          },
+          "hidden": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hidden"
+          },
+          "barcode": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Barcode"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "store_id",
+          "name",
+          "brand",
+          "price",
+          "points_price",
+          "type",
+          "quantity",
+          "desc",
+          "hidden",
+          "barcode"
+        ],
+        "title": "ProductRead"
+      },
+      "ProductSale": {
+        "properties": {
+          "product_id": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "Product Id"
+          },
+          "quantity": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "title": "Quantity"
+          }
+        },
+        "type": "object",
+        "required": [
+          "product_id",
+          "quantity"
+        ],
+        "title": "ProductSale"
+      },
+      "ProductUpdate": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 100,
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "brand": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 30,
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Brand"
+          },
+          "price": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price"
+          },
+          "points_price": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Points Price"
+          },
+          "type": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Type"
+          },
+          "quantity": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Quantity"
+          },
+          "desc": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Desc"
+          },
+          "hidden": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hidden",
+            "default": false
+          },
+          "barcode": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Barcode"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "brand",
+          "price",
+          "points_price",
+          "type",
+          "quantity",
+          "desc",
+          "barcode"
+        ],
+        "title": "ProductUpdate"
+      },
+      "ReviewCreate": {
+        "properties": {
+          "store_id": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "Store Id"
+          },
+          "stars": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "Stars"
+          },
+          "desc": {
+            "type": "string",
+            "title": "Desc"
+          }
+        },
+        "type": "object",
+        "required": [
+          "store_id",
+          "stars",
+          "desc"
+        ],
+        "title": "ReviewCreate"
+      },
+      "ReviewRead": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "Id"
+          },
+          "store_id": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "Store Id"
+          },
+          "user_id": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "User Id"
+          },
+          "stars": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "Stars"
+          },
+          "desc": {
+            "type": "string",
+            "title": "Desc"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "store_id",
+          "user_id",
+          "stars",
+          "desc"
+        ],
+        "title": "ReviewRead"
+      },
+      "SaleCreate": {
+        "properties": {
+          "store_id": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "Store Id"
+          },
+          "products": {
+            "items": {
+              "$ref": "#/components/schemas/ProductSale"
+            },
+            "type": "array",
+            "title": "Products"
+          },
+          "payment_method": {
+            "type": "integer",
+            "maximum": 3,
+            "minimum": 0,
+            "title": "Payment Method"
+          },
+          "user_id": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "User Id"
+          }
+        },
+        "type": "object",
+        "required": [
+          "store_id",
+          "products",
+          "payment_method",
+          "user_id"
+        ],
+        "title": "SaleCreate"
+      },
+      "SaleRead": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "Id"
+          },
+          "user_id": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "User Id"
+          },
+          "store_id": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "Store Id"
+          },
+          "payment_method": {
+            "type": "integer",
+            "maximum": 3,
+            "minimum": 0,
+            "title": "Payment Method"
+          },
+          "timestamp": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Timestamp"
+          },
+          "products": {
+            "items": {
+              "$ref": "#/components/schemas/ProductSale"
+            },
+            "type": "array",
+            "title": "Products"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "user_id",
+          "store_id",
+          "payment_method",
+          "timestamp",
+          "products"
+        ],
+        "title": "SaleRead"
+      },
+      "StoreCreate": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Name"
+          },
+          "address": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Address"
+          },
+          "category": {
+            "type": "integer",
+            "minimum": 0,
+            "title": "Category"
+          },
+          "preorder_enabled": {
+            "type": "boolean",
+            "title": "Preorder Enabled"
+          },
+          "ps_value": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ps Value"
+          },
+          "opening_times": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "time"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array",
+            "maxItems": 7,
+            "minItems": 7,
+            "title": "Opening Times"
+          },
+          "closing_times": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "time"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array",
+            "maxItems": 7,
+            "minItems": 7,
+            "title": "Closing Times"
+          },
+          "payment_methods": {
+            "items": {
+              "type": "boolean"
+            },
+            "type": "array",
+            "maxItems": 4,
+            "minItems": 4,
+            "title": "Payment Methods"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "address",
+          "category",
+          "preorder_enabled",
+          "ps_value",
+          "opening_times",
+          "closing_times",
+          "payment_methods"
+        ],
+        "title": "StoreCreate"
+      },
+      "StoreRead": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "Id"
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 60,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Name"
+          },
+          "address": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Address"
+          },
+          "category": {
+            "type": "integer",
+            "minimum": 0,
+            "title": "Category"
+          },
+          "preorder_enabled": {
+            "type": "boolean",
+            "title": "Preorder Enabled"
+          },
+          "ps_value": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ps Value"
+          },
+          "opening_times": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "time"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array",
+            "maxItems": 7,
+            "minItems": 7,
+            "title": "Opening Times"
+          },
+          "closing_times": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "time"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array",
+            "maxItems": 7,
+            "minItems": 7,
+            "title": "Closing Times"
+          },
+          "payment_methods": {
+            "items": {
+              "type": "boolean"
+            },
+            "type": "array",
+            "maxItems": 4,
+            "minItems": 4,
+            "title": "Payment Methods"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "address",
+          "category",
+          "preorder_enabled",
+          "ps_value",
+          "opening_times",
+          "closing_times",
+          "payment_methods"
+        ],
+        "title": "StoreRead"
+      },
+      "StoreUpdate": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Name"
+          },
+          "address": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Address"
+          },
+          "category": {
+            "type": "integer",
+            "minimum": 0,
+            "title": "Category"
+          },
+          "preorder_enabled": {
+            "type": "boolean",
+            "title": "Preorder Enabled"
+          },
+          "ps_value": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ps Value"
+          },
+          "opening_times": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "time"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array",
+            "maxItems": 7,
+            "minItems": 7,
+            "title": "Opening Times"
+          },
+          "closing_times": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "time"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "type": "array",
+            "maxItems": 7,
+            "minItems": 7,
+            "title": "Closing Times"
+          },
+          "payment_methods": {
+            "items": {
+              "type": "boolean"
+            },
+            "type": "array",
+            "maxItems": 4,
+            "minItems": 4,
+            "title": "Payment Methods"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "address",
+          "category",
+          "preorder_enabled",
+          "ps_value",
+          "opening_times",
+          "closing_times",
+          "payment_methods"
+        ],
+        "title": "StoreUpdate"
+      },
+      "SuccessfulResponse": {
+        "properties": {
+          "successful": {
+            "type": "boolean",
+            "const": true,
+            "title": "Successful",
+            "default": true
+          },
+          "data": {
+            "anyOf": [
+              {
+
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Data"
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Message"
+          }
+        },
+        "type": "object",
+        "required": [
+          "data",
+          "message"
+        ],
+        "title": "SuccessfulResponse",
+        "description": "A generic, standard API response model for successful responses. Inherits from `APIResponse` and ensures `successful` is always `True`.\nAttributes:\n    successful (Literal[True]): Always `True` to indicate a successful API call.\n    data (Optional[Any]): The data returned by the API, if any (will mostly be `dict[str, any]`, `list[dict[str, any]]`, or `None`).\n    message (str): A message providing additional information about the API call."
+      },
+      "Token": {
+        "properties": {
+          "token": {
+            "type": "string",
+            "title": "Token"
+          },
+          "token_type": {
+            "type": "string",
+            "const": "bearer",
+            "title": "Token Type",
+            "default": "bearer"
+          }
+        },
+        "type": "object",
+        "required": [
+          "token"
+        ],
+        "title": "Token"
+      },
+      "UserCreate": {
+        "properties": {
+          "first_names": {
+            "type": "string",
+            "maxLength": 40,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "First Names"
+          },
+          "last_name": {
+            "type": "string",
+            "maxLength": 40,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Last Name"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "title": "Email"
+          },
+          "password": {
+            "type": "string",
+            "minLength": 8,
+            "title": "Password"
+          },
+          "birthdate": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Birthdate"
+          },
+          "gender": {
+            "type": "string",
+            "enum": [
+              "X",
+              "F",
+              "M"
+            ],
+            "title": "Gender"
+          },
+          "res_area": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Res Area"
+          }
+        },
+        "type": "object",
+        "required": [
+          "first_names",
+          "last_name",
+          "email",
+          "password",
+          "birthdate",
+          "gender",
+          "res_area"
+        ],
+        "title": "UserCreate"
+      },
+      "UserRead": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "minimum": 1,
+            "title": "Id"
+          },
+          "first_names": {
+            "type": "string",
+            "maxLength": 40,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "First Names"
+          },
+          "last_name": {
+            "type": "string",
+            "maxLength": 40,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Last Name"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "title": "Email"
+          },
+          "birthdate": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Birthdate"
+          },
+          "gender": {
+            "type": "string",
+            "enum": [
+              "X",
+              "F",
+              "M"
+            ],
+            "title": "Gender"
+          },
+          "res_area": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Res Area"
+          },
+          "store_id": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Store Id"
+          },
+          "store_role": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "cashier",
+                  "owner"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Store Role"
+          },
+          "email_verified": {
+            "type": "boolean",
+            "title": "Email Verified"
+          }
+        },
+        "type": "object",
+        "required": [
+          "id",
+          "first_names",
+          "last_name",
+          "email",
+          "birthdate",
+          "gender",
+          "res_area",
+          "store_id",
+          "store_role",
+          "email_verified"
+        ],
+        "title": "UserRead"
+      },
+      "UserUpdate": {
+        "properties": {
+          "first_names": {
+            "type": "string",
+            "maxLength": 40,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "First Names"
+          },
+          "last_name": {
+            "type": "string",
+            "maxLength": 40,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Last Name"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "title": "Email"
+          },
+          "birthdate": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Birthdate"
+          },
+          "gender": {
+            "type": "string",
+            "enum": [
+              "X",
+              "F",
+              "M"
+            ],
+            "title": "Gender"
+          },
+          "res_area": {
+            "type": "string",
+            "maxLength": 50,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Res Area"
+          }
+        },
+        "type": "object",
+        "required": [
+          "first_names",
+          "last_name",
+          "email",
+          "birthdate",
+          "gender",
+          "res_area"
+        ],
+        "title": "UserUpdate"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "public",
+      "description": "No se debe enviar ningún token."
+    },
+    {
+      "name": "requires_auth",
+      "description": "En el header `Authorization` se debe enviar un token válido (formato: `Bearer \u003Ctoken\u003E`) de un usuario autenticado (`/auth/token`)."
+    },
+    {
+      "name": "requires_active_user",
+      "description": "En el header `Authorization` se debe enviar un token válido (formato: `Bearer \u003Ctoken\u003E`) de un usuario autenticado (`/auth/token`) que haya verificado su mail a través de `/auth/activate`."
+    },
+    {
+      "name": "requires_admin",
+      "description": "En el header `Authorization` se debe enviar un token válido (formato: `Bearer \u003Ctoken\u003E`) de un usuario autenticado (`/auth/token`) que haya verificado su mail a través de `/auth/activate` y que además tenga permisos de administrador. **NO LOS USEN PARA NADA EN EL FRONT.** (la mayoría son endpoints viejos que fueron reemplazados por nuevas versiones que implementan token o no son necesarios.)"
+    }
+  ]
+}

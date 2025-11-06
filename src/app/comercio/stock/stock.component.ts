@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { SidebarComponent } from 'src/app/Componentes/sidebar-statill/sidebar.component';
 import { ProductoFormComponent, ProductoData } from 'src/app/Componentes/producto-form/producto-form.component';
 import { MiApiService } from 'src/app/servicios/mi-api.service';
+import { AuthService } from 'src/app/servicios/auth.service';
 
 @Component({
   selector: 'app-stock',
@@ -11,8 +12,11 @@ import { MiApiService } from 'src/app/servicios/mi-api.service';
   templateUrl: './stock.component.html',
   styleUrls: ['./stock.component.scss']
 })
-export class StockComponent {
-  constructor(private miApi: MiApiService) {}
+export class StockComponent implements OnInit {
+  constructor(
+    private miApi: MiApiService,
+    private authService: AuthService
+  ) {}
 
   SePuedeVerElformulario = false;
   producto: ProductoData = {
@@ -36,6 +40,22 @@ export class StockComponent {
   errorMessage: string | null = null;
 
   ngOnInit() {
+    // Establecer el store_id del usuario owner
+    const user = this.authService.getCurrentUser();
+    if (user && user.store_id) {
+      this.producto.store_id = user.store_id;
+    } else {
+      // Si no hay usuario, intentar obtenerlo
+      this.authService.fetchCurrentUser().subscribe({
+        next: () => {
+          const updatedUser = this.authService.getCurrentUser();
+          if (updatedUser && updatedUser.store_id) {
+            this.producto.store_id = updatedUser.store_id;
+          }
+        }
+      });
+    }
+
     this.miApi.getProductos().subscribe((data: any) => {
       console.log('prubeba, prubea', data);
       this.productos = data.data;
@@ -51,6 +71,11 @@ export class StockComponent {
     this.editarIndex = index;
     this.editarProducto = { ...producto };
     this.SePuedeVerElformulario = true;
+    
+    // Mantener el store_id del usuario owner
+    const user = this.authService.getCurrentUser();
+    const storeId = user?.store_id || producto.store_id;
+    
     this.producto = {
       name: producto.name,
       brand: producto.brand,
@@ -61,7 +86,7 @@ export class StockComponent {
       desc: producto.desc,
       barcode: producto.barcode,
       hidden: producto.hidden,
-      store_id: producto.store_id
+      store_id: storeId
     };
     this.productoEditandoId = producto.id;
   }
@@ -69,6 +94,16 @@ export class StockComponent {
   onProductoSubmit(productoData: ProductoData) {
     this.isLoading = true;
     this.errorMessage = null;
+
+    // Asegurar que el store_id sea el del usuario owner
+    const user = this.authService.getCurrentUser();
+    if (user && user.store_id) {
+      productoData.store_id = user.store_id;
+    } else {
+      this.errorMessage = 'Error: No se pudo obtener el ID de tu tienda.';
+      this.isLoading = false;
+      return;
+    }
 
     if (this.productoEditandoId) {
       // Editar producto existente (PUT)
@@ -122,6 +157,7 @@ export class StockComponent {
   }
 
   resetForm() {
+    const user = this.authService.getCurrentUser();
     this.producto = {
       name: '',
       brand: '',
@@ -132,7 +168,7 @@ export class StockComponent {
       desc: '',
       barcode: '',
       hidden: false,
-      store_id: 1
+      store_id: user?.store_id || 1
     };
     this.SePuedeVerElformulario = false;
     this.editarIndex = null;

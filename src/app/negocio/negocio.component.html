@@ -77,6 +77,11 @@
 <header class="Abajo">
   <div class="Reseña">
     <span class="textoReseña">Reseña</span>
+    @if (checkingPurchase) {
+      <p class="info-message">Verificando si puedes dejar una reseña...</p>
+    } @else if (!hasPurchasedFromStore && authService.isActiveUser()) {
+      <p class="warning-message">Solo puedes dejar una reseña después de realizar un pedido en esta tienda.</p>
+    }
     <div class="Estrellas">
       <span>Bueno</span>
       <button (click)="setValue(1)" [class.active]="estrellas >= 1" class="Estrella">estrella</button>
@@ -86,11 +91,40 @@
       <button (click)="setValue(5)" [class.active]="estrellas >= 5" class="Estrella">estrella</button>
       <span>Malo</span>
     </div>
-    <input type="text" placeholder="Ingrese su reseña aquí" class="ReseñaTextBox" [(ngModel)]="textValue">
-    <button (click)="submitReview()">OK</button>
+    <input 
+      type="text" 
+      placeholder="Ingrese su reseña aquí" 
+      class="ReseñaTextBox" 
+      [(ngModel)]="textValue"
+      [disabled]="checkingPurchase || (!hasPurchasedFromStore && authService.isActiveUser())">
+    <button 
+      (click)="submitReview()"
+      [disabled]="checkingPurchase || (!hasPurchasedFromStore && authService.isActiveUser())">
+      OK
+    </button>
   </div>
 
-  <div class = "reseñasGrid">
+  <div class="reseñasGrid">
+    <h3>Reseñas</h3>
+    @if (reviews && reviews.length > 0) {
+      <div class="reseñas-lista">
+        @for (review of reviews; track review.id) {
+          <div class="reseña-card">
+            <div class="reseña-header">
+              <div class="reseña-estrellas">
+                @for (i of [1,2,3,4,5]; track i) {
+                  <span [class.filled]="i <= review.stars">★</span>
+                }
+              </div>
+              <span class="reseña-fecha">Usuario #{{ review.user_id }}</span>
+            </div>
+            <p class="reseña-texto">{{ review.desc }}</p>
+          </div>
+        }
+      </div>
+    } @else {
+      <p class="sin-reseñas">No hay reseñas todavía. ¡Sé el primero en dejar una!</p>
+    }
   </div>
 </header>
 

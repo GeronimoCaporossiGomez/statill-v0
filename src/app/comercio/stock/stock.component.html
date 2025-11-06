@@ -19,7 +19,7 @@
     [title]="productoEditandoId ? 'Editar Producto' : 'Crear Producto'"
     [submitButtonText]="productoEditandoId ? 'Actualizar Producto' : 'Crear Producto'"
     [showBarcodeField]="true"
-    [showStoreIdField]="true"
+    [showStoreIdField]="false"
     [suggestedData]="null"
     (onSubmit)="onProductoSubmit($event)"
     (onCancel)="onCancelar()"

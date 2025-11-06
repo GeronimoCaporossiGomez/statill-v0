@@ -14,9 +14,8 @@ export class ComercioService {
   }
 
   getStoreById(id: number): Observable<any> {
-    return this.getStores().pipe(
-      map(stores => stores.find((s: any) => s.id === id))
-    );
+    return this.miApiService.getStoreById(id)
+      .pipe(map((response: any) => response.data));
   }
 
   getProductos(): Observable<any[]> {
@@ -25,9 +24,8 @@ export class ComercioService {
   }
 
   getProductosByStore(storeId: number): Observable<any[]> {
-    return this.getProductos().pipe(
-      map(productos => productos.filter((p: any) => p.store_id === storeId))
-    );
+    return this.miApiService.getProductos()
+      .pipe(map((response: any) => response.data.filter((p: any) => p.store_id === storeId)));
   }
 
   postSales(sale: any): Observable<any> {
@@ -49,8 +47,12 @@ export class ComercioService {
   }
 
   getReviewsByStore(storeId: number): Observable<any[]> {
-    return this.getReviews().pipe(
-      map(productos => productos.filter((p: any) => p.store_id === storeId))
-    );
+    return this.miApiService.getReviewsByStoreId(storeId)
+      .pipe(map((response: any) => response.data));
+  }
+
+  getMyOrders(): Observable<any> {
+    return this.miApiService.getMyOrders()
+      .pipe(map((response: any) => response.data));
   }
 }

@@ -24,6 +24,11 @@
 
   <!-- Formulario con animación -->
   <div class="auth-body" [@fadeSlide]="isLogin ? 'login' : 'register'">
+    <!-- Mensajes de éxito/error -->
+    <div *ngIf="message" class="auth-message" [class.success]="messageType === 'success'" [class.error]="messageType === 'error'">
+      {{ message }}
+    </div>
+
     <!-- Paso: Verificación de código -->
     <form *ngIf="isVerifyingCode" (ngSubmit)="submitForm()">
       <div class="form-group">
@@ -34,9 +39,22 @@
           placeholder="Ingresá tu código"
           [(ngModel)]="activationCode"
           name="activation"
+          [disabled]="loading"
           required />
       </div>
-      <button type="submit" class="btn btn-primary">Confirmar</button>
+      <button type="submit" class="btn btn-primary" [disabled]="loading">
+        <span *ngIf="loading">Verificando...</span>
+        <span *ngIf="!loading">Confirmar</span>
+      </button>
+      <div class="resend-section">
+        <p>¿No recibiste el código?</p>
+        <button type="button" class="btn btn-link" (click)="resendVerificationCode()" [disabled]="loading">
+          Reenviar código
+        </button>
+      </div>
+      <button type="button" class="btn btn-link" (click)="backToLogin()" [disabled]="loading">
+        Volver al login
+      </button>
     </form>
 
     <!-- Paso: Login / Registro -->
@@ -111,13 +129,14 @@
       </div>
 
       <div class="form-group">
-        <label for="password">{{ isLogin ? 'Código' : 'Contraseña' }}</label>
+        <label for="password">Contraseña</label>
         <input
           id="password"
           type="password"
-          [placeholder]="isLogin ? 'Ingresá tu código' : 'Ingresar +8 caracteres'"
+          [placeholder]="isLogin ? 'Ingresá tu contraseña' : 'Ingresar +8 caracteres'"
           [(ngModel)]="password"
           name="password"
+          [disabled]="loading"
           required />
       </div>
 
@@ -126,8 +145,9 @@
         <span class="terms-icon">&#9888;</span>
         <span>Al registrarse, está aceptando los <a href="#" class="terms-link">términos y condiciones</a></span>
       </div>
-      <button type="submit" class="btn btn-primary">
-        {{ isLogin ? 'Iniciar sesión' : 'Registrarse' }}
+      <button type="submit" class="btn btn-primary" [disabled]="loading">
+        <span *ngIf="loading">Cargando...</span>
+        <span *ngIf="!loading">{{ isLogin ? 'Iniciar sesión' : 'Registrarse' }}</span>
       </button>
     </form>
 

@@ -12,30 +12,28 @@
     
     <!-- Contenido cuando no está cargando -->
     <div *ngIf="!isLoading">
-      <div *ngFor="let punto of puntosDisplay">
-        <div class="cartel-puntos">
-          <img [src]="punto.imagen" alt="Tienda">
-          <div class="texto contenido-puntos">
-            <h2 class="asd roboto">
-              {{punto.nombre}} 
-              <span class="categoria-badge">{{punto.categoria}}</span>
-              <span class="puntos-display">{{punto.puntos}} pts.</span>
-            </h2>
-            <h3 class="gris roboto">
-              Usuario: {{punto.usuario}}
-              <span *ngIf="punto.rolUsuario" class="rol-badge">{{punto.rolUsuario}}</span>
-            </h3>
-            <h4 class="gris roboto small-text">📍 {{punto.direccion}}</h4>
-            <h5 *ngIf="punto.areaResidencia" class="gris roboto small-text">🏠 {{punto.areaResidencia}}</h5>
+      @if (puntosDisplay.length > 0) {
+        <div *ngFor="let punto of puntosDisplay">
+          <div class="cartel-puntos">
+            <img [src]="punto.imagen" alt="Tienda">
+            <div class="texto contenido-puntos">
+              <h2 class="asd roboto">
+                {{punto.nombre}} 
+                <span class="categoria-badge">{{punto.categoria}}</span>
+                <span class="puntos-display">{{punto.puntos}} pts.</span>
+              </h2>
+              <h4 class="gris roboto small-text">📍 {{punto.direccion}}</h4>
+            </div>
+            <button type="button" [routerLink]="['/negocio', punto.store_id]" class="boton-link">Comprar</button>
           </div>
-          <button type="button" [routerLink]="['/negocio', punto.store_id]" class="boton-link">Comprar</button>
         </div>
-      </div>
-      
-      <!-- Mensaje cuando no hay puntos -->
-      <div *ngIf="puntosDisplay.length === 0" class="no-points-message">
-        <p>No tienes puntos acumulados aún.</p>
-      </div>
+      } @else {
+        <!-- Mensaje cuando no hay puntos -->
+        <div class="no-points-message">
+          <h2>No tienes puntos en ninguna tienda</h2>
+          <p>Realiza compras en las tiendas para acumular puntos y poder canjearlos por productos.</p>
+        </div>
+      }
     </div>
   </div>
 </div>

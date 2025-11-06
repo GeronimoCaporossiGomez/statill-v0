@@ -41,7 +41,7 @@ export class CrearProductoFormComponent {
         desc: '',
         barcode: '',
         hidden: false,
-        store_id: 1
+        store_id: this.producto?.store_id || 1
       };
     }
   }

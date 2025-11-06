@@ -10,32 +10,136 @@
   background: #ffffff;
   border-radius: 12px;
   box-shadow: 0 6px 24px rgba(0,0,0,0.08);
-  padding: 24px;
+  padding: 32px;
   max-width: 420px;
   width: 100%;
   text-align: center;
 }
 
 .confirm-card h1 {
-  margin: 0 0 8px;
+  margin: 0 0 16px;
   font-size: 24px;
+  color: #1f2937;
 }
 
 .confirm-card p {
-  margin: 0 0 16px;
-  color: #555;
+  margin: 0 0 24px;
+  color: #6b7280;
+  font-size: 14px;
 }
 
-.primary {
-  display: inline-block;
+.confirm-form {
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #374151;
+  font-size: 14px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #3b82f6;
+}
+
+.form-group input:disabled {
+  background-color: #f3f4f6;
+  cursor: not-allowed;
+}
+
+.btn {
+  width: 100%;
+  padding: 12px 24px;
   border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-primary {
   background: #3b82f6;
   color: #fff;
-  padding: 10px 16px;
-  border-radius: 8px;
-  cursor: pointer;
 }
 
-.primary:hover {
+.btn-primary:hover:not(:disabled) {
   background: #2563eb;
+}
+
+.btn-primary:disabled {
+  background: #9ca3af;
+  cursor: not-allowed;
+}
+
+.btn-link {
+  background: transparent;
+  color: #3b82f6;
+  text-decoration: underline;
+  padding: 8px;
+}
+
+.btn-link:hover:not(:disabled) {
+  color: #2563eb;
+}
+
+.btn-link:disabled {
+  color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.resend-section {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.resend-section p {
+  margin: 0 0 8px;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.message {
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+}
+
+.message.success {
+  background-color: #d1fae5;
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+}
+
+.message.error {
+  background-color: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+.success-actions {
+  margin-top: 24px;
+}
+
+.success-actions .btn {
+  margin-top: 12px;
 }

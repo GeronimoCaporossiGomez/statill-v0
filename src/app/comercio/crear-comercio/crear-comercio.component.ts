@@ -5,6 +5,7 @@ import { Router, RouterLink } from '@angular/router';
 import { SidebarComponent } from 'src/app/Componentes/sidebar-statill/sidebar.component';
 import { MapaComponent } from 'src/app/mapa/mapa.component';
 import { MiApiService } from 'src/app/servicios/mi-api.service';
+import { AuthService } from 'src/app/servicios/auth.service';
 
 @Component({
   selector: 'app-crear-comercio',
@@ -32,7 +33,8 @@ export class CrearComercioComponent {
   constructor(
     private router: Router,
     private cdr: ChangeDetectorRef,
-    private miApiService: MiApiService
+    private miApiService: MiApiService,
+    private authService: AuthService
   ) {}
 
   aumentarPantalla() {
@@ -95,6 +97,28 @@ export class CrearComercioComponent {
   onSubmit(form: NgForm) {
     console.log('📋 Datos del formulario (raw):', form.value);
 
+    // Obtener el usuario autenticado
+    const currentUser = this.authService.getCurrentUser();
+    if (!currentUser || !currentUser.id) {
+      alert('Error: Debes estar autenticado para crear un comercio.');
+      return;
+    }
+
+    // Validar que el nombre no esté vacío
+    if (!form.value.nombre || form.value.nombre.trim() === '') {
+      alert('Por favor, ingresa un nombre para el comercio.');
+      return;
+    }
+
+    // Usar la dirección confirmada del mapa o la del input
+    const direccionFinal = this.ubicacionConfirmada || this.direccionInput || '';
+    
+    // Validar que haya una dirección
+    if (!direccionFinal || direccionFinal.trim() === '') {
+      alert('Por favor, selecciona una ubicación en el mapa o ingresa una dirección.');
+      return;
+    }
+
     // Transformar horarios al formato del backend (solo HH:MM)
     const openingTimes: (string | null)[] = [];
     const closingTimes: (string | null)[] = [];
@@ -125,16 +149,16 @@ export class CrearComercioComponent {
       'bar': 3
     };
 
-    // Usar la dirección confirmada del mapa o la del input
-    const direccionFinal = this.ubicacionConfirmada || this.direccionInput;
+    // Obtener ps_value del formulario si está habilitado
+    const psValue = form.value.psEnabled ? (form.value.psValue || 1) : 1;
 
     // Construir el objeto en el formato del backend
     const datosParaBackend: any = {
-      name: form.value.nombre || '',
-      address: direccionFinal,
+      name: form.value.nombre.trim(),
+      address: direccionFinal.trim(),
       category: categorias[form.value.tipo] || 0,
       preorder_enabled: form.value.preorder === true,
-      ps_value: 1 , //ESTO HAY QUE HACERLO BIEN, ES DECIR, QUE ESTE CON EL FORM PARA ESO ARREGLAR EL DISEÑO CON EL CSS PORQUE EL MAPA LO ESTA TAPANDO
+      ps_value: psValue,
       opening_times: openingTimes,
       closing_times: closingTimes,
       payment_methods: [
@@ -143,13 +167,8 @@ export class CrearComercioComponent {
         form.value.pagoCredito === true,
         form.value.pagoTransferencia === true
       ],
-      user_id: form.value.localsito
+      user_id: currentUser.id  // Usar el ID del usuario autenticado
     };
-
-    // Si ps_enabled es true, agregar ps_value
-    if (datosParaBackend.ps_enabled) {
-      datosParaBackend.ps_value = form.value.psValue || 0;
-    }
 
     // Agregar coordenadas si están disponibles
     if (this.coordenadasSeleccionadas) {
@@ -165,16 +184,29 @@ export class CrearComercioComponent {
   }
 
   enviarComercio(datos: any) {
-    this.miApiService.postStores(datos).subscribe(
-      response => {
+    this.miApiService.postStores(datos).subscribe({
+      next: (response) => {
         console.log('✅ Comercio creado exitosamente:', response);
+        alert('¡Comercio creado exitosamente!');
         this.router.navigate(['/escanear']);
       },
-      error => {
+      error: (error) => {
         console.error('❌ Error al crear comercio:', error);
         console.error('Detalles:', error.error);
+        
+        // Mostrar mensaje de error más descriptivo
+        let errorMessage = 'Error al crear el comercio. ';
+        if (error.error && error.error.message) {
+          errorMessage += error.error.message;
+        } else if (error.error && typeof error.error === 'string') {
+          errorMessage += error.error;
+        } else {
+          errorMessage += 'Por favor, verifica que todos los campos estén completos.';
+        }
+        
+        alert(errorMessage);
       }
-    );
+    });
   }
 
   onSubmitUnirse(form: NgForm) {

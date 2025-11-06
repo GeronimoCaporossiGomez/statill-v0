@@ -5,6 +5,7 @@ import { ComercioService } from '../servicios/comercio.service';
 import { HeaderStatillComponent } from '../Componentes/header-statill/header-statill.component';
 import { FormsModule } from '@angular/forms';
 import { forkJoin } from 'rxjs';
+import { AuthService } from '../servicios/auth.service';
 
 @Component({
   selector: 'app-negocio',
@@ -16,14 +17,17 @@ export class NegocioComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private comercioService = inject(ComercioService);
+  public authService = inject(AuthService);
 
   textValue = ""
 
-  comercio: any;
+  comercio: any = null;
   productos: any[] = [];
-  reseñas: any[] = [];
+  reviews: any[] = [];
   cargando = true;
   carrito: { [key: number]: number } = {}; // { productoId: cantidad }
+  hasPurchasedFromStore: boolean = false;
+  checkingPurchase: boolean = false;
 
   estrellas: number = 0;
 
@@ -34,14 +38,66 @@ export class NegocioComponent implements OnInit {
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
 
+    if (!id || isNaN(id)) {
+      console.error('ID de tienda inválido');
+      this.cargando = false;
+      this.router.navigate(['/home']);
+      return;
+    }
+
     // Cargar todo junto con forkJoin
     forkJoin({
       store: this.comercioService.getStoreById(id),
       productos: this.comercioService.getProductosByStore(id),
       reviews: this.comercioService.getReviewsByStore(id)
     }).subscribe({
-      error: (err) => {
+      next: (results) => {
+        this.comercio = results.store;
+        this.productos = results.productos;
+        this.reviews = results.reviews;
         this.cargando = false;
+        
+        // Verificar si el usuario ha hecho pedidos en esta tienda
+        this.checkIfUserHasPurchased(id);
+      },
+      error: (err) => {
+        console.error('Error al cargar datos:', err);
+        this.cargando = false;
+        alert('Error al cargar la tienda. Por favor, intente nuevamente.');
+        this.router.navigate(['/home']);
+      }
+    });
+  }
+
+  checkIfUserHasPurchased(storeId: number) {
+    const currentUser = this.authService.getCurrentUser();
+    if (!currentUser || !this.authService.isActiveUser()) {
+      this.hasPurchasedFromStore = false;
+      return;
+    }
+
+    this.checkingPurchase = true;
+    this.comercioService.getMyOrders().subscribe({
+      next: (orders: any[]) => {
+        // Verificar si hay algún pedido en esta tienda
+        this.hasPurchasedFromStore = orders.some((order: any) => 
+          order.store_id === storeId && 
+          (order.status === 'received' || order.status === 'accepted')
+        );
+        this.checkingPurchase = false;
+      },
+      error: (err) => {
+        // Si el error es 403 o 404, el endpoint no está disponible o no tiene permisos
+        // En ese caso, permitir la reseña de todas formas (no bloquear la funcionalidad)
+        if (err.status === 403 || err.status === 404) {
+          console.warn('El endpoint de órdenes no está disponible o no tiene permisos. Permitiendo reseñas.');
+          this.hasPurchasedFromStore = true;
+        } else {
+          console.error('Error al verificar pedidos:', err);
+          // Si falla por otro motivo, también permitir la reseña de todas formas
+          this.hasPurchasedFromStore = true;
+        }
+        this.checkingPurchase = false;
       }
     });
   }
@@ -71,16 +127,44 @@ export class NegocioComponent implements OnInit {
   }
 
   submitReview(): void {
+    // Verificar que el usuario esté autenticado
+    if (!this.authService.isActiveUser()) {
+      alert('Debes iniciar sesión y verificar tu email para dejar una reseña.');
+      return;
+    }
+
+    // Verificar que la tienda esté cargada
+    if (!this.comercio || !this.comercio.id) {
+      alert('Error: No se pudo cargar la información de la tienda.');
+      return;
+    }
+
+    // Verificar si el usuario ha hecho pedidos en esta tienda
+    if (!this.hasPurchasedFromStore && !this.checkingPurchase) {
+      alert('Solo puedes dejar una reseña después de haber realizado un pedido en esta tienda.');
+      return;
+    }
+
+    if (this.estrellas === 0) {
+      alert('Por favor, selecciona una calificación.');
+      return;
+    }
+
     if (this.textValue.trim() === '') {
       alert('Por favor, escribe una reseña.');
       return;
     }
 
+    const currentUser = this.authService.getCurrentUser();
+    if (!currentUser) {
+      alert('Error: No se pudo obtener tu información de usuario.');
+      return;
+    }
+
     const review = {
       store_id: this.comercio.id,
-      user_id: 37,
       stars: this.estrellas,
-      desc: this.textValue
+      desc: this.textValue.trim()
     };
 
     this.comercioService.postReview(review).subscribe({
@@ -90,23 +174,43 @@ export class NegocioComponent implements OnInit {
         // Recargar las reseñas después de enviar una nueva
         this.comercioService.getReviewsByStore(this.comercio.id).subscribe({
           next: (reviews) => {
-            this.reseñas = reviews;
+            this.reviews = reviews;
             this.textValue = '';
             this.estrellas = 0;
+          },
+          error: (err) => {
+            console.error('Error al recargar reseñas:', err);
           }
         });
       },
       error: (err) => {
         console.error('Error al realizar la reseña:', err);
-        console.error('Error al realizar la reseña:', err.status, err.message, err.error);
-        console.log('Review payload:', review, this.comercio.id);
+        const errorMessage = err.error?.message || 'Error al enviar la reseña. Por favor, intente nuevamente.';
+        alert(errorMessage);
       }
     });
   }
 
   finalizarCompra() {
+    if (!this.comercio || !this.comercio.id) {
+      alert('Error: No se pudo cargar la información de la tienda.');
+      return;
+    }
+
     if (this.getTotalItems() === 0) {
       alert('Agregue productos al carrito');
+      return;
+    }
+
+    // Verificar que el usuario esté autenticado
+    if (!this.authService.isActiveUser()) {
+      alert('Debes iniciar sesión y verificar tu email para realizar una compra.');
+      return;
+    }
+
+    const currentUser = this.authService.getCurrentUser();
+    if (!currentUser) {
+      alert('Error: No se pudo obtener tu información de usuario.');
       return;
     }
 
@@ -118,8 +222,8 @@ export class NegocioComponent implements OnInit {
     const venta = {
       store_id: this.comercio.id,
       products: products,
-      payment_method: 3,
-      user_id: 1
+      payment_method: 0, // 0 = cash según la API
+      user_id: currentUser.id
     };
 
     this.comercioService.postSales(venta).subscribe({
@@ -130,12 +234,13 @@ export class NegocioComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error al realizar la venta:', err);
-        alert('Error al realizar la compra');
+        const errorMessage = err.error?.message || 'Error al realizar la compra. Por favor, intente nuevamente.';
+        alert(errorMessage);
       }
     });
   }
 
   volver() {
-    this.router.navigate(['/configuracion']);
+    this.router.navigate(['/home']);
   }
 }

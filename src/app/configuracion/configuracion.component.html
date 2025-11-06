@@ -1,10 +1,23 @@
 <app-header-statill></app-header-statill>
 
-<h1>Nuestros Comercios</h1>
-<div>
-  @for (comercio of comercios; track comercio.id) {
-    <div>
-      <button (click)="irAComercio(comercio.id)">{{comercio.name}}</button>
-    </div>
-  }
+<div class="configuracion-container">
+  <div class="user-info">
+    <h2>Usuario: {{ fullName || 'Cargando...' }}</h2>
+    <p>Email: {{ email || 'Cargando...' }}</p>
+  </div>
+
+  <h1>Mis Comercios</h1>
+  <div>
+    @if (cargando) {
+      <p>Cargando...</p>
+    } @else if (comercios.length === 0) {
+      <p>No tienes comercios registrados.</p>
+    } @else {
+      @for (comercio of comercios; track comercio.id) {
+        <div>
+          <button (click)="irAComercio(comercio.id)">{{comercio.name}}</button>
+        </div>
+      }
+    }
+  </div>
 </div>

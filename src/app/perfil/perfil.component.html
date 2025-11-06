@@ -2,8 +2,8 @@
   <div class="perfi-izquierda">
     <div class="seccion-personal">
       <img src="assets/img/perfil-statill.png" alt="avatar perfil">
-      <h2>Juan Pérez</h2>
-      <h3>juanchiperez&#64;gmail.com</h3>
+      <h2>{{ fullName || 'Cargando...' }}</h2>
+      <h3>{{ email || 'Cargando...' }}</h3>
     </div>
     <div class="seccion-botones">
       <button routerLink="/home">
@@ -30,7 +30,7 @@
       <button type="button">Información personal</button>
       <button type="button" routerLink="/preordenes">Historial</button>
       <h2>Opciones</h2>
-      <button type="button">Cerrar sesión</button>
+      <button type="button" (click)="cerrarSesion()">Cerrar sesión</button>
     </div>
   </div>
 </div>

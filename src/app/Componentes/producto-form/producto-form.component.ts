@@ -70,6 +70,11 @@ export class ProductoFormComponent implements OnInit {
       this.useSuggestedData = true;
       this.applySuggestedData();
     }
+
+    // Si el store_id ya está establecido desde el padre, no mostrar el campo
+    if (this.producto.store_id && this.producto.store_id > 0) {
+      this.showStoreIdField = false;
+    }
   }
 
   applySuggestedData() {
