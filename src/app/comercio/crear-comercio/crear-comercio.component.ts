@@ -6,6 +6,7 @@ import { SidebarComponent } from 'src/app/Componentes/sidebar-statill/sidebar.co
 import { MapaComponent } from 'src/app/mapa/mapa.component';
 import { MiApiService } from 'src/app/servicios/mi-api.service';
 import { AuthService } from 'src/app/servicios/auth.service';
+import { GeneralService } from 'src/app/servicios/general.service';
 
 @Component({
   selector: 'app-crear-comercio',
@@ -23,6 +24,7 @@ export class CrearComercioComponent {
   imagenUrl: string | ArrayBuffer | null = null;
   archivoLogo: File | null = null;
   userId: number = 1;
+  users: any[] = [];
 
   // Variables para el mapa
   direccionInput: string = '';
@@ -38,8 +40,23 @@ export class CrearComercioComponent {
     private router: Router,
     private cdr: ChangeDetectorRef,
     private miApiService: MiApiService,
-    private authService: AuthService
-  ) {}
+    private authService: AuthService,
+    private generalService: GeneralService
+  ) {
+    this.cargarUsuarios();
+  }
+
+  cargarUsuarios() {
+    this.generalService.getUsers().subscribe({
+      next: (users: any) => {
+        this.users = users;
+        console.log('👥 Usuarios cargados:', this.users);
+      },
+      error: (error) => {
+        console.error('❌ Error al cargar usuarios:', error);
+      }
+    });
+  }
 
   aumentarPantalla() {
     this.seccionPantalla += 1;

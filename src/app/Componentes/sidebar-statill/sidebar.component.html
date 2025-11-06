@@ -14,14 +14,14 @@
             [class.active]="activeItem === item.id"
             (click)="setActive(item.id)"
           >
-            <!-- Acá va la imagen correspondiente a "{{item.id}}" -->
             <div class="icon-placeholder">
-              <i [class]="item.icon"></i>
+              <img [src]="item.icon" [alt]="item.text" />
             </div>
             <span>{{ item.text }}</span>
           </a>
         </li>
       </div>
+      
       <div class="items" *ngIf="!vendedor">
         <li *ngFor="let item of menuItemsComprador">
           <ng-container *ngIf="activeItem === item.id">
@@ -34,18 +34,17 @@
             [class.active]="activeItem === item.id"
             (click)="setActive(item.id)"
           >
-            <!-- Acá va la imagen correspondiente a "{{item.id}}" -->
             <div class="icon-placeholder">
-              <i [class]="item.icon"></i>
+              <img [src]="item.icon" [alt]="item.text" />
             </div>
             <span>{{ item.text }}</span>
           </a>
         </li>
       </div>
     </ul>
+    
     <div class="comprador-btn-container">
       <button class="comprador-btn" (click)="toggleVendedor()">
-        <!-- Acá va la imagen correspondiente a "comprador" -->
         <span>{{vendedor ? 'Comprador' : 'Vendedor'}}</span>
       </button>
     </div>

@@ -50,19 +50,36 @@ export const ownerGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  if (authService.isOwner()) {
-    return true;
+  console.log('🔐 OwnerGuard: Verificando acceso...');
+  
+  // Get current user
+  const user = authService.getCurrentUser();
+  console.log('👤 Usuario actual:', user);
+
+  // Check if user is authenticated
+  if (!authService.isAuthenticated()) {
+    console.log('❌ Usuario no autenticado');
+    router.navigate(['/landing']);
+    return false;
   }
 
-  // If authenticated but not owner, redirect to home
-  if (authService.isAuthenticated()) {
+  // Check if user is active (email verified)
+  if (!authService.isActiveUser()) {
+    console.log('❌ Usuario no tiene email verificado');
+    router.navigate(['/confirmacion-codigo']);
+    return false;
+  }
+
+  // Check if user is owner
+  if (!user || user.store_role !== 'owner') {
+    console.log('❌ Usuario no es owner. store_role:', user?.store_role);
+    alert('Esta sección es solo para propietarios de tiendas.');
     router.navigate(['/home']);
     return false;
   }
 
-  // If not authenticated, redirect to landing
-  router.navigate(['/landing']);
-  return false;
+  console.log('✅ Acceso permitido a usuario owner');
+  return true;
 };
 
 /**
@@ -73,18 +90,34 @@ export const storeAccessGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  if (authService.isCashier()) {
-    return true;
+  console.log('🔐 StoreAccessGuard: Verificando acceso...');
+  
+  // Get current user
+  const user = authService.getCurrentUser();
+  console.log('👤 Usuario actual:', user);
+
+  // Check if user is authenticated
+  if (!authService.isAuthenticated()) {
+    console.log('❌ Usuario no autenticado');
+    router.navigate(['/landing']);
+    return false;
   }
 
-  // If authenticated but not cashier/owner, redirect to home
-  if (authService.isAuthenticated()) {
+  // Check if user is active (email verified)
+  if (!authService.isActiveUser()) {
+    console.log('❌ Usuario no tiene email verificado');
+    router.navigate(['/confirmacion-codigo']);
+    return false;
+  }
+
+  // Check if user has store access (owner or cashier)
+  if (!user || (user.store_role !== 'owner' && user.store_role !== 'cashier')) {
+    console.log('❌ Usuario no tiene acceso a tienda. store_role:', user?.store_role);
+    alert('Esta sección es solo para propietarios o cajeros de tiendas.');
     router.navigate(['/home']);
     return false;
   }
 
-  // If not authenticated, redirect to landing
-  router.navigate(['/landing']);
-  return false;
+  console.log('✅ Acceso permitido a usuario con rol:', user.store_role);
+  return true;
 };
-

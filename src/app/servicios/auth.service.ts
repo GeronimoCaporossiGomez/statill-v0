@@ -199,23 +199,23 @@ export class AuthService {
    */
   isOwner(): boolean {
     const user = this.getCurrentUser();
-    return this.isActiveUser() && user?.store_role === 'owner';
+    return this.isActiveUser() && user.store_role === 'owner';
   }
-
-  /**
-   * Check if user is cashier
-   */
+  
   isCashier(): boolean {
     const user = this.getCurrentUser();
-    return this.isActiveUser() && (user?.store_role === 'cashier' || user?.store_role === 'owner');
+    return this.isActiveUser() && user.store_role === 'cashier';
   }
-
+  isOwnerOrCashier(): boolean {
+    const user = this.getCurrentUser();
+    return this.isActiveUser() && (user.store_role === 'owner' || user.store_role === 'cashier');
+  }
   /**
    * Check if user has store (owner or cashier)
    */
   hasStore(): boolean {
     const user = this.getCurrentUser();
-    return this.isActiveUser() && !!user?.store_id;
+    return this.isActiveUser() && !!user.store_id;
   }
 
   /**
