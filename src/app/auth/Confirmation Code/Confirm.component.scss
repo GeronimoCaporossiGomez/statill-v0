@@ -1,145 +1,264 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap');
+
+$color-primario: #FD2A2C;
+$color-texto: #222;
+$color-gris: #666;
+$font-titulo: 'Poppins', sans-serif;
+$font-contenido: 'Roboto Condensed', sans-serif;
+
 .confirm-container {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 60vh;
+  min-height: 100vh;
   padding: 16px;
+  background: linear-gradient(135deg, #fff 0%, #fef0f0 100%);
 }
 
 .confirm-card {
   background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 6px 24px rgba(0,0,0,0.08);
-  padding: 32px;
-  max-width: 420px;
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(253, 42, 44, 0.12);
+  padding: 48px 40px;
+  max-width: 480px;
   width: 100%;
   text-align: center;
+  border: 2px solid rgba(253, 42, 44, 0.1);
 }
 
-.confirm-card h1 {
-  margin: 0 0 16px;
-  font-size: 24px;
-  color: #1f2937;
+.logo-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+
+  .logo {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: 28px;
+    color: $color-primario;
+    font-family: $font-titulo;
+    font-weight: 800;
+  }
 }
 
-.confirm-card p {
-  margin: 0 0 24px;
-  color: #6b7280;
-  font-size: 14px;
+.subtitle {
+  margin: 0 0 32px;
+  color: $color-gris;
+  font-size: 15px;
+  font-family: $font-contenido;
+  line-height: 1.5;
 }
 
 .confirm-form {
   text-align: left;
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .form-group {
-  margin-bottom: 20px;
-}
+  margin-bottom: 24px;
 
-.form-group label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 500;
-  color: #374151;
-  font-size: 14px;
-}
+  label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: $color-texto;
+    font-size: 14px;
+    font-family: $font-titulo;
+  }
 
-.form-group input {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 16px;
-  transition: border-color 0.2s;
-}
+  input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    font-size: 16px;
+    font-family: $font-contenido;
+    transition: all 0.3s ease;
+    background: #f8f8f8;
 
-.form-group input:focus {
-  outline: none;
-  border-color: #3b82f6;
-}
+    &:focus {
+      outline: none;
+      border-color: $color-primario;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(253, 42, 44, 0.1);
+    }
 
-.form-group input:disabled {
-  background-color: #f3f4f6;
-  cursor: not-allowed;
+    &::placeholder {
+      color: #999;
+    }
+
+    &:disabled {
+      background-color: #f3f4f6;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+  }
 }
 
 .btn {
   width: 100%;
-  padding: 12px 24px;
+  padding: 14px 24px;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 700;
+  font-family: $font-titulo;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .btn-primary {
-  background: #3b82f6;
-  color: #fff;
-}
+  background: $color-primario;
+  color: white;
+  box-shadow: 0 4px 12px rgba(253, 42, 44, 0.3);
 
-.btn-primary:hover:not(:disabled) {
-  background: #2563eb;
-}
+  &:hover:not(:disabled) {
+    background: #c82021;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(253, 42, 44, 0.4);
+  }
 
-.btn-primary:disabled {
-  background: #9ca3af;
-  cursor: not-allowed;
+  &:disabled {
+    background: #cccccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
 }
 
 .btn-link {
   background: transparent;
-  color: #3b82f6;
+  color: $color-primario;
   text-decoration: underline;
   padding: 8px;
-}
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: $font-contenido;
+  cursor: pointer;
+  transition: all 0.3s ease;
 
-.btn-link:hover:not(:disabled) {
-  color: #2563eb;
-}
+  &:hover:not(:disabled) {
+    color: #c82021;
+    transform: scale(1.02);
+  }
 
-.btn-link:disabled {
-  color: #9ca3af;
-  cursor: not-allowed;
+  &:disabled {
+    color: #9ca3af;
+    cursor: not-allowed;
+  }
 }
 
 .resend-section {
-  margin-top: 20px;
-  padding-top: 20px;
-  border-top: 1px solid #e5e7eb;
-}
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 2px solid #f0f0f0;
 
-.resend-section p {
-  margin: 0 0 8px;
-  font-size: 14px;
-  color: #6b7280;
+  p {
+    margin: 0 0 12px;
+    font-size: 14px;
+    color: $color-gris;
+    font-family: $font-contenido;
+  }
 }
 
 .message {
-  padding: 12px;
-  border-radius: 8px;
-  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-radius: 12px;
+  margin-bottom: 24px;
   font-size: 14px;
-}
+  font-family: $font-contenido;
+  font-weight: 500;
 
-.message.success {
-  background-color: #d1fae5;
-  color: #065f46;
-  border: 1px solid #6ee7b7;
-}
+  .message-icon {
+    font-size: 20px;
+    font-weight: bold;
+    flex-shrink: 0;
+  }
 
-.message.error {
-  background-color: #fee2e2;
-  color: #991b1b;
-  border: 1px solid #fca5a5;
+  .message-text {
+    flex: 1;
+    text-align: left;
+  }
+
+  &.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 2px solid #c3e6cb;
+
+    .message-icon {
+      color: #28a745;
+    }
+  }
+
+  &.error {
+    background-color: #fff5f5;
+    color: $color-primario;
+    border: 2px solid rgba(253, 42, 44, 0.3);
+
+    .message-icon {
+      color: $color-primario;
+    }
+  }
 }
 
 .success-actions {
-  margin-top: 24px;
+  margin-top: 32px;
+
+  .btn {
+    margin-top: 12px;
+  }
 }
 
-.success-actions .btn {
-  margin-top: 12px;
+// Responsive
+@media (max-width: 600px) {
+  .confirm-card {
+    padding: 32px 24px;
+  }
+
+  .logo-header {
+    .logo {
+      width: 48px;
+      height: 48px;
+    }
+
+    h1 {
+      font-size: 24px;
+    }
+  }
+
+  .subtitle {
+    font-size: 14px;
+  }
+}
+
+// Animaciones
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.confirm-card {
+  animation: fadeIn 0.4s ease-out;
 }
