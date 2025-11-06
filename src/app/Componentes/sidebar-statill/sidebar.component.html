@@ -45,8 +45,9 @@
     
     <div class="comprador-btn-container">
       <button class="comprador-btn" (click)="toggleVendedor()">
+        <img [src]="vendedor ? 'assets/img/vendedor-statill.png' : 'assets/img/vendedor-statill.png'" 
+             [alt]="vendedor ? 'Cambiar a Comprador' : 'Cambiar a Vendedor'" 
+             class="btn-icon" />
         <span>{{vendedor ? 'Comprador' : 'Vendedor'}}</span>
       </button>
     </div>
-  </div>
-</div>
