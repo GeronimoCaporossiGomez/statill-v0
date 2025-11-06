@@ -91,12 +91,13 @@
       <button (click)="setValue(5)" [class.active]="estrellas >= 5" class="Estrella"><img src="assets/img/estrella.png" class="estrellaFoto"></button>
       <span>Malo</span>
     </div>
-    <input 
+    <textarea 
       type="text" 
       placeholder="Ingrese su reseña aquí" 
       class="ReseñaTextBox" 
       [(ngModel)]="textValue"
       [disabled]="checkingPurchase || (!hasPurchasedFromStore && authService.isActiveUser())">
+    </textarea>
     <button 
       (click)="submitReview()"
       [disabled]="checkingPurchase || (!hasPurchasedFromStore && authService.isActiveUser())">
@@ -126,6 +127,9 @@
       <p class="sin-reseñas">No hay reseñas todavía. ¡Sé el primero en dejar una!</p>
     }
   </div>
+</header>
+
+
 
 
 
