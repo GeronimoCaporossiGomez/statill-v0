@@ -19,6 +19,9 @@ export class NegocioComponent implements OnInit {
   private comercioService = inject(ComercioService);
   public authService = inject(AuthService);
 
+  public hasUserReview: boolean = false;
+  public currentReview: any = null;
+
   textValue = ""
 
   comercio: any = null;
@@ -57,6 +60,9 @@ export class NegocioComponent implements OnInit {
         this.reviews = results.reviews;
         this.cargando = false;
         
+        this.checkIfUserHasReviewed(results.reviews);
+        this.checkIfUserHasPurchased(id);
+
         // Verificar si el usuario ha hecho pedidos en esta tienda
         this.checkIfUserHasPurchased(id);
       },
@@ -67,6 +73,16 @@ export class NegocioComponent implements OnInit {
         this.router.navigate(['/home']);
       }
     });
+  }
+
+  checkIfUserHasReviewed(reviews: any[]) {
+    const currentUser = this.authService.getCurrentUser();
+
+    // Check if the current user has a review for this store
+    if (currentUser) {
+      this.currentReview = reviews.find((review) => review.user_id === currentUser.id);
+      this.hasUserReview = !!this.currentReview;  // Set true if review exists
+    }
   }
 
   checkIfUserHasPurchased(storeId: number) {
@@ -187,6 +203,38 @@ export class NegocioComponent implements OnInit {
         console.error('Error al realizar la reseña:', err);
         const errorMessage = err.error?.message || 'Error al enviar la reseña. Por favor, intente nuevamente.';
         alert(errorMessage);
+      }
+    });
+  }
+
+  deleteReview(): void {
+    const currentUser = this.authService.getCurrentUser();
+    
+    // Make sure the user is authenticated and that they have a review
+    if (!currentUser) {
+      alert('Debes iniciar sesión para eliminar una reseña.');
+      return;
+    }
+  
+    if (!this.currentReview) {
+      alert('No tienes reseña para eliminar.');
+      return;
+    }
+  
+    // Send request to delete the review
+    this.comercioService.deleteReview(this.currentReview.id).subscribe({
+      next: (response) => {
+        console.log('Reseña eliminada:', response);
+        alert('Reseña eliminada con éxito!');
+        
+        // Update the reviews list after deleting the review
+        this.reviews = this.reviews.filter((review) => review.id !== this.currentReview.id);
+        this.hasUserReview = false;  // Reset the review state
+        this.currentReview = null;  // Clear the current review
+      },
+      error: (err) => {
+        console.error('Error al eliminar la reseña:', err);
+        alert('Error al eliminar la reseña. Por favor, intente nuevamente.');
       }
     });
   }

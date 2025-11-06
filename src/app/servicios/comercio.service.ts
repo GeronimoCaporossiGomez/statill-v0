@@ -36,6 +36,10 @@ export class ComercioService {
     return this.miApiService.postReviews(review);
   }
 
+  deleteReview(reviewId: any) {
+    return this.miApiService.deleteReviews(`/api/reviews/${reviewId}`);
+  }
+
   getSales(): Observable<any[]> {
     return this.miApiService.getSales()
       .pipe(map((response: any) => response.data));

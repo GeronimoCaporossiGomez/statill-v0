@@ -142,6 +142,9 @@ export class MiApiService {
   postReviews(review: any) {
     return this.http.post(this.apiUrl + '/api/v1/reviews/', review);
   }
+  deleteReviews(id: number): Observable<any> {
+    return this.http.delete(this.apiUrl + '/api/v1/reviews/' + id);
+  }
 
   // Orders endpoints
   getMyOrders(): Observable<any> {
