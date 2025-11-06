@@ -171,7 +171,7 @@ export class NegocioComponent implements OnInit {
       next: (response) => {
         console.log('Review realizada:', response);
         alert('Reseña enviada con éxito!');
-        // Recargar las resenas después de enviar una nueva
+        // Recargar las reseñas después de enviar una nueva
         this.comercioService.getReviewsByStore(this.comercio.id).subscribe({
           next: (reviews) => {
             this.reviews = reviews;
