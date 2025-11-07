@@ -1,4 +1,4 @@
-import { Component, Inject, inject, OnInit } from '@angular/core'
+import { Component, Inject, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ComercioService } from '../servicios/comercio.service';
@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 import { AuthService } from '../servicios/auth.service';
 import { DOCUMENT } from '@angular/common';
+import { GeneralService } from '../servicios/general.service';
 @Component({
   selector: 'app-negocio',
   imports: [CommonModule, HeaderStatillComponent, FormsModule],
@@ -14,16 +15,17 @@ import { DOCUMENT } from '@angular/common';
   styleUrl: './negocio.component.scss',
 })
 export class NegocioComponent implements OnInit {
-  constructor(@Inject(DOCUMENT) private document: Document){}
+  constructor(@Inject(DOCUMENT) private document: Document) {}
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private comercioService = inject(ComercioService);
   public authService = inject(AuthService);
+  private readonly generalService = inject(GeneralService);
 
   public hasUserReview: boolean = false;
   public currentReview: any = null;
 
-  textValue = ""
+  textValue = '';
 
   comercio: any = null;
   productos: any[] = [];
@@ -53,14 +55,26 @@ export class NegocioComponent implements OnInit {
     forkJoin({
       store: this.comercioService.getStoreById(id),
       productos: this.comercioService.getProductosByStore(id),
-      reviews: this.comercioService.getReviewsByStore(id)
+      reviews: this.comercioService.getReviewsByStore(id),
     }).subscribe({
       next: (results) => {
         this.comercio = results.store;
         this.productos = results.productos;
         this.reviews = results.reviews;
+        for (const r of this.reviews) {
+          this.generalService.getUserFirstNames(r.user_id).subscribe({
+            next: (nameAPIResponse: any) => {
+              r.userFirstNames = nameAPIResponse.data;
+            },
+            error: (error) => {
+              console.error(
+                `❌ Error al cargar el primer nombre del usuario ${r.user_id}: `,
+                error
+              );
+            },
+          });
+        }
         this.cargando = false;
-
 
         this.checkIfUserHasReviewed(results.reviews);
         this.checkIfUserHasPurchased(id);
@@ -73,7 +87,7 @@ export class NegocioComponent implements OnInit {
         this.cargando = false;
         alert('Error al cargar la tienda. Por favor, intente nuevamente.');
         this.router.navigate(['/home']);
-      }
+      },
     });
   }
 
@@ -82,8 +96,10 @@ export class NegocioComponent implements OnInit {
 
     // Check if the current user has a review for this store
     if (currentUser) {
-      this.currentReview = reviews.find((review) => review.user_id === currentUser.id);
-      this.hasUserReview = !!this.currentReview;  // Set true if review exists
+      this.currentReview = reviews.find(
+        (review) => review.user_id === currentUser.id
+      );
+      this.hasUserReview = !!this.currentReview; // Set true if review exists
     }
   }
 
@@ -98,9 +114,10 @@ export class NegocioComponent implements OnInit {
     this.comercioService.getMyOrders().subscribe({
       next: (orders: any[]) => {
         // Verificar si hay algún pedido en esta tienda
-        this.hasPurchasedFromStore = orders.some((order: any) =>
-          order.store_id === storeId &&
-          (order.status === 'received' || order.status === 'accepted')
+        this.hasPurchasedFromStore = orders.some(
+          (order: any) =>
+            order.store_id === storeId &&
+            (order.status === 'received' || order.status === 'accepted')
         );
         this.checkingPurchase = false;
       },
@@ -108,7 +125,9 @@ export class NegocioComponent implements OnInit {
         // Si el error es 403 o 404, el endpoint no está disponible o no tiene permisos
         // En ese caso, permitir la reseña de todas formas (no bloquear la funcionalidad)
         if (err.status === 403 || err.status === 404) {
-          console.warn('El endpoint de órdenes no está disponible o no tiene permisos. Permitiendo reseñas.');
+          console.warn(
+            'El endpoint de órdenes no está disponible o no tiene permisos. Permitiendo reseñas.'
+          );
           this.hasPurchasedFromStore = true;
         } else {
           console.error('Error al verificar pedidos:', err);
@@ -116,7 +135,7 @@ export class NegocioComponent implements OnInit {
           this.hasPurchasedFromStore = true;
         }
         this.checkingPurchase = false;
-      }
+      },
     });
   }
 
@@ -159,7 +178,9 @@ export class NegocioComponent implements OnInit {
 
     // Verificar si el usuario ha hecho pedidos en esta tienda
     if (!this.hasPurchasedFromStore && !this.checkingPurchase) {
-      alert('Solo puedes dejar una reseña después de haber realizado un pedido en esta tienda.');
+      alert(
+        'Solo puedes dejar una reseña después de haber realizado un pedido en esta tienda.'
+      );
       return;
     }
 
@@ -182,7 +203,7 @@ export class NegocioComponent implements OnInit {
     const review = {
       store_id: this.comercio.id,
       stars: this.estrellas,
-      desc: this.textValue.trim()
+      desc: this.textValue.trim(),
     };
 
     this.comercioService.postReview(review).subscribe({
@@ -199,14 +220,16 @@ export class NegocioComponent implements OnInit {
           },
           error: (err) => {
             console.error('Error al recargar reseñas:', err);
-          }
+          },
         });
       },
       error: (err) => {
         console.error('Error al realizar la reseña:', err);
-        const errorMessage = err.error?.message || 'Error al enviar la reseña. Por favor, intente nuevamente.';
+        const errorMessage =
+          err.error?.message ||
+          'Error al enviar la reseña. Por favor, intente nuevamente.';
         alert(errorMessage);
-      }
+      },
     });
   }
 
@@ -230,14 +253,16 @@ export class NegocioComponent implements OnInit {
         alert('Reseña eliminada con éxito!');
 
         // Update the reviews list after deleting the review
-        this.reviews = this.reviews.filter((review) => review.id !== this.currentReview.id);
-        this.hasUserReview = false;  // Reset the review state
-        this.currentReview = null;  // Clear the current review
+        this.reviews = this.reviews.filter(
+          (review) => review.id !== this.currentReview.id
+        );
+        this.hasUserReview = false; // Reset the review state
+        this.currentReview = null; // Clear the current review
       },
       error: (err) => {
         console.error('Error al eliminar la reseña:', err);
         alert('Error al eliminar la reseña. Por favor, intente nuevamente.');
-      }
+      },
     });
   }
 
@@ -254,7 +279,9 @@ export class NegocioComponent implements OnInit {
 
     // Verificar que el usuario esté autenticado
     if (!this.authService.isActiveUser()) {
-      alert('Debes iniciar sesión y verificar tu email para realizar una compra.');
+      alert(
+        'Debes iniciar sesión y verificar tu email para realizar una compra.'
+      );
       return;
     }
 
@@ -264,16 +291,18 @@ export class NegocioComponent implements OnInit {
       return;
     }
 
-    const products = Object.entries(this.carrito).map(([productId, quantity]) => ({
-      product_id: Number(productId),
-      quantity: quantity
-    }));
+    const products = Object.entries(this.carrito).map(
+      ([productId, quantity]) => ({
+        product_id: Number(productId),
+        quantity: quantity,
+      })
+    );
 
     const venta = {
       store_id: this.comercio.id,
       products: products,
       payment_method: 0, // 0 = cash según la API
-      user_id: currentUser.id
+      user_id: currentUser.id,
     };
 
     this.comercioService.postSales(venta).subscribe({
@@ -284,9 +313,11 @@ export class NegocioComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error al realizar la venta:', err);
-        const errorMessage = err.error?.message || 'Error al realizar la compra. Por favor, intente nuevamente.';
+        const errorMessage =
+          err.error?.message ||
+          'Error al realizar la compra. Por favor, intente nuevamente.';
         alert(errorMessage);
-      }
+      },
     });
   }
 
