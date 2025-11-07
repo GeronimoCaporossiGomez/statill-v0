@@ -83,13 +83,11 @@
       <p class="warning-message">Solo puedes dejar una reseña después de realizar un pedido en esta tienda.</p>
     }
     <div class="Estrellas">
-      <span>Bueno</span>
       <button (click)="setValue(1)" [class.active]="estrellas >= 1" class="Estrella"><img src="/assets/img/estrella.png" class="estrellaFoto"></button>
       <button (click)="setValue(2)" [class.active]="estrellas >= 2" class="Estrella"><img src="/assets/img/estrella.png" class="estrellaFoto"></button>
       <button (click)="setValue(3)" [class.active]="estrellas >= 3" class="Estrella"><img src="/assets/img/estrella.png" class="estrellaFoto"></button>
       <button (click)="setValue(4)" [class.active]="estrellas >= 4" class="Estrella"><img src="/assets/img/estrella.png" class="estrellaFoto"></button>
       <button (click)="setValue(5)" [class.active]="estrellas >= 5" class="Estrella"><img src="/assets/img/estrella.png" class="estrellaFoto"></button>
-      <span>Malo</span>
     </div>
     <textarea 
       type="text" 
@@ -98,6 +96,7 @@
       [(ngModel)]="textValue"
       [disabled]="checkingPurchase || (!hasPurchasedFromStore && authService.isActiveUser())">
     </textarea>
+    <p>{{ textValue?.length }} / 300</p>
     <div class="botonesReseña">
     <button 
       (click)="submitReview()"

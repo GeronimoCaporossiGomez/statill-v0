@@ -286,12 +286,14 @@
   }
   
   .ReseñaTextBox {
+    resize: none;
+    overflow: hidden;
     text-align: left; 
     font-size: large;
     vertical-align: top;
     padding: 1%;
     width: 80%;
-    height: 60%;
+    height: 30vh;
     background-color: rgb(175, 175, 175);
     border-radius: 10px;
     border-color: transparent;
