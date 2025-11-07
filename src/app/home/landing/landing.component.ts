@@ -17,9 +17,9 @@ export class LandingComponent {
   users: any[] = [];
   
   constructor(private generalService: GeneralService) {
-    this.generalService.getUsers().subscribe((users: any) => {
-      this.users = users;
-    });
+    // this.generalService.getUsers().subscribe((users: any) => {
+    //   this.users = users;
+    // });
   }
   
   openAuthModal() {

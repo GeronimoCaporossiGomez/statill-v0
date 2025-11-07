@@ -59,7 +59,7 @@ export class NegocioComponent implements OnInit {
         this.productos = results.productos;
         this.reviews = results.reviews;
         this.cargando = false;
-        
+
         this.checkIfUserHasReviewed(results.reviews);
         this.checkIfUserHasPurchased(id);
 
@@ -96,8 +96,8 @@ export class NegocioComponent implements OnInit {
     this.comercioService.getMyOrders().subscribe({
       next: (orders: any[]) => {
         // Verificar si hay algún pedido en esta tienda
-        this.hasPurchasedFromStore = orders.some((order: any) => 
-          order.store_id === storeId && 
+        this.hasPurchasedFromStore = orders.some((order: any) =>
+          order.store_id === storeId &&
           (order.status === 'received' || order.status === 'accepted')
         );
         this.checkingPurchase = false;
@@ -209,24 +209,23 @@ export class NegocioComponent implements OnInit {
 
   deleteReview(): void {
     const currentUser = this.authService.getCurrentUser();
-    
     // Make sure the user is authenticated and that they have a review
     if (!currentUser) {
       alert('Debes iniciar sesión para eliminar una reseña.');
       return;
     }
-  
+
     if (!this.currentReview) {
       alert('No tienes reseña para eliminar.');
       return;
     }
-  
+
     // Send request to delete the review
     this.comercioService.deleteReview(this.currentReview.id).subscribe({
       next: (response) => {
         console.log('Reseña eliminada:', response);
         alert('Reseña eliminada con éxito!');
-        
+
         // Update the reviews list after deleting the review
         this.reviews = this.reviews.filter((review) => review.id !== this.currentReview.id);
         this.hasUserReview = false;  // Reset the review state
