@@ -4,14 +4,25 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { HeaderStatillComponent } from 'src/app/Componentes/header-statill/header-statill.component';
 import { DiscountsStatillComponent } from 'src/app/Componentes/Discounts-statill/Discounts-statill.component';
-import { MiApiService, Store, StoresResponse } from '../../servicios/mi-api.service';
+import {
+  MiApiService,
+  Store,
+  StoresResponse,
+} from '../../servicios/mi-api.service';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, NgFor, FormsModule, RouterModule, HeaderStatillComponent, DiscountsStatillComponent],
+  imports: [
+    CommonModule,
+    NgFor,
+    FormsModule,
+    RouterModule,
+    HeaderStatillComponent,
+    DiscountsStatillComponent,
+  ],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
   // Variables para búsqueda
@@ -28,32 +39,32 @@ export class HomeComponent implements OnInit {
       storeName: 'EL JEVI',
       discountText: '🔥 30% OFF en todos los Disco 🔥',
       logoUrl: 'assets/img/tienda.png',
-      storeId: 2
+      storeId: 2,
     },
     {
       id: 2,
       storeName: 'EL JEVI',
       discountText: '¡Seguí acumulando puntos en Taco Bell!',
       logoUrl: 'assets/img/tienda.png',
-      storeId: null
+      storeId: null,
     },
     {
       id: 3,
       storeName: 'EL JEVI',
       discountText: '¿Tenés ganas de pollo frito? ¡Aprovechá los descuentos!',
       logoUrl: 'assets/img/tienda.png',
-      storeId: null
+      storeId: null,
     },
     {
       id: 4,
       storeName: 'EL JEVI',
       discountText: 'Preordená con 20% OFF en kioscos EL JEVI 🔥',
       logoUrl: 'assets/img/tienda.png',
-      storeId: null
-    }
+      storeId: null,
+    },
   ];
 
-  constructor(private apiService: MiApiService) { }
+  constructor(private apiService: MiApiService) {}
 
   ngOnInit(): void {
     this.loadStores();
@@ -72,7 +83,7 @@ export class HomeComponent implements OnInit {
       error: (error) => {
         console.error('Error al cargar tiendas:', error);
         this.isLoading = false;
-      }
+      },
     });
   }
 
@@ -84,9 +95,14 @@ export class HomeComponent implements OnInit {
     }
 
     this.showSearchResults = true;
-    this.filteredStores = this.stores.filter(store =>
-      this.normalizeText(store.name).includes(this.normalizeText(this.searchTerm)) ||
-      this.normalizeText(store.address).includes(this.normalizeText(this.searchTerm))
+    this.filteredStores = this.stores.filter(
+      (store) =>
+        this.normalizeText(store.name).includes(
+          this.normalizeText(this.searchTerm),
+        ) ||
+        this.normalizeText(store.address).includes(
+          this.normalizeText(this.searchTerm),
+        ),
     );
   }
 
@@ -99,11 +115,16 @@ export class HomeComponent implements OnInit {
 
   getCategoryName(category: number): string {
     switch (category) {
-      case 0: return 'Restaurante';
-      case 1: return 'Kiosco';
-      case 2: return 'Supermercado';
-      case 3: return 'Panadería';
-      default: return 'Comercio';
+      case 0:
+        return 'Restaurante';
+      case 1:
+        return 'Kiosco';
+      case 2:
+        return 'Supermercado';
+      case 3:
+        return 'Panadería';
+      default:
+        return 'Comercio';
     }
   }
 

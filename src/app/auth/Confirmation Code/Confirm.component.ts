@@ -9,7 +9,7 @@ import { AuthService } from '../../servicios/auth.service';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './Confirm.component.html',
-  styleUrls: ['./Confirm.component.scss']
+  styleUrls: ['./Confirm.component.scss'],
 })
 export class ConfirmComponent implements OnInit {
   activationCode = '';
@@ -20,7 +20,7 @@ export class ConfirmComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
   ) {}
 
   ngOnInit() {
@@ -54,7 +54,7 @@ export class ConfirmComponent implements OnInit {
         this.loading = false;
         this.message = '¡Cuenta activada exitosamente!';
         this.messageType = 'success';
-        
+
         // Refresh user info and redirect after a short delay
         setTimeout(() => {
           this.authService.fetchCurrentUser().subscribe(() => {
@@ -64,9 +64,11 @@ export class ConfirmComponent implements OnInit {
       },
       error: (err) => {
         this.loading = false;
-        this.message = err.error?.message || 'Código inválido. Por favor, verifique el código enviado a su email.';
+        this.message =
+          err.error?.message ||
+          'Código inválido. Por favor, verifique el código enviado a su email.';
         this.messageType = 'error';
-      }
+      },
     });
   }
 
@@ -83,9 +85,10 @@ export class ConfirmComponent implements OnInit {
       },
       error: (err) => {
         this.loading = false;
-        this.message = 'Error al reenviar el código. Por favor, intente nuevamente.';
+        this.message =
+          'Error al reenviar el código. Por favor, intente nuevamente.';
         this.messageType = 'error';
-      }
+      },
     });
   }
 

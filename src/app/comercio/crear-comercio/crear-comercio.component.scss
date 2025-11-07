@@ -1,5 +1,5 @@
 // Variables
-$primary-color: #FF5555;
+$primary-color: #ff5555;
 $text-dark: #2a2a2a;
 $bg-light: #f5f5f5;
 $white: #ffffff;
@@ -211,7 +211,7 @@ form {
   gap: 10px;
   margin-bottom: 12px;
   align-items: stretch;
-  
+
   input {
     flex: 1;
     min-width: 0;
@@ -220,12 +220,12 @@ form {
     border-radius: 12px !important;
     font-size: 14px !important;
     transition: all 0.3s ease;
-    
+
     &:focus {
       border-color: $primary-color !important;
       box-shadow: 0 0 0 4px rgba($primary-color, 0.1) !important;
     }
-    
+
     &::placeholder {
       color: #999;
     }
@@ -243,13 +243,13 @@ form {
     border-radius: 12px !important;
     transition: all 0.3s ease;
     min-width: 100px;
-    
+
     &:hover:not(:disabled) {
       background-color: darken($primary-color, 8%) !important;
       transform: translateY(-1px);
       box-shadow: 0 4px 12px rgba($primary-color, 0.3);
     }
-    
+
     &:disabled {
       opacity: 0.6;
       cursor: not-allowed;
@@ -276,7 +276,7 @@ form {
   border-radius: 12px;
   overflow: hidden;
   margin-bottom: 0;
-  
+
   app-mapa {
     display: block;
     width: 100%;
@@ -454,13 +454,13 @@ form input[type="text"]:focus {
 
   .input-buscar {
     flex-direction: column;
-    
+
     .btn-buscar-mapa {
       width: 100%;
     }
   }
 }
 
-.inputUbicacion{
+.inputUbicacion {
   width: 100%;
 }

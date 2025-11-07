@@ -4,11 +4,11 @@
       <img src="assets/store-icon.png" alt="icono local" />
     </div>
     <div class="store-info">
-      <div class="store-title">{{ store.name || 'Nombre Restaurante' }}</div>
+      <div class="store-title">{{ store.name || "Nombre Restaurante" }}</div>
       <div class="store-address">
         {{ store.address }} - Tipo de Local
         <span [ngClass]="isOpen(store).abierto ? 'open' : 'closed'">
-          {{ isOpen(store).abierto ? 'Abierto' : 'Cerrado' }}
+          {{ isOpen(store).abierto ? "Abierto" : "Cerrado" }}
           <span>({{ isOpen(store).horario }})</span>
         </span>
       </div>

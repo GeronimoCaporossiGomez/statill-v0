@@ -80,7 +80,7 @@
 .loading-container {
   text-align: center;
   padding: 2rem;
-  
+
   p {
     color: #666;
     font-size: 1.1rem;
@@ -93,7 +93,7 @@
   background-color: white;
   border-radius: 15px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  
+
   p {
     color: #666;
     font-size: 1rem;
@@ -157,7 +157,7 @@
   }
 
   &:hover .store-arrow {
-    color: #FF4444;
+    color: #ff4444;
   }
 }
 
@@ -190,11 +190,11 @@
 
   .store-card {
     padding: 1rem;
-    
+
     .store-name {
       font-size: 1rem;
     }
-    
+
     .store-address {
       font-size: 0.8rem;
     }
@@ -206,7 +206,7 @@
     grid-template-columns: 1fr;
     gap: 0.5rem;
   }
-  
+
   .search-container {
     margin-bottom: 1rem;
   }

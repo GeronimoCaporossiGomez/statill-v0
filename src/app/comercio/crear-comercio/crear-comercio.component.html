@@ -7,29 +7,48 @@
   </button>
   <h1>¡Hola vendedor!</h1>
   <h2>¿Que querés hacer?</h2>
-  <button class="boton" type="button" (click)="creandoComercio(true); seccionPantalla=1">Crear comercio</button>
-  <button class="boton" type="button" (click)="creandoComercio(false)">Unirme a un comercio</button>
+  <button
+    class="boton"
+    type="button"
+    (click)="creandoComercio(true); seccionPantalla = 1"
+  >
+    Crear comercio
+  </button>
+  <button class="boton" type="button" (click)="creandoComercio(false)">
+    Unirme a un comercio
+  </button>
 </div>
 
 <!-- Formulario de creación -->
 <div *ngIf="creando">
   <form (ngSubmit)="onSubmit(comercioForm)" #comercioForm="ngForm">
-
     <!-- PANTALLA 1 -->
-    <div [style.display]="seccionPantalla == 1 ? 'block' : 'none'" class="seccion-creando">
+    <div
+      [style.display]="seccionPantalla == 1 ? 'block' : 'none'"
+      class="seccion-creando"
+    >
       <div class="primera-parte">
-
         <h3>Nombre</h3>
-        <input type="text" name="nombre" ngModel placeholder="Nombre del local">
+        <input
+          type="text"
+          name="nombre"
+          ngModel
+          placeholder="Nombre del local"
+        />
 
         <h3>Logo</h3>
-        <input type="file" (change)="mostrarImagen($event)">
+        <input type="file" (change)="mostrarImagen($event)" />
         <div id="caja-blanca" *ngIf="imagenUrl">
-          <img [src]="imagenUrl" alt="Preview">
+          <img [src]="imagenUrl" alt="Preview" />
         </div>
 
         <h3>Descripción</h3>
-        <input type="text" name="descripcion" ngModel placeholder="Descripción">
+        <input
+          type="text"
+          name="descripcion"
+          ngModel
+          placeholder="Descripción"
+        />
 
         <button type="button" (click)="bajarPantalla()">Anterior</button>
         <button type="button" (click)="aumentarPantalla()">Siguiente</button>
@@ -37,7 +56,10 @@
     </div>
 
     <!-- PANTALLA 2 -->
-    <div [style.display]="seccionPantalla == 2 ? 'block' : 'none'" class="segunda-parte">
+    <div
+      [style.display]="seccionPantalla == 2 ? 'block' : 'none'"
+      class="segunda-parte"
+    >
       <h3>Tipo de Local</h3>
       <select name="tipo" ngModel>
         <option value="">Seleccionar...</option>
@@ -50,91 +72,125 @@
       <h3>Ubicación</h3>
       <div class="ubicacion-container">
         <div class="input-buscar">
-          <input class="inputUbicacion"
-            type="text" 
-            name="ubicacion" 
-            [(ngModel)]="direccionInput" 
+          <input
+            class="inputUbicacion"
+            type="text"
+            name="ubicacion"
+            [(ngModel)]="direccionInput"
             placeholder="Ej: Av. Corrientes 1234, Buenos Aires"
-            #ubicacionInput>
-          <button 
-            type="button" 
+            #ubicacionInput
+          />
+          <button
+            type="button"
             class="btn-buscar-mapa"
-            (click)="buscarDireccionEnMapa()" 
-            [disabled]="buscandoDireccion">
-            {{ buscandoDireccion ? 'Buscando...' : 'Buscar' }}
+            (click)="buscarDireccionEnMapa()"
+            [disabled]="buscandoDireccion"
+          >
+            {{ buscandoDireccion ? "Buscando..." : "Buscar" }}
           </button>
         </div>
-        
+
         <p *ngIf="ubicacionConfirmada" class="ubicacion-confirmada">
           📍 {{ ubicacionConfirmada }}
         </p>
 
         <!-- Mapa integrado -->
         <div class="mapa-wrapper">
-          <app-mapa 
+          <app-mapa
             [modo]="'vendedor'"
             [ubicacion]="coordenadasSeleccionadas"
             (ubicacionSeleccionada)="onUbicacionSeleccionada($event)"
-            (direccionSeleccionada)="onDireccionSeleccionada($event)">
+            (direccionSeleccionada)="onDireccionSeleccionada($event)"
+          >
           </app-mapa>
         </div>
       </div>
 
       <h3>Pre-Order?</h3>
       <label>
-        <input type="checkbox" name="preorder" ngModel>
+        <input type="checkbox" name="preorder" ngModel />
         Permitir pre-orden
       </label>
 
       <h3>Habilitar PS?</h3>
       <label>
-        <input type="checkbox" name="psEnabled" ngModel [checked]="true">
+        <input type="checkbox" name="psEnabled" ngModel [checked]="true" />
         PS habilitado
       </label>
       <div *ngIf="comercioForm.value.psEnabled">
         <h3>Valor PS</h3>
-        <input type="number" name="psValue" ngModel [value]="0" placeholder="0">
+        <input
+          type="number"
+          name="psValue"
+          ngModel
+          [value]="0"
+          placeholder="0"
+        />
       </div>
 
       <h3>Métodos de Pago</h3>
       <div class="metodos-pago-group">
         <label>
-          <input type="checkbox" name="pagoEfectivo" ngModel [checked]="true">
+          <input type="checkbox" name="pagoEfectivo" ngModel [checked]="true" />
           Efectivo
         </label>
         <label>
-          <input type="checkbox" name="pagoDebito" ngModel [checked]="true">
+          <input type="checkbox" name="pagoDebito" ngModel [checked]="true" />
           Débito
         </label>
         <label>
-          <input type="checkbox" name="pagoCredito" ngModel [checked]="true">
+          <input type="checkbox" name="pagoCredito" ngModel [checked]="true" />
           Crédito
         </label>
         <label>
-          <input type="checkbox" name="pagoTransferencia" ngModel [checked]="true">
+          <input
+            type="checkbox"
+            name="pagoTransferencia"
+            ngModel
+            [checked]="true"
+          />
           Transferencia
         </label>
       </div>
 
       <div class="botones-navegacion">
         <button type="button" (click)="bajarPantalla()">Anterior</button>
-        <button type="button" class="btn-siguiente" (click)="aumentarPantalla()">Siguiente</button>
+        <button
+          type="button"
+          class="btn-siguiente"
+          (click)="aumentarPantalla()"
+        >
+          Siguiente
+        </button>
       </div>
     </div>
 
     <!-- PANTALLA 3 -->
-    <div [style.display]="seccionPantalla == 3 ? 'block' : 'none'" class="tercera-parte">
+    <div
+      [style.display]="seccionPantalla == 3 ? 'block' : 'none'"
+      class="tercera-parte"
+    >
       <h2>Horarios</h2>
       <div *ngFor="let dia of dias; let i = index">
         <div class="TodaEstaCosa">
-          <h1>{{dia}}</h1>
+          <h1>{{ dia }}</h1>
           <div class="horario-row">
-            <label style="flex: 0 0 auto;">
-              <input type="checkbox" name="si{{i}}" ngModel>
+            <label style="flex: 0 0 auto">
+              <input type="checkbox" name="si{{ i }}" ngModel />
               Abierto
             </label>
-            <input type="time" name="horaInicio{{i}}" ngModel placeholder="Desde">
-            <input type="time" name="horaFin{{i}}" ngModel placeholder="Hasta">
+            <input
+              type="time"
+              name="horaInicio{{ i }}"
+              ngModel
+              placeholder="Desde"
+            />
+            <input
+              type="time"
+              name="horaFin{{ i }}"
+              ngModel
+              placeholder="Hasta"
+            />
           </div>
         </div>
       </div>
@@ -142,7 +198,6 @@
       <button type="button" (click)="bajarPantalla()">Anterior</button>
       <button type="submit">Crear Comercio</button>
     </div>
-
   </form>
 </div>
 
@@ -150,7 +205,7 @@
 <div *ngIf="!creando && seccionPantalla == 0">
   <form (ngSubmit)="onSubmitUnirse(codigoForm)" #codigoForm="ngForm">
     <h3>Unirme a un local</h3>
-    <input type="text" placeholder="Código del local" name="codigo" ngModel>
+    <input type="text" placeholder="Código del local" name="codigo" ngModel />
     <button type="submit">Entrar</button>
   </form>
 </div>

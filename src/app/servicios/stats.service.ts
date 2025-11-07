@@ -29,7 +29,7 @@ export class StatisticsService {
   getSalesByProduct(
     productId: string,
     startDate?: string,
-    endDate?: string
+    endDate?: string,
   ): Observable<any> {
     let params = new HttpParams().set('product_id', productId.toString());
 

@@ -11,7 +11,7 @@ export class GeneralService {
   editarProducto(id: number, producto: any) {
     return this.http.put(
       this.apiUrl + '/api/v1/products/' + id + '/',
-      producto
+      producto,
     );
   }
   getProductos() {

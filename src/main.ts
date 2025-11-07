@@ -4,7 +4,5 @@ import { appConfig } from './app/app.config';
 
 bootstrapApplication(AppComponent, {
   ...appConfig,
-  providers: [
-    ...(appConfig.providers || []),
-  ]
-}).catch(err => console.error(err));
+  providers: [...(appConfig.providers || [])],
+}).catch((err) => console.error(err));

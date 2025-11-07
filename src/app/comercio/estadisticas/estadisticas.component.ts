@@ -1,4 +1,11 @@
-import { Component, ElementRef, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Chart, ChartConfiguration, ChartType, registerables } from 'chart.js';
@@ -34,7 +41,8 @@ interface Sale {
   styleUrls: ['./estadisticas.component.scss'],
 })
 export class EstadisticasComponent implements OnInit, OnDestroy {
-  @ViewChild('chartCanvas', { static: true }) chartCanvas!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('chartCanvas', { static: true })
+  chartCanvas!: ElementRef<HTMLCanvasElement>;
 
   private statisticsService = inject(StatisticsService);
   private chart?: Chart;
@@ -74,7 +82,9 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
     if (
       (tipo === 'ganancias_por_producto' && !productId) ||
       (tipo === 'fidelidad_clientes' && !storeId) ||
-      (!productId && tipo !== 'ganancias_por_producto' && tipo !== 'fidelidad_clientes')
+      (!productId &&
+        tipo !== 'ganancias_por_producto' &&
+        tipo !== 'fidelidad_clientes')
     ) {
       this.destruirGrafico();
       return;
@@ -156,7 +166,7 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
     const clientIds = Object.keys(clientes);
     const data = clientIds.map((id) => {
       const sum = clientes[+id].reduce((a, b) => a + b, 0);
-      return (sum / clientes[+id].length) || 0;
+      return sum / clientes[+id].length || 0;
     });
     this.renderChart('bar', {
       labels: clientIds.map((id) => `Cliente ${id}`),
@@ -170,7 +180,12 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
     });
   }
 
-  mostrarVentasEnElTiempo(sales: Sale[], productId: number, start?: string, end?: string) {
+  mostrarVentasEnElTiempo(
+    sales: Sale[],
+    productId: number,
+    start?: string,
+    end?: string,
+  ) {
     const ventasPorFecha: Record<string, number> = {};
 
     sales.forEach((venta) => {
@@ -183,7 +198,8 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
 
       const producto = venta.products.find((p) => p.product_id === productId);
       if (producto) {
-        ventasPorFecha[isoDate] = (ventasPorFecha[isoDate] || 0) + producto.quantity;
+        ventasPorFecha[isoDate] =
+          (ventasPorFecha[isoDate] || 0) + producto.quantity;
       }
     });
 
@@ -208,7 +224,9 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
     const metodos: Record<string, number> = {};
 
     sales.forEach((venta) => {
-      const contieneProducto = venta.products.some((p) => p.product_id === productId);
+      const contieneProducto = venta.products.some(
+        (p) => p.product_id === productId,
+      );
       if (contieneProducto) {
         const metodo = this.metodoPagoToString(venta.payment_method);
         metodos[metodo] = (metodos[metodo] || 0) + 1;
@@ -231,12 +249,16 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
     const conteo: Record<string, number> = {};
 
     sales.forEach((venta) => {
-      const incluyeSeleccionado = venta.products.some((p) => p.product_id === productId);
+      const incluyeSeleccionado = venta.products.some(
+        (p) => p.product_id === productId,
+      );
       if (!incluyeSeleccionado) return;
 
       venta.products.forEach((p) => {
         if (p.product_id !== productId) {
-          const nombre = this.products.find((prod) => prod.id === p.product_id)?.name || `ID ${p.product_id}`;
+          const nombre =
+            this.products.find((prod) => prod.id === p.product_id)?.name ||
+            `ID ${p.product_id}`;
           conteo[nombre] = (conteo[nombre] || 0) + p.quantity;
         }
       });
@@ -248,7 +270,9 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
         {
           label: 'Productos vendidos junto al seleccionado',
           data: Object.values(conteo),
-          backgroundColor: Object.keys(conteo).map((_, i) => `hsl(${i * 50}, 70%, 60%)`),
+          backgroundColor: Object.keys(conteo).map(
+            (_, i) => `hsl(${i * 50}, 70%, 60%)`,
+          ),
         },
       ],
     });
@@ -256,10 +280,14 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
 
   metodoPagoToString(metodo: number): string {
     switch (metodo) {
-      case 1: return 'Efectivo';
-      case 2: return 'Débito';
-      case 3: return 'Crédito';
-      default: return 'Otro';
+      case 1:
+        return 'Efectivo';
+      case 2:
+        return 'Débito';
+      case 3:
+        return 'Crédito';
+      default:
+        return 'Otro';
     }
   }
 

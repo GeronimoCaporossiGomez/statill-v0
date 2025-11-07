@@ -7,7 +7,7 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './header-statill.component.html',
-  styleUrl: './header-statill.component.scss'
+  styleUrl: './header-statill.component.scss',
 })
 export class HeaderStatillComponent {
   menuAbierto = false;

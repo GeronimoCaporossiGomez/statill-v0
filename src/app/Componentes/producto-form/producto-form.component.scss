@@ -2,13 +2,13 @@
 .producto-form {
   background: white;
   border-radius: 16px;
-  border: 2px solid #FD2A2C;
+  border: 2px solid #fd2a2c;
   box-shadow: 0 4px 12px rgba(253, 42, 44, 0.15);
   overflow: hidden;
   margin: 1rem 0;
 
   .form-header {
-    background: #FD2A2C;
+    background: #fd2a2c;
     color: white;
     padding: 2rem;
     text-align: center;
@@ -58,8 +58,8 @@
 
     &.error {
       background: #fff5f5;
-      color: #FD2A2C;
-      border-bottom: 1px solid #FD2A2C;
+      color: #fd2a2c;
+      border-bottom: 1px solid #fd2a2c;
     }
   }
 
@@ -160,8 +160,8 @@
           }
 
           &.required::after {
-            content: ' *';
-            color: #FD2A2C;
+            content: " *";
+            color: #fd2a2c;
             font-weight: bold;
           }
         }
@@ -196,7 +196,7 @@
 
           &:focus {
             outline: none;
-            border-color: #FD2A2C;
+            border-color: #fd2a2c;
             box-shadow: 0 0 0 4px rgba(253, 42, 44, 0.1);
             background: white;
           }
@@ -233,7 +233,7 @@
           input[type="checkbox"] {
             width: 18px;
             height: 18px;
-            accent-color: #FD2A2C;
+            accent-color: #fd2a2c;
           }
 
           .checkbox-text {
@@ -292,7 +292,7 @@
         }
 
         &.btn-primary {
-          background: #FD2A2C;
+          background: #fd2a2c;
           color: white;
           box-shadow: 0 2px 8px rgba(253, 42, 44, 0.3);
 
@@ -304,8 +304,8 @@
 
         &.btn-secondary {
           background: white;
-          color: #FD2A2C;
-          border: 2px solid #FD2A2C;
+          color: #fd2a2c;
+          border: 2px solid #fd2a2c;
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
           &:hover:not(:disabled) {

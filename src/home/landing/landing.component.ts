@@ -8,7 +8,7 @@ import { AuthModalComponent } from '../../app/auth/auth-modal.component';
   standalone: true,
   imports: [CommonModule, RouterModule, AuthModalComponent],
   templateUrl: './landing.component.html',
-  styleUrls: ['./landing.component.scss']
+  styleUrls: ['./landing.component.scss'],
 })
 export class LandingComponent {
   showAuthModal = false;

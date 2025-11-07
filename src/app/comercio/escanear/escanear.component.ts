@@ -1,8 +1,17 @@
-import { Component, ElementRef, ViewChild, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  ViewChild,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { SidebarComponent } from "src/app/Componentes/sidebar-statill/sidebar.component";
-import { ProductoFormComponent, ProductoData } from 'src/app/Componentes/producto-form/producto-form.component';
+import { SidebarComponent } from 'src/app/Componentes/sidebar-statill/sidebar.component';
+import {
+  ProductoFormComponent,
+  ProductoData,
+} from 'src/app/Componentes/producto-form/producto-form.component';
 import { MiApiService, ProductsResponse } from '../../servicios/mi-api.service';
 import { ComercioService } from '../../servicios/comercio.service';
 
@@ -12,14 +21,9 @@ declare const Quagga: any;
 @Component({
   selector: 'app-escanear',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    SidebarComponent,
-    ProductoFormComponent
-  ],
+  imports: [CommonModule, FormsModule, SidebarComponent, ProductoFormComponent],
   templateUrl: './escanear.component.html',
-  styleUrls: ['./escanear.component.scss']
+  styleUrls: ['./escanear.component.scss'],
 })
 export class EscanearComponent implements OnDestroy, OnInit {
   @ViewChild('video') videoElement!: ElementRef<HTMLVideoElement>;
@@ -36,7 +40,6 @@ export class EscanearComponent implements OnDestroy, OnInit {
   private lastDetectedAt = 0;
   private readonly detectionCooldownMs = 2500;
 
-
   // Producto para el formulario
   producto: ProductoData = {
     name: '',
@@ -48,13 +51,12 @@ export class EscanearComponent implements OnDestroy, OnInit {
     desc: '',
     barcode: '',
     hidden: false,
-    store_id: 1
+    store_id: 1,
   };
-
 
   constructor(
     private apiService: MiApiService,
-    private comercioService: ComercioService
+    private comercioService: ComercioService,
   ) {}
 
   ngOnInit() {
@@ -72,7 +74,7 @@ export class EscanearComponent implements OnDestroy, OnInit {
       },
       error: (error) => {
         console.error('Error cargando tiendas:', error);
-      }
+      },
     });
   }
 
@@ -98,55 +100,62 @@ export class EscanearComponent implements OnDestroy, OnInit {
 
   async initializeQuagga() {
     return new Promise((resolve, reject) => {
-      Quagga.init({
-        inputStream: {
-          name: "Live",
-          type: "LiveStream",
-          target: this.videoElement.nativeElement,
-          constraints: {
-            width: 640,
-            height: 480,
-            facingMode: "environment"
+      Quagga.init(
+        {
+          inputStream: {
+            name: 'Live',
+            type: 'LiveStream',
+            target: this.videoElement.nativeElement,
+            constraints: {
+              width: 640,
+              height: 480,
+              facingMode: 'environment',
+            },
+          },
+          locator: {
+            patchSize: 'medium',
+            halfSample: true,
+          },
+          numOfWorkers: 2,
+          frequency: 10,
+          decoder: {
+            readers: [
+              'code_128_reader',
+              'ean_reader',
+              'ean_8_reader',
+              'code_39_reader',
+              'code_39_vin_reader',
+              'codabar_reader',
+              'upc_reader',
+              'upc_e_reader',
+              'i2of5_reader',
+            ],
+          },
+          locate: true,
+        },
+        (err: any) => {
+          if (err) {
+            console.error('Error initializing Quagga:', err);
+            reject(err);
+            return;
           }
+          console.log('QuaggaJS initialized successfully');
+          resolve(true);
         },
-        locator: {
-          patchSize: "medium",
-          halfSample: true
-        },
-        numOfWorkers: 2,
-        frequency: 10,
-        decoder: {
-          readers: [
-            "code_128_reader",
-            "ean_reader",
-            "ean_8_reader",
-            "code_39_reader",
-            "code_39_vin_reader",
-            "codabar_reader",
-            "upc_reader",
-            "upc_e_reader",
-            "i2of5_reader"
-          ]
-        },
-        locate: true
-      }, (err: any) => {
-        if (err) {
-          console.error('Error initializing Quagga:', err);
-          reject(err);
-          return;
-        }
-        console.log("QuaggaJS initialized successfully");
-        resolve(true);
-      });
+      );
 
       // Configurar el evento de detección sin apagar la cámara
       Quagga.onDetected((result: any) => {
         const code = result.codeResult?.code;
         const now = Date.now();
-        if (!code) { return; }
+        if (!code) {
+          return;
+        }
 
         // Debounce para evitar múltiples disparos del mismo código
-        if (now - this.lastDetectedAt < this.detectionCooldownMs) { return; }
+        if (now - this.lastDetectedAt < this.detectionCooldownMs) {
+          return;
+        }
         this.lastDetectedAt = now;
 
         console.log('🔍 Código de barras detectado:', code);
@@ -160,7 +169,7 @@ export class EscanearComponent implements OnDestroy, OnInit {
       Quagga.stop();
       this.isCameraOn = false;
       this.stopScanning();
-      console.log("Cámara detenida");
+      console.log('Cámara detenida');
     }
   }
 
@@ -171,17 +180,20 @@ export class EscanearComponent implements OnDestroy, OnInit {
     }
 
     this.isScanning = true;
-    this.errorMessage = 'Escaneando... Apunta la cámara hacia el código de barras';
-    
+    this.errorMessage =
+      'Escaneando... Apunta la cámara hacia el código de barras';
+
     Quagga.start();
-    console.log("Escaneo iniciado - QuaggaJS activo");
+    console.log('Escaneo iniciado - QuaggaJS activo');
   }
 
   stopScanning() {
     this.isScanning = false;
     // No detenemos la cámara; solo dejamos de procesar si se necesita
-    try { Quagga.pause && Quagga.pause(); } catch {}
-    console.log("Escaneo detenido");
+    try {
+      Quagga.pause && Quagga.pause();
+    } catch {}
+    console.log('Escaneo detenido');
   }
 
   onBarcodeDetected(barcode: string) {
@@ -193,29 +205,36 @@ export class EscanearComponent implements OnDestroy, OnInit {
   searchProductsByBarcode(barcode: string) {
     this.isLoading = true;
     this.errorMessage = `Buscando productos con código: ${barcode}`;
-    
+
     this.apiService.getProductsByBarcode(barcode).subscribe({
       next: (response: ProductsResponse) => {
         this.isLoading = false;
-        
+
         if (response.successful && response.data && response.data.length > 0) {
           // Filtrar solo productos que tienen el MISMO código de barras que se escaneó
-          const productsWithMatchingBarcode = response.data.filter((product: any) => 
-            product.barcode && 
-            product.barcode !== null && 
-            product.barcode !== '' &&
-            product.barcode === barcode
+          const productsWithMatchingBarcode = response.data.filter(
+            (product: any) =>
+              product.barcode &&
+              product.barcode !== null &&
+              product.barcode !== '' &&
+              product.barcode === barcode,
           );
-          
+
           console.log('🔍 Código escaneado:', barcode);
           console.log('📊 Total productos en respuesta:', response.data.length);
-          console.log('✅ Productos con código de barras coincidente:', productsWithMatchingBarcode.length);
+          console.log(
+            '✅ Productos con código de barras coincidente:',
+            productsWithMatchingBarcode.length,
+          );
           console.log('🔍 Productos encontrados:', productsWithMatchingBarcode);
-          
+
           if (productsWithMatchingBarcode.length > 0) {
             // Productos encontrados - mostrar formulario con datos sugeridos
             this.foundProducts = productsWithMatchingBarcode;
-            this.showCreateProductFormWithSuggestedData(barcode, productsWithMatchingBarcode);
+            this.showCreateProductFormWithSuggestedData(
+              barcode,
+              productsWithMatchingBarcode,
+            );
             this.errorMessage = `Se encontraron ${productsWithMatchingBarcode.length} producto(s) con código de barras "${barcode}". Puedes usar los datos más comunes o crear uno nuevo.`;
           } else {
             // No hay productos con el mismo código de barras
@@ -236,7 +255,7 @@ export class EscanearComponent implements OnDestroy, OnInit {
         this.foundProducts = [];
         this.showCreateProductForm(barcode);
         this.errorMessage = `Error buscando productos. Crear nuevo producto con código "${barcode}":`;
-      }
+      },
     });
   }
 
@@ -246,7 +265,10 @@ export class EscanearComponent implements OnDestroy, OnInit {
     this.foundProducts = [];
   }
 
-  showCreateProductFormWithSuggestedData(barcode: string, foundProducts: any[]) {
+  showCreateProductFormWithSuggestedData(
+    barcode: string,
+    foundProducts: any[],
+  ) {
     this.producto = {
       name: '',
       brand: '',
@@ -257,9 +279,9 @@ export class EscanearComponent implements OnDestroy, OnInit {
       desc: '',
       barcode: barcode,
       hidden: false,
-      store_id: this.producto.store_id
+      store_id: this.producto.store_id,
     };
-    
+
     this.showCreateForm = true;
   }
 
@@ -273,13 +295,13 @@ export class EscanearComponent implements OnDestroy, OnInit {
         this.errorMessage = '¡Producto creado exitosamente!';
         console.log('✅ Producto creado:', response);
         this.resetForm();
-        setTimeout(() => this.errorMessage = null, 3000);
+        setTimeout(() => (this.errorMessage = null), 3000);
       },
       error: (error) => {
         console.error('❌ Error creando producto:', error);
         this.isLoading = false;
         this.errorMessage = `Error al crear el producto: ${error.error?.message || error.message || 'Error desconocido'}`;
-      }
+      },
     });
   }
 
@@ -303,7 +325,7 @@ export class EscanearComponent implements OnDestroy, OnInit {
       desc: '',
       barcode: '',
       hidden: false,
-      store_id: this.producto.store_id
+      store_id: this.producto.store_id,
     };
     this.foundProducts = [];
     this.scannedBarcode = '';
@@ -314,10 +336,9 @@ export class EscanearComponent implements OnDestroy, OnInit {
     // La lógica de autocompletado se maneja en el componente del formulario
   }
 
-
   ngOnDestroy() {
     this.stopCamera();
-    
+
     // Limpiar QuaggaJS completamente
     if (typeof Quagga !== 'undefined') {
       Quagga.stop();
@@ -327,7 +348,9 @@ export class EscanearComponent implements OnDestroy, OnInit {
 
   onManualSubmit() {
     const code = (this.manualBarcode || '').trim();
-    if (!code) { return; }
+    if (!code) {
+      return;
+    }
     this.scannedBarcode = code;
     this.searchProductsByBarcode(code);
   }

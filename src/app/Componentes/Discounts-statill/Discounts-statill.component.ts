@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './Discounts-statill.component.html',
-  styleUrls: ['./Discounts-statill.component.scss']
+  styleUrls: ['./Discounts-statill.component.scss'],
 })
 export class DiscountsStatillComponent {
   @Input() logoUrl: string = '';

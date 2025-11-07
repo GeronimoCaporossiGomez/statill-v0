@@ -16,7 +16,7 @@ interface Store {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './Stores.component.html',
-  styleUrls: ['./Stores.component.scss']
+  styleUrls: ['./Stores.component.scss'],
 })
 export class StoresComponent implements OnInit {
   stores: Store[] = [];
@@ -46,7 +46,14 @@ export class StoresComponent implements OnInit {
       const m = parseInt(match[2], 10);
       const s = parseInt(match[3], 10);
       // Usar la fecha de hoy con la hora del string
-      const d = new Date(now.getFullYear(), now.getMonth(), now.getDate(), h, m, s);
+      const d = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+        h,
+        m,
+        s,
+      );
       return d;
     }
     // Si es formato ISO
@@ -54,7 +61,7 @@ export class StoresComponent implements OnInit {
     return isNaN(d.getTime()) ? null : d;
   }
 
-  isOpen(store: Store): { abierto: boolean, horario: string } {
+  isOpen(store: Store): { abierto: boolean; horario: string } {
     const now = new Date();
     const day = now.getDay(); // 0=domingo
     const openStr = store.opening_times[day];

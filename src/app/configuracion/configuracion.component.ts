@@ -26,7 +26,7 @@ export class ConfiguracionComponent implements OnInit {
   ngOnInit() {
     // Obtener usuario actual
     this.user = this.authService.getCurrentUser();
-    
+
     if (this.user) {
       this.fullName = `${this.user.first_names} ${this.user.last_name}`;
       this.email = this.user.email;
@@ -39,7 +39,7 @@ export class ConfiguracionComponent implements OnInit {
             this.fullName = `${this.user.first_names} ${this.user.last_name}`;
             this.email = this.user.email;
           }
-        }
+        },
       });
     }
 
@@ -48,13 +48,15 @@ export class ConfiguracionComponent implements OnInit {
       this.comercioService.getStores().subscribe({
         next: (stores) => {
           // Filtrar solo las tiendas del usuario
-          this.comercios = stores.filter((store: any) => store.id === this.user.store_id);
+          this.comercios = stores.filter(
+            (store: any) => store.id === this.user.store_id,
+          );
           this.cargando = false;
         },
         error: (err) => {
           console.error('Error al cargar tiendas:', err);
           this.cargando = false;
-        }
+        },
       });
     } else {
       // Si no es owner, cargar todas las tiendas (o mostrar mensaje)
@@ -66,7 +68,7 @@ export class ConfiguracionComponent implements OnInit {
         error: (err) => {
           console.error('Error al cargar tiendas:', err);
           this.cargando = false;
-        }
+        },
       });
     }
   }

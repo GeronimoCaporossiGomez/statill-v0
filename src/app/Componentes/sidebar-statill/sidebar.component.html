@@ -1,4 +1,6 @@
-<button type="button" class="boton-sidebar-fijo" (click)="toggleSidebar()">☰</button>
+<button type="button" class="boton-sidebar-fijo" (click)="toggleSidebar()">
+  ☰
+</button>
 <div *ngIf="isExpanded" class="sidebar sidebariwis">
   <div class="sidebariwis-nav">
     <ul>
@@ -7,7 +9,7 @@
           <ng-container *ngIf="activeItem === item.id">
             <span class="active-dot"></span>
           </ng-container>
-          
+
           <a
             [routerLink]="item.path"
             routerLinkActive="active"
@@ -21,13 +23,13 @@
           </a>
         </li>
       </div>
-      
+
       <div class="items" *ngIf="!vendedor">
         <li *ngFor="let item of menuItemsComprador">
           <ng-container *ngIf="activeItem === item.id">
             <span class="active-dot"></span>
           </ng-container>
-          
+
           <a
             [routerLink]="item.path"
             routerLinkActive="active"
@@ -42,12 +44,20 @@
         </li>
       </div>
     </ul>
-    
+
     <div class="comprador-btn-container">
       <button class="comprador-btn" (click)="toggleVendedor()">
-        <img [src]="vendedor ? 'assets/img/vendedor-statill.png' : 'assets/img/vendedor-statill.png'" 
-             [alt]="vendedor ? 'Cambiar a Comprador' : 'Cambiar a Vendedor'" 
-             class="btn-icon" />
-        <span>{{vendedor ? 'Comprador' : 'Vendedor'}}</span>
+        <img
+          [src]="
+            vendedor
+              ? 'assets/img/vendedor-statill.png'
+              : 'assets/img/vendedor-statill.png'
+          "
+          [alt]="vendedor ? 'Cambiar a Comprador' : 'Cambiar a Vendedor'"
+          class="btn-icon"
+        />
+        <span>{{ vendedor ? "Comprador" : "Vendedor" }}</span>
       </button>
     </div>
+  </div>
+</div>

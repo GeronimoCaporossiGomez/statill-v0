@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SidebarComponent } from 'src/app/Componentes/sidebar-statill/sidebar.component';
-import { ProductoFormComponent, ProductoData } from 'src/app/Componentes/producto-form/producto-form.component';
+import {
+  ProductoFormComponent,
+  ProductoData,
+} from 'src/app/Componentes/producto-form/producto-form.component';
 import { MiApiService } from 'src/app/servicios/mi-api.service';
 import { AuthService } from 'src/app/servicios/auth.service';
 
@@ -10,12 +13,12 @@ import { AuthService } from 'src/app/servicios/auth.service';
   standalone: true,
   imports: [CommonModule, SidebarComponent, ProductoFormComponent],
   templateUrl: './stock.component.html',
-  styleUrls: ['./stock.component.scss']
+  styleUrls: ['./stock.component.scss'],
 })
 export class StockComponent implements OnInit {
   constructor(
     private miApi: MiApiService,
-    private authService: AuthService
+    private authService: AuthService,
   ) {}
 
   SePuedeVerElformulario = false;
@@ -29,7 +32,7 @@ export class StockComponent implements OnInit {
     desc: '',
     barcode: '',
     hidden: false,
-    store_id: 1
+    store_id: 1,
   };
 
   productos: any[] = [];
@@ -52,7 +55,7 @@ export class StockComponent implements OnInit {
           if (updatedUser && updatedUser.store_id) {
             this.producto.store_id = updatedUser.store_id;
           }
-        }
+        },
       });
     }
 
@@ -62,7 +65,7 @@ export class StockComponent implements OnInit {
       console.log('Productos desde la API:', this.productos);
     });
   }
-    //invertimos
+  //invertimos
   FormChange() {
     this.SePuedeVerElformulario = !this.SePuedeVerElformulario;
   }
@@ -71,11 +74,11 @@ export class StockComponent implements OnInit {
     this.editarIndex = index;
     this.editarProducto = { ...producto };
     this.SePuedeVerElformulario = true;
-    
+
     // Mantener el store_id del usuario owner
     const user = this.authService.getCurrentUser();
     const storeId = user?.store_id || producto.store_id;
-    
+
     this.producto = {
       name: producto.name,
       brand: producto.brand,
@@ -86,7 +89,7 @@ export class StockComponent implements OnInit {
       desc: producto.desc,
       barcode: producto.barcode,
       hidden: producto.hidden,
-      store_id: storeId
+      store_id: storeId,
     };
     this.productoEditandoId = producto.id;
   }
@@ -107,21 +110,23 @@ export class StockComponent implements OnInit {
 
     if (this.productoEditandoId) {
       // Editar producto existente (PUT)
-      this.miApi.editarProducto(this.productoEditandoId, productoData).subscribe({
-        next: (response) => {
-          console.log('✅ Producto editado correctamente:', response);
-          this.isLoading = false;
-          this.errorMessage = '¡Producto editado exitosamente!';
-          this.cargarProductos();
-          this.resetForm();
-          setTimeout(() => this.errorMessage = null, 3000);
-        },
-        error: (error) => {
-          console.error('❌ Error al editar producto:', error);
-          this.isLoading = false;
-          this.errorMessage = `Error al editar producto: ${error.error?.message || error.message}`;
-        }
-      });
+      this.miApi
+        .editarProducto(this.productoEditandoId, productoData)
+        .subscribe({
+          next: (response) => {
+            console.log('✅ Producto editado correctamente:', response);
+            this.isLoading = false;
+            this.errorMessage = '¡Producto editado exitosamente!';
+            this.cargarProductos();
+            this.resetForm();
+            setTimeout(() => (this.errorMessage = null), 3000);
+          },
+          error: (error) => {
+            console.error('❌ Error al editar producto:', error);
+            this.isLoading = false;
+            this.errorMessage = `Error al editar producto: ${error.error?.message || error.message}`;
+          },
+        });
     } else {
       // Crear producto nuevo (POST)
       this.miApi.crearProducto(productoData).subscribe({
@@ -131,13 +136,13 @@ export class StockComponent implements OnInit {
           this.errorMessage = '¡Producto creado exitosamente!';
           this.cargarProductos();
           this.resetForm();
-          setTimeout(() => this.errorMessage = null, 3000);
+          setTimeout(() => (this.errorMessage = null), 3000);
         },
         error: (error) => {
           console.error('❌ Error al crear producto:', error);
           this.isLoading = false;
           this.errorMessage = `Error al crear producto: ${error.error?.message || error.message}`;
-        }
+        },
       });
     }
   }
@@ -168,7 +173,7 @@ export class StockComponent implements OnInit {
       desc: '',
       barcode: '',
       hidden: false,
-      store_id: user?.store_id || 1
+      store_id: user?.store_id || 1,
     };
     this.SePuedeVerElformulario = false;
     this.editarIndex = null;

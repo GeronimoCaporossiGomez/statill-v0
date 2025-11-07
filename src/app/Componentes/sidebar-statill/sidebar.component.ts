@@ -7,10 +7,9 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [RouterModule, CommonModule],
   templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.scss']
+  styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent {
-
   isExpanded = false;
   activeItem = 'home'; // Item activo por defecto
   vendedor: boolean = true;
@@ -20,32 +19,32 @@ export class SidebarComponent {
       path: '/catalogo',
       icon: 'assets/img/catalogo-noesPNG.png',
       text: 'Catálogo',
-      id: 'catalogo'
+      id: 'catalogo',
     },
     {
       path: '/stock',
       icon: 'assets/img/Productos-icono.png',
       text: 'Productos',
-      id: 'stock'
+      id: 'stock',
     },
     {
       path: '/estadisticas',
       icon: 'assets/img/Estadisticas-icono.png',
       text: 'Estadísticas',
-      id: 'estadisticas'
+      id: 'estadisticas',
     },
     {
       path: '/escanear',
       icon: 'assets/img/Escanear-icono.png',
       text: 'Escanear',
-      id: 'escanear'
+      id: 'escanear',
     },
     {
       path: '/configuracion',
       icon: 'assets/img/Configuracion-icono.png',
       text: 'Ajustes',
-      id: 'configuracion'
-    }
+      id: 'configuracion',
+    },
   ];
 
   menuItemsComprador = [
@@ -53,26 +52,26 @@ export class SidebarComponent {
       path: '/home',
       icon: 'assets/img/home-statill.png',
       text: 'Home',
-      id: 'home'
+      id: 'home',
     },
     {
       path: '/perfil',
       icon: 'assets/img/perfil-statill.png',
       text: 'Perfil',
-      id: 'perfil'
+      id: 'perfil',
     },
     {
       path: '/mapa',
       icon: 'assets/img/mapa-pin-statill.png',
       text: 'Mapa',
-      id: 'mapa'
+      id: 'mapa',
     },
     {
       path: '/puntos',
       icon: 'assets/img/puntos-statill.png',
       text: 'Puntos',
-      id: 'puntos'
-    }
+      id: 'puntos',
+    },
   ];
 
   toggleSidebar() {

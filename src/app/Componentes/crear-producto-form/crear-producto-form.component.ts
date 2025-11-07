@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './crear-producto-form.component.html',
-  styleUrls: ['./crear-producto-form.component.scss']
+  styleUrls: ['./crear-producto-form.component.scss'],
 })
 export class CrearProductoFormComponent {
   @Input() producto: any = {};
@@ -25,7 +25,7 @@ export class CrearProductoFormComponent {
     { id: 0, name: 'Restaurante' },
     { id: 1, name: 'Kiosco' },
     { id: 2, name: 'Supermercado' },
-    { id: 3, name: 'Panadería' }
+    { id: 3, name: 'Panadería' },
   ];
 
   // Inicializar producto con estructura correcta
@@ -41,7 +41,7 @@ export class CrearProductoFormComponent {
         desc: '',
         barcode: '',
         hidden: false,
-        store_id: this.producto?.store_id || 1
+        store_id: this.producto?.store_id || 1,
       };
     }
   }
@@ -63,7 +63,7 @@ export class CrearProductoFormComponent {
       desc: this.producto.desc || '',
       barcode: this.producto.barcode || '',
       hidden: Boolean(this.producto.hidden),
-      store_id: Number(this.producto.store_id) || 1
+      store_id: Number(this.producto.store_id) || 1,
     };
 
     this.onSubmit.emit(productoData);
@@ -84,13 +84,13 @@ export class CrearProductoFormComponent {
       desc: '',
       barcode: '',
       hidden: false,
-      store_id: 1
+      store_id: 1,
     };
     this.onReset.emit();
   }
 
   getTypeNameById(typeId: number): string {
-    const tipo = this.tiposProducto.find(t => t.id === typeId);
+    const tipo = this.tiposProducto.find((t) => t.id === typeId);
     return tipo ? tipo.name : 'Sin categoría';
   }
 }

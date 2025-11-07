@@ -1,7 +1,16 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { latLng, tileLayer, MapOptions, Marker, marker, icon, Map, LeafletMouseEvent } from 'leaflet';
+import {
+  latLng,
+  tileLayer,
+  MapOptions,
+  Marker,
+  marker,
+  icon,
+  Map,
+  LeafletMouseEvent,
+} from 'leaflet';
 import * as L from 'leaflet';
 import { LeafletModule } from '@bluehalo/ngx-leaflet';
 import { MiApiService } from '../servicios/mi-api.service';
@@ -12,7 +21,7 @@ import { GeocodingService } from '../servicios/geocoding.service';
   standalone: true,
   imports: [LeafletModule, CommonModule, FormsModule],
   templateUrl: './mapa.component.html',
-  styleUrl: './mapa.component.scss'
+  styleUrl: './mapa.component.scss',
 })
 export class MapaComponent {
   @Input() modo: 'vendedor' | 'comprador' = 'comprador';
@@ -29,11 +38,11 @@ export class MapaComponent {
     layers: [
       tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
-        attribution: '&copy; OpenStreetMap contributors'
-      })
+        attribution: '&copy; OpenStreetMap contributors',
+      }),
     ],
     zoom: 13,
-    center: latLng(-34.6037, -58.3816)
+    center: latLng(-34.6037, -58.3816),
   };
 
   map!: Map;
@@ -42,7 +51,7 @@ export class MapaComponent {
 
   constructor(
     private api: MiApiService,
-    private geocoding: GeocodingService
+    private geocoding: GeocodingService,
   ) {}
 
   onMapReady(map: Map) {
@@ -75,8 +84,8 @@ export class MapaComponent {
       icon: icon({
         iconUrl: 'assets/img/mapa-pin-statill.png',
         iconSize: [32, 32],
-        iconAnchor: [16, 32]
-      })
+        iconAnchor: [16, 32],
+      }),
     });
 
     this.marcadorVendedor.addTo(this.map);
@@ -98,12 +107,21 @@ export class MapaComponent {
     this.buscandoDireccion = true;
 
     try {
-      const coords = await this.geocoding.geocode(this.direccionInput).toPromise();
+      const coords = await this.geocoding
+        .geocode(this.direccionInput)
+        .toPromise();
 
       if (coords && coords.lat && coords.lng) {
         // Validar coordenadas dentro de Argentina
-        if (coords.lat < -55 || coords.lat > -21 || coords.lng < -73 || coords.lng > -53) {
-          alert('La dirección no parece estar en Argentina. Por favor, verifica.');
+        if (
+          coords.lat < -55 ||
+          coords.lat > -21 ||
+          coords.lng < -73 ||
+          coords.lng > -53
+        ) {
+          alert(
+            'La dirección no parece estar en Argentina. Por favor, verifica.',
+          );
           this.buscandoDireccion = false;
           return;
         }
@@ -117,7 +135,9 @@ export class MapaComponent {
         // Emitir dirección confirmada
         this.direccionSeleccionada.emit(this.direccionActual);
 
-        console.log(`✅ Dirección encontrada: ${this.direccionActual} -> [${coords.lat}, ${coords.lng}]`);
+        console.log(
+          `✅ Dirección encontrada: ${this.direccionActual} -> [${coords.lat}, ${coords.lng}]`,
+        );
       } else {
         alert('No se pudo encontrar la dirección. Intenta con otra.');
       }
@@ -169,15 +189,22 @@ export class MapaComponent {
 
         // Filtrar direcciones inválidas (solo símbolos raros)
         const direccionLimpia = store.address.trim();
-        if (direccionLimpia.length < 5 || /^[^a-zA-Z0-9]+$/.test(direccionLimpia)) {
-          console.log(`⚠️ Dirección inválida para ${store.name}: "${store.address}"`);
+        if (
+          direccionLimpia.length < 5 ||
+          /^[^a-zA-Z0-9]+$/.test(direccionLimpia)
+        ) {
+          console.log(
+            `⚠️ Dirección inválida para ${store.name}: "${store.address}"`,
+          );
           return false;
         }
 
         return true;
       });
 
-      console.log(`✅ Tiendas con direcciones válidas: ${storesValidas.length}`);
+      console.log(
+        `✅ Tiendas con direcciones válidas: ${storesValidas.length}`,
+      );
 
       // Geocodificar una por una
       for (let i = 0; i < storesValidas.length; i++) {
@@ -187,12 +214,21 @@ export class MapaComponent {
         console.log(`📍 Dirección: ${store.address}`);
 
         try {
-          const coords = await this.geocoding.geocode(store.address).toPromise();
+          const coords = await this.geocoding
+            .geocode(store.address)
+            .toPromise();
 
           if (coords && coords.lat && coords.lng) {
             // Validar que las coordenadas sean razonables (Argentina está aprox entre -55 y -21 lat, -73 y -53 lng)
-            if (coords.lat < -55 || coords.lat > -21 || coords.lng < -73 || coords.lng > -53) {
-              console.log(`❌ Coordenadas fuera de Argentina: [${coords.lat}, ${coords.lng}]`);
+            if (
+              coords.lat < -55 ||
+              coords.lat > -21 ||
+              coords.lng < -73 ||
+              coords.lng > -53
+            ) {
+              console.log(
+                `❌ Coordenadas fuera de Argentina: [${coords.lat}, ${coords.lng}]`,
+              );
               continue;
             }
 
@@ -202,15 +238,17 @@ export class MapaComponent {
               icon: icon({
                 iconUrl: 'assets/img/mapa-pin-statill.png',
                 iconSize: [32, 32],
-                iconAnchor: [16, 32]
-              })
+                iconAnchor: [16, 32],
+              }),
             }).bindPopup(`<b>${store.name}</b><br>${store.address}`);
 
             // Verificar que el marcador se agregue correctamente
             try {
               newMarker.addTo(this.map);
               this.leafletMarkers.push(newMarker);
-              console.log(`📌 Marcador agregado. Total: ${this.leafletMarkers.length}`);
+              console.log(
+                `📌 Marcador agregado. Total: ${this.leafletMarkers.length}`,
+              );
             } catch (err) {
               console.error(`💥 Error al agregar marcador:`, err);
             }
@@ -223,19 +261,23 @@ export class MapaComponent {
 
         // Esperar 1.2 segundos entre requests (un poco más para estar seguros)
         if (i < storesValidas.length - 1) {
-          await new Promise(resolve => setTimeout(resolve, 1200));
+          await new Promise((resolve) => setTimeout(resolve, 1200));
         }
       }
 
-      console.log(`\n🏁 Finalizado. Marcadores en mapa: ${this.leafletMarkers.length}`);
+      console.log(
+        `\n🏁 Finalizado. Marcadores en mapa: ${this.leafletMarkers.length}`,
+      );
 
       // Ajustar vista
       if (this.leafletMarkers.length > 0) {
         try {
-          const coords = this.leafletMarkers.map(m => m.getLatLng());
+          const coords = this.leafletMarkers.map((m) => m.getLatLng());
           const bounds = L.latLngBounds(coords);
           this.map.fitBounds(bounds, { padding: [50, 50] });
-          console.log(`🎉 Mapa ajustado con ${this.leafletMarkers.length} tiendas`);
+          console.log(
+            `🎉 Mapa ajustado con ${this.leafletMarkers.length} tiendas`,
+          );
         } catch (err) {
           console.error('Error ajustando bounds:', err);
         }

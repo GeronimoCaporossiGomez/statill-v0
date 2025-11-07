@@ -1,11 +1,11 @@
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-.puntos-seccion{
-  background-color: #EEE;
+.puntos-seccion {
+  background-color: #eee;
   height: 100vh;
   width: 100%;
   display: flex;
@@ -13,32 +13,32 @@
   align-items: center;
 }
 
-.cartel-puntos{
+.cartel-puntos {
   width: 90vw;
   border-radius: 20px; /* no se porque tan feo esto */
   display: flex;
   margin-bottom: 3%;
   align-items: center;
   justify-content: space-between;
-  border: 1px solid #C2C2C2;
-  background: #FAFAFA;
+  border: 1px solid #c2c2c2;
+  background: #fafafa;
   height: 25vh;
 }
-.seccion-izquierda-cartel{
+.seccion-izquierda-cartel {
   display: flex;
   align-items: center;
   width: 70%;
 }
 
-span{
-  color: #06B512;
+span {
+  color: #06b512;
 }
 
-img{
+img {
   margin: 2%;
 }
 
-.boton-link{
+.boton-link {
   background-color: transparent;
   border: none;
   border-radius: 8px;
@@ -47,7 +47,7 @@ img{
   padding: 10px 20px;
   text-align: center;
   text-decoration: none;
-    justify-content: center;
+  justify-content: center;
   align-items: center;
   display: inline-block;
   font-size: 30px;
@@ -59,15 +59,15 @@ img{
   margin-right: 3%;
 }
 
-.texto{
-  font-size: 1.40rem;
+.texto {
+  font-size: 1.4rem;
   width: 100%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.gris{
+.gris {
   color: #585858;
 }
 
@@ -81,7 +81,9 @@ img{
   background: #fff;
   border: 2px solid #e0e0e0;
   /* sin border-radius */
-  transition: width 0.2s, height 0.2s;
+  transition:
+    width 0.2s,
+    height 0.2s;
   display: block;
 }
 
@@ -108,8 +110,7 @@ img{
   }
 }
 
-
-h1{
+h1 {
   width: 90vw;
   display: flex;
   align-items: right;
@@ -123,7 +124,7 @@ h1{
   text-align: center;
   padding: 2rem;
   width: 90vw;
-  
+
   p {
     font-size: 1.1rem;
     color: #666;
@@ -136,7 +137,7 @@ h1{
   text-align: center;
   padding: 2rem;
   width: 90vw;
-  
+
   p {
     font-size: 1.1rem;
     color: #888;
@@ -153,7 +154,9 @@ h1{
 
 // Ajustar el contenido de puntos para mejor espaciado
 .cartel-puntos .contenido-puntos {
-  h3, h4, h5 {
+  h3,
+  h4,
+  h5 {
     margin: 0.2rem 0;
     line-height: 1.2;
   }
@@ -172,7 +175,7 @@ h1{
 }
 
 .puntos-display {
-  color: #06B512 !important;
+  color: #06b512 !important;
   font-weight: bold;
   float: right;
 }
@@ -187,7 +190,6 @@ h1{
   margin-left: 0.5rem;
   text-transform: capitalize;
 }
-
 
 // Mejorar la presentación de información del usuario
 .cartel-puntos .contenido-puntos {
@@ -204,12 +206,12 @@ h1{
     font-size: 0.6rem;
     padding: 0.1rem 0.3rem;
   }
-  
+
   .rol-badge {
     font-size: 0.55rem;
     padding: 0.05rem 0.3rem;
   }
-  
+
   .puntos-display {
     font-size: 0.9rem;
   }

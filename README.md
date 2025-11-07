@@ -6,16 +6,16 @@
 
 ## ⚙️ Tecnologías utilizadas
 
-| Herramienta            | Función principal                                  |
-|------------------------|----------------------------------------------------|
-| Angular 19             | Framework con componentes standalone               |
-| SCSS modular           | Estilos escalables y responsive                    |
-| Angular Router         | Navegación con carga perezosa (`loadComponent`)    |
-| RxJS & Signals         | Estado reactivo moderno y eficiente                |
-| localStorage           | Persistencia de sesión/local                       |
-| Angular PWA            | Compatible con Android/iOS + instalación directa   |
-| Animaciones Angular    | Transiciones suaves entre login/registro           |
-| FormsModule            | Formularios reactivos integrados con `ngModel`     |
+| Herramienta         | Función principal                                |
+| ------------------- | ------------------------------------------------ |
+| Angular 19          | Framework con componentes standalone             |
+| SCSS modular        | Estilos escalables y responsive                  |
+| Angular Router      | Navegación con carga perezosa (`loadComponent`)  |
+| RxJS & Signals      | Estado reactivo moderno y eficiente              |
+| localStorage        | Persistencia de sesión/local                     |
+| Angular PWA         | Compatible con Android/iOS + instalación directa |
+| Animaciones Angular | Transiciones suaves entre login/registro         |
+| FormsModule         | Formularios reactivos integrados con `ngModel`   |
 
 ---
 
@@ -71,3 +71,4 @@ npm run start
 Gerónimo Caporossi
 
 Martín Adler
+```

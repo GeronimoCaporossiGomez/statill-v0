@@ -7,8 +7,6 @@ import { MapaComponent } from 'src/app/mapa/mapa.component';
   selector: 'app-mapa-pagina',
   imports: [CommonModule, HeaderStatillComponent, MapaComponent],
   templateUrl: './mapa-pagina.component.html',
-  styleUrl: './mapa-pagina.component.scss'
+  styleUrl: './mapa-pagina.component.scss',
 })
-export class MapaPaginaComponent {
-
-}
+export class MapaPaginaComponent {}

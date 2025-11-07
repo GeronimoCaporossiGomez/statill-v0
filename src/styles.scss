@@ -1,8 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;800&display=swap');
-$font-family: 'Poppins', sans-serif;
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap');
-$font-family-secundaria: 'Roboto Condensed', sans-serif;
-
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;800&display=swap");
+$font-family: "Poppins", sans-serif;
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&display=swap");
+$font-family-secundaria: "Roboto Condensed", sans-serif;
 
 * {
   margin: 0;
@@ -10,6 +9,6 @@ $font-family-secundaria: 'Roboto Condensed', sans-serif;
   font-family: $font-family;
 }
 
-.roboto{
+.roboto {
   font-family: $font-family-secundaria;
 }

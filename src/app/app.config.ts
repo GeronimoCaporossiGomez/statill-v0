@@ -9,8 +9,6 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideAnimations(),
-    provideHttpClient(
-      withInterceptors([authInterceptor])
-    )
-  ]
+    provideHttpClient(withInterceptors([authInterceptor])),
+  ],
 };

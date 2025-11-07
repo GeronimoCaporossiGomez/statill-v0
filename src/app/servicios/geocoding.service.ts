@@ -11,7 +11,7 @@ export class GeocodingService {
   private corsProxy = 'https://api.allorigins.win/raw?url=';
   private nominatimBase = 'https://nominatim.openstreetmap.org/search';
 
-  geocode(address: string): Observable<{lat: number, lng: number} | null> {
+  geocode(address: string): Observable<{ lat: number; lng: number } | null> {
     if (!address || address.trim() === '') {
       return of(null);
     }
@@ -25,17 +25,19 @@ export class GeocodingService {
       catchError(() => {
         console.log('❌ No se pudo geocodificar después de intentos');
         return of(null);
-      })
+      }),
     );
   }
 
-  private geocodeIntento(address: string): Observable<{lat: number, lng: number} | null> {
+  private geocodeIntento(
+    address: string,
+  ): Observable<{ lat: number; lng: number } | null> {
     const params = new URLSearchParams({
       q: address,
       format: 'json',
       limit: '1',
       addressdetails: '1',
-      countrycodes: 'ar'
+      countrycodes: 'ar',
     });
 
     const nominatimUrl = `${this.nominatimBase}?${params.toString()}`;
@@ -45,20 +47,20 @@ export class GeocodingService {
 
     return this.http.get<any[]>(proxiedUrl).pipe(
       delay(1000),
-      map(results => {
+      map((results) => {
         if (results && results.length > 0) {
           console.log('✅ Resultado encontrado:', results[0]);
           return {
             lat: parseFloat(results[0].lat),
-            lng: parseFloat(results[0].lon)
+            lng: parseFloat(results[0].lon),
           };
         }
         throw new Error('No results');
       }),
-      catchError(error => {
+      catchError((error) => {
         console.error('❌ Error en geocodificación:', error);
         throw error;
-      })
+      }),
     );
   }
 

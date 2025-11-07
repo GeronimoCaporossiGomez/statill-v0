@@ -1,21 +1,39 @@
 <div class="puntos-pagina">
-
-  <app-header-statill></app-header-statill> <!-- esto va a terminar siendo el header del figma -->
+  <app-header-statill></app-header-statill>
+  <!-- esto va a terminar siendo el header del figma -->
 
   <div class="puntos-seccion">
     <h1>Mis preordenes:</h1>
     <div *ngFor="let prueba of probando; let i = index">
-      <div class="cartel-comercio" (click)="verDetalle(i)" [ngClass]="{'descripcion-activa': descripcion === i}">
+      <div
+        class="cartel-comercio"
+        (click)="verDetalle(i)"
+        [ngClass]="{ 'descripcion-activa': descripcion === i }"
+      >
         <div class="seccion-izquierda-cartel">
-          <img src="{{prueba.imagen}}" alt="pokoko">
-          <div class="texto" [ngClass]="{'detalles': descripcion === i}">
-              <h2 class="asd roboto">{{prueba.nombre}}: <span>Pedido #{{i+1}} ({{prueba.fecha}}) ({{prueba.hora}})</span></h2>
-              <h3 class="gris roboto">{{prueba.descripcion}}</h3>
+          <img src="{{ prueba.imagen }}" alt="pokoko" />
+          <div class="texto" [ngClass]="{ detalles: descripcion === i }">
+            <h2 class="asd roboto">
+              {{ prueba.nombre }}:
+              <span
+                >Pedido #{{ i + 1 }} ({{ prueba.fecha }}) ({{
+                  prueba.hora
+                }})</span
+              >
+            </h2>
+            <h3 class="gris roboto">{{ prueba.descripcion }}</h3>
             <ng-container *ngIf="descripcion === i">
-              <h3 class="descripcion roboto">Pago:
-                <h3 class="descri roboto">Precio final abonado: {{prueba.pago[0].precioFinalAbonado}}</h3>
-                <h3 class="descri roboto">Medio de pago: {{prueba.pago[1].metodo}}</h3>
-                <h3 class="descri roboto">Propina: {{prueba.pago[2].propina}}</h3>
+              <h3 class="descripcion roboto">
+                Pago:
+                <h3 class="descri roboto">
+                  Precio final abonado: {{ prueba.pago[0].precioFinalAbonado }}
+                </h3>
+                <h3 class="descri roboto">
+                  Medio de pago: {{ prueba.pago[1].metodo }}
+                </h3>
+                <h3 class="descri roboto">
+                  Propina: {{ prueba.pago[2].propina }}
+                </h3>
               </h3>
             </ng-container>
           </div>
@@ -24,4 +42,3 @@
     </div>
   </div>
 </div>
-

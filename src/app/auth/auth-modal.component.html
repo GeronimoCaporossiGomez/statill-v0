@@ -25,7 +25,12 @@
   <!-- Formulario con animación -->
   <div class="auth-body" [@fadeSlide]="isLogin ? 'login' : 'register'">
     <!-- Mensajes de éxito/error -->
-    <div *ngIf="message" class="auth-message" [class.success]="messageType === 'success'" [class.error]="messageType === 'error'">
+    <div
+      *ngIf="message"
+      class="auth-message"
+      [class.success]="messageType === 'success'"
+      [class.error]="messageType === 'error'"
+    >
       {{ message }}
     </div>
 
@@ -40,7 +45,8 @@
           [(ngModel)]="activationCode"
           name="activation"
           [disabled]="loading"
-          required />
+          required
+        />
       </div>
       <button type="submit" class="btn btn-primary" [disabled]="loading">
         <span *ngIf="loading">Verificando...</span>
@@ -48,11 +54,21 @@
       </button>
       <div class="resend-section">
         <p>¿No recibiste el código?</p>
-        <button type="button" class="btn btn-link" (click)="resendVerificationCode()" [disabled]="loading">
+        <button
+          type="button"
+          class="btn btn-link"
+          (click)="resendVerificationCode()"
+          [disabled]="loading"
+        >
           Reenviar código
         </button>
       </div>
-      <button type="button" class="btn btn-link" (click)="backToLogin()" [disabled]="loading">
+      <button
+        type="button"
+        class="btn btn-link"
+        (click)="backToLogin()"
+        [disabled]="loading"
+      >
         Volver al login
       </button>
     </form>
@@ -70,7 +86,8 @@
               placeholder="Ingresa tu nombre"
               [(ngModel)]="first_names"
               name="first_names"
-              required />
+              required
+            />
           </div>
 
           <div class="form-group">
@@ -81,7 +98,8 @@
               placeholder="Ingresa tu apellido"
               [(ngModel)]="last_name"
               name="last_name"
-              required />
+              required
+            />
           </div>
 
           <div class="form-group">
@@ -91,7 +109,8 @@
               type="date"
               [(ngModel)]="birthdate"
               name="birthdate"
-              required />
+              required
+            />
           </div>
 
           <div class="form-group">
@@ -112,7 +131,8 @@
               placeholder="Ej: Vicente López"
               [(ngModel)]="res_area"
               name="res_area"
-              required />
+              required
+            />
           </div>
         </div>
       </ng-container>
@@ -125,7 +145,8 @@
           placeholder="ejemplo@gmail.com"
           [(ngModel)]="email"
           name="email"
-          required />
+          required
+        />
       </div>
 
       <div class="form-group">
@@ -133,21 +154,29 @@
         <input
           id="password"
           type="password"
-          [placeholder]="isLogin ? 'Ingresá tu contraseña' : 'Ingresar +8 caracteres'"
+          [placeholder]="
+            isLogin ? 'Ingresá tu contraseña' : 'Ingresar +8 caracteres'
+          "
           [(ngModel)]="password"
           name="password"
           [disabled]="loading"
-          required />
+          required
+        />
       </div>
 
       <!-- Términos y condiciones solo en registro -->
       <div *ngIf="!isLogin" class="terms">
         <span class="terms-icon">&#9888;</span>
-        <span>Al registrarse, está aceptando los <a href="#" class="terms-link">términos y condiciones</a></span>
+        <span
+          >Al registrarse, está aceptando los
+          <a href="#" class="terms-link">términos y condiciones</a></span
+        >
       </div>
       <button type="submit" class="btn btn-primary" [disabled]="loading">
         <span *ngIf="loading">Cargando...</span>
-        <span *ngIf="!loading">{{ isLogin ? 'Iniciar sesión' : 'Registrarse' }}</span>
+        <span *ngIf="!loading">{{
+          isLogin ? "Iniciar sesión" : "Registrarse"
+        }}</span>
       </button>
     </form>
 
@@ -157,8 +186,16 @@
     </div>
 
     <div class="switch-mode" *ngIf="!isVerifyingCode">
-      <span *ngIf="!isLogin">¿Ya tenés cuenta? <a (click)="toggleMode(true)" class="switch-link">Iniciá sesión</a></span>
-      <span *ngIf="isLogin">¿No tenés cuenta? <a (click)="toggleMode(false)" class="switch-link">Registrate</a></span>
+      <span *ngIf="!isLogin"
+        >¿Ya tenés cuenta?
+        <a (click)="toggleMode(true)" class="switch-link"
+          >Iniciá sesión</a
+        ></span
+      >
+      <span *ngIf="isLogin"
+        >¿No tenés cuenta?
+        <a (click)="toggleMode(false)" class="switch-link">Registrate</a></span
+      >
     </div>
 
     <!-- Cierre del modal -->

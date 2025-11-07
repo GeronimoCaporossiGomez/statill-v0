@@ -1,11 +1,11 @@
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-.puntos-seccion{
-  background-color: #EEE;
+.puntos-seccion {
+  background-color: #eee;
   height: auto;
   width: 100%;
   display: flex;
@@ -13,53 +13,57 @@
   align-items: center;
 }
 
-.cartel-comercio{
+.cartel-comercio {
   width: 90vw;
   border-radius: 20px; /* no se porque tan feo esto */
   display: flex;
   margin-bottom: 3%;
   align-items: center;
   justify-content: space-between;
-  border: 1px solid #C2C2C2;
-  background: #FAFAFA;
+  border: 1px solid #c2c2c2;
+  background: #fafafa;
   height: 25vh;
   cursor: pointer;
 }
 
-.cartel-comercio img, .preorden-avatar {
+.cartel-comercio img,
+.preorden-avatar {
   width: clamp(60px, 12vw, 120px);
   height: clamp(60px, 12vw, 120px);
   object-fit: cover;
   margin-right: 2vw;
   background: #fff;
   border: 2px solid #e0e0e0;
-  transition: width 0.2s, height 0.2s;
+  transition:
+    width 0.2s,
+    height 0.2s;
 }
 
 @media (max-width: 600px) {
-  .cartel-comercio img, .preorden-avatar {
+  .cartel-comercio img,
+  .preorden-avatar {
     width: 48px;
     height: 48px;
     margin-right: 10px;
   }
 }
 
-.seccion-izquierda-cartel{
+.seccion-izquierda-cartel {
   display: flex;
   align-items: center;
   width: 95%;
 }
 
-span{
+span {
   font-weight: bold;
 }
 
-img{
+img {
   margin: 2%;
 }
 
-.boton-link{
-  background-color: #FF6F61;
+.boton-link {
+  background-color: #ff6f61;
   border: none;
   border-radius: 8px;
   color: white;
@@ -74,7 +78,7 @@ img{
   margin-right: 3%;
 }
 
-.texto{
+.texto {
   font-size: 1.25rem;
   width: 100%;
   white-space: nowrap;
@@ -87,14 +91,13 @@ img{
   overflow: visible !important;
   text-overflow: unset !important;
   word-break: break-word !important; // <-- esto fuerza el salto de línea
-
 }
 
-.gris{
+.gris {
   color: #585858;
 }
 
-.descripcion{
+.descripcion {
   height: 30vh;
   overflow: hidden;
   color: #585858;
@@ -103,17 +106,17 @@ img{
   justify-content: center;
 }
 
-.descripcion-activa{
+.descripcion-activa {
   height: auto;
 }
 
-.descri{
+.descri {
   color: #585858;
   font-size: 1.2rem;
   margin: 0.2rem 0;
 }
 
-h1{
+h1 {
   width: 90vw;
   display: flex;
   align-items: right;

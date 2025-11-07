@@ -36,13 +36,15 @@ export class AuthService {
   private apiUrl = 'https://statill-api.onrender.com';
   private readonly TOKEN_KEY = 'statill_token';
   private readonly USER_KEY = 'statill_user';
-  
-  private currentUserSubject = new BehaviorSubject<UserRead | null>(this.getStoredUser());
+
+  private currentUserSubject = new BehaviorSubject<UserRead | null>(
+    this.getStoredUser(),
+  );
   public currentUser$ = this.currentUserSubject.asObservable();
 
   constructor(
     private http: HttpClient,
-    private router: Router
+    private router: Router,
   ) {
     // Si hay token pero no usuario, intentar obtenerlo
     if (this.getToken() && !this.currentUserSubject.value) {
@@ -51,7 +53,7 @@ export class AuthService {
   }
 
   // ============ TOKEN MANAGEMENT ============
-  
+
   getToken(): string | null {
     return localStorage.getItem(this.TOKEN_KEY);
   }
@@ -65,7 +67,7 @@ export class AuthService {
   }
 
   // ============ USER MANAGEMENT ============
-  
+
   private getStoredUser(): UserRead | null {
     const stored = localStorage.getItem(this.USER_KEY);
     return stored ? JSON.parse(stored) : null;
@@ -86,7 +88,7 @@ export class AuthService {
   }
 
   // ============ AUTHENTICATION METHODS ============
-  
+
   /**
    * Register a new user
    */
@@ -121,40 +123,44 @@ export class AuthService {
     if (payload.scope) body.set('scope', payload.scope);
     if (payload.client_id) body.set('client_id', payload.client_id);
     if (payload.client_secret) body.set('client_secret', payload.client_secret);
-    
-    return this.http.post<LoginResponse>(
-      this.apiUrl + '/api/v1/auth/token',
-      body.toString(),
-      { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
-    ).pipe(
-      tap(response => {
-        if (response.successful && response.data?.token) {
-          this.setToken(response.data.token);
-          // Fetch user info after successful login
-          this.fetchCurrentUser().subscribe();
-        }
-      })
-    );
+
+    return this.http
+      .post<LoginResponse>(
+        this.apiUrl + '/api/v1/auth/token',
+        body.toString(),
+        { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
+      )
+      .pipe(
+        tap((response) => {
+          if (response.successful && response.data?.token) {
+            this.setToken(response.data.token);
+            // Fetch user info after successful login
+            this.fetchCurrentUser().subscribe();
+          }
+        }),
+      );
   }
 
   /**
    * Get current authenticated user
    */
   fetchCurrentUser(): Observable<GetUserResponse> {
-    return this.http.get<GetUserResponse>(this.apiUrl + '/api/v1/users/me').pipe(
-      tap(response => {
-        if (response.successful && response.data) {
-          this.setUser(response.data);
-        }
-      }),
-      catchError(error => {
-        // Si el token es inválido, limpiar sesión
-        if (error.status === 401) {
-          this.logout();
-        }
-        return throwError(() => error);
-      })
-    );
+    return this.http
+      .get<GetUserResponse>(this.apiUrl + '/api/v1/users/me')
+      .pipe(
+        tap((response) => {
+          if (response.successful && response.data) {
+            this.setUser(response.data);
+          }
+        }),
+        catchError((error) => {
+          // Si el token es inválido, limpiar sesión
+          if (error.status === 401) {
+            this.logout();
+          }
+          return throwError(() => error);
+        }),
+      );
   }
 
   /**
@@ -162,21 +168,25 @@ export class AuthService {
    * IMPORTANT: This is a PATCH request, not GET
    */
   activateAccount(code: string): Observable<any> {
-    return this.http.patch(this.apiUrl + '/api/v1/auth/activate', null, {
-      params: { code }
-    }).pipe(
-      tap(() => {
-        // After activation, refresh user info to get updated email_verified status
-        this.fetchCurrentUser().subscribe();
+    return this.http
+      .patch(this.apiUrl + '/api/v1/auth/activate', null, {
+        params: { code },
       })
-    );
+      .pipe(
+        tap(() => {
+          // After activation, refresh user info to get updated email_verified status
+          this.fetchCurrentUser().subscribe();
+        }),
+      );
   }
 
   /**
    * Send email verification code to authenticated user
    */
   sendEmailVerificationCode(): Observable<any> {
-    return this.http.get(this.apiUrl + '/api/v1/auth/send-email-verification-code');
+    return this.http.get(
+      this.apiUrl + '/api/v1/auth/send-email-verification-code',
+    );
   }
 
   /**
@@ -201,14 +211,17 @@ export class AuthService {
     const user = this.getCurrentUser();
     return this.isActiveUser() && user.store_role === 'owner';
   }
-  
+
   isCashier(): boolean {
     const user = this.getCurrentUser();
     return this.isActiveUser() && user.store_role === 'cashier';
   }
   isOwnerOrCashier(): boolean {
     const user = this.getCurrentUser();
-    return this.isActiveUser() && (user.store_role === 'owner' || user.store_role === 'cashier');
+    return (
+      this.isActiveUser() &&
+      (user.store_role === 'owner' || user.store_role === 'cashier')
+    );
   }
   /**
    * Check if user has store (owner or cashier)
@@ -240,7 +253,7 @@ export class AuthService {
   hasValidToken(): boolean {
     const token = this.getToken();
     if (!token) return false;
-    
+
     // Basic token validation (check if it's not expired)
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
@@ -251,7 +264,7 @@ export class AuthService {
     }
   }
 
-  getUserFirstName(id: number){
-    return this.http.get(`/api/v1/users/${id}/name/`)
+  getUserFirstName(id: number) {
+    return this.http.get(`/api/v1/users/${id}/name/`);
   }
 }

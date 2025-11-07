@@ -6,8 +6,6 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [RouterModule],
   templateUrl: './comercio-header.component.html',
-  styleUrl: './comercio-header.component.scss'
+  styleUrl: './comercio-header.component.scss',
 })
-export class ComercioHeaderComponent {
-
-}
+export class ComercioHeaderComponent {}

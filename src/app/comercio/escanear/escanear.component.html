@@ -18,12 +18,20 @@
 
     <div class="camera-controls">
       <button (click)="toggleCamera()" class="btn-pill btn-red">
-        {{ isCameraOn ? 'Apagar Cámara' : 'Prender Cámara' }}
+        {{ isCameraOn ? "Apagar Cámara" : "Prender Cámara" }}
       </button>
-      <button (click)="startScanning()" [disabled]="!isCameraOn || isScanning" class="btn-pill btn-red-outline">
-        {{ isScanning ? 'Escaneando…' : 'Escanear productos' }}
+      <button
+        (click)="startScanning()"
+        [disabled]="!isCameraOn || isScanning"
+        class="btn-pill btn-red-outline"
+      >
+        {{ isScanning ? "Escaneando…" : "Escanear productos" }}
       </button>
-      <button (click)="stopScanning()" [disabled]="!isScanning" class="btn-pill btn-gray">
+      <button
+        (click)="stopScanning()"
+        [disabled]="!isScanning"
+        class="btn-pill btn-gray"
+      >
         Detener escaneo
       </button>
     </div>
@@ -36,20 +44,36 @@
         placeholder="Ingresar código de barras manualmente"
         [(ngModel)]="manualBarcode"
       />
-      <button class="btn-pill btn-dark" (click)="onManualSubmit()" [disabled]="!manualBarcode?.trim()">Buscar</button>
+      <button
+        class="btn-pill btn-dark"
+        (click)="onManualSubmit()"
+        [disabled]="!manualBarcode?.trim()"
+      >
+        Buscar
+      </button>
     </div>
 
-    <div *ngIf="errorMessage" class="message"
-         [ngClass]="{'success': errorMessage.includes('exitosamente'), 'error': !errorMessage.includes('exitosamente') && !errorMessage.includes('Escaneando')}">
+    <div
+      *ngIf="errorMessage"
+      class="message"
+      [ngClass]="{
+        success: errorMessage.includes('exitosamente'),
+        error:
+          !errorMessage.includes('exitosamente') &&
+          !errorMessage.includes('Escaneando'),
+      }"
+    >
       {{ errorMessage }}
     </div>
   </div>
 
   <!-- Sección de resultados y formularios -->
   <div class="seccion-formulario">
-    
     <!-- Mostrar productos encontrados -->
-    <div *ngIf="foundProducts.length > 0 && !showCreateForm" class="productos-encontrados">
+    <div
+      *ngIf="foundProducts.length > 0 && !showCreateForm"
+      class="productos-encontrados"
+    >
       <h2>✅ Productos Encontrados</h2>
       <div class="producto-info">
         <div class="producto-header">
@@ -63,9 +87,14 @@
           <p><strong>Fecha:</strong> {{ displayData.fecha }}</p>
         </div>
       </div>
-      
+
       <div class="multiple-products" *ngIf="foundProducts.length > 1">
-        <p><strong>{{ foundProducts.length - 1 }} producto(s) más con este código</strong></p>
+        <p>
+          <strong
+            >{{ foundProducts.length - 1 }} producto(s) más con este
+            código</strong
+          >
+        </p>
         <button class="btn-secondary">Ver todos</button>
       </div>
     </div>
@@ -76,7 +105,11 @@
       [isLoading]="isLoading"
       [errorMessage]="errorMessage"
       [showForm]="showCreateForm"
-      [title]="foundProducts.length > 0 ? 'Crear Producto (Datos Sugeridos)' : 'Crear Nuevo Producto'"
+      [title]="
+        foundProducts.length > 0
+          ? 'Crear Producto (Datos Sugeridos)'
+          : 'Crear Nuevo Producto'
+      "
       [submitButtonText]="'Crear Producto'"
       [showBarcodeField]="true"
       [showStoreIdField]="true"
@@ -84,19 +117,31 @@
       (onSubmit)="onProductoSubmit($event)"
       (onCancel)="onCancelar()"
       (onReset)="onReset()"
-      (onUseSuggestedData)="onUseSuggestedData($event)">
+      (onUseSuggestedData)="onUseSuggestedData($event)"
+    >
     </app-producto-form>
 
     <!-- Información adicional cuando hay productos encontrados -->
-    <div *ngIf="foundProducts.length > 0 && showCreateForm" class="found-products-info">
+    <div
+      *ngIf="foundProducts.length > 0 && showCreateForm"
+      class="found-products-info"
+    >
       <h4>🔍 Información del Escaneo</h4>
       <p><strong>Código escaneado:</strong> {{ scannedBarcode }}</p>
-      <p><strong>Tienda:</strong> {{ currentStore?.name || 'No especificada' }}</p>
-      <p><strong>Productos similares encontrados:</strong> {{ foundProducts.length }}</p>
+      <p>
+        <strong>Tienda:</strong> {{ currentStore?.name || "No especificada" }}
+      </p>
+      <p>
+        <strong>Productos similares encontrados:</strong>
+        {{ foundProducts.length }}
+      </p>
     </div>
 
     <!-- Información básica cuando no hay datos -->
-    <div *ngIf="!showCreateForm && foundProducts.length === 0" class="info-inicial">
+    <div
+      *ngIf="!showCreateForm && foundProducts.length === 0"
+      class="info-inicial"
+    >
       <h2>📊 Información del Escaneo</h2>
       <div class="info-placeholder">
         <div class="placeholder-icon">🔍</div>
@@ -106,9 +151,7 @@
 
     <!-- Botón de limpiar siempre visible -->
     <div class="acciones-formulario">
-      <button (click)="resetForm()" class="btn-clean">
-        🧹 Limpiar Todo
-      </button>
+      <button (click)="resetForm()" class="btn-clean">🧹 Limpiar Todo</button>
     </div>
   </div>
 </div>

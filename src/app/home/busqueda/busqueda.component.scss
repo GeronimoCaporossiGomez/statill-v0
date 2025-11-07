@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap");
 
-$color-primario: #FD2A2C;
+$color-primario: #fd2a2c;
 $color-secundario: #3f51b5;
 $color-header: #f5f5f5;
 $color-borde-azul: #2196f3;
@@ -9,7 +9,7 @@ $color-borde-azul: #2196f3;
 .home-layout {
   min-height: 100vh;
   background: #fff;
-  font-family: 'Roboto Condensed', sans-serif;
+  font-family: "Roboto Condensed", sans-serif;
 }
 
 .statill-header {
@@ -19,11 +19,12 @@ $color-borde-azul: #2196f3;
   background: $color-header;
   border-bottom: 2px solid #ddd;
   padding: 0.7rem 2rem 0.7rem 2rem;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-weight: 800;
   font-size: 1.3rem;
 
-  .header-left, .header-right {
+  .header-left,
+  .header-right {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -51,7 +52,8 @@ $color-borde-azul: #2196f3;
       }
     }
   }
-  .header-cuenta, .header-mapa {
+  .header-cuenta,
+  .header-mapa {
     font-weight: 600;
   }
 }
@@ -80,7 +82,7 @@ $color-borde-azul: #2196f3;
     border-radius: 12px;
     font-size: 1.1rem;
     background: #fff;
-    font-family: 'Roboto Condensed', sans-serif;
+    font-family: "Roboto Condensed", sans-serif;
   }
 }
 
@@ -101,7 +103,7 @@ app-stores {
   border: 1.5px solid #ddd;
   border-radius: 12px;
   padding: 1.2rem 1rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
   h2 {
     font-size: 1.2rem;
     color: $color-primario;

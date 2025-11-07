@@ -19,6 +19,7 @@ Este proyecto está preparado para ejecutarse en cualquier máquina sin necesida
 
 1. **Instalación de dependencias**  
    La primera vez que corras el script, si `node_modules/` no está presente, se instalará automáticamente con:
+
    ```
    NodeJS\npm.cmd install
    ```

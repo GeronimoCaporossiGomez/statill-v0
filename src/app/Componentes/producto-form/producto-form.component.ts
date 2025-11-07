@@ -20,7 +20,7 @@ export interface ProductoData {
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './producto-form.component.html',
-  styleUrls: ['./producto-form.component.scss']
+  styleUrls: ['./producto-form.component.scss'],
 })
 export class ProductoFormComponent implements OnInit {
   @Input() producto: ProductoData = {
@@ -33,9 +33,9 @@ export class ProductoFormComponent implements OnInit {
     desc: '',
     barcode: '',
     hidden: false,
-    store_id: 1
+    store_id: 1,
   };
-  
+
   @Input() isLoading: boolean = false;
   @Input() errorMessage: string | null = null;
   @Input() showForm: boolean = false;
@@ -59,7 +59,7 @@ export class ProductoFormComponent implements OnInit {
     { id: 5, name: 'Electrónica' },
     { id: 6, name: 'Ropa' },
     { id: 7, name: 'Hogar' },
-    { id: 8, name: 'Otro' }
+    { id: 8, name: 'Otro' },
   ];
 
   useSuggestedData: boolean = false;
@@ -81,66 +81,86 @@ export class ProductoFormComponent implements OnInit {
     if (this.suggestedData && this.suggestedData.length > 0) {
       // Calcular los datos más comunes
       const mostCommonData = this.calculateMostCommonData(this.suggestedData);
-      
+
       this.producto = {
         ...this.producto,
         name: mostCommonData.name || '',
         brand: mostCommonData.brand || '',
         desc: mostCommonData.desc || '',
-        type: mostCommonData.type || 1
+        type: mostCommonData.type || 1,
       };
     }
   }
 
   calculateMostCommonData(products: any[]) {
     // Encontrar el nombre más común
-    const nameCounts = products.reduce((acc, product) => {
-      const name = product.name || '';
-      acc[name] = (acc[name] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
-    const mostCommonName = Object.keys(nameCounts).reduce((a, b) => 
-      nameCounts[a] > nameCounts[b] ? a : b, '');
+    const nameCounts = products.reduce(
+      (acc, product) => {
+        const name = product.name || '';
+        acc[name] = (acc[name] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
+    const mostCommonName = Object.keys(nameCounts).reduce(
+      (a, b) => (nameCounts[a] > nameCounts[b] ? a : b),
+      '',
+    );
 
     // Encontrar la marca más común
-    const brandCounts = products.reduce((acc, product) => {
-      const brand = product.brand || '';
-      acc[brand] = (acc[brand] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
-    const mostCommonBrand = Object.keys(brandCounts).reduce((a, b) => 
-      brandCounts[a] > brandCounts[b] ? a : b, '');
+    const brandCounts = products.reduce(
+      (acc, product) => {
+        const brand = product.brand || '';
+        acc[brand] = (acc[brand] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
+    const mostCommonBrand = Object.keys(brandCounts).reduce(
+      (a, b) => (brandCounts[a] > brandCounts[b] ? a : b),
+      '',
+    );
 
     // Encontrar la descripción más común
-    const descCounts = products.reduce((acc, product) => {
-      const desc = product.desc || '';
-      acc[desc] = (acc[desc] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
-    const mostCommonDesc = Object.keys(descCounts).reduce((a, b) => 
-      descCounts[a] > descCounts[b] ? a : b, '');
+    const descCounts = products.reduce(
+      (acc, product) => {
+        const desc = product.desc || '';
+        acc[desc] = (acc[desc] || 0) + 1;
+        return acc;
+      },
+      {} as Record<string, number>,
+    );
+    const mostCommonDesc = Object.keys(descCounts).reduce(
+      (a, b) => (descCounts[a] > descCounts[b] ? a : b),
+      '',
+    );
 
     // Encontrar el tipo más común
-    const typeCounts = products.reduce((acc, product) => {
-      const type = product.type || 1;
-      acc[type] = (acc[type] || 0) + 1;
-      return acc;
-    }, {} as Record<number, number>);
-    const mostCommonType = Object.keys(typeCounts).reduce((a, b) => 
-      typeCounts[Number(a)] > typeCounts[Number(b)] ? a : b, '1');
+    const typeCounts = products.reduce(
+      (acc, product) => {
+        const type = product.type || 1;
+        acc[type] = (acc[type] || 0) + 1;
+        return acc;
+      },
+      {} as Record<number, number>,
+    );
+    const mostCommonType = Object.keys(typeCounts).reduce(
+      (a, b) => (typeCounts[Number(a)] > typeCounts[Number(b)] ? a : b),
+      '1',
+    );
 
     return {
       name: mostCommonName,
       brand: mostCommonBrand,
       desc: mostCommonDesc,
-      type: Number(mostCommonType)
+      type: Number(mostCommonType),
     };
   }
 
   toggleSuggestedData() {
     this.useSuggestedData = !this.useSuggestedData;
     this.onUseSuggestedData.emit(this.useSuggestedData);
-    
+
     if (this.useSuggestedData) {
       this.applySuggestedData();
     } else {
@@ -169,7 +189,7 @@ export class ProductoFormComponent implements OnInit {
       desc: this.producto.desc.trim(),
       barcode: this.producto.barcode.trim(),
       hidden: Boolean(this.producto.hidden),
-      store_id: Number(this.producto.store_id) || 1
+      store_id: Number(this.producto.store_id) || 1,
     };
 
     this.onSubmit.emit(productoData);
@@ -190,14 +210,14 @@ export class ProductoFormComponent implements OnInit {
       desc: '',
       barcode: '',
       hidden: false,
-      store_id: 1
+      store_id: 1,
     };
     this.useSuggestedData = false;
     this.onReset.emit();
   }
 
   getTypeNameById(typeId: number): string {
-    const tipo = this.tiposProducto.find(t => t.id === typeId);
+    const tipo = this.tiposProducto.find((t) => t.id === typeId);
     return tipo ? tipo.name : 'Sin categoría';
   }
 }

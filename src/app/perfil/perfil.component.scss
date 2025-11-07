@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap");
 
 .pagina-perfil {
   display: flex;
@@ -13,7 +13,7 @@
 .perfi-izquierda {
   background: #fff;
   border-radius: 18px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
   width: 25%;
   padding: 2rem 1.2rem 1.2rem 1.2rem;
   margin-left: 2rem;
@@ -129,7 +129,7 @@
       width: 100%;
       background: #fff;
       border: none;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
       padding: 1rem 1.2rem;
       font-size: 1.08rem;
       font-weight: 600;
@@ -144,7 +144,7 @@
         background: #f3f3f3;
       }
       &::after {
-        content: '\2192'; /* flecha derecha */
+        content: "\2192"; /* flecha derecha */
         font-size: 1.2rem;
         color: #888;
         margin-left: 0.7rem;
@@ -161,7 +161,7 @@
   border-radius: 14px !important;
   margin-top: 1.1em;
   border: 2.5px solid #111 !important;
-  box-shadow: 0 1px 4px rgba(253,42,44,0.08);
+  box-shadow: 0 1px 4px rgba(253, 42, 44, 0.08);
   display: flex;
   align-items: center;
   gap: 0.7em;
@@ -187,7 +187,7 @@
   }
 }
 
-.hola{
-  background-color: #c82021 ;
+.hola {
+  background-color: #c82021;
   margin-bottom: 0%;
 }

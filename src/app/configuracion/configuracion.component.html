@@ -2,8 +2,8 @@
 
 <div class="configuracion-container">
   <div class="user-info">
-    <h2>Usuario: {{ fullName || 'Cargando...' }}</h2>
-    <p>Email: {{ email || 'Cargando...' }}</p>
+    <h2>Usuario: {{ fullName || "Cargando..." }}</h2>
+    <p>Email: {{ email || "Cargando..." }}</p>
   </div>
 
   <h1>Mis Comercios</h1>
@@ -15,7 +15,9 @@
     } @else {
       @for (comercio of comercios; track comercio.id) {
         <div>
-          <button (click)="irAComercio(comercio.id)">{{comercio.name}}</button>
+          <button (click)="irAComercio(comercio.id)">
+            {{ comercio.name }}
+          </button>
         </div>
       }
     }

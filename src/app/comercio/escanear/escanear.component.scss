@@ -164,13 +164,22 @@
 }
 
 @keyframes scanningPulse {
-  0%, 100% { border-color: #28a745; }
-  50% { border-color: #20c997; }
+  0%,
+  100% {
+    border-color: #28a745;
+  }
+  50% {
+    border-color: #20c997;
+  }
 }
 
 @keyframes scanLine {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 // Controles de cámara
@@ -201,8 +210,13 @@
   border: 2px solid #ff4646;
 }
 
-.btn-gray { background: #ececec; }
-.btn-dark { background: #222; color: #fff; }
+.btn-gray {
+  background: #ececec;
+}
+.btn-dark {
+  background: #222;
+  color: #fff;
+}
 
 .manual-input {
   margin: 10px auto 6px;
@@ -562,7 +576,7 @@
   align-items: center;
   background: #fff;
   border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
   width: 100%;
   min-height: 90px;
   padding: 12px 24px;
@@ -574,7 +588,7 @@
   margin: 0 auto 24px auto;
   background: #fff;
   border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
   width: 100%;
   min-height: 90px;
   padding: 12px 24px;
@@ -609,7 +623,7 @@
 }
 
 .producto-nombre {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 1.1rem;
   font-weight: bold;
   margin-bottom: 4px;
@@ -617,13 +631,13 @@
 }
 
 .producto-desc {
-  font-family: 'Roboto Condensed', sans-serif;
+  font-family: "Roboto Condensed", sans-serif;
   font-size: 1rem;
   color: #444;
 }
 
 .producto-precio {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 1.1rem;
   color: #000000;
   min-width: 80px;
@@ -638,7 +652,7 @@
 .producto-cantidad {
   min-width: 80px;
   text-align: center;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 1.1rem;
   color: #222;
   margin-right: 5px;
@@ -655,10 +669,12 @@
   justify-content: center;
 }
 
-.producto-nombre-input, .producto-desc-input, .producto-precio-input {
+.producto-nombre-input,
+.producto-desc-input,
+.producto-precio-input {
   width: 100%;
   font-size: 1.1rem;
-  font-family: 'Roboto Condensed', sans-serif;
+  font-family: "Roboto Condensed", sans-serif;
   border: none;
   background: transparent;
   border-bottom: 1.5px solid #e0e0e0;
@@ -668,14 +684,16 @@
   transition: border 0.2s;
 }
 
-.producto-nombre-input:focus, .producto-desc-input:focus, .producto-precio-input:focus {
+.producto-nombre-input:focus,
+.producto-desc-input:focus,
+.producto-precio-input:focus {
   border-bottom: 1.5px solid #3498db;
 }
 
 .producto-cantidad-input {
   width: 60px;
   font-size: 1.1rem;
-  font-family: 'Roboto Condensed', sans-serif;
+  font-family: "Roboto Condensed", sans-serif;
   border: none;
   margin-left: 5px;
   background: transparent;
@@ -762,10 +780,14 @@
 }
 
 @media print {
-  .seccion-camara, .camera-controls, .acciones-formulario, app-header-statill, app-comercio-header {
+  .seccion-camara,
+  .camera-controls,
+  .acciones-formulario,
+  app-header-statill,
+  app-comercio-header {
     display: none !important;
   }
-  
+
   .seccion-formulario {
     max-width: 100%;
     box-shadow: none;

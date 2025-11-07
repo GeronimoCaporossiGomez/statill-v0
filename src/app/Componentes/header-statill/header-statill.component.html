@@ -2,7 +2,11 @@
   <div class="header-nav">
     <div class="seccion-izquierda">
       <button type="button" class="boton-header" routerLink="/perfil">
-        <img src="assets/img/perfil-statill.png" alt="icono perfil" class="icono-menu" />
+        <img
+          src="assets/img/perfil-statill.png"
+          alt="icono perfil"
+          class="icono-menu"
+        />
         Cuenta
       </button>
       <button type="button" class="boton-toggle" (click)="toggleMenu()">
@@ -10,27 +14,43 @@
       </button>
       <div class="menu-perfil" *ngIf="menuAbierto">
         <button type="button" routerLink="/perfil">
-          <img src="assets/img/perfil-statill.png" alt="icono cuenta" class="icono-menu-dropdown" />
+          <img
+            src="assets/img/perfil-statill.png"
+            alt="icono cuenta"
+            class="icono-menu-dropdown"
+          />
           Cuenta
         </button>
         <button type="button" routerLink="/puntos">
-          <img src="assets/img/icono-puntos.png" alt="icono puntos" class="icono-menu-dropdown" />
+          <img
+            src="assets/img/icono-puntos.png"
+            alt="icono puntos"
+            class="icono-menu-dropdown"
+          />
           Puntos
         </button>
         <button type="button" routerLink="/crear-comercio" class="boton-rojo">
-          <img src="assets/img/vendedor-statill.png" alt="icono vendedor" class="icono-vendedor" />
+          <img
+            src="assets/img/vendedor-statill.png"
+            alt="icono vendedor"
+            class="icono-vendedor"
+          />
           Vendedor
         </button>
       </div>
     </div>
 
     <div class="logo-centro">
-      <img src="assets/img/statill-header.png" alt="logo de statill">
+      <img src="assets/img/statill-header.png" alt="logo de statill" />
     </div>
 
     <div class="seccion-derecha">
       <button type="button" class="boton-header" routerLink="/mapa">
-        <img src="assets/img/mapa-pin-statill.png" alt="icono mapa" class="icono-menu" />
+        <img
+          src="assets/img/mapa-pin-statill.png"
+          alt="icono mapa"
+          class="icono-menu"
+        />
         Mapa
       </button>
     </div>

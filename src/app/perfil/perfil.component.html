@@ -1,22 +1,46 @@
 <div class="pagina-perfil">
   <div class="perfi-izquierda">
     <div class="seccion-personal">
-      <img src="assets/img/perfil-statill.png" alt="avatar perfil">
-      <h2>{{ fullName || 'Cargando...' }}</h2>
-      <h3>{{ email || 'Cargando...' }}</h3>
+      <img src="assets/img/perfil-statill.png" alt="avatar perfil" />
+      <h2>{{ fullName || "Cargando..." }}</h2>
+      <h3>{{ email || "Cargando..." }}</h3>
     </div>
     <div class="seccion-botones">
       <button routerLink="/home">
-        <img src="assets/img/home-statill.png" alt="icono home" class="icono-menu" /> Home
+        <img
+          src="assets/img/home-statill.png"
+          alt="icono home"
+          class="icono-menu"
+        />
+        Home
       </button>
       <button routerLink="/mapa">
-        <img src="assets/img/mapa-pin-statill.png" alt="icono mapa" class="icono-menu" /> Mapa
+        <img
+          src="assets/img/mapa-pin-statill.png"
+          alt="icono mapa"
+          class="icono-menu"
+        />
+        Mapa
       </button>
       <button routerLink="/puntos">
-        <img src="assets/img/puntos-statill.png" alt="icono puntos" class="icono-menu" /> Puntos
+        <img
+          src="assets/img/puntos-statill.png"
+          alt="icono puntos"
+          class="icono-menu"
+        />
+        Puntos
       </button>
-      <button class="boton-vendedor" style="background-color: red;" routerLink="/crear-comercio">
-        <img src="assets/img/vendedor-statill.png" alt="icono puntos" class="icono-menu" /> Vendedor
+      <button
+        class="boton-vendedor"
+        style="background-color: red"
+        routerLink="/crear-comercio"
+      >
+        <img
+          src="assets/img/vendedor-statill.png"
+          alt="icono puntos"
+          class="icono-menu"
+        />
+        Vendedor
       </button>
     </div>
   </div>

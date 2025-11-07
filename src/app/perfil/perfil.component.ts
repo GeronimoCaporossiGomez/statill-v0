@@ -8,9 +8,8 @@ import { AuthService } from '../servicios/auth.service';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './perfil.component.html',
-  styleUrls: ['./perfil.component.scss']
+  styleUrls: ['./perfil.component.scss'],
 })
-
 export class PerfilComponent implements OnInit {
   sidebarAbierto = false;
   user: any = null;
@@ -22,7 +21,7 @@ export class PerfilComponent implements OnInit {
   ngOnInit() {
     // Obtener usuario actual
     this.user = this.authService.getCurrentUser();
-    
+
     if (this.user) {
       this.fullName = `${this.user.first_names} ${this.user.last_name}`;
       this.email = this.user.email;
@@ -35,7 +34,7 @@ export class PerfilComponent implements OnInit {
             this.fullName = `${this.user.first_names} ${this.user.last_name}`;
             this.email = this.user.email;
           }
-        }
+        },
       });
     }
   }

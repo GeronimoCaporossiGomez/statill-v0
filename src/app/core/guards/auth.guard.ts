@@ -51,7 +51,7 @@ export const ownerGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
 
   console.log('🔐 OwnerGuard: Verificando acceso...');
-  
+
   // Get current user
   const user = authService.getCurrentUser();
   console.log('👤 Usuario actual:', user);
@@ -91,7 +91,7 @@ export const storeAccessGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
 
   console.log('🔐 StoreAccessGuard: Verificando acceso...');
-  
+
   // Get current user
   const user = authService.getCurrentUser();
   console.log('👤 Usuario actual:', user);
@@ -112,7 +112,10 @@ export const storeAccessGuard: CanActivateFn = (route, state) => {
 
   // Check if user has store access (owner or cashier)
   if (!user || (user.store_role !== 'owner' && user.store_role !== 'cashier')) {
-    console.log('❌ Usuario no tiene acceso a tienda. store_role:', user?.store_role);
+    console.log(
+      '❌ Usuario no tiene acceso a tienda. store_role:',
+      user?.store_role,
+    );
     alert('Esta sección es solo para propietarios o cajeros de tiendas.');
     router.navigate(['/home']);
     return false;

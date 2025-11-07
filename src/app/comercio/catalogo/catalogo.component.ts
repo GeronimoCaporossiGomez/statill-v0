@@ -8,7 +8,7 @@ import { MiApiService } from 'src/app/servicios/mi-api.service';
   standalone: true,
   imports: [CommonModule, SidebarComponent, FormsModule],
   templateUrl: './catalogo.component.html',
-  styleUrl: './catalogo.component.scss'
+  styleUrl: './catalogo.component.scss',
 })
 export class CatalogoComponent {
   constructor(private miApi: MiApiService) {}
@@ -21,7 +21,7 @@ export class CatalogoComponent {
     });
   }
 
-  selectedProductoId: number|null = null;
+  selectedProductoId: number | null = null;
 
   agregarProducto() {
     if (this.selectedProductoId === null) return;
@@ -32,7 +32,8 @@ export class CatalogoComponent {
   }
 
   get productosCatalogo() {
-    return this.productos.filter(p => this.productosCatalogoIds.includes(p.id));
+    return this.productos.filter((p) =>
+      this.productosCatalogoIds.includes(p.id),
+    );
   }
 }
-

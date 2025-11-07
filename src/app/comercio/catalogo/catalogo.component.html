@@ -14,7 +14,11 @@
             {{ prod.name }}
           </option>
         </select>
-        <button type="button" (click)="agregarProducto()" [disabled]="!selectedProductoId">
+        <button
+          type="button"
+          (click)="agregarProducto()"
+          [disabled]="!selectedProductoId"
+        >
           <i class="fas fa-plus"></i> Añadir
         </button>
       </div>
@@ -32,9 +36,7 @@
         <p><b>Cantidad:</b> {{ producto.quantity }}</p>
         <p><b>Barcode:</b> {{ producto.barcode }}</p>
       </div>
-      <div class="producto-precio">
-        ${{ producto.price }}
-      </div>
+      <div class="producto-precio">${{ producto.price }}</div>
       <div class="producto-edit">
         <i class="fas fa-edit"></i>
       </div>

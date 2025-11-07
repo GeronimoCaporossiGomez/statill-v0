@@ -8,8 +8,6 @@ import { ComercioHeaderComponent } from '../comercio-header/comercio-header.comp
   standalone: true,
   imports: [CommonModule, ComercioHeaderComponent, HeaderStatillComponent],
   templateUrl: './ajustes.component.html',
-  styleUrl: './ajustes.component.scss'
+  styleUrl: './ajustes.component.scss',
 })
-export class AjustesComponent {
-
-}
+export class AjustesComponent {}

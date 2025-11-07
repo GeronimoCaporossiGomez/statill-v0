@@ -11,16 +11,30 @@ import { GeneralService } from 'src/app/servicios/general.service';
 @Component({
   selector: 'app-crear-comercio',
   standalone: true,
-  imports: [CommonModule, FormsModule, SidebarComponent, RouterLink, MapaComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    SidebarComponent,
+    RouterLink,
+    MapaComponent,
+  ],
   templateUrl: './crear-comercio.component.html',
-  styleUrl: './crear-comercio.component.scss'
+  styleUrl: './crear-comercio.component.scss',
 })
 export class CrearComercioComponent {
   @ViewChild(MapaComponent) mapaComponent!: MapaComponent;
 
   creando: boolean = true;
   seccionPantalla: number = 0;
-  dias: string[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+  dias: string[] = [
+    'Lunes',
+    'Martes',
+    'Miércoles',
+    'Jueves',
+    'Viernes',
+    'Sábado',
+    'Domingo',
+  ];
   imagenUrl: string | ArrayBuffer | null = null;
   archivoLogo: File | null = null;
   userId: number = 1;
@@ -41,7 +55,7 @@ export class CrearComercioComponent {
     private cdr: ChangeDetectorRef,
     private miApiService: MiApiService,
     private authService: AuthService,
-    private generalService: GeneralService
+    private generalService: GeneralService,
   ) {
     this.cargarUsuarios();
   }
@@ -54,13 +68,13 @@ export class CrearComercioComponent {
       },
       error: (error) => {
         console.error('❌ Error al cargar usuarios:', error);
-      }
+      },
     });
   }
 
   aumentarPantalla() {
     this.seccionPantalla += 1;
-    if(this.seccionPantalla > 3) {
+    if (this.seccionPantalla > 3) {
       this.seccionPantalla = 3;
     }
 
@@ -132,11 +146,14 @@ export class CrearComercioComponent {
     }
 
     // Usar la dirección confirmada del mapa o la del input
-    const direccionFinal = this.ubicacionConfirmada || this.direccionInput || '';
+    const direccionFinal =
+      this.ubicacionConfirmada || this.direccionInput || '';
 
     // Validar que haya una dirección
     if (!direccionFinal || direccionFinal.trim() === '') {
-      alert('Por favor, selecciona una ubicación en el mapa o ingresa una dirección.');
+      alert(
+        'Por favor, selecciona una ubicación en el mapa o ingresa una dirección.',
+      );
       return;
     }
 
@@ -164,14 +181,14 @@ export class CrearComercioComponent {
 
     // Mapear categoría de texto a número
     const categorias: { [key: string]: number } = {
-      'Local': 0,
-      'Restaurante': 1,
-      'tienda': 2,
-      'bar': 3
+      Local: 0,
+      Restaurante: 1,
+      tienda: 2,
+      bar: 3,
     };
 
     // Obtener ps_value del formulario si está habilitado
-    const psValue = form.value.psEnabled ? (form.value.psValue || 1) : 1;
+    const psValue = form.value.psEnabled ? form.value.psValue || 1 : 1;
 
     // Construir el objeto en el formato del backend
     const datosParaBackend: any = {
@@ -186,9 +203,9 @@ export class CrearComercioComponent {
         form.value.pagoEfectivo === true,
         form.value.pagoDebito === true,
         form.value.pagoCredito === true,
-        form.value.pagoTransferencia === true
+        form.value.pagoTransferencia === true,
       ],
-      user_id: currentUser.id  // Usar el ID del usuario autenticado
+      user_id: currentUser.id, // Usar el ID del usuario autenticado
     };
 
     // Agregar coordenadas si están disponibles
@@ -222,11 +239,12 @@ export class CrearComercioComponent {
         } else if (error.error && typeof error.error === 'string') {
           errorMessage += error.error;
         } else {
-          errorMessage += 'Por favor, verifica que todos los campos estén completos.';
+          errorMessage +=
+            'Por favor, verifica que todos los campos estén completos.';
         }
 
         alert(errorMessage);
-      }
+      },
     });
   }
 
@@ -264,24 +282,27 @@ export class CrearComercioComponent {
     console.log('🚀 Subiendo imagen directo a Cloudinary...');
 
     // Usar fetch para subir directo a Cloudinary (sin pasar por tu backend)
-    fetch(`https://api.cloudinary.com/v1_1/${this.CLOUDINARY_CLOUD_NAME}/image/upload`, {
-      method: 'POST',
-      body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.log('✅ Imagen subida exitosamente a Cloudinary!');
-      console.log('📸 URL de la imagen:', data.secure_url);
-      console.log('🆔 Public ID:', data.public_id);
+    fetch(
+      `https://api.cloudinary.com/v1_1/${this.CLOUDINARY_CLOUD_NAME}/image/upload`,
+      {
+        method: 'POST',
+        body: formData,
+      },
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('✅ Imagen subida exitosamente a Cloudinary!');
+        console.log('📸 URL de la imagen:', data.secure_url);
+        console.log('🆔 Public ID:', data.public_id);
 
-      alert(`✅ ¡Imagen subida!\n\nURL: ${data.secure_url}`);
+        alert(`✅ ¡Imagen subida!\n\nURL: ${data.secure_url}`);
 
-      // Aquí podés guardar la URL si querés usarla después
-      // this.urlImagenCloudinary = data.secure_url;
-    })
-    .catch(error => {
-      console.error('❌ Error al subir imagen a Cloudinary:', error);
-      alert('❌ Error al subir la imagen. Revisá la consola.');
-    });
+        // Aquí podés guardar la URL si querés usarla después
+        // this.urlImagenCloudinary = data.secure_url;
+      })
+      .catch((error) => {
+        console.error('❌ Error al subir imagen a Cloudinary:', error);
+        alert('❌ Error al subir la imagen. Revisá la consola.');
+      });
   }
 }

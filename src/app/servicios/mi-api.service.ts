@@ -103,7 +103,10 @@ export class MiApiService {
     return this.http.post(this.apiUrl + '/api/v1/products/', producto);
   }
   editarProducto(id: number, producto: any) {
-    return this.http.put(this.apiUrl + '/api/v1/products/' + id + '/', producto);
+    return this.http.put(
+      this.apiUrl + '/api/v1/products/' + id + '/',
+      producto,
+    );
   }
   getUsers(): Observable<UsersResponse> {
     return this.http.get<UsersResponse>(this.apiUrl + '/api/v1/users/');
@@ -118,7 +121,9 @@ export class MiApiService {
     return this.http.get(this.apiUrl + '/api/v1/products/?store_id=' + storeId);
   }
   getProductsByBarcode(barcode: string): Observable<ProductsResponse> {
-    return this.http.get<ProductsResponse>(this.apiUrl + '/api/v1/products/?barcode=' + barcode);
+    return this.http.get<ProductsResponse>(
+      this.apiUrl + '/api/v1/products/?barcode=' + barcode,
+    );
   }
   getSales() {
     return this.http.get(this.apiUrl + '/api/v1/sales/');
@@ -135,9 +140,11 @@ export class MiApiService {
   getStoreById(id: number): Observable<any> {
     return this.http.get(this.apiUrl + '/api/v1/stores/' + id);
   }
-  
+
   getReviewsByStoreId(storeId: number): Observable<ReviewsResponse> {
-    return this.http.get<ReviewsResponse>(this.apiUrl + '/api/v1/reviews/store/' + storeId);
+    return this.http.get<ReviewsResponse>(
+      this.apiUrl + '/api/v1/reviews/store/' + storeId,
+    );
   }
   postReviews(review: any) {
     return this.http.post(this.apiUrl + '/api/v1/reviews/', review);
@@ -151,5 +158,3 @@ export class MiApiService {
     return this.http.get(this.apiUrl + '/api/v1/orders/my');
   }
 }
-
-

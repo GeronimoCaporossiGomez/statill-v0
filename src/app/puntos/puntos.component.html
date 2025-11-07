@@ -1,40 +1,48 @@
 <div class="puntos-pagina">
-
-  <app-header-statill></app-header-statill> <!-- esto va a terminar siendo el header del figma -->
+  <app-header-statill></app-header-statill>
+  <!-- esto va a terminar siendo el header del figma -->
 
   <div class="puntos-seccion">
     <h1>Mis puntos:</h1>
-    
+
     <!-- Indicador de carga -->
     <div *ngIf="isLoading" class="loading-container">
       <p>Cargando puntos...</p>
     </div>
-    
+
     <!-- Contenido cuando no está cargando -->
     <div *ngIf="!isLoading">
       @if (puntosDisplay.length > 0) {
         <div *ngFor="let punto of puntosDisplay">
           <div class="cartel-puntos">
-            <img [src]="punto.imagen" alt="Tienda">
+            <img [src]="punto.imagen" alt="Tienda" />
             <div class="texto contenido-puntos">
               <h2 class="asd roboto">
-                {{punto.nombre}} 
-                <span class="categoria-badge">{{punto.categoria}}</span>
-                <span class="puntos-display">{{punto.puntos}} pts.</span>
+                {{ punto.nombre }}
+                <span class="categoria-badge">{{ punto.categoria }}</span>
+                <span class="puntos-display">{{ punto.puntos }} pts.</span>
               </h2>
-              <h4 class="gris roboto small-text">📍 {{punto.direccion}}</h4>
+              <h4 class="gris roboto small-text">📍 {{ punto.direccion }}</h4>
             </div>
-            <button type="button" [routerLink]="['/negocio', punto.store_id]" class="boton-link">Comprar</button>
+            <button
+              type="button"
+              [routerLink]="['/negocio', punto.store_id]"
+              class="boton-link"
+            >
+              Comprar
+            </button>
           </div>
         </div>
       } @else {
         <!-- Mensaje cuando no hay puntos -->
         <div class="no-points-message">
           <h2>No tienes puntos en ninguna tienda</h2>
-          <p>Realiza compras en las tiendas para acumular puntos y poder canjearlos por productos.</p>
+          <p>
+            Realiza compras en las tiendas para acumular puntos y poder
+            canjearlos por productos.
+          </p>
         </div>
       }
     </div>
   </div>
 </div>
-

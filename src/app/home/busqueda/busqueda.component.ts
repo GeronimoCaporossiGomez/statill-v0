@@ -8,7 +8,7 @@ import { StoresComponent } from 'src/app/Componentes/Stores-Statill/Stores.compo
   selector: 'app-home',
   imports: [CommonModule, FormsModule, StoresComponent],
   templateUrl: './busqueda.component.html',
-  styleUrls: ['./busqueda.component.scss']
+  styleUrls: ['./busqueda.component.scss'],
 })
 export class HomeComponent implements OnInit {
   searchTerm = '';
@@ -18,7 +18,9 @@ export class HomeComponent implements OnInit {
   ngOnInit() {}
 
   agregarAlCarrito(producto: any) {
-    const itemExistente = this.carrito.find(item => item.nombre === producto.nombre);
+    const itemExistente = this.carrito.find(
+      (item) => item.nombre === producto.nombre,
+    );
     if (itemExistente) {
       itemExistente.cantidad = (itemExistente.cantidad || 1) + 1;
     } else {

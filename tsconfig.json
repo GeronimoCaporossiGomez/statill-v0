@@ -6,12 +6,12 @@
     "experimentalDecorators": true,
     "forceConsistentCasingInFileNames": true,
     "importHelpers": true,
-    "module": "esnext",             // ✅ compatible con Angular 17+ y lazy loading
+    "module": "esnext", // ✅ compatible con Angular 17+ y lazy loading
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "target": "esnext",             // ✅ moderno y aceptado por TypeScript
+    "target": "esnext", // ✅ moderno y aceptado por TypeScript
     "useDefineForClassFields": false,
-    "lib": ["esnext", "dom"],       // ✅ bibliotecas para JS moderno + navegador
+    "lib": ["esnext", "dom"], // ✅ bibliotecas para JS moderno + navegador
     "typeRoots": ["./node_modules/@types", "./src/types"]
   },
   "exclude": ["node_modules", "dist"]
