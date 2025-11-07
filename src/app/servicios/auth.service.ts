@@ -250,4 +250,8 @@ export class AuthService {
       return false; // Invalid token format
     }
   }
+
+  getUserFirstName(id: number){
+    return this.http.get(`/api/v1/users/${id}/name/`)
+  }
 }
