@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core'
+import { Component, Inject, inject, OnInit } from '@angular/core'
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ComercioService } from '../servicios/comercio.service';
@@ -6,7 +6,7 @@ import { HeaderStatillComponent } from '../Componentes/header-statill/header-sta
 import { FormsModule } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 import { AuthService } from '../servicios/auth.service';
-
+import { DOCUMENT } from '@angular/common';
 @Component({
   selector: 'app-negocio',
   imports: [CommonModule, HeaderStatillComponent, FormsModule],
@@ -14,6 +14,7 @@ import { AuthService } from '../servicios/auth.service';
   styleUrl: './negocio.component.scss',
 })
 export class NegocioComponent implements OnInit {
+  constructor(@Inject(DOCUMENT) private document: Document){}
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private comercioService = inject(ComercioService);
@@ -59,6 +60,7 @@ export class NegocioComponent implements OnInit {
         this.productos = results.productos;
         this.reviews = results.reviews;
         this.cargando = false;
+
 
         this.checkIfUserHasReviewed(results.reviews);
         this.checkIfUserHasPurchased(id);
@@ -187,6 +189,7 @@ export class NegocioComponent implements OnInit {
       next: (response) => {
         console.log('Review realizada:', response);
         alert('Reseña enviada con éxito!');
+        this.document.location.reload();
         // Recargar las reseñas después de enviar una nueva
         this.comercioService.getReviewsByStore(this.comercio.id).subscribe({
           next: (reviews) => {
