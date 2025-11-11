@@ -1,39 +1,32 @@
 <section class="confirm-container">
   <div class="confirm-card">
-    <h1>Verificación de Email</h1>
-    <p *ngIf="!message">
-      Ingresa el código de verificación que enviamos a tu email.
-    </p>
-
+    <div class="logo-header">
+      <img src="assets/img/logo.png" alt="Statill Logo" class="logo">
+      <h1>Verificación de Email</h1>
+    </div>
+    
+    <p *ngIf="!message" class="subtitle">Ingresá el código de verificación que enviamos a tu email.</p>
+    
     <!-- Message display -->
-    <div
-      *ngIf="message"
-      class="message"
-      [class.success]="messageType === 'success'"
-      [class.error]="messageType === 'error'"
-    >
-      {{ message }}
+    <div *ngIf="message" class="message" [class.success]="messageType === 'success'" [class.error]="messageType === 'error'">
+      <span class="message-icon">{{ messageType === 'success' ? '✓' : '⚠' }}</span>
+      <span class="message-text">{{ message }}</span>
     </div>
 
     <!-- Activation form -->
-    <form
-      *ngIf="!messageType || messageType === 'error'"
-      (ngSubmit)="submitCode()"
-      class="confirm-form"
-    >
+    <form *ngIf="!messageType || messageType === 'error'" (ngSubmit)="submitCode()" class="confirm-form">
       <div class="form-group">
         <label for="activationCode">Código de verificación</label>
         <input
           id="activationCode"
           type="text"
-          placeholder="Ingresa tu código"
+          placeholder="Ingresá tu código"
           [(ngModel)]="activationCode"
           name="activationCode"
           [disabled]="loading"
-          required
-        />
+          required />
       </div>
-
+      
       <button type="submit" class="btn btn-primary" [disabled]="loading">
         <span *ngIf="loading">Verificando...</span>
         <span *ngIf="!loading">Verificar código</span>
@@ -43,19 +36,16 @@
     <!-- Resend code option -->
     <div *ngIf="messageType !== 'success'" class="resend-section">
       <p>¿No recibiste el código?</p>
-      <button
-        type="button"
-        class="btn btn-link"
-        (click)="resendCode()"
-        [disabled]="loading"
-      >
+      <button type="button" class="btn-link" (click)="resendCode()" [disabled]="loading">
         Reenviar código
       </button>
     </div>
 
     <!-- Success state -->
     <div *ngIf="messageType === 'success'" class="success-actions">
-      <button class="btn btn-primary" (click)="goToApp()">Ir a Statill</button>
+      <button class="btn btn-primary" (click)="goToApp()">
+        Ir a Statill
+      </button>
     </div>
   </div>
 </section>
