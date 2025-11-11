@@ -35,7 +35,7 @@
           <span class="store-category">{{
             getCategoryName(store.category)
           }}</span>
-          <p class="store-address">📍 {{ store.address }}</p>
+          <p class="store-address"> {{ store.address }}</p>
         </div>
         <div class="store-arrow">→</div>
       </div>
@@ -44,7 +44,7 @@
 
   <!-- Promociones (solo se muestran cuando no hay búsqueda activa) -->
   <section *ngIf="!showSearchResults" class="promotions-section">
-    <h2 class="promotions-title">¡Promociones imperdibles! 🔥🤩</h2>
+    <h2 class="promotions-title">¡Promociones imperdibles! </h2>
     <div class="promotions-grid">
       <app-discounts-statill
         *ngFor="let promo of promotions"

@@ -37,7 +37,7 @@ export class HomeComponent implements OnInit {
     {
       id: 1,
       storeName: 'EL JEVI',
-      discountText: '🔥 30% OFF en todos los Disco 🔥',
+      discountText: '30% OFF en todos los Disco',
       logoUrl: 'assets/img/tienda.png',
       storeId: 2,
     },
@@ -58,7 +58,7 @@ export class HomeComponent implements OnInit {
     {
       id: 4,
       storeName: 'EL JEVI',
-      discountText: 'Preordená con 20% OFF en kioscos EL JEVI 🔥',
+      discountText: 'Preordená con 20% OFF en kioscos EL JEVI',
       logoUrl: 'assets/img/tienda.png',
       storeId: null,
     },
