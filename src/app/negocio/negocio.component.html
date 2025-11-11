@@ -178,9 +178,7 @@
           <div class="reseña-card">
             <div class="reseña-header">
               <div class="reseña-estrellas">
-                @for (i of [1, 2, 3, 4, 5]; track i) {
-                  <span [class.filled]="i <= review.stars">★</span>
-                }
+                <span *ngFor="let star of [].constructor(review.stars); let i = index" [class.filled]="i + 1 <= review.stars">★</span>
               </div>
               <span class="reseña-fecha"
                 ><b>{{ review.userFirstNames }}</b></span
