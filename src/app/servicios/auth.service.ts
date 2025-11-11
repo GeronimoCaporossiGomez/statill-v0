@@ -21,7 +21,7 @@ export interface UserRead {
   gender: 'M' | 'F' | 'X';
   res_area: string;
   store_id: number | null;
-  store_role: 'owner' | 'cashier' | null;
+  store_role: string | null; // Cambiado a string para más flexibilidad
   email_verified: boolean;
 }
 
