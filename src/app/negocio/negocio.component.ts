@@ -56,6 +56,7 @@ export class NegocioComponent implements OnInit {
       store: this.comercioService.getStoreById(id),
       productos: this.comercioService.getProductosByStore(id),
       reviews: this.comercioService.getReviewsByStore(id),
+      points: this.comercioService.getMyPointsInStore(id)
     }).subscribe({
       next: (results) => {
         this.comercio = results.store;

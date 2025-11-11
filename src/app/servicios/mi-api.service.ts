@@ -157,4 +157,11 @@ export class MiApiService {
   getMyOrders(): Observable<any> {
     return this.http.get(this.apiUrl + '/api/v1/orders/my');
   }
+
+  getMyPointsInStore(storeId: number): Observable<PointsResponse> {
+    return this.http.get<PointsResponse>(
+      this.apiUrl + '/api/v1/points/my/store/' + storeId,
+    );
+  } 
+
 }

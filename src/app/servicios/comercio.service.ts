@@ -71,4 +71,10 @@ export class ComercioService {
       .getMyOrders()
       .pipe(map((response: any) => response.data));
   }
+
+  getMyPointsInStore(storeId: number): Observable<any> {
+    return this.miApiService
+      .getMyPointsInStore(storeId)
+      .pipe(map((response: any) => response.data));
+  }
 }
