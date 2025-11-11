@@ -1,9 +1,92 @@
-<div class="carrito-pagina">
-  <div class="tipo-header">
-    <li>
-      <div class="carrito-header">
-        <img src="assets/img/logo.png" alt="Logo del comercio" />
+<div class="carrito-container">
+  <div class="carrito-header">
+    <button class="btn-back" (click)="volver()">
+      ← Volver
+    </button>
+    <h1>🛒 Tu Carrito</h1>
+    <div class="store-name" *ngIf="store">{{ store.name }}</div>
+  </div>
+
+  <!-- Mensaje de error -->
+  <div *ngIf="errorMessage" class="error-message">
+    ⚠️ {{ errorMessage }}
+  </div>
+
+  <!-- Carrito vacío -->
+  <div *ngIf="cartItems.length === 0" class="empty-cart">
+    <div class="empty-icon">🛒</div>
+    <h2>Tu carrito está vacío</h2>
+    <p>Agrega productos para continuar</p>
+    <button class="btn-primary" (click)="volver()">Ir a la tienda</button>
+  </div>
+
+  <!-- Productos del carrito -->
+  <div *ngIf="cartItems.length > 0" class="cart-content">
+    <div class="cart-items">
+      <div *ngFor="let item of cartItems" class="cart-item">
+        <div class="item-image">
+          <img [src]="item.image || 'assets/img/tienda.png'" [alt]="item.name">
+        </div>
+        <div class="item-info">
+          <h3>{{ item.name }}</h3>
+          <p class="item-price">${{ item.price }}</p>
+        </div>
+        <div class="item-controls">
+          <button class="btn-qty" (click)="updateQuantity(item, -1)">-</button>
+          <span class="qty">{{ item.quantity }}</span>
+          <button class="btn-qty" (click)="updateQuantity(item, 1)">+</button>
+        </div>
+        <div class="item-total">${{ item.price * item.quantity }}</div>
+        <button class="btn-remove" (click)="removeItem(item)">🗑️</button>
       </div>
-    </li>
+    </div>
+
+    <!-- Resumen y pago -->
+    <div class="cart-summary">
+      <div class="summary-section">
+        <h2>Resumen del Pedido</h2>
+        <div class="summary-row">
+          <span>Productos ({{ getTotalItems() }})</span>
+          <span>${{ getTotal() }}</span>
+        </div>
+        <div class="summary-row total">
+          <span><strong>Total</strong></span>
+          <span><strong>${{ getTotal() }}</strong></span>
+        </div>
+      </div>
+
+      <!-- Métodos de pago -->
+      <div class="payment-section">
+        <h3>Método de Pago</h3>
+        <div class="payment-methods">
+          <label 
+            *ngFor="let method of paymentMethods" 
+            class="payment-method"
+            [class.disabled]="!isPaymentMethodAllowed(method.id)"
+            [class.selected]="selectedPaymentMethod === method.id">
+            <input 
+              type="radio" 
+              name="payment" 
+              [value]="method.id"
+              [(ngModel)]="selectedPaymentMethod"
+              [disabled]="!isPaymentMethodAllowed(method.id)">
+            <span class="method-icon">{{ method.icon }}</span>
+            <span class="method-name">{{ method.name }}</span>
+            <span *ngIf="!isPaymentMethodAllowed(method.id)" class="not-available">
+              No disponible
+            </span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Botón de confirmar -->
+      <button 
+        class="btn-checkout" 
+        (click)="createOrder()"
+        [disabled]="isLoading || cartItems.length === 0">
+        <span *ngIf="!isLoading">Confirmar Pedido</span>
+        <span *ngIf="isLoading">Procesando...</span>
+      </button>
+    </div>
   </div>
 </div>

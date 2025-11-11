@@ -66,6 +66,16 @@ export const routes: Routes = [
     canActivate: [activeUserGuard]
   },
   {
+  path: 'carrito',
+  loadComponent: () => import('./pages/carrito/carrito.component').then(m => m.CarritoComponent),
+  canActivate: [activeUserGuard]
+},
+{
+  path: 'orden-confirmacion',
+  loadComponent: () => import('./pages/Confirmation/Confirmation.component').then(m => m.OrdenConfirmacionComponent),
+  canActivate: [activeUserGuard]
+},
+  {
     path: 'crear-comercio',
     loadComponent: () =>
       import('../app/comercio/crear-comercio/crear-comercio.component').then(m => m.CrearComercioComponent),
