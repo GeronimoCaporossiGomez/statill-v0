@@ -267,7 +267,7 @@ export class OrdenConfirmacionComponent implements OnInit {
       next: (response) => {
         if (response.successful && response.data) {
           this.order = response.data;
-          // Aquí podrías cargar el nombre de la tienda si lo necesitas
+          this.loadStoreName(this.order.store_id);
         }
         this.isLoading = false;
       },
@@ -277,6 +277,12 @@ export class OrdenConfirmacionComponent implements OnInit {
         this.isLoading = false;
       }
     });
+  }
+  
+  loadStoreName(storeId: number) {
+    // Aquí deberías inyectar MiApiService para obtener el nombre
+    // Por ahora lo dejamos como placeholder
+    this.storeName = `Tienda #${storeId}`;
   }
   
   getStatusText(status: string): string {

@@ -18,6 +18,7 @@ interface CartItem {
 interface Store {
   id: number;
   name: string;
+  address: string;
   payment_methods: boolean[]; // [Efectivo, Débito, Crédito, Transferencia]
 }
 
@@ -52,6 +53,11 @@ export class CarritoComponent implements OnInit {
   ngOnInit() {
     // Obtener storeId de la URL
     this.storeId = Number(this.route.snapshot.queryParamMap.get('storeId'));
+    
+    if (!this.storeId) {
+      this.errorMessage = 'Error: No se encontró la tienda';
+      return;
+    }
     
     // Obtener items del carrito del localStorage
     const cartData = localStorage.getItem(`cart_${this.storeId}`);
@@ -116,7 +122,7 @@ export class CarritoComponent implements OnInit {
   createOrder() {
     // Validaciones
     if (!this.authService.isActiveUser()) {
-      this.errorMessage = 'Debes iniciar sesión para realizar un pedido';
+      this.errorMessage = 'Debes iniciar sesión y verificar tu email para realizar un pedido';
       return;
     }
 
@@ -133,7 +139,7 @@ export class CarritoComponent implements OnInit {
     this.isLoading = true;
     this.errorMessage = null;
 
-    // Preparar la orden
+    // Preparar la preorden
     const order = {
       store_id: this.storeId,
       products: this.cartItems.map(item => ({
@@ -143,20 +149,25 @@ export class CarritoComponent implements OnInit {
       payment_method: this.selectedPaymentMethod
     };
 
-    // Crear la orden
+    console.log('📦 Creando preorden:', order);
+
+    // Crear la preorden (POST /api/v1/orders/)
     this.orderService.createOrder(order).subscribe({
       next: (response) => {
-        console.log('✅ Orden creada:', response);
+        console.log('✅ Preorden creada:', response);
         this.isLoading = false;
         
         // Limpiar carrito
         this.clearCart();
 
+        // Obtener el ID de la orden desde la respuesta
+        const orderId = response.data?.id || response.data;
+
         // Redirigir según el método de pago
         if (this.selectedPaymentMethod === 0) {
           // Efectivo - ir a página de confirmación
           this.router.navigate(['/orden-confirmacion'], {
-            queryParams: { orderId: response.data }
+            queryParams: { orderId: orderId }
           });
         } else {
           // Otros métodos - ir a página de no disponible
@@ -164,9 +175,20 @@ export class CarritoComponent implements OnInit {
         }
       },
       error: (error) => {
-        console.error('❌ Error al crear orden:', error);
+        console.error('❌ Error al crear preorden:', error);
         this.isLoading = false;
-        this.errorMessage = error.error?.message || 'Error al crear el pedido. Intente nuevamente.';
+        
+        let errorMsg = 'Error al crear el pedido. Intente nuevamente.';
+        
+        if (error.error?.message) {
+          errorMsg = error.error.message;
+        } else if (error.status === 404) {
+          errorMsg = 'No se pudo encontrar el producto. Verifica que estén disponibles.';
+        } else if (error.status === 400) {
+          errorMsg = 'Datos inválidos. Verifica tu carrito.';
+        }
+        
+        this.errorMessage = errorMsg;
       }
     });
   }
