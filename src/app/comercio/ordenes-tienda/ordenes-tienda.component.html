@@ -1,0 +1,100 @@
+<app-sidebar></app-sidebar>
+
+<div class="ordenes-container">
+  <h1>📦 Gestión de Pedidos</h1>
+
+  <!-- Filtros -->
+  <div class="filters">
+    <button 
+      *ngFor="let status of statusFilters" 
+      class="filter-btn"
+      [class.active]="selectedStatus === status.value"
+      (click)="filterByStatus(status.value)">
+      {{ status.icon }} {{ status.label }} ({{ getCountByStatus(status.value) }})
+    </button>
+  </div>
+
+  <!-- Loading -->
+  <div *ngIf="isLoading" class="loading">
+    Cargando pedidos...
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Sin órdenes -->
+  <div *ngIf="!isLoading && filteredOrders.length === 0" class="no-orders">
+    <p>No hay pedidos {{ selectedStatus !== 'all' ? 'con este estado' : '' }}</p>
+  </div>
+
+  <!-- Órdenes -->
+  <div class="orders-grid">
+    <div *ngFor="let order of filteredOrders" class="order-card" [class]="order.status">
+      <div class="order-header">
+        <div class="order-number">
+          <strong>Pedido #{{ order.id }}</strong>
+          <span class="status-badge" [class]="order.status">
+            {{ getStatusText(order.status) }}
+          </span>
+        </div>
+        <div class="order-date">{{ formatDate(order.created_at) }}</div>
+      </div>
+
+      <div class="order-body">
+        <div class="order-info">
+          <p><strong>Cliente:</strong> {{ order.userName || 'Usuario #' + order.user_id }}</p>
+          <p><strong>Método de Pago:</strong> {{ getPaymentMethod(order.payment_method) }}</p>
+          <p><strong>Productos:</strong> {{ order.products.length }} item(s)</p>
+        </div>
+
+        <!-- Productos -->
+        <div class="products-list">
+          <div *ngFor="let product of order.productDetails" class="product-item">
+            <span>{{ product.quantity }}x {{ product.name }}</span>
+            <span class="product-price">\${{ product.price * product.quantity }}</span>
+          </div>
+        </div>
+
+        <div class="order-total">
+          <strong>Total: \${{ calculateOrderTotal(order) }}</strong>
+        </div>
+      </div>
+
+      <div class="order-actions">
+        <button 
+          *ngIf="order.status === 'pending'" 
+          class="btn-accept"
+          (click)="updateStatus(order)"
+          [disabled]="processingOrderId === order.id">
+          {{ processingOrderId === order.id ? 'Procesando...' : '✓ Aceptar Pedido' }}
+        </button>
+
+        <button 
+          *ngIf="order.status === 'accepted'" 
+          class="btn-complete"
+          (click)="updateStatus(order)"
+          [disabled]="processingOrderId === order.id">
+          {{ processingOrderId === order.id ? 'Procesando...' : '✓ Marcar como Entregado' }}
+        </button>
+
+        <button 
+          *ngIf="order.status === 'pending' || order.status === 'accepted'"
+          class="btn-cancel"
+          (click)="cancelOrder(order)"
+          [disabled]="processingOrderId === order.id">
+          ✗ Cancelar
+        </button>
+
+        <span *ngIf="order.status === 'received'" class="completed-badge">
+          ✓ Pedido completado
+        </span>
+
+        <span *ngIf="order.status === 'cancelled'" class="cancelled-badge">
+          ✗ Pedido cancelado
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
