@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
+import { Observable,of } from 'rxjs';
+import{catchError} from"rxjs/operators"
 // Interfaces para la respuesta de puntos
 export interface Point {
   id: number;
@@ -175,9 +175,12 @@ export class MiApiService {
     return this.http.get(this.apiUrl + '/api/v1/orders/my');
   }
 
-  getMyPointsInStore(storeId: number): Observable<PointsResponse> {
-    return this.http.get<PointsResponse>(
-      this.apiUrl + '/api/v1/points/my/store/' + storeId,
+  getMyPointsInStore(storeId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/api/v1/points/my/store/${storeId}`).pipe(
+      catchError(() => {
+        // If the API call fails or status is not 200, return the fallback value
+        return of({ data: 0 });
+      })
     );
   }
 

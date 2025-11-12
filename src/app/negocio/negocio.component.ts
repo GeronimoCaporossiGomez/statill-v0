@@ -30,6 +30,7 @@ export class NegocioComponent implements OnInit {
   comercio: any = null;
   productos: any[] = [];
   reviews: any[] = [];
+  userPoints: any = null;
   cargando = true;
   carrito: { [key: number]: number } = {}; // { productoId: cantidad }
   hasPurchasedFromStore: boolean = false;
@@ -62,6 +63,10 @@ export class NegocioComponent implements OnInit {
         this.comercio = results.store;
         this.productos = results.productos;
         this.reviews = results.reviews;
+
+        const points = results.points;
+        this.userPoints = points;
+
         for (const r of this.reviews) {
           this.generalService.getUserFirstNames(r.user_id).subscribe({
             next: (nameAPIResponse: any) => {

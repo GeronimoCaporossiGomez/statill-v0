@@ -25,7 +25,7 @@
     <!-- Productos -->
     <div class="productos-container">
       <h2 class="seccion-titulo">Productos</h2>
-      <span class="tusPuntos">0 puntos</span>
+      <span class="tusPuntos">{{ userPoints }} puntos</span>
       <div class="productos-grid">
         @for (producto of productos; track producto.id) {
           <div class="producto-card">
