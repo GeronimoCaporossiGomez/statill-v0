@@ -36,18 +36,20 @@ export class AuthService {
   private apiUrl = 'https://statill-api.onrender.com';
   private readonly TOKEN_KEY = 'statill_token';
   private readonly USER_KEY = 'statill_user';
-  
-  private currentUserSubject = new BehaviorSubject<UserRead | null>(this.getStoredUser());
+
+  private currentUserSubject = new BehaviorSubject<UserRead | null>(
+    this.getStoredUser(),
+  );
   public currentUser$ = this.currentUserSubject.asObservable();
 
   constructor(
     private http: HttpClient,
-    private router: Router
+    private router: Router,
   ) {
     console.log('🔧 AuthService inicializado');
     const storedUser = this.getStoredUser();
     console.log('👤 Usuario almacenado:', storedUser);
-    
+
     // Si hay token pero no usuario, intentar obtenerlo
     if (this.getToken() && !this.currentUserSubject.value) {
       console.log('⚠️ Hay token pero no usuario, obteniendo datos...');
@@ -56,7 +58,7 @@ export class AuthService {
   }
 
   // ============ TOKEN MANAGEMENT ============
-  
+
   getToken(): string | null {
     const token = localStorage.getItem(this.TOKEN_KEY);
     console.log('🔑 Token:', token ? 'Existe' : 'No existe');
@@ -74,7 +76,7 @@ export class AuthService {
   }
 
   // ============ USER MANAGEMENT ============
-  
+
   private getStoredUser(): UserRead | null {
     const stored = localStorage.getItem(this.USER_KEY);
     const user = stored ? JSON.parse(stored) : null;
@@ -101,7 +103,7 @@ export class AuthService {
   }
 
   // ============ AUTHENTICATION METHODS ============
-  
+
   registerUser(user: {
     first_names: string;
     last_name: string;
@@ -129,58 +131,66 @@ export class AuthService {
     if (payload.scope) body.set('scope', payload.scope);
     if (payload.client_id) body.set('client_id', payload.client_id);
     if (payload.client_secret) body.set('client_secret', payload.client_secret);
-    
-    return this.http.post<LoginResponse>(
-      this.apiUrl + '/api/v1/auth/token',
-      body.toString(),
-      { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
-    ).pipe(
-      tap(response => {
-        if (response.successful && response.data?.token) {
-          this.setToken(response.data.token);
-          // Fetch user info after successful login
-          this.fetchCurrentUser().subscribe();
-        }
-      })
-    );
+
+    return this.http
+      .post<LoginResponse>(
+        this.apiUrl + '/api/v1/auth/token',
+        body.toString(),
+        { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } },
+      )
+      .pipe(
+        tap((response) => {
+          if (response.successful && response.data?.token) {
+            this.setToken(response.data.token);
+            // Fetch user info after successful login
+            this.fetchCurrentUser().subscribe();
+          }
+        }),
+      );
   }
 
   fetchCurrentUser(): Observable<GetUserResponse> {
     console.log('🌐 Obteniendo usuario del servidor...');
-    return this.http.get<GetUserResponse>(this.apiUrl + '/api/v1/users/me').pipe(
-      tap(response => {
-        console.log('📥 Respuesta del servidor:', response);
-        if (response.successful && response.data) {
-          console.log('✅ Usuario obtenido:', response.data);
-          console.log('📋 store_role:', response.data.store_role);
-          console.log('📋 store_id:', response.data.store_id);
-          console.log('📋 email_verified:', response.data.email_verified);
-          this.setUser(response.data);
-        }
-      }),
-      catchError(error => {
-        console.error('❌ Error al obtener usuario:', error);
-        if (error.status === 401) {
-          this.logout();
-        }
-        return throwError(() => error);
-      })
-    );
+    return this.http
+      .get<GetUserResponse>(this.apiUrl + '/api/v1/users/me')
+      .pipe(
+        tap((response) => {
+          console.log('📥 Respuesta del servidor:', response);
+          if (response.successful && response.data) {
+            console.log('✅ Usuario obtenido:', response.data);
+            console.log('📋 store_role:', response.data.store_role);
+            console.log('📋 store_id:', response.data.store_id);
+            console.log('📋 email_verified:', response.data.email_verified);
+            this.setUser(response.data);
+          }
+        }),
+        catchError((error) => {
+          console.error('❌ Error al obtener usuario:', error);
+          if (error.status === 401) {
+            this.logout();
+          }
+          return throwError(() => error);
+        }),
+      );
   }
 
   activateAccount(code: string): Observable<any> {
-    return this.http.patch(this.apiUrl + '/api/v1/auth/activate', null, {
-      params: { code }
-    }).pipe(
-      tap(() => {
-        console.log('✅ Cuenta activada');
-        this.fetchCurrentUser().subscribe();
+    return this.http
+      .patch(this.apiUrl + '/api/v1/auth/activate', null, {
+        params: { code },
       })
-    );
+      .pipe(
+        tap(() => {
+          console.log('✅ Cuenta activada');
+          this.fetchCurrentUser().subscribe();
+        }),
+      );
   }
 
   sendEmailVerificationCode(): Observable<any> {
-    return this.http.get(this.apiUrl + '/api/v1/auth/send-email-verification-code');
+    return this.http.get(
+      this.apiUrl + '/api/v1/auth/send-email-verification-code',
+    );
   }
 
   isAuthenticated(): boolean {
@@ -207,7 +217,7 @@ export class AuthService {
     console.log('  - store_id:', user?.store_id);
     return owner;
   }
-  
+
   isCashier(): boolean {
     const user = this.getCurrentUser();
     const cashier = this.isActiveUser() && user?.store_role === 'cashier';
@@ -217,7 +227,9 @@ export class AuthService {
 
   isOwnerOrCashier(): boolean {
     const user = this.getCurrentUser();
-    const hasAccess = this.isActiveUser() && (user?.store_role === 'owner' || user?.store_role === 'cashier');
+    const hasAccess =
+      this.isActiveUser() &&
+      (user?.store_role === 'owner' || user?.store_role === 'cashier');
     console.log('🔐 isOwnerOrCashier():', hasAccess);
     return hasAccess;
   }
@@ -248,7 +260,7 @@ export class AuthService {
       console.log('❌ No hay token');
       return false;
     }
-    
+
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
       const expiration = payload.exp * 1000;

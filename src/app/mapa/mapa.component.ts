@@ -73,14 +73,14 @@ export class MapaComponent {
   }
 
   // Seleccionar ubicación haciendo click en el mapa
-  seleccionarUbicacionEnMapa(lat: number, lng: number) {
+  seleccionarUbicacionEnMapa(latitude: number, longitude: number) {
     // Remover marcador anterior si existe
     if (this.marcadorVendedor) {
       this.map.removeLayer(this.marcadorVendedor);
     }
 
     // Crear nuevo marcador
-    this.marcadorVendedor = marker([lat, lng], {
+    this.marcadorVendedor = marker([latitude, longitude], {
       icon: icon({
         iconUrl: 'assets/img/mapa-pin-statill.png',
         iconSize: [32, 32],
@@ -89,13 +89,13 @@ export class MapaComponent {
     });
 
     this.marcadorVendedor.addTo(this.map);
-    this.map.setView([lat, lng], 15);
+    this.map.setView([latitude, longitude], 15);
 
     // Emitir coordenadas
-    this.ubicacionSeleccionada.emit([lat, lng]);
+    this.ubicacionSeleccionada.emit([latitude, longitude]);
 
     // Obtener dirección aproximada (geocoding inverso)
-    this.obtenerDireccionDesdeCoordenadas(lat, lng);
+    this.obtenerDireccionDesdeCoordenadas(latitude, longitude);
   }
 
   // Buscar dirección y mostrarla en el mapa
@@ -110,14 +110,15 @@ export class MapaComponent {
       const coords = await this.geocoding
         .geocode(this.direccionInput)
         .toPromise();
+      console.log('Debug coords:', coords);
 
-      if (coords && coords.lat && coords.lng) {
+      if (coords && coords.latitude && coords.longitude) {
         // Validar coordenadas dentro de Argentina
         if (
-          coords.lat < -55 ||
-          coords.lat > -21 ||
-          coords.lng < -73 ||
-          coords.lng > -53
+          coords.latitude < -55 ||
+          coords.latitude > -21 ||
+          coords.longitude < -73 ||
+          coords.longitude > -53
         ) {
           alert(
             'La dirección no parece estar en Argentina. Por favor, verifica.',
@@ -130,13 +131,13 @@ export class MapaComponent {
         this.direccionActual = this.direccionInput;
 
         // Mostrar en el mapa
-        this.seleccionarUbicacionEnMapa(coords.lat, coords.lng);
+        this.seleccionarUbicacionEnMapa(coords.latitude, coords.longitude);
 
         // Emitir dirección confirmada
         this.direccionSeleccionada.emit(this.direccionActual);
 
         console.log(
-          `✅ Dirección encontrada: ${this.direccionActual} -> [${coords.lat}, ${coords.lng}]`,
+          `✅ Dirección encontrada: ${this.direccionActual} -> [${coords.latitude}, ${coords.longitude}]`,
         );
       } else {
         alert('No se pudo encontrar la dirección. Intenta con otra.');
@@ -150,16 +151,13 @@ export class MapaComponent {
   }
 
   // Geocoding inverso (coordenadas -> dirección)
-  async obtenerDireccionDesdeCoordenadas(lat: number, lng: number) {
+  async obtenerDireccionDesdeCoordenadas(latitude: number, longitude: number) {
     try {
-      // Usar Nominatim para reverse geocoding
-      const url = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`;
-      const response = await fetch(url);
-      const data = await response.json();
+      const data = await this.geocoding.reverseGeocode(latitude, longitude).toPromise();
 
-      if (data && data.display_name) {
-        this.direccionActual = data.display_name;
-        this.direccionInput = data.display_name;
+      if (data) {
+        this.direccionActual = data.address;
+        this.direccionInput = data.address;
         this.direccionSeleccionada.emit(this.direccionActual);
         console.log(`📍 Dirección aproximada: ${this.direccionActual}`);
       }
@@ -180,89 +178,82 @@ export class MapaComponent {
       const stores = res.data;
       console.log(`📊 Total de tiendas: ${stores.length}`);
 
-      // Filtrar tiendas con direcciones válidas
-      const storesValidas = stores.filter((store: any) => {
-        if (!store.address || store.address.trim() === '') {
-          console.log(`⚠️ Tienda sin dirección: ${store.name}`);
-          return false;
-        }
 
-        // Filtrar direcciones inválidas (solo símbolos raros)
-        const direccionLimpia = store.address.trim();
-        if (
-          direccionLimpia.length < 5 ||
-          /^[^a-zA-Z0-9]+$/.test(direccionLimpia)
-        ) {
-          console.log(
-            `⚠️ Dirección inválida para ${store.name}: "${store.address}"`,
-          );
-          return false;
-        }
-
-        return true;
-      });
-
-      console.log(
-        `✅ Tiendas con direcciones válidas: ${storesValidas.length}`,
-      );
-
-      // Geocodificar una por una
-      for (let i = 0; i < storesValidas.length; i++) {
-        const store = storesValidas[i];
-
-        console.log(`\n🏪 ${i + 1}/${storesValidas.length} - ${store.name}`);
-        console.log(`📍 Dirección: ${store.address}`);
-
+      for (let i = 0; i < stores.length; i++) {
+        const store = stores[i];
+        const coords = { latitude: store.latitude, longitude: store.longitude };
+        const newMarker = marker([coords.latitude, coords.longitude], {
+          icon: icon({
+            iconUrl: 'assets/img/mapa-pin-statill.png',
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+          }),
+        }).bindPopup(`<b>${store.name}</b><br>${store.address}`);
         try {
-          const coords = await this.geocoding
-            .geocode(store.address)
-            .toPromise();
-
-          if (coords && coords.lat && coords.lng) {
-            // Validar que las coordenadas sean razonables (Argentina está aprox entre -55 y -21 lat, -73 y -53 lng)
-            if (
-              coords.lat < -55 ||
-              coords.lat > -21 ||
-              coords.lng < -73 ||
-              coords.lng > -53
-            ) {
-              console.log(
-                `❌ Coordenadas fuera de Argentina: [${coords.lat}, ${coords.lng}]`,
-              );
-              continue;
-            }
-
-            console.log(`✅ Geocodificado: [${coords.lat}, ${coords.lng}]`);
-
-            const newMarker = marker([coords.lat, coords.lng], {
-              icon: icon({
-                iconUrl: 'assets/img/mapa-pin-statill.png',
-                iconSize: [32, 32],
-                iconAnchor: [16, 32],
-              }),
-            }).bindPopup(`<b>${store.name}</b><br>${store.address}`);
-
-            // Verificar que el marcador se agregue correctamente
-            try {
-              newMarker.addTo(this.map);
-              this.leafletMarkers.push(newMarker);
-              console.log(
-                `📌 Marcador agregado. Total: ${this.leafletMarkers.length}`,
-              );
-            } catch (err) {
-              console.error(`💥 Error al agregar marcador:`, err);
-            }
-          } else {
-            console.log(`❌ No se obtuvieron coordenadas válidas`);
-          }
-        } catch (error) {
-          console.error(`💥 Error geocodificando:`, error);
+          newMarker.addTo(this.map);
+          this.leafletMarkers.push(newMarker);
+          console.log(
+            `📌 Marcador agregado. Total: ${this.leafletMarkers.length}`,
+          );
+        } catch (err) {
+          console.error(`💥 Error al agregar marcador:`, err);
         }
 
-        // Esperar 1.2 segundos entre requests (un poco más para estar seguros)
-        if (i < storesValidas.length - 1) {
-          await new Promise((resolve) => setTimeout(resolve, 1200));
-        }
+        // const store = storesValidas[i];
+
+        // console.log(`\n🏪 ${i + 1}/${storesValidas.length} - ${store.name}`);
+        // console.log(`📍 Dirección: ${store.address}`);
+
+        // try {
+        //   const coords = await this.geocoding
+        //     .geocode(store.address)
+        //     .toPromise();
+
+        //   if (coords && coords.latitude && coords.longitude) {
+        //     // Validar que las coordenadas sean razonables (Argentina está aprox entre -55 y -21 latitude, -73 y -53 longitude)
+        //     if (
+        //       coords.latitude < -55 ||
+        //       coords.latitude > -21 ||
+        //       coords.longitude < -73 ||
+        //       coords.longitude > -53
+        //     ) {
+        //       console.log(
+        //         `❌ Coordenadas fuera de Argentina: [${coords.latitude}, ${coords.longitude}]`,
+        //       );
+        //       continue;
+        //     }
+
+        //     console.log(`✅ Geocodificado: [${coords.latitude}, ${coords.longitude}]`);
+
+        //     const newMarker = marker([coords.latitude, coords.longitude], {
+        //       icon: icon({
+        //         iconUrl: 'assets/img/mapa-pin-statill.png',
+        //         iconSize: [32, 32],
+        //         iconAnchor: [16, 32],
+        //       }),
+        //     }).bindPopup(`<b>${store.name}</b><br>${store.address}`);
+
+        //     // Verificar que el marcador se agregue correctamente
+        //     try {
+        //       newMarker.addTo(this.map);
+        //       this.leafletMarkers.push(newMarker);
+        //       console.log(
+        //         `📌 Marcador agregado. Total: ${this.leafletMarkers.length}`,
+        //       );
+        //     } catch (err) {
+        //       console.error(`💥 Error al agregar marcador:`, err);
+        //     }
+        //   } else {
+        //     console.log(`❌ No se obtuvieron coordenadas válidas`);
+        //   }
+        // } catch (error) {
+        //   console.error(`💥 Error geocodificando:`, error);
+        // }
+
+        // // Esperar 1.2 segundos entre requests (un poco más para estar seguros)
+        // if (i < storesValidas.length - 1) {
+        //   await new Promise((resolve) => setTimeout(resolve, 1200));
+        // }
       }
 
       console.log(

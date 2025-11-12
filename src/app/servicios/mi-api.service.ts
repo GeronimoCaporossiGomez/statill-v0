@@ -36,6 +36,22 @@ export interface UsersResponse {
   message: string;
 }
 
+export interface GeocodeAddressResponse {
+  data: {
+    latitude: number;
+    longitude: number;
+    formatted_address: string;
+  };
+  message: string;
+  successful: boolean;
+}
+
+export interface ReverseGeocodingResponse{
+    data:{address:string},
+    message:string,
+    successful:boolean
+  }
+
 // Interfaces para productos
 export interface Product {
   id: number;
@@ -91,6 +107,7 @@ export interface StoresResponse {
   data: Store[];
   message: string;
 }
+
 
 @Injectable({ providedIn: 'root' })
 export class MiApiService {
@@ -162,6 +179,16 @@ export class MiApiService {
     return this.http.get<PointsResponse>(
       this.apiUrl + '/api/v1/points/my/store/' + storeId,
     );
-  } 
+  }
 
+  // geo
+  geocodeAddress(address: string): Observable<GeocodeAddressResponse> {
+    return this.http.get<GeocodeAddressResponse>(
+      this.apiUrl + '/api/v1/geo/geocode?address=' + address,
+    );
+  }
+
+  reverseGeocode(latitude:number,longitude:number): Observable<ReverseGeocodingResponse>{
+    return this.http.get<ReverseGeocodingResponse>(this.apiUrl + `/api/v1/geo/geocode/reverse?latitude=${latitude}&longitude=${longitude}`)
+  }
 }
