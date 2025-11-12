@@ -1,4 +1,3 @@
-// src/app/servicios/order.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -55,12 +54,30 @@ export class OrderService {
     return this.http.get<OrdersResponse>(`${this.apiUrl}/orders/my`);
   }
 
+  // ✅ Obtener una orden propia por ID (sin permisos de admin)
+  getMyOrderById(id: number): Observable<Order | null> {
+    return new Observable(observer => {
+      this.getMyOrders().subscribe({
+        next: (response) => {
+          if (response.successful && response.data) {
+            const found = response.data.find(o => o.id === id) || null;
+            observer.next(found);
+            observer.complete();
+          } else {
+            observer.error('Error al obtener mis órdenes');
+          }
+        },
+        error: (err) => observer.error(err)
+      });
+    });
+  }
+
   // Obtener órdenes de mi tienda (como owner/cashier)
   getMyStoreOrders(): Observable<OrdersResponse> {
     return this.http.get<OrdersResponse>(`${this.apiUrl}/orders/my/store`);
   }
 
-  // Obtener orden por ID
+  // ❌ (Solo admins) Obtener orden por ID
   getOrderById(id: number): Observable<OrderResponse> {
     return this.http.get<OrderResponse>(`${this.apiUrl}/orders/${id}`);
   }
