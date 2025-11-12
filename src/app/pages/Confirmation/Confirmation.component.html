@@ -1,0 +1,61 @@
+<div class="confirmacion-container">
+  <div class="confirmacion-card">
+    <div class="success-icon">✅</div>
+    <h1>¡Pedido Confirmado!</h1>
+
+    <div *ngIf="order" class="order-details">
+      <div class="detail-row">
+        <span class="label">Número de Orden:</span>
+        <span class="value">#{{ order.id }}</span>
+      </div>
+
+      <div class="detail-row">
+        <span class="label">Estado:</span>
+        <span class="status pending">{{ getStatusText(order.status) }}</span>
+      </div>
+
+      <div class="detail-row">
+        <span class="label">Método de Pago:</span>
+        <span class="value">💵 Efectivo</span>
+      </div>
+
+      <div class="detail-row">
+        <span class="label">Fecha:</span>
+        <span class="value">{{ formatDate(order.created_at) }}</span>
+      </div>
+
+      <div class="products-section">
+        <h3>Productos:</h3>
+        <div *ngFor="let product of order.products" class="product-item">
+          <span>{{ product.quantity }}x Producto #{{ product.product_id }}</span>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <p><strong>📍 Dirección de retiro:</strong></p>
+        <p>{{ storeName || 'Cargando...' }}</p>
+        <p class="info-text">
+          Presentá este número de orden al retirar tu pedido.
+          El comercio te avisará cuando esté listo.
+        </p>
+      </div>
+    </div>
+
+    <div *ngIf="isLoading" class="loading">
+      Cargando información del pedido...
+    </div>
+
+    <div *ngIf="errorMessage" class="error">
+      {{ errorMessage }}
+    </div>
+
+    <div class="actions">
+      <button class="btn-primary" [routerLink]="['/preordenes']">
+        Ver Mis Pedidos
+      </button>
+      <button class="btn-secondary" [routerLink]="['/home']">
+        Volver al Inicio
+      </button>
+    </div>
+  </div>
+</div>
