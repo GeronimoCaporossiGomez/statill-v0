@@ -1,3 +1,5 @@
+
+
 <div class="header-pagina">
   <div class="header-nav">
     <div class="seccion-izquierda">
@@ -29,14 +31,28 @@
           />
           Puntos
         </button>
-        <button type="button" routerLink="/crear-comercio" class="boton-rojo">
+        @if([storeAccessGuard]){
+        <button type="button" 
+         class="boton-rojo">
           <img
             src="assets/img/vendedor-statill.png"
             alt="icono vendedor"
             class="icono-vendedor"
           />
           Vendedor
-        </button>
+        </button> }
+        @else{
+          <button type="button" 
+          routerLink="/crear-comercio"
+           class="boton-rojo">
+            <img
+              src="assets/img/vendedor-statill.png"
+              alt="icono vendedor"
+              class="icono-vendedor"
+            />
+            Vendedor
+          </button>
+        }
       </div>
     </div>
 

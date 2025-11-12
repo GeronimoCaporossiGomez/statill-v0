@@ -7,6 +7,7 @@ import { MapaComponent } from 'src/app/mapa/mapa.component';
 import { MiApiService } from 'src/app/servicios/mi-api.service';
 import { AuthService } from 'src/app/servicios/auth.service';
 import { GeneralService } from 'src/app/servicios/general.service';
+import { HeaderStatillComponent } from 'src/app/Componentes/header-statill/header-statill.component';
 
 @Component({
   selector: 'app-crear-comercio',
@@ -17,6 +18,7 @@ import { GeneralService } from 'src/app/servicios/general.service';
     SidebarComponent,
     RouterLink,
     MapaComponent,
+    HeaderStatillComponent
   ],
   templateUrl: './crear-comercio.component.html',
   styleUrl: './crear-comercio.component.scss',
