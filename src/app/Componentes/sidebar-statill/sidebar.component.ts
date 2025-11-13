@@ -1,8 +1,6 @@
-
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-
 
 @Component({
   selector: 'app-sidebar',
@@ -12,9 +10,9 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./sidebar.component.scss'],
 })
 export class SidebarComponent {
-  isExpanded = false;
+  isExpanded = true; // Cambiado a true para mostrar por defecto
   activeItem = 'home'; // Item activo por defecto
-  vendedor = true;
+  vendedor = false; // Cambiado a false para mostrar modo comprador por defecto
 
   menuItemsVendedor = [
     {
@@ -116,5 +114,3 @@ export class SidebarComponent {
     return 'assets/img/vendedor-statill.png';
   }
 }
-
-

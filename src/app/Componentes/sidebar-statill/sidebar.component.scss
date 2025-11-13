@@ -12,12 +12,10 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
 
-
   &:hover {
     background-color: #f5f5f5;
   }
 }
-
 
 .sidebar {
   position: fixed;
@@ -31,13 +29,11 @@
   overflow-y: auto;
 }
 
-
 .sidebariwis-nav {
   display: flex;
   flex-direction: column;
   height: 100%;
   padding: 80px 0 20px 0;
-
 
   ul {
     list-style: none;
@@ -106,7 +102,7 @@
       }
 
       &.switch-item {
-        margin-top: auto;
+        margin-top: 20px;
 
         .comprador-btn {
           width: 100%;
@@ -115,7 +111,6 @@
     }
   }
 }
-
 
 .comprador-btn {
   margin-top: 12px;
@@ -150,21 +145,17 @@
   }
 }
 
-
 .sidebar::-webkit-scrollbar {
   width: 6px;
 }
-
 
 .sidebar::-webkit-scrollbar-track {
   background: transparent;
 }
 
-
 .sidebar::-webkit-scrollbar-thumb {
   background: #d0d0d0;
   border-radius: 3px;
-
 
   &:hover {
     background: #b0b0b0;
