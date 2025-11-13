@@ -75,22 +75,22 @@ export class NegocioComponent implements OnInit {
               this.image = '';
             },
           });
-          this.productos = results.productos;
-          // For each product, try to fetch its image URL and set `producto.image` so the template can show it
-          for (const p of this.productos) {
-            if (p && p.id) {
-              this.api.getImageByObjectId('product', Number(p.id)).subscribe({
-                next: (imgRes: any) => {
-                  p.image = imgRes?.data || '';
-                },
-                error: (err: any) => {
-                  p.image = '';
-                },
-              });
-            } else {
-              p.image = '';
-            }
+        this.productos = results.productos;
+        // For each product, try to fetch its image URL and set `producto.image` so the template can show it
+        for (const p of this.productos) {
+          if (p && p.id) {
+            this.api.getImageByObjectId('product', Number(p.id)).subscribe({
+              next: (imgRes: any) => {
+                p.image = imgRes?.data || '';
+              },
+              error: (err: any) => {
+                p.image = '';
+              },
+            });
+          } else {
+            p.image = '';
           }
+        }
         this.reviews = results.reviews;
 
         const points = results.points;

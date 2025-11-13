@@ -43,7 +43,6 @@ export class StockComponent implements OnInit {
   errorMessage: string | null = null;
   // Archivo de imagen para el producto que se está creando/edtiando
   archivoProducto: File | null = null;
-  
 
   ngOnInit() {
     // Establecer el store_id del usuario owner
@@ -140,24 +139,32 @@ export class StockComponent implements OnInit {
             // Si hay una imagen seleccionada, subirla ahora. Use fallback id when response doesn't include data
             if (this.archivoProducto) {
               const res: any = response || {};
-              const prodId = this.productoEditandoId ?? res?.data?.id ?? res?.id;
+              const prodId =
+                this.productoEditandoId ?? res?.data?.id ?? res?.id;
               if (prodId) {
-                this.miApi.uploadImage('product', prodId, this.archivoProducto).subscribe({
-                  next: () => {
-                    console.log('✅ Imagen de producto subida correctamente');
-                    this.cargarProductos();
-                    this.resetForm();
-                    setTimeout(() => (this.errorMessage = null), 3000);
-                  },
-                  error: (err) => {
-                    console.error('❌ Error al subir imagen de producto:', err);
-                    this.cargarProductos();
-                    this.resetForm();
-                    setTimeout(() => (this.errorMessage = null), 3000);
-                  },
-                });
+                this.miApi
+                  .uploadImage('product', prodId, this.archivoProducto)
+                  .subscribe({
+                    next: () => {
+                      console.log('✅ Imagen de producto subida correctamente');
+                      this.cargarProductos();
+                      this.resetForm();
+                      setTimeout(() => (this.errorMessage = null), 3000);
+                    },
+                    error: (err) => {
+                      console.error(
+                        '❌ Error al subir imagen de producto:',
+                        err,
+                      );
+                      this.cargarProductos();
+                      this.resetForm();
+                      setTimeout(() => (this.errorMessage = null), 3000);
+                    },
+                  });
               } else {
-                console.warn('No se encontró ID de producto para subir la imagen (editar).');
+                console.warn(
+                  'No se encontró ID de producto para subir la imagen (editar).',
+                );
                 this.cargarProductos();
                 this.resetForm();
                 setTimeout(() => (this.errorMessage = null), 3000);
@@ -186,22 +193,26 @@ export class StockComponent implements OnInit {
             const res: any = response || {};
             const prodId = res?.data?.id ?? res?.id;
             if (prodId) {
-              this.miApi.uploadImage('product', prodId, this.archivoProducto).subscribe({
-                next: () => {
-                  console.log('✅ Imagen de producto subida correctamente');
-                  this.cargarProductos();
-                  this.resetForm();
-                  setTimeout(() => (this.errorMessage = null), 3000);
-                },
-                error: (err) => {
-                  console.error('❌ Error al subir imagen de producto:', err);
-                  this.cargarProductos();
-                  this.resetForm();
-                  setTimeout(() => (this.errorMessage = null), 3000);
-                },
-              });
+              this.miApi
+                .uploadImage('product', prodId, this.archivoProducto)
+                .subscribe({
+                  next: () => {
+                    console.log('✅ Imagen de producto subida correctamente');
+                    this.cargarProductos();
+                    this.resetForm();
+                    setTimeout(() => (this.errorMessage = null), 3000);
+                  },
+                  error: (err) => {
+                    console.error('❌ Error al subir imagen de producto:', err);
+                    this.cargarProductos();
+                    this.resetForm();
+                    setTimeout(() => (this.errorMessage = null), 3000);
+                  },
+                });
             } else {
-              console.warn('No se encontró ID de producto en la respuesta al crear el producto.');
+              console.warn(
+                'No se encontró ID de producto en la respuesta al crear el producto.',
+              );
               this.cargarProductos();
               this.resetForm();
               setTimeout(() => (this.errorMessage = null), 3000);
