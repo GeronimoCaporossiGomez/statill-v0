@@ -46,6 +46,10 @@ export class CrearComercioComponent {
   coordenadasSeleccionadas: [number, number] | null = null;
   buscandoDireccion: boolean = false;
 
+  // 🔥 CLOUDINARY CONFIG - CAMBIÁ ESTOS VALORES
+  private readonly CLOUDINARY_CLOUD_NAME = 'aaa'; // 👈 Cambiá esto
+  private readonly CLOUDINARY_UPLOAD_PRESET = 'aaa'; // 👈 Cambiá estoa
+
   constructor(
     private router: Router,
     private cdr: ChangeDetectorRef,
@@ -219,10 +223,8 @@ export class CrearComercioComponent {
 
   enviarComercio(datos: any) {
     this.miApiService.postStores(datos).subscribe({
-      next: (response: any) => {
+      next: (response:any) => {
         console.log('✅ Comercio creado exitosamente:', response);
-
-        // If there's an image, upload it
         if (this.archivoLogo) {
           this.miApiService
             .uploadImage('store', response.data.id, this.archivoLogo)
@@ -244,11 +246,13 @@ export class CrearComercioComponent {
           alert('¡Comercio creado exitosamente!');
           this.router.navigate(['/escanear']);
         }
+        this.router.navigate(['/escanear']);
       },
       error: (error) => {
         console.error('❌ Error al crear comercio:', error);
         console.error('Detalles:', error.error);
 
+        // Mostrar mensaje de error más descriptivo
         let errorMessage = 'Error al crear el comercio. ';
         if (error.error && error.error.message) {
           errorMessage += error.error.message;
@@ -281,6 +285,44 @@ export class CrearComercioComponent {
         this.cdr.markForCheck();
       };
       reader.readAsDataURL(input.files[0]);
+
+      // 🚀 SUBIR DIRECTO A CLOUDINARY
+      this.subirDirectoCloudinary(this.archivoLogo);
     }
+  }
+
+  // 🔥 MÉTODO PARA SUBIR DIRECTO A CLOUDINARY
+  subirDirectoCloudinary(file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', this.CLOUDINARY_UPLOAD_PRESET);
+    formData.append('cloud_name', this.CLOUDINARY_CLOUD_NAME);
+    formData.append('folder', 'stores'); // Opcional: organizar en carpeta
+
+    console.log('🚀 Subiendo imagen directo a Cloudinary...');
+
+    // Usar fetch para subir directo a Cloudinary (sin pasar por tu backend)
+    fetch(
+      `https://api.cloudinary.com/v1_1/${this.CLOUDINARY_CLOUD_NAME}/image/upload`,
+      {
+        method: 'POST',
+        body: formData,
+      },
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('✅ Imagen subida exitosamente a Cloudinary!');
+        console.log('📸 URL de la imagen:', data.secure_url);
+        console.log('🆔 Public ID:', data.public_id);
+
+        alert(`✅ ¡Imagen subida!\n\nURL: ${data.secure_url}`);
+
+        // Aquí podés guardar la URL si querés usarla después
+        // this.urlImagenCloudinary = data.secure_url;
+      })
+      .catch((error) => {
+        console.error('❌ Error al subir imagen a Cloudinary:', error);
+        alert('❌ Error al subir la imagen. Revisá la consola.');
+      });
   }
 }

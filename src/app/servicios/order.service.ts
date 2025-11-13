@@ -37,7 +37,7 @@ export interface OrdersResponse {
 }
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class OrderService {
   private apiUrl = 'https://statill-api.onrender.com/api/v1';
@@ -56,18 +56,18 @@ export class OrderService {
 
   // ✅ Obtener una orden propia por ID (sin permisos de admin)
   getMyOrderById(id: number): Observable<Order | null> {
-    return new Observable((observer) => {
+    return new Observable(observer => {
       this.getMyOrders().subscribe({
         next: (response) => {
           if (response.successful && response.data) {
-            const found = response.data.find((o) => o.id === id) || null;
+            const found = response.data.find(o => o.id === id) || null;
             observer.next(found);
             observer.complete();
           } else {
             observer.error('Error al obtener mis órdenes');
           }
         },
-        error: (err) => observer.error(err),
+        error: (err) => observer.error(err)
       });
     });
   }
