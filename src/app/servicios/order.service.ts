@@ -73,9 +73,13 @@ export class OrderService {
   }
 
   // Obtener órdenes de mi tienda (como owner/cashier)
-  getMyStoreOrders(): Observable<OrdersResponse> {
-    return this.http.get<OrdersResponse>(`${this.apiUrl}/orders/my/store`);
-  }
+getMyStoreOrders(): Observable<OrdersResponse> {
+  const token = localStorage.getItem('token');
+  return this.http.get<OrdersResponse>(`${this.apiUrl}/orders/my/store`, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+}
+
 
   // ❌ (Solo admins) Obtener orden por ID
   getOrderById(id: number): Observable<OrderResponse> {
