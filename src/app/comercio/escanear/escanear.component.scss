@@ -3,16 +3,15 @@
   display: flex;
   gap: 2rem;
   padding: 1.5rem;
-  padding-top: calc(1.5rem + 10vh); // Agrega el 10% al padding superior
   min-height: 100vh;
-  background: #eeeeee;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 }
 
 // Sección de cámara y escáner
 .seccion-camara {
   flex: 1;
   max-width: 720px;
-  background: #ffffff;
+  background: #eee;
   border-radius: 12px;
   padding: 1.5rem 1rem 1rem;
 }

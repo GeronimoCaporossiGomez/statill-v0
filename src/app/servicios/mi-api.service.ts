@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Observable,of } from 'rxjs';
+import{catchError} from"rxjs/operators"
 // Interfaces para la respuesta de puntos
 export interface Point {
   id: number;
@@ -46,11 +46,11 @@ export interface GeocodeAddressResponse {
   successful: boolean;
 }
 
-export interface ReverseGeocodingResponse {
-  data: { address: string };
-  message: string;
-  successful: boolean;
-}
+export interface ReverseGeocodingResponse{
+    data:{address:string},
+    message:string,
+    successful:boolean
+  }
 
 // Interfaces para productos
 export interface Product {
@@ -108,21 +108,6 @@ export interface StoresResponse {
   message: string;
 }
 
-export interface CloudinaryUploadResponse {
-  successful: boolean;
-  data: {
-    public_id: string;
-    url: string;
-    format: string;
-  };
-  message: string;
-}
-
-export interface GetCloudinaryURLResponse {
-  successful: boolean;
-  data: string; //la url es data
-  message: string;
-}
 
 @Injectable({ providedIn: 'root' })
 export class MiApiService {
@@ -191,14 +176,12 @@ export class MiApiService {
   }
 
   getMyPointsInStore(storeId: number): Observable<any> {
-    return this.http
-      .get<any>(`${this.apiUrl}/api/v1/points/my/store/${storeId}`)
-      .pipe(
-        catchError(() => {
-          // If the API call fails or status is not 200, return the fallback value
-          return of({ data: 0 });
-        }),
-      );
+    return this.http.get<any>(`${this.apiUrl}/api/v1/points/my/store/${storeId}`).pipe(
+      catchError(() => {
+        // If the API call fails or status is not 200, return the fallback value
+        return of({ data: 0 });
+      })
+    );
   }
 
   // geo
@@ -208,45 +191,7 @@ export class MiApiService {
     );
   }
 
-  reverseGeocode(
-    latitude: number,
-    longitude: number,
-  ): Observable<ReverseGeocodingResponse> {
-    return this.http.get<ReverseGeocodingResponse>(
-      this.apiUrl +
-        `/api/v1/geo/geocode/reverse?latitude=${latitude}&longitude=${longitude}`,
-    );
-  }
-
-  // images
-
-  uploadImage(
-    t: 'store' | 'user' | 'product',
-    id: number,
-    file: File,
-  ): Observable<CloudinaryUploadResponse> {
-    const formData = new FormData();
-    formData.append('file', file, file.name);
-    return this.http.post<CloudinaryUploadResponse>(
-      this.apiUrl + `/api/v1/images/upload?t=${t}&id=${id}`,
-      formData,
-    );
-  }
-
-  getImageByObjectId(
-    t: 'user' | 'store' | 'product',
-    id: number,
-  ): Observable<GetCloudinaryURLResponse> {
-    return this.http.get<GetCloudinaryURLResponse>(
-      this.apiUrl + `/api/v1/images/id/object?t=${t}&id=${id}`,
-    );
-  }
-
-  getImageByCloudinaryId(
-    cloudinary_public_id: string,
-  ): Observable<GetCloudinaryURLResponse> {
-    return this.http.get<GetCloudinaryURLResponse>(
-      this.apiUrl + `/api/v1/images/cloudinary/${cloudinary_public_id}`,
-    );
+  reverseGeocode(latitude:number,longitude:number): Observable<ReverseGeocodingResponse>{
+    return this.http.get<ReverseGeocodingResponse>(this.apiUrl + `/api/v1/geo/geocode/reverse?latitude=${latitude}&longitude=${longitude}`)
   }
 }

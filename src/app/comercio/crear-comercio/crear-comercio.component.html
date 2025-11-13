@@ -91,7 +91,7 @@
         </div>
 
         <p *ngIf="ubicacionConfirmada" class="ubicacion-confirmada">
-          {{ ubicacionConfirmada }}
+          📍 {{ ubicacionConfirmada }}
         </p>
 
         <!-- Mapa integrado -->
@@ -143,8 +143,13 @@
           Crédito
         </label>
         <label>
-          <input type="checkbox" name="pagoQR" ngModel [checked]="true" />
-          QR
+          <input
+            type="checkbox"
+            name="pagoTransferencia"
+            ngModel
+            [checked]="true"
+          />
+          Transferencia
         </label>
       </div>
 
