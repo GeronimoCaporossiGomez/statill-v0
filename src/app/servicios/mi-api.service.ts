@@ -10,9 +10,26 @@ export interface Point {
   amount: number;
 }
 
+export interface Discount {
+  id: number;
+  product_id: number;
+  pct_off: number;
+  start_date: string;
+  end_date: string;
+  days_usable: (string | null)[];
+  min_amount: number;
+  max_amount: number;
+}
+
 export interface PointsResponse {
   successful: boolean;
   data: Point[];
+  message: string;
+}
+
+export interface DiscountsResponse {
+  successful: boolean;
+  data: Discount[];
   message: string;
 }
 
@@ -131,6 +148,11 @@ export class MiApiService {
   getProductos() {
     return this.http.get(this.apiUrl + '/api/v1/products/');
   }
+
+  getProducto(productId: number) {
+    return this.http.get(this.apiUrl + '/api/v1/products/' + productId);
+  }
+
   crearProducto(producto: any) {
     return this.http.post(this.apiUrl + '/api/v1/products/', producto);
   }
@@ -169,6 +191,11 @@ export class MiApiService {
   getReviews(): Observable<ReviewsResponse> {
     return this.http.get<ReviewsResponse>(this.apiUrl + '/api/v1/reviews/');
   }
+
+  getDiscounts(): Observable<DiscountsResponse> {
+    return this.http.get<DiscountsResponse>(this.apiUrl + '/api/v1/discounts/');
+  }
+
   getStoreById(id: number): Observable<any> {
     return this.http.get(this.apiUrl + '/api/v1/stores/' + id);
   }
