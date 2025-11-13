@@ -1,16 +1,15 @@
 <button type="button" class="boton-sidebar-fijo" (click)="toggleSidebar()">
   ☰
 </button>
-
 <div *ngIf="isExpanded" class="sidebar sidebariwis">
   <div class="sidebariwis-nav">
     <ul>
-      <!-- Sidebar de VENDEDOR -->
       <div class="items" *ngIf="vendedor">
         <li *ngFor="let item of menuItemsVendedor">
           <ng-container *ngIf="activeItem === item.id">
             <span class="active-dot"></span>
           </ng-container>
+
 
           <a
             [routerLink]="item.path"
@@ -26,12 +25,13 @@
         </li>
       </div>
 
-      <!-- Sidebar de COMPRADOR -->
+
       <div class="items" *ngIf="!vendedor">
         <li *ngFor="let item of menuItemsComprador">
           <ng-container *ngIf="activeItem === item.id">
             <span class="active-dot"></span>
           </ng-container>
+
 
           <a
             [routerLink]="item.path"
@@ -48,8 +48,8 @@
       </div>
     </ul>
 
-    <!-- Botón de cambio visible solo si es OWNER o CASHIER -->
-    <div class="comprador-btn-container" *ngIf="isOwnerOrCashier">
+
+    <div class="comprador-btn-container">
       <button class="comprador-btn" (click)="toggleVendedor()">
         <img
           [src]="
@@ -60,7 +60,7 @@
           [alt]="vendedor ? 'Cambiar a Comprador' : 'Cambiar a Vendedor'"
           class="btn-icon"
         />
-        <span>{{ vendedor ? 'Comprador' : 'Vendedor' }}</span>
+        <span>{{ vendedor ? "Comprador" : "Vendedor" }}</span>
       </button>
     </div>
   </div>
