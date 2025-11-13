@@ -43,6 +43,16 @@ export class StockComponent implements OnInit {
   errorMessage: string | null = null;
   archivoProducto: File | null = null;
 
+  get totalProductos(): number {
+    return this.productos.length;
+  }
+
+  get totalUnidades(): number {
+    return this.productos.reduce(
+      (acc, producto) => acc + (producto?.quantity ?? 0),
+      0,
+    );
+  }
 
   ngOnInit() {
     // Establecer el store_id del usuario owner

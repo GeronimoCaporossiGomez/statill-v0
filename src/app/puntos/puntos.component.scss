@@ -132,6 +132,18 @@ h1 {
   }
 }
 
+.error-alert {
+  width: 90vw;
+  margin: 1rem auto 2rem;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  background: #fff5f5;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  font-weight: 600;
+  text-align: center;
+}
+
 // Estilos para el mensaje cuando no hay puntos
 .no-points-message {
   text-align: center;

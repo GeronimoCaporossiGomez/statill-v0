@@ -102,6 +102,19 @@ h1 {
     font-size: 0.9rem;
     margin-top: 1rem;
   }
+
+  .info-address {
+    margin-top: 0.35rem;
+    font-weight: 500;
+  }
+
+  .qr-note {
+    background: rgba(254, 240, 138, 0.6);
+    color: #a16207;
+    padding: 0.75rem 0.9rem;
+    border-radius: 12px;
+    margin-top: 1rem;
+  }
 }
 
 .loading, .error {

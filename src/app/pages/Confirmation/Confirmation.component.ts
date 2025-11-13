@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrderService, Order } from '../../servicios/order.service';
+import { MiApiService } from '../../servicios/mi-api.service';
 
 @Component({
   selector: 'app-orden-confirmacion',
@@ -14,14 +15,22 @@ export class OrdenConfirmacionComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private orderService = inject(OrderService);
+  private miApiService = inject(MiApiService);
 
   order: Order | null = null;
   isLoading = false;
   errorMessage: string | null = null;
   orderId!: number;
+  paymentContext: 'cash' | 'qr' | null = null;
+  storeName = '';
+  storeAddress = '';
 
   ngOnInit() {
     this.orderId = Number(this.route.snapshot.queryParamMap.get('orderId'));
+    const payment = this.route.snapshot.queryParamMap.get('payment');
+    this.paymentContext =
+      payment === 'qr' || payment === 'cash' ? payment : null;
+
     if (!this.orderId) {
       this.errorMessage = 'ID de orden no encontrado';
       return;
@@ -34,19 +43,27 @@ export class OrdenConfirmacionComponent implements OnInit {
     this.isLoading = true;
     this.errorMessage = null;
 
-    // 🔄 Usar endpoint permitido: /api/v1/orders/my
-    this.orderService.getMyOrders().subscribe({
-      next: (response) => {
-        if (response.successful && response.data) {
-          const found = response.data.find(o => o.id === this.orderId);
-          if (found) {
-            this.order = found;
-          } else {
-            this.errorMessage = 'No se encontró la orden';
-          }
-        } else {
-          this.errorMessage = 'Error al obtener las órdenes';
+    this.orderService.getMyOrderById(this.orderId).subscribe({
+      next: (order) => {
+        this.isLoading = false;
+
+        if (!order) {
+          this.errorMessage = 'No se encontró la orden';
+          return;
         }
+
+        this.order = order;
+        this.storeName = '';
+        this.storeAddress = '';
+
+        if (order.store_id) {
+          this.loadStore(order.store_id);
+        }
+      },
+      error: (error) => {
+        console.error('Error al obtener la orden', error);
+        this.errorMessage =
+          'No pudimos cargar tu orden. Intentá nuevamente en unos segundos.';
         this.isLoading = false;
       },
     });
@@ -78,7 +95,38 @@ export class OrdenConfirmacionComponent implements OnInit {
     });
   }
 
+  goTo(path: string) {
+    this.router.navigate(['/', path]);
+  }
+
   volver() {
     this.router.navigate(['/']);
+  }
+
+  private loadStore(storeId: number) {
+    this.setStoreFallback(storeId);
+
+    this.miApiService.getStoreById(storeId).subscribe({
+      next: (response: any) => {
+        const storeData = response?.data ?? response;
+
+        if (!storeData) {
+          this.setStoreFallback(storeId);
+          return;
+        }
+
+        this.storeName = storeData.name?.trim() || `Tienda #${storeId}`;
+        this.storeAddress = storeData.address || 'Dirección no disponible';
+      },
+      error: (error) => {
+        console.warn('No se pudo obtener la tienda de la orden', error);
+        this.setStoreFallback(storeId);
+      },
+    });
+  }
+
+  private setStoreFallback(storeId: number) {
+    this.storeName = this.storeName || `Tienda #${storeId}`;
+    this.storeAddress = this.storeAddress || 'Dirección no disponible';
   }
 }

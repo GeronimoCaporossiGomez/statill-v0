@@ -63,7 +63,7 @@ export const routes: Routes = [
     path: 'home',
     loadComponent: () =>
       import('./home/home/home.component').then(m => m.HomeComponent),
-    canActivate: [activeUserGuard]
+    
   },
   {
     path: 'crear-comercio',
@@ -77,6 +77,12 @@ export const routes: Routes = [
     import('./comercio/menu-local/menu-local.component').then(m => m.MenuLocalComponent),
   canActivate: [storeAccessGuard] // Owner o Cashier
 },
+  {
+    path: 'ventas-locales',
+    loadComponent: () =>
+      import('./comercio/ventas-locales/ventas-locales.component').then(m => m.VentasLocalesComponent),
+    canActivate: [storeAccessGuard]
+  },
   {
     path: 'carrito',
     loadComponent: () =>

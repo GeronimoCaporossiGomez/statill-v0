@@ -1,3 +1,154 @@
+https://statill-api.onrender.com/
+public
+No se debe enviar ningún token. esto aplica para todos los de abajo hasta requires-auth
+POST
+/api/v1/auth/token
+Issue Token
+GET
+/api/v1/status/
+Get Status
+GET
+/api/v1/products/
+Get All Products
+GET
+/api/v1/products/{id}
+Get Product By Id
+GET
+/api/v1/products/store/{id}
+Get Products By Store Id
+POST
+/api/v1/users/
+Create User
+GET
+/api/v1/users/{id}/name
+Get First Names By Id
+GET
+/api/v1/stores/
+Get All Stores
+GET
+/api/v1/stores/{id}
+Get Store By Id
+GET
+/api/v1/discounts/store/{store_id}
+Get All Discounts From Store
+GET
+/api/v1/discounts/{id}
+Get Discount By Id
+GET
+/api/v1/discounts/product/{product_id}
+Get Discount By Product Id
+GET
+/api/v1/discounts/product/{product_id}/allownull
+Get Discount By Product Id Allow Null
+GET
+/api/v1/reviews/
+Get All Reviews
+GET
+/api/v1/reviews/{id}
+Get Review By Id
+GET
+/api/v1/reviews/store/{id}
+Get Reviews By Store Id
+GET
+/api/v1/reviews/user/{id}
+Get Reviews By User Id
+GET
+/api/v1/geo/geocode
+Geocode Address
+GET
+/api/v1/geo/geocode/reverse
+Reverse Geocode
+requires_auth
+En el header Authorization se debe enviar un token válido (formato: Bearer <token>) de un usuario autenticado (/auth/token).
+PATCH
+/api/v1/auth/activate
+Activate
+GET
+/api/v1/auth/send-email-verification-code
+Send Email Verification Code Endpoint
+GET
+/api/v1/users/me
+Get Current User Endpoint
+DELETE
+/api/v1/users/me
+Delete Current User
+requires_active_user
+En el header Authorization se debe enviar un token válido (formato: Bearer <token>) de un usuario autenticado (/auth/token) que haya verificado su mail a través de /auth/activate. Aplica para todos los de abajo revisar auth.guard.ts e interceptor
+POST
+/api/v1/products/
+Create Product
+PUT
+/api/v1/products/{id}
+Update Product
+DELETE
+/api/v1/products/{id}
+Delete Product
+POST
+/api/v1/sales/
+Create Sale
+GET
+/api/v1/sales/store/my
+Get My Store Sales
+PUT
+/api/v1/users/me
+Update Current User
+GET
+/api/v1/users/store/my
+Get My Store Users
+POST
+/api/v1/stores/
+Create Store
+PUT
+/api/v1/stores/my
+Update Own Store
+DELETE
+/api/v1/stores/my
+Delete Own Store
+POST
+/api/v1/stores/cashier
+Add Cashier
+PATCH
+/api/v1/stores/cashier/accept
+Accept Cashier Add
+POST
+/api/v1/orders/
+Create Order
+GET
+/api/v1/orders/my
+Get My Orders
+GET
+/api/v1/orders/my/store
+Get My Store Orders
+GET
+/api/v1/orders/{id}/products
+Get Order Products
+PATCH
+/api/v1/orders/{id}/products
+Update Order Products
+PATCH
+/api/v1/orders/{id}/status
+Update Order Status
+PATCH
+/api/v1/orders/{id}/cancel
+Cancel Order
+POST
+/api/v1/discounts/
+Create Discount
+GET
+/api/v1/points/my/store/{store_id}
+Get My Points In Store
+POST
+/api/v1/points/product/{product_id}
+Buy With Points
+POST
+/api/v1/reviews/
+Create Review
+DELETE
+/api/v1/reviews/{id}
+Delete Review
+SOLO ESTOS DE ACA ARRIBA SON VALIDOS LOS OTROS ESTAN OBSOLETOS.
+
+@ -1,4629 +1,149 @@
 {
   "openapi": "3.1.0",
   "info": {
@@ -2141,6 +2292,154 @@
             "content": {
               "application/json": {
                 "schema": {
+https://statill-api.onrender.com/
+public
+No se debe enviar ningún token. esto aplica para todos los de abajo hasta requires-auth
+POST
+/api/v1/auth/token
+Issue Token
+GET
+/api/v1/status/
+Get Status
+GET
+/api/v1/products/
+Get All Products
+GET
+/api/v1/products/{id}
+Get Product By Id
+GET
+/api/v1/products/store/{id}
+Get Products By Store Id
+POST
+/api/v1/users/
+Create User
+GET
+/api/v1/users/{id}/name
+Get First Names By Id
+GET
+/api/v1/stores/
+Get All Stores
+GET
+/api/v1/stores/{id}
+Get Store By Id
+GET
+/api/v1/discounts/store/{store_id}
+Get All Discounts From Store
+GET
+/api/v1/discounts/{id}
+Get Discount By Id
+GET
+/api/v1/discounts/product/{product_id}
+Get Discount By Product Id
+GET
+/api/v1/discounts/product/{product_id}/allownull
+Get Discount By Product Id Allow Null
+GET
+/api/v1/reviews/
+Get All Reviews
+GET
+/api/v1/reviews/{id}
+Get Review By Id
+GET
+/api/v1/reviews/store/{id}
+Get Reviews By Store Id
+GET
+/api/v1/reviews/user/{id}
+Get Reviews By User Id
+GET
+/api/v1/geo/geocode
+Geocode Address
+GET
+/api/v1/geo/geocode/reverse
+Reverse Geocode
+requires_auth
+En el header Authorization se debe enviar un token válido (formato: Bearer <token>) de un usuario autenticado (/auth/token).
+PATCH
+/api/v1/auth/activate
+Activate
+GET
+/api/v1/auth/send-email-verification-code
+Send Email Verification Code Endpoint
+GET
+/api/v1/users/me
+Get Current User Endpoint
+DELETE
+/api/v1/users/me
+Delete Current User
+requires_active_user
+En el header Authorization se debe enviar un token válido (formato: Bearer <token>) de un usuario autenticado (/auth/token) que haya verificado su mail a través de /auth/activate. Aplica para todos los de abajo revisar auth.guard.ts e interceptor
+POST
+/api/v1/products/
+Create Product
+PUT
+/api/v1/products/{id}
+Update Product
+DELETE
+/api/v1/products/{id}
+Delete Product
+POST
+/api/v1/sales/
+Create Sale
+GET
+/api/v1/sales/store/my
+Get My Store Sales
+PUT
+/api/v1/users/me
+Update Current User
+GET
+/api/v1/users/store/my
+Get My Store Users
+POST
+/api/v1/stores/
+Create Store
+PUT
+/api/v1/stores/my
+Update Own Store
+DELETE
+/api/v1/stores/my
+Delete Own Store
+POST
+/api/v1/stores/cashier
+Add Cashier
+PATCH
+/api/v1/stores/cashier/accept
+Accept Cashier Add
+POST
+/api/v1/orders/
+Create Order
+GET
+/api/v1/orders/my
+Get My Orders
+GET
+/api/v1/orders/my/store
+Get My Store Orders
+GET
+/api/v1/orders/{id}/products
+Get Order Products
+PATCH
+/api/v1/orders/{id}/products
+Update Order Products
+PATCH
+/api/v1/orders/{id}/status
+Update Order Status
+PATCH
+/api/v1/orders/{id}/cancel
+Cancel Order
+POST
+/api/v1/discounts/
+Create Discount
+GET
+/api/v1/points/my/store/{store_id}
+Get My Points In Store
+POST
+/api/v1/points/product/{product_id}
+Buy With Points
+POST
+/api/v1/reviews/
+Create Review
+DELETE
+/api/v1/reviews/{id}
+Delete Review
 
                 }
               }
