@@ -32,7 +32,7 @@ export class AuthModalComponent {
   @Output() close = new EventEmitter<void>();
 
   isLogin = true;
-  // verification UI removed
+  isVerifyingCode = false;
   // Registration fields
   first_names = '';
   last_name = '';
@@ -41,33 +41,24 @@ export class AuthModalComponent {
   birthdate = '';
   gender = '';
   res_area = '';
+  activationCode = '';
 
   // For error/success messages
   message = '';
   messageType: 'success' | 'error' | '' = '';
   loading = false;
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+  ) {}
 
   toggleMode(value: boolean) {
     this.isLogin = value;
     this.message = '';
     this.messageType = '';
-  }
-
-  // Handler for the main button: if registering, navigate to confirmation page;
-  // if login, proceed with login flow.
-  onSubmitButton(event: Event) {
-    event.preventDefault();
-    if (!this.isLogin) {
-      // registro -> cerrar modal y redirigir a confirmacion-codigo con email
-      this.loading = false;
-      this.close.emit();
-      this.router.navigate(['/confirmacion-codigo'], { queryParams: { email: this.email } });
-      return;
-    }
-    // login -> ejecutar flujo normal
-    this.submitForm();
+    this.isVerifyingCode = false;
+    this.activationCode = '';
   }
 
   submitForm() {
@@ -75,56 +66,141 @@ export class AuthModalComponent {
     this.messageType = '';
     this.loading = true;
 
-    // Login flow
-    this.authService
-      .requestToken({
-        grant_type: 'password',
-        username: this.email,
-        password: this.password,
-      })
-      .subscribe({
-        next: (response) => {
-          this.loading = false;
-          const user = this.authService.getCurrentUser?.() ?? null;
-          if (user && !user.email_verified) {
-            this.message = 'Por favor, verifique su email antes de continuar.';
-            this.messageType = 'error';
-            // keep user in login state (verification handled outside modal)
-            // optionally trigger resend
-            this.authService.sendEmailVerificationCode?.().subscribe?.();
-          } else {
-            this.message = '¡Bienvenido!';
-            this.messageType = 'success';
-            setTimeout(() => {
-              this.close.emit();
-              this.router.navigate(['/home']);
-            }, 1000);
-          }
+    if (this.isVerifyingCode) {
+      // Activate account with code (PATCH request)
+      this.authService.activateAccount(this.activationCode).subscribe({
+        next: () => {
+          // After successful activation, login automatically
+          this.authService
+            .requestToken({
+              grant_type: 'password',
+              username: this.email,
+              password: this.password, // Use password, not code
+            })
+            .subscribe({
+              next: () => {
+                this.loading = false;
+                this.message = '¡Cuenta activada exitosamente!';
+                this.messageType = 'success';
+                setTimeout(() => {
+                  this.close.emit();
+                  this.router.navigate(['/home']);
+                }, 1500);
+              },
+              error: (err) => {
+                this.loading = false;
+                this.message =
+                  'Cuenta activada, pero falló el login automático. Por favor, inicie sesión manualmente.';
+                this.messageType = 'error';
+                // Switch to login mode so user can login manually
+                setTimeout(() => {
+                  this.isVerifyingCode = false;
+                  this.isLogin = true;
+                }, 2000);
+              },
+            });
         },
         error: (err) => {
           this.loading = false;
           this.message =
             err.error?.message ||
-            'Error de autenticación. Verifique el email y la contraseña.';
+            'Código inválido. Por favor, verifique el código enviado a su email.';
           this.messageType = 'error';
         },
       });
+    } else if (this.isLogin) {
+      // Login with email and password
+      this.authService
+        .requestToken({
+          grant_type: 'password',
+          username: this.email,
+          password: this.password,
+        })
+        .subscribe({
+          next: (response) => {
+            this.loading = false;
+            // Check if user needs to verify email
+            const user = this.authService.getCurrentUser();
+            if (user && !user.email_verified) {
+              this.message =
+                'Por favor, verifique su email antes de continuar.';
+              this.messageType = 'error';
+              this.isVerifyingCode = true;
+              // Optionally send verification code again
+              this.authService.sendEmailVerificationCode().subscribe();
+            } else {
+              this.message = '¡Bienvenido!';
+              this.messageType = 'success';
+              setTimeout(() => {
+                this.close.emit();
+                this.router.navigate(['/home']);
+              }, 1000);
+            }
+          },
+          error: (err) => {
+            this.loading = false;
+            this.message =
+              err.error?.message ||
+              'Error de autenticación. Verifique el email y la contraseña.';
+            this.messageType = 'error';
+          },
+        });
+    } else {
+      // Register new user
+      this.authService
+        .registerUser({
+          first_names: this.first_names,
+          last_name: this.last_name,
+          email: this.email,
+          password: this.password,
+          birthdate: this.birthdate,
+          gender: this.gender,
+          res_area: this.res_area,
+        })
+        .subscribe({
+          next: (res) => {
+            this.loading = false;
+            this.message =
+              'Registro exitoso. Se ha enviado un código de verificación a tu email.';
+            this.messageType = 'success';
+            // Switch to verification mode
+            this.isVerifyingCode = true;
+          },
+          error: (err) => {
+            this.loading = false;
+            this.message =
+              err.error?.message ||
+              'Error al registrarse. Revise los datos ingresados.';
+            this.messageType = 'error';
+          },
+        });
+    }
   }
 
-  // keep resend method in case it's used elsewhere
+  // Method to resend verification code
   resendVerificationCode() {
     this.loading = true;
-    this.authService.sendEmailVerificationCode?.().subscribe({
+    this.authService.sendEmailVerificationCode().subscribe({
       next: () => {
         this.loading = false;
         this.message = 'Código de verificación reenviado exitosamente.';
         this.messageType = 'success';
       },
-      error: () => {
+      error: (err) => {
         this.loading = false;
-        this.message = 'Error al reenviar el código. Por favor, intente nuevamente.';
+        this.message =
+          'Error al reenviar el código. Por favor, intente nuevamente.';
         this.messageType = 'error';
       },
     });
+  }
+
+  // Method to go back from verification to login
+  backToLogin() {
+    this.isVerifyingCode = false;
+    this.isLogin = true;
+    this.message = '';
+    this.messageType = '';
+    this.activationCode = '';
   }
 }
