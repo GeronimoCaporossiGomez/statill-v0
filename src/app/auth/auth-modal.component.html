@@ -180,25 +180,4 @@
       </button>
     </form>
 
-    <!-- Divider y cambio de modo -->
-    <div class="divider">
-      <span>O</span>
-    </div>
-
-    <div class="switch-mode" *ngIf="!isVerifyingCode">
-      <span *ngIf="!isLogin"
-        >¿Ya tenés cuenta?
-        <a (click)="toggleMode(true)" class="switch-link"
-          >Iniciá sesión</a
-        ></span
-      >
-      <span *ngIf="isLogin"
-        >¿No tenés cuenta?
-        <a (click)="toggleMode(false)" class="switch-link">Registrate</a></span
-      >
-    </div>
-
-    <!-- Cierre del modal -->
-    <button class="close-btn" (click)="close.emit()">Cerrar</button>
-  </div>
 </div>
