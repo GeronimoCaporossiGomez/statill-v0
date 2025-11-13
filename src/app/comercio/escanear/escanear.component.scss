@@ -3,15 +3,16 @@
   display: flex;
   gap: 2rem;
   padding: 1.5rem;
+  padding-top: calc(1.5rem + 10vh); // Agrega el 10% al padding superior
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  background: #EEEEEE;
 }
 
 // Sección de cámara y escáner
 .seccion-camara {
   flex: 1;
   max-width: 720px;
-  background: #eee;
+  background: #FFFFFF;
   border-radius: 12px;
   padding: 1.5rem 1rem 1rem;
 }
@@ -96,7 +97,7 @@
   border-radius: 20px;
   overflow: hidden;
   width: 640px;
-  height: 340px;
+  height: 360px;
 
   #scanner-container {
     width: 100%;
@@ -184,7 +185,7 @@
 
 // Controles de cámara
 .camera-controls {
-  margin: 0.8rem 0 0.6rem;
+  margin: 1.2rem 0 0.8rem;
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
@@ -219,7 +220,7 @@
 }
 
 .manual-input {
-  margin: 10px auto 6px;
+  margin: 20px auto 12px;
   display: flex;
   gap: 10px;
   justify-content: center;

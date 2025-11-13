@@ -63,7 +63,7 @@ export const routes: Routes = [
     path: 'home',
     loadComponent: () =>
       import('./home/home/home.component').then(m => m.HomeComponent),
-    canActivate: [activeUserGuard]
+    
   },
   {
     path: 'crear-comercio',
