@@ -48,10 +48,8 @@
     <h2 class="promotions-title">¡Promociones imperdibles!</h2>
     <div class="promotions-grid">
       <app-discounts-statill
-        *ngFor="let promo of promotions.data"
-        [logoUrl]="promo.logoUrl"
-        [storeName]="promo.storeName"
-        [discountText]="promo.discountText"
+        *ngFor="let promo of promotions"
+        [d]="promo"
       >
       </app-discounts-statill>
 

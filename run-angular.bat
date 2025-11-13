@@ -1,4 +1,7 @@
 @echo off
+chcp 65001
+cls
+
 :: -------------------------------
 :: SE PUEDE UTILIZAR HASTA EN TU CASA PERO ES PRINCIPALMENTE PARA LA ESCUELA
 :: Script de arranque de Statill

@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { HeaderStatillComponent } from 'src/app/Componentes/header-statill/header-statill.component';
 import { DiscountsStatillComponent } from 'src/app/Componentes/Discounts-statill/Discounts-statill.component';
 import {
+  Discount,
   DiscountsResponse,
   MiApiService,
   Store,
@@ -33,7 +34,7 @@ export class HomeComponent implements OnInit {
   searchTerm: string = '';
   stores: Store[] = [];
   filteredStores: Store[] = [];
-  promotions: DiscountsResponse = null; 
+  promotions: Discount[] = null; 
   isLoading: boolean = true;
   showSearchResults: boolean = false;
 
@@ -66,7 +67,9 @@ export class HomeComponent implements OnInit {
   loadDiscounts(): void {
     this.apiService.getDiscounts().subscribe({
       next: (data) => {
-        this.promotions = data;
+        this.promotions = data.data;
+        console.log("Descuentos:");
+        console.log(this.promotions);
         this.isLoading = false; // Data has been loaded, stop loading
       },
       error: (error) => {

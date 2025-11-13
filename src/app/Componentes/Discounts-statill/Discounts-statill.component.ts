@@ -1,5 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Discount, MiApiService, Product, ProductsResponse, Store } from 'src/app/servicios/mi-api.service';
 
 @Component({
   selector: 'app-discounts-statill',
@@ -9,7 +10,19 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./Discounts-statill.component.scss'],
 })
 export class DiscountsStatillComponent {
-  @Input() logoUrl: string = '';
-  @Input() storeName: string = '';
-  @Input() discountText: string = '';
+  @Input() d: Discount;
+  private product: Product;
+  public store: Store;
+  public img: string;
+  private readonly api = inject(MiApiService);
+  ngOnInit(){
+    this.api.getProducto(this.d.product_id).subscribe({
+      next: (r)=>{
+        
+      },
+      error:(ex)=>{
+        console.error(ex)
+      }
+    })
+  }
 }
