@@ -5,11 +5,13 @@ import { RouterModule } from '@angular/router';
 import { HeaderStatillComponent } from 'src/app/Componentes/header-statill/header-statill.component';
 import { DiscountsStatillComponent } from 'src/app/Componentes/Discounts-statill/Discounts-statill.component';
 import {
+  DiscountsResponse,
   MiApiService,
   Store,
   StoresResponse,
 } from '../../servicios/mi-api.service';
 import { SidebarComponent } from 'src/app/Componentes/sidebar-statill/sidebar.component';
+
 
 @Component({
   selector: 'app-home',
@@ -31,45 +33,17 @@ export class HomeComponent implements OnInit {
   searchTerm: string = '';
   stores: Store[] = [];
   filteredStores: Store[] = [];
+  promotions: DiscountsResponse = null; 
   isLoading: boolean = true;
   showSearchResults: boolean = false;
 
-  // Promociones atractivas usando el logo de El Jevi
-  promotions = [
-    {
-      id: 1,
-      storeName: 'EL JEVI',
-      discountText: '30% OFF en todos los Disco',
-      logoUrl: 'assets/img/tienda.png',
-      storeId: 2,
-    },
-    {
-      id: 2,
-      storeName: 'EL JEVI',
-      discountText: '¡Seguí acumulando puntos en Taco Bell!',
-      logoUrl: 'assets/img/tienda.png',
-      storeId: null,
-    },
-    {
-      id: 3,
-      storeName: 'EL JEVI',
-      discountText: '¿Tenés ganas de pollo frito? ¡Aprovechá los descuentos!',
-      logoUrl: 'assets/img/tienda.png',
-      storeId: null,
-    },
-    {
-      id: 4,
-      storeName: 'EL JEVI',
-      discountText: 'Preordená con 20% OFF en kioscos EL JEVI',
-      logoUrl: 'assets/img/tienda.png',
-      storeId: null,
-    },
-  ];
+  // Promociones atractivas
 
   constructor(private apiService: MiApiService) {}
 
   ngOnInit(): void {
     this.loadStores();
+    this.loadDiscounts();
   }
 
   loadStores(): void {
@@ -84,6 +58,19 @@ export class HomeComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error al cargar tiendas:', error);
+        this.isLoading = false;
+      },
+    });
+  }
+
+  loadDiscounts(): void {
+    this.apiService.getDiscounts().subscribe({
+      next: (data) => {
+        this.promotions = data;
+        this.isLoading = false; // Data has been loaded, stop loading
+      },
+      error: (error) => {
+        console.error('Error fetching discounts or products:', error);
         this.isLoading = false;
       },
     });

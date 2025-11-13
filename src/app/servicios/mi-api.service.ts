@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable,of } from 'rxjs';
 import{catchError} from"rxjs/operators"
+
 // Interfaces para la respuesta de puntos
 export interface Point {
   id: number;
@@ -10,9 +11,26 @@ export interface Point {
   amount: number;
 }
 
+export interface Discount {
+  id: number;
+  product_id: number;
+  pct_off: number;
+  start_date: string;
+  end_date: string;
+  days_usable: (string | null)[];
+  min_amount: number;
+  max_amount: number;
+}
+
 export interface PointsResponse {
   successful: boolean;
   data: Point[];
+  message: string;
+}
+
+export interface DiscountsResponse {
+  successful: boolean;
+  data: Discount[];
   message: string;
 }
 
@@ -108,6 +126,21 @@ export interface StoresResponse {
   message: string;
 }
 
+export interface CloudinaryUploadResponse {
+  successful: boolean;
+  data: {
+    public_id: string;
+    url: string;
+    format: string;
+  };
+  message: string;
+}
+
+export interface GetCloudinaryURLResponse {
+  successful: boolean;
+  data: string; //la url es data
+  message: string;
+}
 
 @Injectable({ providedIn: 'root' })
 export class MiApiService {
@@ -116,6 +149,11 @@ export class MiApiService {
   getProductos() {
     return this.http.get(this.apiUrl + '/api/v1/products/');
   }
+
+  getProducto(productId: number) {
+    return this.http.get(this.apiUrl + '/api/v1/products/' + productId);
+  }
+
   crearProducto(producto: any) {
     return this.http.post(this.apiUrl + '/api/v1/products/', producto);
   }
@@ -154,6 +192,11 @@ export class MiApiService {
   getReviews(): Observable<ReviewsResponse> {
     return this.http.get<ReviewsResponse>(this.apiUrl + '/api/v1/reviews/');
   }
+
+  getDiscounts(): Observable<DiscountsResponse> {
+    return this.http.get<DiscountsResponse>(this.apiUrl + '/api/v1/discounts/');
+  }
+
   getStoreById(id: number): Observable<any> {
     return this.http.get(this.apiUrl + '/api/v1/stores/' + id);
   }
@@ -193,5 +236,34 @@ export class MiApiService {
 
   reverseGeocode(latitude:number,longitude:number): Observable<ReverseGeocodingResponse>{
     return this.http.get<ReverseGeocodingResponse>(this.apiUrl + `/api/v1/geo/geocode/reverse?latitude=${latitude}&longitude=${longitude}`)
+  }
+  uploadImage(
+    t: 'store' | 'user' | 'product',
+    id: number,
+    file: File,
+  ): Observable<CloudinaryUploadResponse> {
+    const formData = new FormData();
+    formData.append('file', file, file.name);
+    return this.http.post<CloudinaryUploadResponse>(
+      this.apiUrl + `/api/v1/images/upload?t=${t}&id=${id}`,
+      formData,
+    );
+  }
+
+  getImageByObjectId(
+    t: 'user' | 'store' | 'product',
+    id: number,
+  ): Observable<GetCloudinaryURLResponse> {
+    return this.http.get<GetCloudinaryURLResponse>(
+      this.apiUrl + `/api/v1/images/id/object?t=${t}&id=${id}`,
+    );
+  }
+
+  getImageByCloudinaryId(
+    cloudinary_public_id: string,
+  ): Observable<GetCloudinaryURLResponse> {
+    return this.http.get<GetCloudinaryURLResponse>(
+      this.apiUrl + `/api/v1/images/cloudinary/${cloudinary_public_id}`,
+    );
   }
 }

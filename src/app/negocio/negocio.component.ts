@@ -7,6 +7,8 @@ import { FormsModule } from '@angular/forms';
 import { forkJoin } from 'rxjs';
 import { AuthService } from '../servicios/auth.service';
 import { GeneralService } from '../servicios/general.service';
+import { MiApiService } from '../servicios/mi-api.service';
+
 
 @Component({
   selector: 'app-negocio',
@@ -21,6 +23,8 @@ export class NegocioComponent implements OnInit {
   private comercioService = inject(ComercioService);
   public authService = inject(AuthService);
   private readonly generalService = inject(GeneralService);
+  private readonly api = inject(MiApiService);
+
 
   public hasUserReview: boolean = false;
   public currentReview: any = null;
@@ -37,6 +41,8 @@ export class NegocioComponent implements OnInit {
   checkingPurchase: boolean = false;
 
   estrellas: number = 0;
+  public image: string = '';
+
 
   setValue(value: number): void {
     this.estrellas = value;
@@ -60,8 +66,35 @@ export class NegocioComponent implements OnInit {
     }).subscribe({
       next: (results) => {
         this.comercio = results.store;
-        this.productos = results.productos;
-        this.reviews = results.reviews;
+// getImageByObjectId returns an Observable<GetCloudinaryURLResponse>, subscribe and set the string URL
+this.api
+.getImageByObjectId('store', Number(this.comercio.id))
+.subscribe({
+  next: (imgRes: any) => {
+    this.image = imgRes.data;
+  },
+  error: (err: any) => {
+    console.error('Error cargando imagen de la tienda:', err);
+    this.image = '';
+  },
+});
+this.productos = results.productos;
+// For each product, try to fetch its image URL and set `producto.image` so the template can show it
+for (const p of this.productos) {
+  if (p && p.id) {
+    this.api.getImageByObjectId('product', Number(p.id)).subscribe({
+      next: (imgRes: any) => {
+        p.image = imgRes?.data || '';
+      },
+      error: (err: any) => {
+        p.image = '';
+      },
+    });
+  } else {
+    p.image = '';
+  }
+}        
+this.reviews = results.reviews;
 
         const points = results.points;
         this.userPoints = points;

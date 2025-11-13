@@ -19,7 +19,7 @@ interface Store {
   id: number;
   name: string;
   address: string;
-  payment_methods: boolean[]; // [Efectivo, Débito, Crédito, Transferencia]
+  payment_methods: boolean[]; // [Efectivo, Débito, Crédito, QR]
 }
 
 @Component({
@@ -47,7 +47,7 @@ export class CarritoComponent implements OnInit {
     { id: 0, name: 'Efectivo', icon: '💵' },
     { id: 1, name: 'Débito', icon: '💳' },
     { id: 2, name: 'Crédito', icon: '💳' },
-    { id: 3, name: 'Transferencia', icon: '📱' }
+    { id: 3, name: 'QR', icon: '📱' }
   ];
 
   ngOnInit() {

@@ -43,16 +43,21 @@
   </section>
 
   <!-- Promociones (solo se muestran cuando no hay búsqueda activa) -->
+
   <section *ngIf="!showSearchResults" class="promotions-section">
     <h2 class="promotions-title">¡Promociones imperdibles!</h2>
     <div class="promotions-grid">
       <app-discounts-statill
-        *ngFor="let promo of promotions"
+        *ngFor="let promo of promotions.data"
         [logoUrl]="promo.logoUrl"
-        [storeName]="promo.storeName"
+        [storeName]="promo.productName"
         [discountText]="promo.discountText"
       >
       </app-discounts-statill>
+
+      <div *ngIf="isLoading" class="loading-container">
+        <p>Buscando promociones...</p>
+      </div>
     </div>
   </section>
 </main>

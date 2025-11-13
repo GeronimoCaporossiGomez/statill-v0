@@ -203,7 +203,7 @@ export class CrearComercioComponent {
         form.value.pagoEfectivo === true,
         form.value.pagoDebito === true,
         form.value.pagoCredito === true,
-        form.value.pagoTransferencia === true,
+        form.value.pagoQR === true,
       ],
       user_id: currentUser.id, // Usar el ID del usuario autenticado
     };
@@ -223,9 +223,29 @@ export class CrearComercioComponent {
 
   enviarComercio(datos: any) {
     this.miApiService.postStores(datos).subscribe({
-      next: (response) => {
+      next: (response:any) => {
         console.log('✅ Comercio creado exitosamente:', response);
-        alert('¡Comercio creado exitosamente!');
+        if (this.archivoLogo) {
+          this.miApiService
+            .uploadImage('store', response.data.id, this.archivoLogo)
+            .subscribe({
+              next: () => {
+                console.log('✅ Imagen subida exitosamente');
+                alert('¡Comercio creado exitosamente!');
+                this.router.navigate(['/escanear']);
+              },
+              error: (error) => {
+                console.error('❌ Error al subir imagen:', error);
+                alert(
+                  'Comercio creado, pero hubo un error al subir la imagen.',
+                );
+                this.router.navigate(['/escanear']);
+              },
+            });
+        } else {
+          alert('¡Comercio creado exitosamente!');
+          this.router.navigate(['/escanear']);
+        }
         this.router.navigate(['/escanear']);
       },
       error: (error) => {
