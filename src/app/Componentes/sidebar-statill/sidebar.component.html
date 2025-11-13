@@ -4,13 +4,11 @@
 <div *ngIf="isExpanded" class="sidebar sidebariwis">
   <div class="sidebariwis-nav">
     <ul>
-      <div class="items" *ngIf="vendedor">
-        <li *ngFor="let item of menuItemsVendedor">
+      <ng-container *ngFor="let item of currentMenuItems">
+        <li>
           <ng-container *ngIf="activeItem === item.id">
             <span class="active-dot"></span>
           </ng-container>
-
-
           <a
             [routerLink]="item.path"
             routerLinkActive="active"
@@ -23,45 +21,14 @@
             <span>{{ item.text }}</span>
           </a>
         </li>
-      </div>
+      </ng-container>
 
-
-      <div class="items" *ngIf="!vendedor">
-        <li *ngFor="let item of menuItemsComprador">
-          <ng-container *ngIf="activeItem === item.id">
-            <span class="active-dot"></span>
-          </ng-container>
-
-
-          <a
-            [routerLink]="item.path"
-            routerLinkActive="active"
-            [class.active]="activeItem === item.id"
-            (click)="setActive(item.id)"
-          >
-            <div class="icon-placeholder">
-              <img [src]="item.icon" [alt]="item.text" />
-            </div>
-            <span>{{ item.text }}</span>
-          </a>
-        </li>
-      </div>
+      <li class="switch-item">
+        <button class="comprador-btn" type="button" (click)="toggleVendedor()">
+          <img [src]="toggleIcon" [alt]="toggleAlt" class="btn-icon" />
+          <span>{{ toggleLabel }}</span>
+        </button>
+      </li>
     </ul>
-
-
-    <div class="comprador-btn-container">
-      <button class="comprador-btn" (click)="toggleVendedor()">
-        <img
-          [src]="
-            vendedor
-              ? 'assets/img/vendedor-statill.png'
-              : 'assets/img/vendedor-statill.png'
-          "
-          [alt]="vendedor ? 'Cambiar a Comprador' : 'Cambiar a Vendedor'"
-          class="btn-icon"
-        />
-        <span>{{ vendedor ? "Comprador" : "Vendedor" }}</span>
-      </button>
-    </div>
   </div>
 </div>

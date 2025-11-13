@@ -1,0 +1,240 @@
+<div class="ventas-locales-layout">
+  <aside class="sidebar-wrapper">
+    <app-sidebar></app-sidebar>
+  </aside>
+
+  <section class="ventas-content">
+    <header class="ventas-header">
+      <button class="volver-btn" type="button" (click)="navigateBack()">
+        ← Menú local
+      </button>
+
+      <div class="titulo-wrapper">
+        <span class="badge">Ventas en el local</span>
+        <h1>Registrar nueva venta</h1>
+        <p>
+          Crea ventas presenciales sin necesidad de preorden. Seleccioná los productos,
+          definí el método de pago y confirmá el cobro en tienda.
+        </p>
+      </div>
+
+      <div class="store-chip" *ngIf="store">
+        <div class="icon">🏪</div>
+        <div class="chip-content">
+          <span class="chip-title">{{ store.name }}</span>
+          <span class="chip-subtitle">{{ store.address }}</span>
+        </div>
+      </div>
+    </header>
+
+    <div *ngIf="isLoading" class="estado">
+      <div class="loader"></div>
+      <p>Cargando productos y datos del local...</p>
+    </div>
+
+    <div *ngIf="!isLoading && loadError" class="estado error">
+      <h3>😕 Algo salió mal</h3>
+      <p>{{ loadError }}</p>
+    </div>
+
+    <div *ngIf="!isLoading && !loadError" class="ventas-grid">
+      <div class="productos-panel">
+        <div class="panel-header">
+          <h2>Productos</h2>
+          <span>{{ filteredProducts.length }} disponibles</span>
+        </div>
+
+        <div class="buscador">
+          <span class="icon">🔍</span>
+          <input
+            type="search"
+            placeholder="Buscar por nombre, marca o código de barras"
+            [(ngModel)]="searchTerm"
+            (ngModelChange)="onSearchChange()"
+          />
+        </div>
+
+        <div *ngIf="filteredProducts.length === 0" class="estado">
+          <p>No encontramos productos que coincidan con tu búsqueda.</p>
+        </div>
+
+        <div class="productos-lista">
+          <article
+            *ngFor="let producto of filteredProducts"
+            class="producto-card"
+          >
+            <div class="producto-info">
+              <h3>{{ producto.name }}</h3>
+              <p class="detalle">
+                <span *ngIf="producto.brand">{{ producto.brand }} · </span>
+                Código: {{ producto.barcode || '—' }}
+              </p>
+              <p class="stock">
+                Stock disponible:
+                <strong>{{ producto.quantity || 0 }}</strong>
+              </p>
+            </div>
+
+            <div class="producto-precio">
+              ${{ producto.price | number : '1.2-2' }}
+            </div>
+
+            <button
+              type="button"
+              class="agregar-btn"
+              [disabled]="(producto.quantity || 0) <= 0"
+              (click)="addItem(producto)"
+            >
+              Agregar
+            </button>
+          </article>
+        </div>
+      </div>
+
+      <aside class="venta-panel">
+        <div class="panel-header">
+          <h2>Detalle de la venta</h2>
+          <span>{{ saleItems.length }} productos seleccionados</span>
+        </div>
+
+        <div *ngIf="feedbackMessage" class="feedback" [class.error]="feedbackMessage.type === 'error'">
+          {{ feedbackMessage.text }}
+        </div>
+
+        <div *ngIf="saleItems.length === 0" class="estado">
+          <p>Agregá productos desde la izquierda para comenzar.</p>
+        </div>
+
+        <div *ngIf="saleItems.length > 0" class="venta-detalle">
+          <div
+            *ngFor="let item of saleItems"
+            class="venta-item"
+          >
+            <div class="venta-info">
+              <h3>{{ item.name }}</h3>
+              <p *ngIf="item.barcode" class="detalle">Código: {{ item.barcode }}</p>
+              <p class="stock">
+                Stock disponible:
+                <strong>{{ item.stock }}</strong>
+              </p>
+            </div>
+
+            <div class="venta-controles">
+              <div class="cantidad">
+                <button
+                  type="button"
+                  (click)="updateQuantity(item.product_id, item.quantity - 1)"
+                >
+                  –
+                </button>
+                <input
+                  type="number"
+                  [ngModel]="item.quantity"
+                  (ngModelChange)="updateQuantity(item.product_id, +$event)"
+                  min="1"
+                  [max]="item.stock"
+                />
+                <button
+                  type="button"
+                  (click)="updateQuantity(item.product_id, item.quantity + 1)"
+                  [disabled]="item.quantity >= item.stock"
+                >
+                  +
+                </button>
+              </div>
+              <div class="importe">
+                ${{ (item.price * item.quantity) | number : '1.2-2' }}
+              </div>
+              <button
+                type="button"
+                class="eliminar"
+                (click)="removeItem(item.product_id)"
+              >
+                Quitar
+              </button>
+            </div>
+          </div>
+
+          <div class="panel-divider"></div>
+
+          <div class="payment-block">
+            <h4>Método de pago</h4>
+            <div class="payment-options">
+              <label
+                *ngFor="let method of allowedPaymentMethods()"
+                [class.selected]="selectedPaymentMethod === method.id"
+              >
+                <input
+                  type="radio"
+                  name="payment"
+                  [value]="method.id"
+                  [(ngModel)]="selectedPaymentMethod"
+                />
+                <span class="icon">{{ method.icon }}</span>
+                <span>{{ method.label }}</span>
+              </label>
+            </div>
+            <p *ngIf="selectedPaymentMethod === 3" class="payment-note">
+              El pago por QR se confirma únicamente en el local.
+            </p>
+          </div>
+
+          <div class="cliente-block">
+            <label class="checkbox">
+              <input
+                type="checkbox"
+                [(ngModel)]="assignToCustomer"
+              />
+              Asignar venta a un cliente
+            </label>
+
+            <div class="cliente-input" *ngIf="assignToCustomer">
+              <label for="customerId">ID de cliente (opcional)</label>
+              <input
+                type="number"
+                id="customerId"
+                min="1"
+                [(ngModel)]="customerIdInput"
+                placeholder="Ingresá el ID del usuario si querés sumar puntos"
+              />
+            </div>
+          </div>
+        </div>
+
+        <footer class="resumen">
+          <div class="totales">
+            <div class="fila">
+              <span>Productos</span>
+              <strong>{{ totalUnits }}</strong>
+            </div>
+            <div class="fila total">
+              <span>Total a cobrar</span>
+              <strong>${{ totalAmount | number : '1.2-2' }}</strong>
+            </div>
+          </div>
+
+          <div class="acciones">
+            <button
+              type="button"
+              class="secondary"
+              (click)="clearSale()"
+              [disabled]="saleItems.length === 0 || isSubmitting"
+            >
+              Limpiar
+            </button>
+            <button
+              type="button"
+              class="primary"
+              (click)="createSale()"
+              [disabled]="saleItems.length === 0 || isSubmitting"
+            >
+              <span *ngIf="!isSubmitting">Registrar venta</span>
+              <span *ngIf="isSubmitting">Registrando...</span>
+            </button>
+          </div>
+        </footer>
+      </aside>
+    </div>
+  </section>
+</div>
+

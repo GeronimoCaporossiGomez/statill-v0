@@ -16,7 +16,7 @@
 
       <div class="detail-row">
         <span class="label">Método de Pago:</span>
-        <span class="value">💵 Efectivo</span>
+        <span class="value">{{ getPaymentMethod(order.payment_method) }}</span>
       </div>
 
       <div class="detail-row">
@@ -33,10 +33,18 @@
 
       <div class="info-box">
         <p><strong>📍 Dirección de retiro:</strong></p>
-        <p>{{ storeName || 'Cargando...' }}</p>
+        <p>
+          {{ storeName || ('Tienda #' + order.store_id) }}
+        </p>
+        <p class="info-text info-address">
+          {{ storeAddress || 'Dirección no disponible' }}
+        </p>
         <p class="info-text">
           Presentá este número de orden al retirar tu pedido.
           El comercio te avisará cuando esté listo.
+        </p>
+        <p *ngIf="paymentContext === 'qr'" class="info-text qr-note">
+          Recordá que el pago QR se valida presencialmente en el local antes de entregar el pedido.
         </p>
       </div>
     </div>
@@ -45,12 +53,15 @@
       Cargando información del pedido...
     </div>
 
+    <div *ngIf="!isLoading && errorMessage" class="error">
+      {{ errorMessage }}
+    </div>
 
     <div class="actions">
-      <button class="btn-primary" routerLink="/preordenes">
+      <button class="btn-primary" type="button" (click)="goTo('preordenes')">
         Ver Mis Pedidos
       </button>
-      <button class="btn-secondary" routerLink ="/home">
+      <button class="btn-secondary" type="button" (click)="goTo('home')">
         Volver al Inicio
       </button>
     </div>

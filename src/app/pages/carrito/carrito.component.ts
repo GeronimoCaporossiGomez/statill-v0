@@ -121,8 +121,16 @@ export class CarritoComponent implements OnInit {
 
   createOrder() {
     // Validaciones
+    if (!this.authService.isAuthenticated()) {
+      this.errorMessage = 'Debes iniciar sesión para realizar un pedido';
+      return;
+    }
+
     if (!this.authService.isActiveUser()) {
-      this.errorMessage = 'Debes iniciar sesión y verificar tu email para realizar un pedido';
+      this.errorMessage = null;
+      this.router.navigate(['/confirmacion-codigo'], {
+        queryParams: { redirect: this.router.url },
+      });
       return;
     }
 
@@ -164,13 +172,12 @@ export class CarritoComponent implements OnInit {
         const orderId = response.data?.id || response.data;
 
         // Redirigir según el método de pago
-        if (this.selectedPaymentMethod === 0) {
-          // Efectivo - ir a página de confirmación
+        if (this.selectedPaymentMethod === 0 || this.selectedPaymentMethod === 3) {
+          const paymentParam = this.selectedPaymentMethod === 3 ? 'qr' : 'cash';
           this.router.navigate(['/orden-confirmacion'], {
-            queryParams: { orderId: orderId }
+            queryParams: { orderId: orderId, payment: paymentParam }
           });
         } else {
-          // Otros métodos - ir a página de no disponible
           this.router.navigate(['/metodo-pago-no-disponible']);
         }
       },

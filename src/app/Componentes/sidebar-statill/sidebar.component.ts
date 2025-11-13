@@ -14,10 +14,21 @@ import { CommonModule } from '@angular/common';
 export class SidebarComponent {
   isExpanded = false;
   activeItem = 'home'; // Item activo por defecto
-  vendedor: boolean = true;
-
+  vendedor = true;
 
   menuItemsVendedor = [
+    {
+      path: '/menu-local',
+      icon: 'assets/img/tienda.png',
+      text: 'Menú Local',
+      id: 'menu-local',
+    },
+    {
+      path: '/ventas-locales',
+      icon: 'assets/img/estrella.png',
+      text: 'Ventas',
+      id: 'ventas-locales',
+    },
     {
       path: '/catalogo',
       icon: 'assets/img/catalogo-noesPNG.png',
@@ -50,7 +61,6 @@ export class SidebarComponent {
     },
   ];
 
-
   menuItemsComprador = [
     {
       path: '/home',
@@ -78,19 +88,32 @@ export class SidebarComponent {
     },
   ];
 
-
   toggleSidebar() {
     this.isExpanded = !this.isExpanded;
   }
-
 
   toggleVendedor() {
     this.vendedor = !this.vendedor;
   }
 
-
   setActive(itemId: string) {
     this.activeItem = itemId;
+  }
+
+  get currentMenuItems() {
+    return this.vendedor ? this.menuItemsVendedor : this.menuItemsComprador;
+  }
+
+  get toggleLabel() {
+    return this.vendedor ? 'Comprador' : 'Vendedor';
+  }
+
+  get toggleAlt() {
+    return this.vendedor ? 'Cambiar a Comprador' : 'Cambiar a Vendedor';
+  }
+
+  get toggleIcon() {
+    return 'assets/img/vendedor-statill.png';
   }
 }
 

@@ -1,62 +1,118 @@
 <div class="pagina-stock">
-  <nav>
+  <aside class="stock-sidebar">
     <app-sidebar></app-sidebar>
-  </nav>
+  </aside>
 
-  <h1 class="Stock-Title">Productos</h1>
-  <div class="agregar-producto-card" (click)="FormChange()">
-    <div class="agregar-icono">{{ SePuedeVerElformulario ? "" : "+" }}</div>
-    <div class="agregar-texto">
-      {{ SePuedeVerElformulario ? "Cancelar" : "Añadir Producto" }}
-    </div>
-  </div>
-
-  <app-producto-form
-    [producto]="producto"
-    [isLoading]="isLoading"
-    [errorMessage]="errorMessage"
-    [showForm]="SePuedeVerElformulario"
-    [title]="productoEditandoId ? 'Editar Producto' : 'Crear Producto'"
-    [submitButtonText]="
-      productoEditandoId ? 'Actualizar Producto' : 'Crear Producto'
-    "
-    [showBarcodeField]="true"
-    [showStoreIdField]="false"
-    [suggestedData]="null"
-    (onSubmit)="onProductoSubmit($event)"
-    (onCancel)="onCancelar()"
-    (onReset)="onReset()"
-    (onUseSuggestedData)="onUseSuggestedData($event)"
-    (onFileSelected)="onFileSelected($event)"
-  >
-  </app-producto-form>
-
-  <div *ngIf="SePuedeVerElformulario == false" class="productos-container">
-    <div
-      *ngFor="let producto of productos; let i = index"
-      class="producto-card"
-    >
-      <div class="producto-img">
-        <img
-          *ngIf="producto.img"
-          [src]="producto.img"
-          alt="Imagen de {{ producto.name }}"
-        />
-        <div *ngIf="!producto.img" class="img-placeholder">
-          <span>🖼️</span>
+  <section class="stock-content">
+    <header class="stock-hero">
+      <div class="hero-text">
+        <span class="badge">Gestión de catálogo</span>
+        <h1>Productos de tu tienda</h1>
+        <p>
+          Creá y actualizá los productos disponibles en tu local. Controlá precios, stock y visibilidad desde un solo lugar.
+        </p>
+      </div>
+      <div class="hero-metrics">
+        <div class="metric">
+          <span class="metric-value">{{ totalProductos }}</span>
+          <span class="metric-label">productos activos</span>
+        </div>
+        <div class="metric">
+          <span class="metric-value">{{ totalUnidades }}</span>
+          <span class="metric-label">unidades en stock</span>
         </div>
       </div>
-      <div class="producto-info">
-        <div class="producto-nombre">{{ producto.name }}</div>
-        <div class="producto-desc">{{ producto.desc }}</div>
+    </header>
+
+    <div class="cta-card">
+      <div class="cta-icon">
+        {{ SePuedeVerElformulario ? "🛠️" : "✨" }}
       </div>
-      <div class="producto-precio">x{{ producto.quantity }}</div>
-      <div class="producto-precio">${{ producto.price }}</div>
-      <div class="producto-editar">
-        <button class="edit-btn" (click)="onEdit(producto, i)">
-          <span>✏️</span>
-        </button>
+      <div class="cta-content">
+        <h2>
+          {{ SePuedeVerElformulario ? "Editá el producto seleccionado" : "Añadí un nuevo producto" }}
+        </h2>
+        <p>
+          Cargá los datos principales, agregá una imagen y mantené actualizado tu catálogo para que los clientes vean productos reales.
+        </p>
       </div>
+      <button class="cta-button" type="button" (click)="FormChange()">
+        {{ SePuedeVerElformulario ? "Cerrar formulario" : "Agregar producto" }}
+      </button>
     </div>
-  </div>
+
+    <div class="form-wrapper" [class.visible]="SePuedeVerElformulario">
+      <app-producto-form
+        [producto]="producto"
+        [isLoading]="isLoading"
+        [errorMessage]="errorMessage"
+        [showForm]="SePuedeVerElformulario"
+        [title]="productoEditandoId ? 'Editar Producto' : 'Crear Producto'"
+        [submitButtonText]="
+          productoEditandoId ? 'Actualizar Producto' : 'Crear Producto'
+        "
+        [showBarcodeField]="true"
+        [showStoreIdField]="false"
+        [suggestedData]="null"
+        (onSubmit)="onProductoSubmit($event)"
+        (onCancel)="onCancelar()"
+        (onReset)="onReset()"
+        (onUseSuggestedData)="onUseSuggestedData($event)"
+        (onFileSelected)="onFileSelected($event)"
+      >
+      </app-producto-form>
+    </div>
+
+    <section class="productos-panel" *ngIf="!SePuedeVerElformulario">
+      <header class="panel-header">
+        <h2>Catálogo actual</h2>
+        <p>Seleccioná un producto para editarlo rápidamente.</p>
+      </header>
+
+      <div class="productos-grid">
+        <article
+          class="producto-card"
+          *ngFor="let producto of productos; let i = index"
+        >
+          <div class="producto-media">
+            <img
+              *ngIf="producto.img"
+              [src]="producto.img"
+              alt="Imagen de {{ producto.name }}"
+            />
+            <div *ngIf="!producto.img" class="img-placeholder">
+              <span>🖼️</span>
+            </div>
+          </div>
+
+          <div class="producto-body">
+            <h3>{{ producto.name }}</h3>
+            <p class="producto-desc">
+              {{ producto.desc || "Sin descripción" }}
+            </p>
+            <div class="producto-meta">
+              <span class="stock-chip">
+                Stock: <strong>{{ producto.quantity || 0 }}</strong>
+              </span>
+              <span class="price-chip">
+                Precio: <strong>${{ producto.price }}</strong>
+              </span>
+            </div>
+          </div>
+
+          <div class="producto-actions">
+            <button class="edit-btn" type="button" (click)="onEdit(producto, i)">
+              Editar
+            </button>
+          </div>
+        </article>
+      </div>
+
+      <div *ngIf="productos.length === 0" class="empty-state">
+        <div class="empty-icon">📦</div>
+        <h3>Sin productos cargados</h3>
+        <p>Comenzá agregando tu primer producto para que aparezca aquí.</p>
+      </div>
+    </section>
+  </section>
 </div>

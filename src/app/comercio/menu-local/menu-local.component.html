@@ -1,12 +1,52 @@
-<div class="menu-local-container">
-  <h1 class="titulo">Panel del Comercio</h1>
+<div class="menu-local-layout">
+  <aside class="sidebar-wrapper">
+    <app-sidebar></app-sidebar>
+  </aside>
 
-  <div class="botones-grid">
-    <button (click)="goTo('/catalogo')">🛍️ Catálogo</button>
-    <button (click)="goTo('/stock')">📦 Stock</button>
-    <button (click)="goTo('/ordenes-tienda')">📋 Órdenes</button>
-    <button (click)="goTo('/escanear')">📷 Escanear</button>
-    <button (click)="goTo('/estadisticas')">📈 Estadísticas</button>
-    <button (click)="goTo('/configuracion')">⚙️ Configuración</button>
-  </div>
+  <section class="menu-local-container">
+    <header class="menu-local-header">
+      <div class="header-badge">Panel del comercio</div>
+      <h1 class="titulo">Gestioná tu local</h1>
+      <p class="descripcion">
+        Accedé rápidamente a las herramientas de tu tienda física y gestioná ventas, catálogo y operaciones diarias.
+      </p>
+    </header>
+
+    <div class="botones-grid">
+      <button (click)="goTo('/ventas-locales')" class="boton-destacado">
+        <span class="btn-title">Registrar venta</span>
+        <span class="btn-subtitle">Cobrás en el local sin preorden</span>
+      </button>
+
+      <button (click)="goTo('/catalogo')">
+        <span class="btn-title">Catálogo</span>
+        <span class="btn-subtitle">Gestioná tus productos visibles</span>
+      </button>
+
+      <button (click)="goTo('/stock')">
+        <span class="btn-title">Stock</span>
+        <span class="btn-subtitle">Actualizá inventario rápidamente</span>
+      </button>
+
+      <button (click)="goTo('/ordenes-tienda')">
+        <span class="btn-title">Órdenes</span>
+        <span class="btn-subtitle">Controlá pedidos en curso</span>
+      </button>
+
+      <button (click)="goTo('/escanear')">
+        <span class="btn-title">Escanear</span>
+        <span class="btn-subtitle">Procesá QR y códigos de barras</span>
+      </button>
+
+      <button (click)="goTo('/estadisticas')">
+        <span class="btn-title">Estadísticas</span>
+        <span class="btn-subtitle">Revisá el rendimiento de tu tienda</span>
+      </button>
+
+      <button (click)="goTo('/configuracion')">
+        <span class="btn-title">Configuración</span>
+        <span class="btn-subtitle">Administrá la información del local</span>
+      </button>
+    </div>
+  </section>
 </div>

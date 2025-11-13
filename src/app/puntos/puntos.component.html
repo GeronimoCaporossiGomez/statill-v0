@@ -12,6 +12,10 @@
 
     <!-- Contenido cuando no está cargando -->
     <div *ngIf="!isLoading">
+      <div *ngIf="errorMessage" class="error-alert">
+        {{ errorMessage }}
+      </div>
+
       @if (puntosDisplay.length > 0) {
         <div *ngFor="let punto of puntosDisplay">
           <div class="cartel-puntos">

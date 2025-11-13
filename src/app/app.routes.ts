@@ -78,6 +78,12 @@ export const routes: Routes = [
   canActivate: [storeAccessGuard] // Owner o Cashier
 },
   {
+    path: 'ventas-locales',
+    loadComponent: () =>
+      import('./comercio/ventas-locales/ventas-locales.component').then(m => m.VentasLocalesComponent),
+    canActivate: [storeAccessGuard]
+  },
+  {
     path: 'carrito',
     loadComponent: () =>
       import('./pages/carrito/carrito.component').then(m => m.CarritoComponent),
