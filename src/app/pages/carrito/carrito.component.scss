@@ -7,7 +7,7 @@
 .carrito-header {
   max-width: 1200px;
   margin: 0 auto 2rem;
-  
+
   .btn-back {
     background: white;
     border: 2px solid #ddd;
@@ -16,18 +16,18 @@
     cursor: pointer;
     font-size: 1rem;
     margin-bottom: 1rem;
-    
+
     &:hover {
       background: #f8f8f8;
     }
   }
-  
+
   h1 {
     font-size: 2rem;
     color: #333;
     margin: 0 0 0.5rem 0;
   }
-  
+
   .store-name {
     color: #666;
     font-size: 1.1rem;
@@ -51,18 +51,18 @@
   background: white;
   padding: 3rem 2rem;
   border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
   .empty-icon {
     font-size: 4rem;
     margin-bottom: 1rem;
   }
-  
+
   h2 {
     margin: 0 0 0.5rem 0;
     color: #333;
   }
-  
+
   p {
     color: #666;
     margin-bottom: 2rem;
@@ -75,7 +75,7 @@
   display: grid;
   grid-template-columns: 1fr 400px;
   gap: 2rem;
-  
+
   @media (max-width: 968px) {
     grid-template-columns: 1fr;
   }
@@ -95,36 +95,36 @@
   grid-template-columns: 80px 1fr auto auto auto;
   gap: 1rem;
   align-items: center;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-  
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
   .item-image {
     width: 80px;
     height: 80px;
     border-radius: 8px;
     overflow: hidden;
     background: #f8f8f8;
-    
+
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
   }
-  
+
   .item-info {
     h3 {
       margin: 0 0 0.5rem 0;
       font-size: 1.1rem;
       color: #333;
     }
-    
+
     .item-price {
       margin: 0;
       color: #666;
       font-size: 0.9rem;
     }
   }
-  
+
   .item-controls {
     display: flex;
     align-items: center;
@@ -132,7 +132,7 @@
     background: #f8f8f8;
     padding: 0.5rem;
     border-radius: 8px;
-    
+
     .btn-qty {
       width: 32px;
       height: 32px;
@@ -142,19 +142,19 @@
       cursor: pointer;
       font-size: 1.2rem;
       color: #333;
-      
+
       &:hover {
         background: #e0e0e0;
       }
     }
-    
+
     .qty {
       min-width: 40px;
       text-align: center;
       font-weight: 600;
     }
   }
-  
+
   .item-total {
     font-weight: 700;
     font-size: 1.1rem;
@@ -162,7 +162,7 @@
     min-width: 80px;
     text-align: right;
   }
-  
+
   .btn-remove {
     background: #fff5f5;
     border: none;
@@ -171,7 +171,7 @@
     border-radius: 8px;
     cursor: pointer;
     font-size: 1.2rem;
-    
+
     &:hover {
       background: #ffe0e0;
     }
@@ -185,23 +185,23 @@
   height: fit-content;
   position: sticky;
   top: 2rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
   h2 {
     margin: 0 0 1.5rem 0;
     font-size: 1.5rem;
     color: #333;
   }
-  
+
   .summary-section {
     margin-bottom: 2rem;
-    
+
     .summary-row {
       display: flex;
       justify-content: space-between;
       margin-bottom: 1rem;
       color: #666;
-      
+
       &.total {
         margin-top: 1rem;
         padding-top: 1rem;
@@ -211,23 +211,23 @@
       }
     }
   }
-  
+
   .payment-section {
     margin-bottom: 2rem;
-    
+
     h3 {
       margin: 0 0 1rem 0;
       font-size: 1.2rem;
       color: #333;
     }
   }
-  
+
   .payment-methods {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
   }
-  
+
   .payment-method {
     display: flex;
     align-items: center;
@@ -237,41 +237,41 @@
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s ease;
-    
+
     &:hover:not(.disabled) {
       border-color: #4caf50;
       background: #f1f8f4;
     }
-    
+
     &.selected {
       border-color: #4caf50;
       background: #e8f5e9;
     }
-    
+
     &.disabled {
       opacity: 0.5;
       cursor: not-allowed;
-      
+
       input {
         cursor: not-allowed;
       }
     }
-    
+
     input[type="radio"] {
       width: 20px;
       height: 20px;
       cursor: pointer;
     }
-    
+
     .method-icon {
       font-size: 1.5rem;
     }
-    
+
     .method-name {
       flex: 1;
       font-weight: 500;
     }
-    
+
     .not-available {
       font-size: 0.8rem;
       color: #999;
@@ -290,13 +290,13 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  
+
   &:hover:not(:disabled) {
     background: #45a049;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
   }
-  
+
   &:disabled {
     background: #cccccc;
     cursor: not-allowed;
@@ -313,7 +313,7 @@
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  
+
   &:hover {
     background: #45a049;
   }
@@ -323,22 +323,22 @@
   .cart-item {
     grid-template-columns: 60px 1fr;
     gap: 0.75rem;
-    
+
     .item-image {
       width: 60px;
       height: 60px;
     }
-    
+
     .item-controls {
       grid-column: 1 / -1;
       justify-content: center;
     }
-    
+
     .item-total {
       grid-column: 1 / -1;
       text-align: center;
     }
-    
+
     .btn-remove {
       grid-column: 1 / -1;
       width: 100%;

@@ -11,10 +11,13 @@
       <button class="back-button" (click)="volver()">
         <span class="arrow">←</span>
       </button>
-      <div class="store-info">
-        <h1 class="store-name">{{ comercio.name }}</h1>
-        <p class="store-address">{{ comercio.address }}</p>
-      </div>
+        <div class="store-info">
+          <h1 class="store-name">{{ comercio.name }}</h1>
+          <p class="store-address">{{ comercio.address }}</p>
+        </div>
+        <div class="store-logo">
+          <img alt="{{ comercio.name }} logo" [src]="image" />
+        </div>
     </div>
 
     <!-- Barra de búsqueda -->

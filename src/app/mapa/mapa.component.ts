@@ -153,7 +153,9 @@ export class MapaComponent {
   // Geocoding inverso (coordenadas -> dirección)
   async obtenerDireccionDesdeCoordenadas(latitude: number, longitude: number) {
     try {
-      const data = await this.geocoding.reverseGeocode(latitude, longitude).toPromise();
+      const data = await this.geocoding
+        .reverseGeocode(latitude, longitude)
+        .toPromise();
 
       if (data) {
         this.direccionActual = data.address;
@@ -177,7 +179,6 @@ export class MapaComponent {
 
       const stores = res.data;
       console.log(`📊 Total de tiendas: ${stores.length}`);
-
 
       for (let i = 0; i < stores.length; i++) {
         const store = stores[i];

@@ -7,7 +7,11 @@
       <div class="video-container">
         <div #video id="scanner-container" [class.scanning]="isScanning"></div>
         <div *ngIf="!isCameraOn" class="frame-placeholder">
-           <img src="assets/img/Escanear-icono.png" alt="Ícono de código de barras" style="width: 220px; height: 156px;">
+          <img
+            src="assets/img/Escanear-icono.png"
+            alt="Ícono de código de barras"
+            style="width: 220px; height: 156px"
+          />
         </div>
         <div *ngIf="isScanning" class="scanning-overlay">
           <div class="scanning-line"></div>
@@ -74,7 +78,7 @@
       *ngIf="foundProducts.length > 0 && !showCreateForm"
       class="productos-encontrados"
     >
-      <h2> Productos Encontrados</h2>
+      <h2>Productos Encontrados</h2>
       <div class="producto-info">
         <div class="producto-header">
           <h3>{{ displayData.nombre }}</h3>
@@ -126,7 +130,7 @@
       *ngIf="foundProducts.length > 0 && showCreateForm"
       class="found-products-info"
     >
-      <h4> Información del Escaneo</h4>
+      <h4>Información del Escaneo</h4>
       <p><strong>Código escaneado:</strong> {{ scannedBarcode }}</p>
       <p>
         <strong>Tienda:</strong> {{ currentStore?.name || "No especificada" }}
@@ -142,7 +146,7 @@
       *ngIf="!showCreateForm && foundProducts.length === 0"
       class="info-inicial"
     >
-      <h2> Información del Escaneo</h2>
+      <h2>Información del Escaneo</h2>
       <div class="info-placeholder">
         <div class="placeholder-icon"></div>
         <p>Prende la cámara y escanea, o ingresa el código manualmente.</p>

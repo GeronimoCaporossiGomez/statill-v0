@@ -7,6 +7,6 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [CommonModule, RouterModule],
   templateUrl: './metodo-pago-no-disponible.component.html',
-  styleUrls: ['./metodo-pago-no-disponible.component.scss']
+  styleUrls: ['./metodo-pago-no-disponible.component.scss'],
 })
 export class MetodoPagoNoDisponibleComponent {}
