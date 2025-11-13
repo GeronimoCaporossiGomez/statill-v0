@@ -41,6 +41,8 @@ export class StockComponent implements OnInit {
   productoEditandoId: number | null = null;
   isLoading = false;
   errorMessage: string | null = null;
+  // Archivo de imagen para el producto que se está creando/edtiando
+  archivoProducto: File | null = null;
 
   ngOnInit() {
     // Establecer el store_id del usuario owner
@@ -61,8 +63,25 @@ export class StockComponent implements OnInit {
 
     this.miApi.getProductos().subscribe((data: any) => {
       console.log('prubeba, prubea', data);
-      this.productos = data.data;
+      this.productos = data.data || [];
       console.log('Productos desde la API:', this.productos);
+
+      // For each product, try to fetch its image URL and assign to producto.img
+      for (const p of this.productos) {
+        if (p && p.id) {
+          this.miApi.getImageByObjectId('product', Number(p.id)).subscribe({
+            next: (imgRes: any) => {
+              p.img = imgRes?.data || '';
+            },
+            error: (err) => {
+              // No image found or error - leave img empty string so UI shows placeholder
+              p.img = '';
+            },
+          });
+        } else {
+          p.img = '';
+        }
+      }
     });
   }
   //invertimos
@@ -117,9 +136,44 @@ export class StockComponent implements OnInit {
             console.log('✅ Producto editado correctamente:', response);
             this.isLoading = false;
             this.errorMessage = '¡Producto editado exitosamente!';
-            this.cargarProductos();
-            this.resetForm();
-            setTimeout(() => (this.errorMessage = null), 3000);
+            // Si hay una imagen seleccionada, subirla ahora. Use fallback id when response doesn't include data
+            if (this.archivoProducto) {
+              const res: any = response || {};
+              const prodId =
+                this.productoEditandoId ?? res?.data?.id ?? res?.id;
+              if (prodId) {
+                this.miApi
+                  .uploadImage('product', prodId, this.archivoProducto)
+                  .subscribe({
+                    next: () => {
+                      console.log('✅ Imagen de producto subida correctamente');
+                      this.cargarProductos();
+                      this.resetForm();
+                      setTimeout(() => (this.errorMessage = null), 3000);
+                    },
+                    error: (err) => {
+                      console.error(
+                        '❌ Error al subir imagen de producto:',
+                        err,
+                      );
+                      this.cargarProductos();
+                      this.resetForm();
+                      setTimeout(() => (this.errorMessage = null), 3000);
+                    },
+                  });
+              } else {
+                console.warn(
+                  'No se encontró ID de producto para subir la imagen (editar).',
+                );
+                this.cargarProductos();
+                this.resetForm();
+                setTimeout(() => (this.errorMessage = null), 3000);
+              }
+            } else {
+              this.cargarProductos();
+              this.resetForm();
+              setTimeout(() => (this.errorMessage = null), 3000);
+            }
           },
           error: (error) => {
             console.error('❌ Error al editar producto:', error);
@@ -134,9 +188,40 @@ export class StockComponent implements OnInit {
           console.log('✅ Producto creado correctamente:', response);
           this.isLoading = false;
           this.errorMessage = '¡Producto creado exitosamente!';
-          this.cargarProductos();
-          this.resetForm();
-          setTimeout(() => (this.errorMessage = null), 3000);
+          // Si hay una imagen seleccionada, subirla vinculada al producto recién creado
+          if (this.archivoProducto) {
+            const res: any = response || {};
+            const prodId = res?.data?.id ?? res?.id;
+            if (prodId) {
+              this.miApi
+                .uploadImage('product', prodId, this.archivoProducto)
+                .subscribe({
+                  next: () => {
+                    console.log('✅ Imagen de producto subida correctamente');
+                    this.cargarProductos();
+                    this.resetForm();
+                    setTimeout(() => (this.errorMessage = null), 3000);
+                  },
+                  error: (err) => {
+                    console.error('❌ Error al subir imagen de producto:', err);
+                    this.cargarProductos();
+                    this.resetForm();
+                    setTimeout(() => (this.errorMessage = null), 3000);
+                  },
+                });
+            } else {
+              console.warn(
+                'No se encontró ID de producto en la respuesta al crear el producto.',
+              );
+              this.cargarProductos();
+              this.resetForm();
+              setTimeout(() => (this.errorMessage = null), 3000);
+            }
+          } else {
+            this.cargarProductos();
+            this.resetForm();
+            setTimeout(() => (this.errorMessage = null), 3000);
+          }
         },
         error: (error) => {
           console.error('❌ Error al crear producto:', error);
@@ -157,7 +242,22 @@ export class StockComponent implements OnInit {
 
   cargarProductos() {
     this.miApi.getProductos().subscribe((data: any) => {
-      this.productos = data.data;
+      this.productos = data.data || [];
+
+      for (const p of this.productos) {
+        if (p && p.id) {
+          this.miApi.getImageByObjectId('product', Number(p.id)).subscribe({
+            next: (imgRes: any) => {
+              p.img = imgRes?.data || '';
+            },
+            error: () => {
+              p.img = '';
+            },
+          });
+        } else {
+          p.img = '';
+        }
+      }
     });
   }
 
@@ -179,6 +279,13 @@ export class StockComponent implements OnInit {
     this.editarIndex = null;
     this.productoEditandoId = null;
     this.errorMessage = null;
+    // Limpiar imagen seleccionada
+    this.archivoProducto = null;
+  }
+
+  // Recibe el archivo emitido por el formulario hijo
+  onFileSelected(file: File | null) {
+    this.archivoProducto = file;
   }
 
   onUseSuggestedData(useSuggested: boolean) {

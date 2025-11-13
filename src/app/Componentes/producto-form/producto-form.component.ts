@@ -49,6 +49,10 @@ export class ProductoFormComponent implements OnInit {
   @Output() onCancel = new EventEmitter<void>();
   @Output() onReset = new EventEmitter<void>();
   @Output() onUseSuggestedData = new EventEmitter<boolean>();
+  @Output() onFileSelected = new EventEmitter<File | null>();
+
+  // Preview URL for the selected image inside the form
+  selectedImageUrl: string | ArrayBuffer | null = null;
 
   tiposProducto = [
     { id: 0, name: 'Restaurante' },
@@ -195,6 +199,23 @@ export class ProductoFormComponent implements OnInit {
     this.onSubmit.emit(productoData);
   }
 
+  fileChanged(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      this.onFileSelected.emit(file);
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.selectedImageUrl = reader.result;
+      };
+      reader.readAsDataURL(file);
+    } else {
+      this.onFileSelected.emit(null);
+      this.selectedImageUrl = null;
+    }
+  }
+
   cancelForm() {
     this.onCancel.emit();
   }
@@ -213,6 +234,9 @@ export class ProductoFormComponent implements OnInit {
       store_id: 1,
     };
     this.useSuggestedData = false;
+    // Clear selected image preview and notify parent
+    this.selectedImageUrl = null;
+    this.onFileSelected.emit(null);
     this.onReset.emit();
   }
 

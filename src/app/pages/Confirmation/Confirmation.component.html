@@ -27,16 +27,18 @@
       <div class="products-section">
         <h3>Productos:</h3>
         <div *ngFor="let product of order.products" class="product-item">
-          <span>{{ product.quantity }}x Producto #{{ product.product_id }}</span>
+          <span
+            >{{ product.quantity }}x Producto #{{ product.product_id }}</span
+          >
         </div>
       </div>
 
       <div class="info-box">
         <p><strong>📍 Dirección de retiro:</strong></p>
-        <p>{{ storeName || 'Cargando...' }}</p>
+        <p>{{ storeName || "Cargando..." }}</p>
         <p class="info-text">
-          Presentá este número de orden al retirar tu pedido.
-          El comercio te avisará cuando esté listo.
+          Presentá este número de orden al retirar tu pedido. El comercio te
+          avisará cuando esté listo.
         </p>
       </div>
     </div>
@@ -45,14 +47,11 @@
       Cargando información del pedido...
     </div>
 
-
     <div class="actions">
       <button class="btn-primary" routerLink="/preordenes">
         Ver Mis Pedidos
       </button>
-      <button class="btn-secondary" routerLink ="/home">
-        Volver al Inicio
-      </button>
+      <button class="btn-secondary" routerLink="/home">Volver al Inicio</button>
     </div>
   </div>
 </div>
