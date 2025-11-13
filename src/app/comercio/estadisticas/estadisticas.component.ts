@@ -65,18 +65,6 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
       error: (err) => console.error('Error al obtener tiendas', err),
     });
 
-    // Establecer fechas por defecto (desde hace un mes hasta hoy)
-    const hoy = new Date();
-    const haceUnMes = new Date();
-    haceUnMes.setMonth(hoy.getMonth() - 1);
-
-    const formatoFecha = (fecha: Date): string => {
-      return fecha.toISOString().split('T')[0];
-    };
-
-    this.startDateControl.setValue(formatoFecha(haceUnMes));
-    this.endDateControl.setValue(formatoFecha(hoy));
-
     this.productControl.valueChanges.subscribe(() => this.cargarVentas());
     this.storeControl.valueChanges.subscribe(() => this.cargarVentas());
     this.startDateControl.valueChanges.subscribe(() => this.cargarVentas());
@@ -133,7 +121,6 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
       },
     });
   }
-
   mostrarGananciasPorProducto(sales: Sale[], productId: number) {
     // Sumar cantidad * precio solo para el producto seleccionado
     let total = 0;

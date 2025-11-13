@@ -8,7 +8,7 @@ import { OrderService, Order } from '../../servicios/order.service';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './Confirmation.component.html',
-  styleUrls: ['./Confirmation.component.scss'],
+  styleUrls: ['./Confirmation.component.scss']
 })
 export class OrdenConfirmacionComponent implements OnInit {
   private route = inject(ActivatedRoute);
@@ -38,7 +38,7 @@ export class OrdenConfirmacionComponent implements OnInit {
     this.orderService.getMyOrders().subscribe({
       next: (response) => {
         if (response.successful && response.data) {
-          const found = response.data.find((o) => o.id === this.orderId);
+          const found = response.data.find(o => o.id === this.orderId);
           if (found) {
             this.order = found;
           } else {
@@ -54,16 +54,16 @@ export class OrdenConfirmacionComponent implements OnInit {
 
   getStatusText(status: string): string {
     const map: any = {
-      pending: 'Pendiente',
-      accepted: 'Aceptada',
-      received: 'Entregada',
-      cancelled: 'Cancelada',
+      'pending': 'Pendiente',
+      'accepted': 'Aceptada',
+      'received': 'Entregada',
+      'cancelled': 'Cancelada'
     };
     return map[status] || status;
   }
 
   getPaymentMethod(method: number): string {
-    const methods = ['💵 Efectivo', '💳 Débito', '💳 Crédito', '📱 QR'];
+    const methods = ['💵 Efectivo', '💳 Débito', '💳 Crédito', '📱 Transferencia'];
     return methods[method] || 'Desconocido';
   }
 
@@ -74,7 +74,7 @@ export class OrdenConfirmacionComponent implements OnInit {
       month: 'short',
       year: 'numeric',
       hour: '2-digit',
-      minute: '2-digit',
+      minute: '2-digit'
     });
   }
 
