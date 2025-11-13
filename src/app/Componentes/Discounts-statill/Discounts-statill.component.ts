@@ -18,11 +18,14 @@ export class DiscountsStatillComponent {
   ngOnInit(){
     this.api.getProducto(this.d.product_id).subscribe({
       next: (r)=>{
-        
+        this.product = r.data;
+        this.api.getStoreById(this.product.store_id).subscribe({
+          next: (r)=>{
+            this.store = r.data;
+            
+          }
+        })
       },
-      error:(ex)=>{
-        console.error(ex)
-      }
     })
   }
 }
