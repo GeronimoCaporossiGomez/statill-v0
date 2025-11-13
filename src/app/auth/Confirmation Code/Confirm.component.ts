@@ -91,7 +91,7 @@ export class ConfirmComponent implements OnInit {
       },
     });
   }
-
+ 
   goToApp() {
     // Check if user is verified before allowing access
     const user = this.authService.getCurrentUser();
