@@ -18,6 +18,65 @@ export const authGuard: CanActivateFn = (route, state) => {
   router.navigate(['/landing']);
   return false;
 };
+export const allowCreateCommerceGuard: CanActivateFn = (route, state) => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
+
+  console.log('🔐 allowCreateCommerceGuard: verificando acceso a', state.url);
+
+  // 1️⃣ Si no está autenticado → /landing
+  if (!authService.isAuthenticated()) {
+    console.log('❌ No autenticado -> /landing');
+    router.navigate(['/landing']);
+    return false;
+  }
+
+  // 2️⃣ Si el usuario ya está cargado en memoria
+  const user = authService.getCurrentUser();
+  if (user) {
+    const hasStoreRole = user.store_role === 'owner' || user.store_role === 'cashier';
+    console.log('👤 Usuario en memoria, store_role =', user.store_role, 'hasStoreRole =', hasStoreRole);
+
+    if (hasStoreRole) {
+      console.log('🚫 Ya tiene comercio -> /menu-local');
+      router.navigate(['/menu-local']);
+      return false;
+    }
+
+    console.log('✅ No tiene comercio, acceso permitido');
+    return true;
+  }
+
+  // 3️⃣ Si no hay usuario cargado, lo pedimos al servidor
+  return authService.fetchCurrentUser().pipe(
+    map((response) => {
+      if (!response?.successful || !response.data) {
+        console.log('❌ No se pudo obtener usuario -> /landing');
+        router.navigate(['/landing']);
+        return false;
+      }
+
+      const fetchedUser = response.data;
+      const hasStoreRole = fetchedUser.store_role === 'owner' || fetchedUser.store_role === 'cashier';
+      console.log('📥 Usuario obtenido: store_role =', fetchedUser.store_role);
+
+      if (hasStoreRole) {
+        console.log('🚫 Ya tiene comercio -> /menu-local');
+        router.navigate(['/menu-local']);
+        return false;
+      }
+
+      console.log('✅ No tiene comercio, acceso permitido');
+      return true;
+    }),
+    catchError((error) => {
+      console.error('❌ Error al verificar usuario en allowCreateCommerceGuard:', error);
+      router.navigate(['/landing']);
+      return of(false);
+    }),
+  );
+};
+
 
 export const activeUserGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);

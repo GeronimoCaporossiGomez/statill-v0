@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { authGuard, activeUserGuard, ownerGuard, storeAccessGuard } from './core/guards/auth.guard';
+import { authGuard, activeUserGuard, ownerGuard, storeAccessGuard, allowCreateCommerceGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -69,8 +69,14 @@ export const routes: Routes = [
     path: 'crear-comercio',
     loadComponent: () =>
       import('./comercio/crear-comercio/crear-comercio.component').then(m => m.CrearComercioComponent),
-    canActivate: [activeUserGuard]
+   canActivate: [activeUserGuard, allowCreateCommerceGuard]
   },
+  {
+  path: 'menu-local',
+  loadComponent: () =>
+    import('./comercio/menu-local/menu-local.component').then(m => m.MenuLocalComponent),
+  canActivate: [storeAccessGuard] // Owner o Cashier
+},
   {
     path: 'carrito',
     loadComponent: () =>
