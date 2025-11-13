@@ -63,7 +63,7 @@ export class OrdenConfirmacionComponent implements OnInit {
   }
 
   getPaymentMethod(method: number): string {
-    const methods = ['💵 Efectivo', '💳 Débito', '💳 Crédito', '📱 Transferencia'];
+    const methods = ['💵 Efectivo', '💳 Débito', '💳 Crédito', '📱 QR'];
     return methods[method] || 'Desconocido';
   }
 

@@ -10,7 +10,7 @@ export interface OrderProduct {
 export interface CreateOrderRequest {
   store_id: number;
   products: OrderProduct[];
-  payment_method: number; // 0: Efectivo, 1: Débito, 2: Crédito, 3: Transferencia
+  payment_method: number; // 0: Efectivo, 1: Débito, 2: Crédito, 3: QR
 }
 
 export interface Order {
