@@ -32,7 +32,6 @@ export class AuthModalComponent {
   @Output() close = new EventEmitter<void>();
 
   isLogin = true;
-  // verification UI removed
   // Registration fields
   first_names = '';
   last_name = '';
@@ -55,18 +54,68 @@ export class AuthModalComponent {
     this.messageType = '';
   }
 
-  // Handler for the main button: if registering, navigate to confirmation page;
+  // Handler for the main button: if registering, perform registration then navigate;
   // if login, proceed with login flow.
   onSubmitButton(event: Event) {
     event.preventDefault();
+
     if (!this.isLogin) {
-      // registro -> cerrar modal y redirigir a confirmacion-codigo con email
-      this.loading = false;
-      this.close.emit();
-      this.router.navigate(['/confirmacion-codigo'], { queryParams: { email: this.email } });
+      // Registro: llamar a la API de registro, esperar respuesta y luego navegar a confirmacion-codigo
+      this.message = '';
+      this.messageType = '';
+      this.loading = true;
+
+      this.authService
+        .registerUser({
+          first_names: this.first_names,
+          last_name: this.last_name,
+          email: this.email,
+          password: this.password,
+          birthdate: this.birthdate,
+          gender: this.gender,
+          res_area: this.res_area,
+        })
+        .subscribe({
+          next: (res) => {
+            this.loading = false;
+            this.message = 'Registro exitoso. Se ha enviado un código de verificación a tu email.';
+            this.messageType = 'success';
+
+            // Intentar solicitar reenvío/envío explícito del código si el servicio lo expone
+            const sendFn = (this.authService as any).sendEmailVerificationCode;
+            if (typeof sendFn === 'function') {
+              try {
+                sendFn.call(this.authService, this.email).subscribe({
+                  next: () => {
+                    // no-op
+                  },
+                  error: () => {
+                    // no-op
+                  },
+                });
+              } catch {
+                // ignore
+              }
+            }
+
+            // Cerrar modal y navegar a la página de confirmación con email en query params
+            this.close.emit();
+            this.router.navigate(['/confirmacion-codigo'], { queryParams: { email: this.email } });
+          },
+          error: (err) => {
+            this.loading = false;
+            this.message =
+              err?.error?.message ||
+              err?.message ||
+              'Error al registrarse. Revise los datos ingresados.';
+            this.messageType = 'error';
+          },
+        });
+
       return;
     }
-    // login -> ejecutar flujo normal
+
+    // Si es login, ejecutar flujo normal
     this.submitForm();
   }
 
@@ -85,13 +134,17 @@ export class AuthModalComponent {
       .subscribe({
         next: (response) => {
           this.loading = false;
-          const user = this.authService.getCurrentUser?.() ?? null;
+          const user = (this.authService as any).getCurrentUser?.() ?? null;
           if (user && !user.email_verified) {
             this.message = 'Por favor, verifique su email antes de continuar.';
             this.messageType = 'error';
-            // keep user in login state (verification handled outside modal)
-            // optionally trigger resend
-            this.authService.sendEmailVerificationCode?.().subscribe?.();
+            // opcional: reenviar código
+            const sendFn = (this.authService as any).sendEmailVerificationCode;
+            if (typeof sendFn === 'function') {
+              try {
+                sendFn.call(this.authService, this.email).subscribe();
+              } catch {}
+            }
           } else {
             this.message = '¡Bienvenido!';
             this.messageType = 'success';
@@ -104,27 +157,40 @@ export class AuthModalComponent {
         error: (err) => {
           this.loading = false;
           this.message =
-            err.error?.message ||
+            err?.error?.message ||
+            err?.message ||
             'Error de autenticación. Verifique el email y la contraseña.';
           this.messageType = 'error';
         },
       });
   }
 
-  // keep resend method in case it's used elsewhere
   resendVerificationCode() {
     this.loading = true;
-    this.authService.sendEmailVerificationCode?.().subscribe({
-      next: () => {
+    const sendFn = (this.authService as any).sendEmailVerificationCode;
+    if (typeof sendFn === 'function') {
+      try {
+        sendFn.call(this.authService, this.email).subscribe({
+          next: () => {
+            this.loading = false;
+            this.message = 'Código de verificación reenviado exitosamente.';
+            this.messageType = 'success';
+          },
+          error: () => {
+            this.loading = false;
+            this.message = 'Error al reenviar el código. Por favor, intente nuevamente.';
+            this.messageType = 'error';
+          },
+        });
+      } catch {
         this.loading = false;
-        this.message = 'Código de verificación reenviado exitosamente.';
-        this.messageType = 'success';
-      },
-      error: () => {
-        this.loading = false;
-        this.message = 'Error al reenviar el código. Por favor, intente nuevamente.';
+        this.message = 'No se pudo reenviar el código.';
         this.messageType = 'error';
-      },
-    });
+      }
+    } else {
+      this.loading = false;
+      this.message = 'Función de reenvío no disponible.';
+      this.messageType = 'error';
+    }
   }
 }
