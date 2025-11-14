@@ -24,6 +24,8 @@ import { GeneralService } from 'src/app/servicios/general.service';
 export class CrearComercioComponent {
   @ViewChild(MapaComponent) mapaComponent!: MapaComponent;
 
+  mensajeAlerta: string = "";
+  ErrorAlerta: boolean = false 
   creando: boolean = true;
   seccionPantalla: number = 0;
   dias: string[] = [
@@ -135,13 +137,15 @@ export class CrearComercioComponent {
     // Obtener el usuario autenticado
     const currentUser = this.authService.getCurrentUser();
     if (!currentUser || !currentUser.id) {
-      alert('Error: Debes estar autenticado para crear un comercio.');
+      this.ErrorAlerta = true;
+      this.mensajeAlerta = "Error: Debes estar autenticado para crear un comercio."
       return;
     }
 
     // Validar que el nombre no esté vacío
     if (!form.value.nombre || form.value.nombre.trim() === '') {
-      alert('Por favor, ingresa un nombre para el comercio.');
+      this.ErrorAlerta = true;
+      this.mensajeAlerta = "Ingresa una dirección o algo asi"
       return;
     }
 
@@ -151,9 +155,8 @@ export class CrearComercioComponent {
 
     // Validar que haya una dirección
     if (!direccionFinal || direccionFinal.trim() === '') {
-      alert(
-        'Por favor, selecciona una ubicación en el mapa o ingresa una dirección.',
-      );
+      this.ErrorAlerta = true;
+      this.mensajeAlerta = "Por favor, selecciona una ubicación en el mapa o ingresa una dirección."
       return;
     }
 
@@ -231,19 +234,21 @@ export class CrearComercioComponent {
             .subscribe({
               next: () => {
                 console.log('✅ Imagen subida exitosamente');
-                alert('¡Comercio creado exitosamente!');
+                this.ErrorAlerta = false;
+                this.mensajeAlerta = "Comercio creado exitosamente"
+                this.subirDirectoCloudinary(this.archivoLogo);
                 this.router.navigate(['/escanear']);
               },
               error: (error) => {
                 console.error('❌ Error al subir imagen:', error);
-                alert(
-                  'Comercio creado, pero hubo un error al subir la imagen.',
-                );
+                this.ErrorAlerta = true;
+                this.mensajeAlerta = "Comercio creado, pero hubo un error al subir la imagen"
                 this.router.navigate(['/escanear']);
               },
             });
         } else {
-          alert('¡Comercio creado exitosamente!');
+          this.ErrorAlerta = false;
+          this.mensajeAlerta = "Comercio creado exitosamente"
           this.router.navigate(['/escanear']);
         }
         this.router.navigate(['/escanear']);
@@ -263,7 +268,8 @@ export class CrearComercioComponent {
             'Por favor, verifica que todos los campos estén completos.';
         }
 
-        alert(errorMessage);
+        this.ErrorAlerta = false;
+        this.mensajeAlerta = errorMessage
       },
     });
   }
@@ -287,7 +293,6 @@ export class CrearComercioComponent {
       reader.readAsDataURL(input.files[0]);
 
       // 🚀 SUBIR DIRECTO A CLOUDINARY
-      this.subirDirectoCloudinary(this.archivoLogo);
     }
   }
 

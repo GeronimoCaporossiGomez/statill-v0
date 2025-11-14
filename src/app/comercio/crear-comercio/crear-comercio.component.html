@@ -195,6 +195,8 @@
         </div>
       </div>
 
+      <h1 [class]="{'success': !ErrorAlerta, 'error': ErrorAlerta}">{{mensajeAlerta}}aaa</h1>
+
       <button type="button" (click)="bajarPantalla()">Anterior</button>
       <button type="submit">Crear Comercio</button>
     </div>
