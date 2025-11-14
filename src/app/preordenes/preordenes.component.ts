@@ -3,6 +3,7 @@ import { HeaderStatillComponent } from '../Componentes/header-statill/header-sta
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { MiApiService } from '../servicios/mi-api.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-preordenes',
@@ -24,7 +25,21 @@ export class PreordenesComponent {
   loadOrders() {
     this.miApiService.getMyOrders().subscribe({
       next: (data) => {
-        this.probando = data;
+        const orders = data.data;
+        console.log(data.data)
+        // Create 1 request per order
+        const storeRequests = orders.map((order: any) =>
+          this.miApiService.getStoreById(order.store_id)
+        );
+  
+        // Run all requests in parallel
+        forkJoin(storeRequests).subscribe((stores) => {
+          // Attach store to its order
+          this.probando = orders.map((order: any, i: number) => ({
+            ...order,
+            store: stores[i]   // <--- store info here
+          }));
+        });
       },
       error: (err) => {
         console.error("Error loading orders:", err);

@@ -14,12 +14,12 @@
           <img src="{{ prueba.imagen }}" alt="pokoko" />
           <div class="texto" [ngClass]="{ detalles: descripcion === i }">
             <h2 class="asd roboto">
-              {{ prueba.nombre }}:
               <span
-                >Pedido #{{ i + 1 }} ({{ prueba.fecha }}) ({{
+                >Pedido #{{ i + 1 }} ({{ prueba.start_date }}) ({{
                   prueba.hora
-                }})</span
+                }}):</span
               >
+              {{ prueba.store.data.name }}
             </h2>
             <h3 class="gris roboto">{{ prueba.descripcion }}</h3>
             <ng-container *ngIf="descripcion === i">
