@@ -75,13 +75,13 @@ export const routes: Routes = [
   path: 'menu-local',
   loadComponent: () =>
     import('./comercio/menu-local/menu-local.component').then(m => m.MenuLocalComponent),
-  canActivate: [storeAccessGuard] // Owner o Cashier
+  //canActivate: [storeAccessGuard] // Owner o Cashier
 },
   {
     path: 'ventas-locales',
     loadComponent: () =>
       import('./comercio/ventas-locales/ventas-locales.component').then(m => m.VentasLocalesComponent),
-    canActivate: [storeAccessGuard]
+    //canActivate: [storeAccessGuard]
   },
   {
     path: 'carrito',
@@ -106,31 +106,31 @@ export const routes: Routes = [
     path: 'stock',
     loadComponent: () =>
       import('./comercio/stock/stock.component').then(m => m.StockComponent),
-    canActivate: [ownerGuard]
+    //canActivate: [ownerGuard]
   },
   {
     path: 'ordenes-tienda',
     loadComponent: () =>
       import('./comercio/ordenes-tienda/ordenes-tienda.component').then(m => m.OrdenesTiendaComponent),
-    canActivate: [storeAccessGuard] // Owner o Cashier
+    //canActivate: [storeAccessGuard] // Owner o Cashier
   },
   {
     path: 'escanear',
     loadComponent: () =>
       import('./comercio/escanear/escanear.component').then(m => m.EscanearComponent),
-    canActivate: [storeAccessGuard] // Owner or cashier
+    //canActivate: [storeAccessGuard] // Owner or cashier
   },
   {
     path: 'estadisticas',
     loadComponent: () =>
       import('./comercio/estadisticas/estadisticas.component').then(m => m.EstadisticasComponent),
-    canActivate: [ownerGuard]
+    //canActivate: [ownerGuard]
   },
   {
     path: 'configuracion',
     loadComponent: () =>
       import('./configuracion/configuracion.component').then(m => m.ConfiguracionComponent),
-    canActivate: [ownerGuard]
+    //canActivate: [ownerGuard]
   },
   {
     path: 'ayuda',
