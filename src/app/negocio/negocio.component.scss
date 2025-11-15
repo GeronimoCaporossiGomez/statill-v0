@@ -14,7 +14,7 @@
     margin-top: 20px;
     padding: 10px 20px;
     background-color: #f54c4c;
-    color: white;
+    color: #f54c4c;
     border: none;
     border-radius: 5px;
     cursor: pointer;
@@ -32,7 +32,7 @@
 }
 
 .store-header {
-  background: linear-gradient(135deg, #006c2e 0%, #00873a 100%);
+  background: #f54c4c;
   color: white;
   padding: 15px 20px;
   display: flex;
@@ -90,7 +90,7 @@
 
 .search-bar {
   padding: 20px;
-  background-color: #006c2e;
+  background-color:  #f54c4c;
 
   input {
     width: 100%;
@@ -210,7 +210,7 @@
   padding: 0.75rem 1rem;
   border: none;
   border-radius: 10px;
-  background: linear-gradient(135deg, #006c2e, #009444);
+  background:  #f54c4c;
   color: #fff;
   font-weight: 600;
   font-size: 0.95rem;
@@ -222,7 +222,7 @@
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 18px -12px rgba(0, 148, 68, 0.6);
+    box-shadow:  #f54c4c 0 12px 30px -12px rgba(0, 0, 0, 0.4);
   }
 
   &:active {
@@ -247,7 +247,7 @@
   height: 34px;
   border: none;
   border-radius: 50%;
-  background: #006c2e;
+  background:  #f54c4c;
   color: #fff;
   font-size: 1.1rem;
   display: flex;
@@ -272,7 +272,7 @@
   min-width: 28px;
   text-align: center;
   font-weight: 600;
-  color: #006c2e;
+  color:  #f54c4c;
 }
 
 .producto-imagen {
