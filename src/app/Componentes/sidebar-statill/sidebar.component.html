@@ -1,7 +1,7 @@
 <button type="button" class="boton-sidebar-fijo" (click)="toggleSidebar()">
   ☰
 </button>
-<div *ngIf="isExpanded" class="sidebar sidebariwis">
+<div *ngIf="!isExpanded" class="sidebar sidebariwis">
   <div class="sidebariwis-nav">
     <ul>
       <ng-container *ngFor="let item of currentMenuItems">

@@ -9,8 +9,8 @@
     <span class="auth-title">Statill</span>
   </div>
 
-  <!-- Tabs de navegación (ocultas durante verificación de código) -->
-  <div class="auth-header" *ngIf="!isVerifyingCode">
+  <!-- Tabs de navegación -->
+  <div class="auth-header">
     <div class="tabs">
       <div class="tab" [class.active]="!isLogin" (click)="toggleMode(false)">
         Registro
@@ -34,47 +34,8 @@
       {{ message }}
     </div>
 
-    <!-- Paso: Verificación de código -->
-    <form *ngIf="isVerifyingCode" (ngSubmit)="submitForm()">
-      <div class="form-group">
-        <label for="activation">Código de verificación</label>
-        <input
-          id="activation"
-          type="text"
-          placeholder="Ingresá tu código"
-          [(ngModel)]="activationCode"
-          name="activation"
-          [disabled]="loading"
-          required
-        />
-      </div>
-      <button type="submit" class="btn btn-primary" [disabled]="loading">
-        <span *ngIf="loading">Verificando...</span>
-        <span *ngIf="!loading">Confirmar</span>
-      </button>
-      <div class="resend-section">
-        <p>¿No recibiste el código?</p>
-        <button
-          type="button"
-          class="btn btn-link"
-          (click)="resendVerificationCode()"
-          [disabled]="loading"
-        >
-          Reenviar código
-        </button>
-      </div>
-      <button
-        type="button"
-        class="btn btn-link"
-        (click)="backToLogin()"
-        [disabled]="loading"
-      >
-        Volver al login
-      </button>
-    </form>
-
     <!-- Paso: Login / Registro -->
-    <form *ngIf="!isVerifyingCode" (ngSubmit)="submitForm()">
+    <form (ngSubmit)="submitForm()">
       <!-- Solo en registro -->
       <ng-container *ngIf="!isLogin">
         <div class="form-grid">
