@@ -4,11 +4,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ComercioService } from '../servicios/comercio.service';
 import { HeaderStatillComponent } from '../Componentes/header-statill/header-statill.component';
 import { FormsModule } from '@angular/forms';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { AuthService } from '../servicios/auth.service';
 import { GeneralService } from '../servicios/general.service';
 import { MiApiService } from '../servicios/mi-api.service';
-
 
 @Component({
   selector: 'app-negocio',
@@ -24,7 +23,9 @@ export class NegocioComponent implements OnInit {
   public authService = inject(AuthService);
   private readonly generalService = inject(GeneralService);
   private readonly api = inject(MiApiService);
+  private readonly auth = inject(AuthService);
 
+  public loggedIn = this.auth.getToken() !== null;
 
   public hasUserReview: boolean = false;
   public currentReview: any = null;
@@ -43,7 +44,6 @@ export class NegocioComponent implements OnInit {
   estrellas: number = 0;
   public image: string = '';
 
-
   setValue(value: number): void {
     this.estrellas = value;
   }
@@ -58,46 +58,56 @@ export class NegocioComponent implements OnInit {
       return;
     }
 
-    forkJoin({
-      store: this.comercioService.getStoreById(id),
-      productos: this.comercioService.getProductosByStore(id),
-      reviews: this.comercioService.getReviewsByStore(id),
-      points: this.comercioService.getMyPointsInStore(id),
-    }).subscribe({
+    forkJoin(
+      this.loggedIn
+        ? {
+            store: this.comercioService.getStoreById(id),
+            productos: this.comercioService.getProductosByStore(id),
+            reviews: this.comercioService.getReviewsByStore(id),
+            points: this.comercioService.getMyPointsInStore(id),
+          }
+        : {
+            store: this.comercioService.getStoreById(id),
+            productos: this.comercioService.getProductosByStore(id),
+            reviews: this.comercioService.getReviewsByStore(id),
+          }
+    ).subscribe({
       next: (results) => {
         this.comercio = results.store;
-// getImageByObjectId returns an Observable<GetCloudinaryURLResponse>, subscribe and set the string URL
-this.api
-.getImageByObjectId('store', Number(this.comercio.id))
-.subscribe({
-  next: (imgRes: any) => {
-    this.image = imgRes.data;
-  },
-  error: (err: any) => {
-    console.error('Error cargando imagen de la tienda:', err);
-    this.image = '';
-  },
-});
-this.productos = results.productos;
-// For each product, try to fetch its image URL and set `producto.image` so the template can show it
-for (const p of this.productos) {
-  if (p && p.id) {
-    this.api.getImageByObjectId('product', Number(p.id)).subscribe({
-      next: (imgRes: any) => {
-        p.image = imgRes?.data || '';
-      },
-      error: (err: any) => {
-        p.image = '';
-      },
-    });
-  } else {
-    p.image = '';
-  }
-}        
-this.reviews = results.reviews;
+        // getImageByObjectId returns an Observable<GetCloudinaryURLResponse>, subscribe and set the string URL
+        this.api
+          .getImageByObjectId('store', Number(this.comercio.id))
+          .subscribe({
+            next: (imgRes: any) => {
+              this.image = imgRes.data;
+            },
+            error: (err: any) => {
+              console.error('Error cargando imagen de la tienda:', err);
+              this.image = '';
+            },
+          });
+        this.productos = results.productos;
+        // For each product, try to fetch its image URL and set `producto.image` so the template can show it
+        for (const p of this.productos) {
+          if (p && p.id) {
+            this.api.getImageByObjectId('product', Number(p.id)).subscribe({
+              next: (imgRes: any) => {
+                p.image = imgRes?.data || '';
+              },
+              error: (err: any) => {
+                p.image = '';
+              },
+            });
+          } else {
+            p.image = '';
+          }
+        }
+        this.reviews = results.reviews;
 
-        const points = results.points;
-        this.userPoints = points;
+        if (this.loggedIn) {
+          const points = results.points;
+          this.userPoints = points;
+        }
 
         for (const r of this.reviews) {
           this.generalService.getUserFirstNames(r.user_id).subscribe({
@@ -107,7 +117,7 @@ this.reviews = results.reviews;
             error: (error) => {
               console.error(
                 `❌ Error al cargar el primer nombre del usuario ${r.user_id}: `,
-                error,
+                error
               );
             },
           });
@@ -130,7 +140,7 @@ this.reviews = results.reviews;
     const currentUser = this.authService.getCurrentUser();
     if (currentUser) {
       this.currentReview = reviews.find(
-        (review) => review.user_id === currentUser.id,
+        (review) => review.user_id === currentUser.id
       );
       this.hasUserReview = !!this.currentReview;
     }
@@ -149,14 +159,14 @@ this.reviews = results.reviews;
         this.hasPurchasedFromStore = orders.some(
           (order: any) =>
             order.store_id === storeId &&
-            (order.status === 'received' || order.status === 'accepted'),
+            (order.status === 'received' || order.status === 'accepted')
         );
         this.checkingPurchase = false;
       },
       error: (err) => {
         if (err.status === 403 || err.status === 404) {
           console.warn(
-            'El endpoint de órdenes no está disponible o no tiene permisos. Permitiendo reseñas.',
+            'El endpoint de órdenes no está disponible o no tiene permisos. Permitiendo reseñas.'
           );
           this.hasPurchasedFromStore = true;
         } else {
@@ -205,7 +215,7 @@ this.reviews = results.reviews;
 
     if (!this.hasPurchasedFromStore && !this.checkingPurchase) {
       alert(
-        'Solo puedes dejar una reseña después de haber realizado un pedido en esta tienda.',
+        'Solo puedes dejar una reseña después de haber realizado un pedido en esta tienda.'
       );
       return;
     }
@@ -265,7 +275,7 @@ this.reviews = results.reviews;
         console.log('Reseña eliminada:', response);
         alert('Reseña eliminada con éxito!');
         this.reviews = this.reviews.filter(
-          (review) => review.id !== this.currentReview.id,
+          (review) => review.id !== this.currentReview.id
         );
         this.hasUserReview = false;
         this.currentReview = null;
@@ -291,28 +301,32 @@ this.reviews = results.reviews;
 
     // Verificar autenticación
     if (!this.authService.isActiveUser()) {
-      alert('Debes iniciar sesión y verificar tu email para realizar una compra.');
+      alert(
+        'Debes iniciar sesión y verificar tu email para realizar una compra.'
+      );
       return;
     }
 
     // Preparar datos del carrito
-    const cartData = Object.entries(this.carrito).map(([productId, quantity]) => {
-      const producto = this.productos.find(p => p.id === Number(productId));
-      return {
-        id: Number(productId),
-        name: producto?.name || 'Producto',
-        price: producto?.price || 0,
-        quantity: quantity,
-        image: producto?.image
-      };
-    });
+    const cartData = Object.entries(this.carrito).map(
+      ([productId, quantity]) => {
+        const producto = this.productos.find((p) => p.id === Number(productId));
+        return {
+          id: Number(productId),
+          name: producto?.name || 'Producto',
+          price: producto?.price || 0,
+          quantity: quantity,
+          image: producto?.image,
+        };
+      }
+    );
 
     // Guardar en localStorage
     localStorage.setItem(`cart_${this.comercio.id}`, JSON.stringify(cartData));
 
     // Redirigir al carrito
     this.router.navigate(['/carrito'], {
-      queryParams: { storeId: this.comercio.id }
+      queryParams: { storeId: this.comercio.id },
     });
   }
 

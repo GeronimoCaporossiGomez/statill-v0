@@ -28,6 +28,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         authService.logout();
         router.navigate(['/landing']);
       }
+      console.error(error)
       return throwError(() => error);
     }),
   );

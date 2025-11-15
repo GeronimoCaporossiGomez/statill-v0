@@ -1,106 +1,99 @@
 <app-header-statill></app-header-statill>
 
 @if (cargando) {
-  <div class="loading">
-    <p>Cargando...</p>
-  </div>
+<div class="loading">
+  <p>Cargando...</p>
+</div>
 } @else if (comercio) {
-  <div class="container">
-    <!-- Header del comercio -->
-    <div class="store-header">
-      <button class="back-button" (click)="volver()">
-        <span class="arrow">←</span>
-      </button>
-      <div class="store-info">
-        <h1 class="store-name">{{ comercio.name }}</h1>
-        <p class="store-address">{{ comercio.address }}</p>
-      </div>
-      <div class="store-logo">
-        <img alt="{{ comercio.name }} logo" [src]="image" />
-      </div>
+<div class="container">
+  <!-- Header del comercio -->
+  <div class="store-header">
+    <button class="back-button" (click)="volver()">
+      <span class="arrow">←</span>
+    </button>
+    <div class="store-info">
+      <h1 class="store-name">{{ comercio.name }}</h1>
+      <p class="store-address">{{ comercio.address }}</p>
     </div>
-
-    <!-- Barra de búsqueda -->
-    <div class="search-bar">
-      <input type="text" placeholder="Busque productos aquí" />
+    <div class="store-logo">
+      <img alt="{{ comercio.name }} logo" [src]="image" />
     </div>
+  </div>
 
-    <!-- Productos -->
-    <div class="productos-container">
-      <h2 class="seccion-titulo">Productos</h2>
-      <span class="tusPuntos">{{ userPoints }} puntos</span>
-      <div class="productos-grid">
-        @for (producto of productos; track producto.id) {
-          <div class="producto-card">
-            <div class="producto-info">
-              <h3 class="producto-nombre">{{ producto.name }}</h3>
-              <p class="producto-descripcion">{{ producto.brand }}</p>
-              <p class="producto-precio">${{ producto.price }}</p>
+  <!-- Barra de búsqueda -->
+  <div class="search-bar">
+    <input type="text" placeholder="Busque productos aquí" />
+  </div>
 
-              <!-- Botones de cantidad -->
-              <div class="cantidad-controls">
-                @if (getCantidad(producto.id) === 0) {
-                  <button
-                    class="btn-agregar"
-                    (click)="agregarProducto(producto.id)"
-                  >
-                    Agregar al carrito
-                  </button>
-                } @else {
-                  <div class="contador">
-                    <button
-                      class="btn-menos"
-                      (click)="quitarProducto(producto.id)"
-                    >
-                      -
-                    </button>
-                    <span class="cantidad">{{ getCantidad(producto.id) }}</span>
-                    <button
-                      class="btn-mas"
-                      (click)="agregarProducto(producto.id)"
-                    >
-                      +
-                    </button>
-                  </div>
-                }
-              </div>
-            </div>
-            <div class="producto-imagen">
-              @if (producto.image) {
-                <img [src]="producto.image" [alt]="producto.name" />
-              }
-            </div>
-          </div>
-        }
-      </div>
-    </div>
+  <!-- Productos -->
+  <div class="productos-container">
+    <h2 class="seccion-titulo">Productos</h2>
 
-    <!-- Botón de finalizar compra -->
-    @if (getTotalItems() > 0) {
-      <div class="carrito-flotante">
-        <button class="btn-agregar" (click)="finalizarCompra()">
-          Finalizar Compra ({{ getTotalItems() }} productos)
-        </button>
-      </div>
+    @if(loggedIn){
+    <span class="tusPuntos">{{ userPoints }} puntos</span>
     }
+    <div class="productos-grid">
+      @for (producto of productos; track producto.id) {
+      <div class="producto-card">
+        <div class="producto-info">
+          <h3 class="producto-nombre">{{ producto.name }}</h3>
+          <p class="producto-descripcion">{{ producto.brand }}</p>
+          <p class="producto-precio">${{ producto.price }}</p>
+
+          <!-- Botones de cantidad -->
+          <div class="cantidad-controls">
+            @if (getCantidad(producto.id) === 0) {
+            <button class="btn-agregar" (click)="agregarProducto(producto.id)">
+              Agregar al carrito
+            </button>
+            } @else {
+            <div class="contador">
+              <button class="btn-menos" (click)="quitarProducto(producto.id)">
+                -
+              </button>
+              <span class="cantidad">{{ getCantidad(producto.id) }}</span>
+              <button class="btn-mas" (click)="agregarProducto(producto.id)">
+                +
+              </button>
+            </div>
+            }
+          </div>
+        </div>
+        <div class="producto-imagen">
+          @if (producto.image) {
+          <img [src]="producto.image" [alt]="producto.name" />
+          }
+        </div>
+      </div>
+      }
+    </div>
   </div>
+
+  <!-- Botón de finalizar compra -->
+  @if (getTotalItems() > 0) {
+  <div class="carrito-flotante">
+    <button class="btn-agregar" (click)="finalizarCompra()">
+      Finalizar Compra ({{ getTotalItems() }} productos)
+    </button>
+  </div>
+  }
+</div>
 } @else {
-  <div class="error">
-    <p>Comercio no encontrado</p>
-    <button (click)="volver()">Volver</button>
-  </div>
+<div class="error">
+  <p>Comercio no encontrado</p>
+  <button (click)="volver()">Volver</button>
+</div>
 }
 
 <header class="Abajo">
   <div class="Reseña">
     <span class="textoReseña">Reseña</span>
     @if (checkingPurchase) {
-      <p class="info-message">Verificando si puedes dejar una reseña...</p>
+    <p class="info-message">Verificando si puedes dejar una reseña...</p>
     } @else if (!hasPurchasedFromStore && authService.isActiveUser()) {
-      <p class="warning-message">
-        Solo puedes dejar una reseña después de realizar un pedido en esta
-        tienda.
-      </p>
+    <p class="warning-message">
+      Solo puedes dejar una reseña después de realizar un pedido en esta tienda.
+    </p>
     }
     <div class="Estrellas">
       <button
@@ -178,32 +171,29 @@
   <div class="reseñasGrid">
     <h3>Reseñas</h3>
     @if (reviews && reviews.length > 0) {
-      <div class="reseñas-lista">
-        @for (review of reviews; track review.id) {
-          <div class="reseña-card">
-            <div class="reseña-header">
-              <div class="reseña-estrellas">
-                <span
-                  *ngFor="
-                    let star of [].constructor(review.stars);
-                    let i = index
-                  "
-                  [class.filled]="i + 1 <= review.stars"
-                  >★</span
-                >
-              </div>
-              <span class="reseña-fecha"
-                ><b>{{ review.userFirstNames }}</b></span
-              >
-            </div>
-            <p class="reseña-texto">{{ review.desc }}</p>
+    <div class="reseñas-lista">
+      @for (review of reviews; track review.id) {
+      <div class="reseña-card">
+        <div class="reseña-header">
+          <div class="reseña-estrellas">
+            <span
+              *ngFor="let star of [].constructor(review.stars); let i = index"
+              [class.filled]="i + 1 <= review.stars"
+              >★</span
+            >
           </div>
-        }
+          <span class="reseña-fecha"
+            ><b>{{ review.userFirstNames }}</b></span
+          >
+        </div>
+        <p class="reseña-texto">{{ review.desc }}</p>
       </div>
+      }
+    </div>
     } @else {
-      <p class="sin-reseñas">
-        No hay reseñas todavía. ¡Sé el primero en dejar una!
-      </p>
+    <p class="sin-reseñas">
+      No hay reseñas todavía. ¡Sé el primero en dejar una!
+    </p>
     }
   </div>
 </header>
