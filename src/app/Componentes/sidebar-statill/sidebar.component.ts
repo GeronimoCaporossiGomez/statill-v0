@@ -17,8 +17,8 @@ export class SidebarComponent {
   menuItemsVendedor = [
     {
       path: '/menu-local',
-      icon: 'assets/img/tienda.png',
-      text: 'Menú Local',
+      icon: 'assets/img/menu-icono.png',
+      text: 'Menú',
       id: 'menu-local',
     },
     {

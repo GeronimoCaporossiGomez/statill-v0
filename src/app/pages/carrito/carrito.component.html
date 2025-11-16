@@ -3,18 +3,17 @@
     <button class="btn-back" (click)="volver()">
       ← Volver
     </button>
-    <h1>🛒 Tu Carrito</h1>
+    <h1>Tu Carrito</h1>
     <div class="store-name" *ngIf="store">{{ store.name }}</div>
   </div>
 
   <!-- Mensaje de error -->
   <div *ngIf="errorMessage" class="error-message">
-    ⚠️ {{ errorMessage }}
+    {{ errorMessage }}
   </div>
 
   <!-- Carrito vacío -->
   <div *ngIf="cartItems.length === 0" class="empty-cart">
-    <div class="empty-icon">🛒</div>
     <h2>Tu carrito está vacío</h2>
     <p>Agrega productos para continuar</p>
     <button class="btn-primary" (click)="volver()">Ir a la tienda</button>
@@ -37,7 +36,7 @@
           <button class="btn-qty" (click)="updateQuantity(item, 1)">+</button>
         </div>
         <div class="item-total">${{ item.price * item.quantity }}</div>
-        <button class="btn-remove" (click)="removeItem(item)">🗑️</button>
+        <button class="btn-remove" (click)="removeItem(item)">×</button>
       </div>
     </div>
 
@@ -70,7 +69,6 @@
               [value]="method.id"
               [(ngModel)]="selectedPaymentMethod"
               [disabled]="!isPaymentMethodAllowed(method.id)">
-            <span class="method-icon">{{ method.icon }}</span>
             <span class="method-name">{{ method.name }}</span>
             <span *ngIf="!isPaymentMethodAllowed(method.id)" class="not-available">
               No disponible
@@ -78,7 +76,7 @@
           </label>
         </div>
         <p class="payment-hint" *ngIf="selectedPaymentMethod === 3">
-          📱 El pago QR se finaliza en el local; presentá el código al retirar tu pedido.
+          El pago QR se finaliza en el local; presentá el código al retirar tu pedido.
         </p>
       </div>
 

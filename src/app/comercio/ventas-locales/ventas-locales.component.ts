@@ -325,4 +325,3 @@ export class VentasLocalesComponent implements OnInit, OnDestroy {
     this.subscriptions.add(refreshSub);
   }
 }
-

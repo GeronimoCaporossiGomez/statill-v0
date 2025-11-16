@@ -1,7 +1,7 @@
 <div class="confirmacion-container">
   <div class="confirmacion-card">
-    <div class="success-icon">✅</div>
-    <h1>¡Pedido Confirmado!</h1>
+    <div class="success-badge">Confirmado</div>
+    <h1>Pedido Confirmado</h1>
 
     <div *ngIf="order" class="order-details">
       <div class="detail-row">
@@ -25,25 +25,25 @@
       </div>
 
       <div class="products-section">
-        <h3>Productos:</h3>
+        <h3>Productos</h3>
         <div *ngFor="let product of order.products" class="product-item">
           <span>{{ product.quantity }}x Producto #{{ product.product_id }}</span>
         </div>
       </div>
 
       <div class="info-box">
-        <p><strong>📍 Dirección de retiro:</strong></p>
-        <p>
+        <p class="info-title">Dirección de retiro</p>
+        <p class="store-name">
           {{ storeName || ('Tienda #' + order.store_id) }}
         </p>
-        <p class="info-text info-address">
+        <p class="info-address">
           {{ storeAddress || 'Dirección no disponible' }}
         </p>
         <p class="info-text">
           Presentá este número de orden al retirar tu pedido.
           El comercio te avisará cuando esté listo.
         </p>
-        <p *ngIf="paymentContext === 'qr'" class="info-text qr-note">
+        <p *ngIf="paymentContext === 'qr'" class="qr-note">
           Recordá que el pago QR se valida presencialmente en el local antes de entregar el pedido.
         </p>
       </div>

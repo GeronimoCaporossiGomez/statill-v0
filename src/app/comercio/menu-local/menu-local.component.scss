@@ -1,22 +1,18 @@
 .menu-local-layout {
-  display: grid;
-  grid-template-columns: 280px 1fr;
+  position: relative;
   min-height: 100vh;
-  background: linear-gradient(145deg, #fd2a2c 0%, rgba(253, 42, 44, 0.85) 100%);
+  background: #fafafa;
 }
 
-.sidebar-wrapper {
-  background: rgba(255, 255, 255, 0.06);
-  padding: 1.5rem 1rem;
-  backdrop-filter: blur(8px);
-}
 
 .menu-local-container {
   padding: 3rem clamp(1.5rem, 4vw, 4rem);
-  color: #fff;
+  color: #1a1a1a;
   display: flex;
   flex-direction: column;
   gap: 2.5rem;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .menu-local-header {
@@ -26,89 +22,96 @@
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.4rem 1rem;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.18);
-    font-size: 0.85rem;
-    letter-spacing: 0.06em;
+    padding: 6px 16px;
+    border-radius: 20px;
+    background: #f5f5f5;
+    color: #666;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
     text-transform: uppercase;
   }
 
   .titulo {
     margin: 1rem 0 0.5rem;
-    font-size: clamp(2.2rem, 5vw, 3.4rem);
-    font-weight: 700;
+    font-size: clamp(28px, 5vw, 36px);
+    font-weight: 600;
+    color: #1a1a1a;
   }
 
   .descripcion {
     max-width: 540px;
-    font-size: 1.05rem;
+    font-size: 15px;
     line-height: 1.6;
-    opacity: 0.92;
+    color: #666;
   }
 }
 
 .botones-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 1.5rem;
+  gap: 16px;
   width: 100%;
   max-width: 960px;
 
   button {
-    border: none;
-    border-radius: 20px;
+    border: 1px solid #e8e8e8;
+    border-radius: 12px;
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
-    background: rgba(255, 255, 255, 0.12);
-    color: inherit;
+    gap: 6px;
+    background: white;
+    color: #1a1a1a;
     cursor: pointer;
-    transition:
-      transform 0.2s ease,
-      box-shadow 0.2s ease,
-      background 0.2s ease;
+    transition: all 0.2s ease;
+    text-align: left;
 
     &:hover {
-      transform: translateY(-6px);
-      background: rgba(255, 255, 255, 0.18);
-      box-shadow: 0 18px 40px -24px rgba(0, 0, 0, 0.45);
+      transform: translateY(-2px);
+      background: #FD2A2C;
+      color: white;
+      border-color: #FD2A2C;
+      box-shadow: 0 4px 16px rgba(253, 42, 44, 0.2);
+
+      .btn-subtitle {
+        opacity: 0.9;
+      }
     }
   }
 
   .boton-destacado {
-    background: rgba(255, 255, 255, 0.92);
-    color: #fd2a2c;
-
     &:hover {
-      background: #ffffff;
-      box-shadow: 0 18px 45px -24px rgba(253, 42, 44, 0.65);
+      background: #FD2A2C;
+      border-color: #FD2A2C;
+      box-shadow: 0 4px 20px rgba(253, 42, 44, 0.25);
+    }
+
+    .btn-subtitle {
+      opacity: 0.85;
     }
   }
 }
 
 .btn-title {
-  font-size: 1.1rem;
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: 600;
   letter-spacing: 0.02em;
 }
 
 .btn-subtitle {
-  font-size: 0.9rem;
-  opacity: 0.85;
+  font-size: 13px;
+  opacity: 0.7;
+  line-height: 1.4;
 }
 
 @media (max-width: 1024px) {
-  .menu-local-layout {
-    grid-template-columns: 1fr;
-  }
-
   .sidebar-wrapper {
-    position: sticky;
-    top: 0;
-    z-index: 5;
-    background: rgba(255, 255, 255, 0.1);
+    transform: translateX(-100%);
+    
+    &.open {
+      transform: translateX(0);
+    }
   }
 }
 

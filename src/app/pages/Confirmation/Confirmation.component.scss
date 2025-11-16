@@ -1,6 +1,6 @@
 .confirmacion-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #e74545 0%, #9c6969 100%);
+  background: #fafafa;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -9,29 +9,32 @@
 
 .confirmacion-card {
   background: white;
-  border-radius: 24px;
+  border-radius: 12px;
+  border: 1px solid #e0e0e0;
   padding: 3rem;
   max-width: 600px;
   width: 100%;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   text-align: center;
 }
 
-.success-icon {
-  font-size: 5rem;
-  margin-bottom: 1rem;
-  animation: bounce 0.5s ease;
-}
-
-@keyframes bounce {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.1); }
+.success-badge {
+  display: inline-block;
+  padding: 8px 20px;
+  background: #f5f5f5;
+  color: #1a1a1a;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
 }
 
 h1 {
-  color: #4caf50;
+  color: #1a1a1a;
   margin: 0 0 2rem 0;
-  font-size: 2rem;
+  font-size: 24px;
+  font-weight: 600;
 }
 
 .order-details {
@@ -48,22 +51,24 @@ h1 {
   .label {
     color: #666;
     font-weight: 500;
+    font-size: 14px;
   }
 
   .value {
     font-weight: 600;
-    color: #333;
+    color: #1a1a1a;
+    font-size: 14px;
   }
 
   .status {
-    padding: 0.25rem 0.75rem;
+    padding: 4px 12px;
     border-radius: 12px;
-    font-size: 0.9rem;
+    font-size: 13px;
     font-weight: 600;
 
     &.pending {
-      background: #fff3cd;
-      color: #856404;
+      background: #fff3e0;
+      color: #e65100;
     }
   }
 }
@@ -71,49 +76,68 @@ h1 {
 .products-section {
   margin-top: 1.5rem;
   padding: 1rem;
-  background: #f8f9fa;
+  background: #fafafa;
   border-radius: 8px;
+  border: 1px solid #f0f0f0;
 
   h3 {
     margin: 0 0 0.75rem 0;
-    font-size: 1.1rem;
-    color: #333;
+    font-size: 15px;
+    font-weight: 600;
+    color: #1a1a1a;
   }
 
   .product-item {
     padding: 0.5rem 0;
     color: #666;
+    font-size: 14px;
   }
 }
 
 .info-box {
   margin-top: 1.5rem;
   padding: 1.5rem;
-  background: #e8f5e9;
-  border-radius: 12px;
-  border-left: 4px solid #4caf50;
+  background: #fafafa;
+  border-radius: 8px;
+  border: 1px solid #e8e8e8;
+  text-align: left;
 
-  p {
-    margin: 0.5rem 0;
-    color: #2e7d32;
+  .info-title {
+    margin: 0 0 0.5rem 0;
+    font-weight: 600;
+    color: #1a1a1a;
+    font-size: 14px;
   }
 
-  .info-text {
-    font-size: 0.9rem;
-    margin-top: 1rem;
+  .store-name {
+    margin: 0.5rem 0;
+    color: #1a1a1a;
+    font-weight: 600;
+    font-size: 15px;
   }
 
   .info-address {
-    margin-top: 0.35rem;
+    margin: 0.25rem 0 1rem 0;
     font-weight: 500;
+    color: #666;
+    font-size: 14px;
+  }
+
+  .info-text {
+    font-size: 13px;
+    margin: 1rem 0 0 0;
+    color: #666;
+    line-height: 1.6;
   }
 
   .qr-note {
-    background: rgba(254, 240, 138, 0.6);
-    color: #a16207;
-    padding: 0.75rem 0.9rem;
-    border-radius: 12px;
+    background: #fff3e0;
+    color: #e65100;
+    padding: 12px;
+    border-radius: 8px;
     margin-top: 1rem;
+    font-size: 13px;
+    line-height: 1.6;
   }
 }
 
@@ -121,47 +145,51 @@ h1 {
   padding: 2rem;
   text-align: center;
   color: #666;
+  font-size: 14px;
 }
 
 .error {
   color: #d32f2f;
+  background: #fff3e0;
+  border-radius: 8px;
 }
 
 .actions {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 12px;
   margin-top: 2rem;
 }
 
 .btn-primary,
 .btn-secondary {
-  padding: 1rem;
+  padding: 14px;
   border: none;
-  border-radius: 12px;
-  font-size: 1rem;
+  border-radius: 8px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
 }
 
 .btn-primary {
-  background: #4caf50;
+  background: #1a1a1a;
   color: white;
 
   &:hover {
-    background: #45a049;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+    background: #333;
+    transform: translateY(-1px);
   }
 }
 
 .btn-secondary {
   background: #f5f5f5;
-  color: #333;
+  color: #666;
+  border: 1px solid #e0e0e0;
 
   &:hover {
-    background: #e0e0e0;
+    background: #e8e8e8;
+    color: #333;
   }
 }
 
@@ -170,11 +198,7 @@ h1 {
     padding: 2rem 1.5rem;
   }
 
-  .success-icon {
-    font-size: 4rem;
-  }
-
   h1 {
-    font-size: 1.5rem;
+    font-size: 20px;
   }
 }

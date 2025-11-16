@@ -19,7 +19,6 @@
       </div>
 
       <div class="store-chip" *ngIf="store">
-        <div class="icon">🏪</div>
         <div class="chip-content">
           <span class="chip-title">{{ store.name }}</span>
           <span class="chip-subtitle">{{ store.address }}</span>
@@ -33,7 +32,7 @@
     </div>
 
     <div *ngIf="!isLoading && loadError" class="estado error">
-      <h3>😕 Algo salió mal</h3>
+      <h3>Algo salió mal</h3>
       <p>{{ loadError }}</p>
     </div>
 
@@ -45,7 +44,6 @@
         </div>
 
         <div class="buscador">
-          <span class="icon">🔍</span>
           <input
             type="search"
             placeholder="Buscar por nombre, marca o código de barras"
@@ -170,7 +168,6 @@
                   [value]="method.id"
                   [(ngModel)]="selectedPaymentMethod"
                 />
-                <span class="icon">{{ method.icon }}</span>
                 <span>{{ method.label }}</span>
               </label>
             </div>
@@ -237,4 +234,3 @@
     </div>
   </section>
 </div>
-
