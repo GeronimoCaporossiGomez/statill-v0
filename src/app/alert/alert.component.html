@@ -1,0 +1,4 @@
+<div class="alert-container" [ngClass]="{ show: show, success: !isError, error: isError }">
+  <span class="alert-text">{{ alertText }}</span>
+  <div class="alert-progress" [style.width.%]="progress" [ngClass]="{ 'progress-error': isError, 'progress-success': !isError }"></div>
+</div>

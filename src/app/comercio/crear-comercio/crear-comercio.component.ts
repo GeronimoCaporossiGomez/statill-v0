@@ -7,6 +7,7 @@ import { MapaComponent } from 'src/app/mapa/mapa.component';
 import { MiApiService } from 'src/app/servicios/mi-api.service';
 import { AuthService } from 'src/app/servicios/auth.service';
 import { GeneralService } from 'src/app/servicios/general.service';
+import { AlertComponent } from 'src/app/alert/alert.component';
 
 @Component({
   selector: 'app-crear-comercio',
@@ -17,13 +18,14 @@ import { GeneralService } from 'src/app/servicios/general.service';
     SidebarComponent,
     RouterLink,
     MapaComponent,
+    AlertComponent
   ],
   templateUrl: './crear-comercio.component.html',
   styleUrl: './crear-comercio.component.scss',
 })
 export class CrearComercioComponent {
   @ViewChild(MapaComponent) mapaComponent!: MapaComponent;
-
+  @ViewChild(AlertComponent) AlertComponent!: AlertComponent;
   mensajeAlerta: string = '';
   ErrorAlerta: boolean = false;
   creando: boolean = true;
@@ -133,16 +135,13 @@ export class CrearComercioComponent {
     // Obtener el usuario autenticado
     const currentUser = this.authService.getCurrentUser();
     if (!currentUser || !currentUser.id) {
-      this.ErrorAlerta = true;
-      this.mensajeAlerta =
-        'Error: Debes estar autenticado para crear un comercio.';
+      this.AlertComponent.Alert('¡Operación exitosa!', false);
       return;
     }
 
     // Validar que el nombre no esté vacío
     if (!form.value.nombre || form.value.nombre.trim() === '') {
-      this.ErrorAlerta = true;
-      this.mensajeAlerta = 'Ingresa una dirección o algo asi';
+      this.AlertComponent.Alert('Ingresa una dirección o algo asi', true);
       return;
     }
 
@@ -152,9 +151,7 @@ export class CrearComercioComponent {
 
     // Validar que haya una dirección
     if (!direccionFinal || direccionFinal.trim() === '') {
-      this.ErrorAlerta = true;
-      this.mensajeAlerta =
-        'Por favor, selecciona una ubicación en el mapa o ingresa una dirección.';
+      this.AlertComponent.Alert('Por favor, selecciona una ubicación en el mapa o ingresa una dirección.', true);
       return;
     }
 
@@ -232,8 +229,7 @@ export class CrearComercioComponent {
             .subscribe({
               next: () => {
                 console.log('✅ Imagen subida exitosamente');
-                this.ErrorAlerta = false;
-                this.mensajeAlerta = 'Comercio creado exitosamente';
+                this.AlertComponent.Alert('Comercio creado exitosamente', false);
                 this.miApiService.uploadImage(
                   'store',
                   response.data.id,
@@ -243,15 +239,12 @@ export class CrearComercioComponent {
               },
               error: (error) => {
                 console.error('❌ Error al subir imagen:', error);
-                this.ErrorAlerta = true;
-                this.mensajeAlerta =
-                  'Comercio creado, pero hubo un error al subir la imagen';
+                this.AlertComponent.Alert('Comercio creado, pero hubo un error al subir la imagen', true);
                 this.router.navigate(['/escanear']);
               },
             });
         } else {
-          this.ErrorAlerta = false;
-          this.mensajeAlerta = 'Comercio creado exitosamente';
+          this.AlertComponent.Alert('Comercio creado exitosamente', false);
           this.router.navigate(['/escanear']);
         }
         this.router.navigate(['/escanear']);
@@ -271,8 +264,7 @@ export class CrearComercioComponent {
             'Por favor, verifica que todos los campos estén completos.';
         }
 
-        this.ErrorAlerta = false;
-        this.mensajeAlerta = errorMessage;
+        this.AlertComponent.Alert(errorMessage, true);
       },
     });
   }
