@@ -347,7 +347,7 @@ export class EscanearComponent implements OnDestroy, OnInit {
   // 🔥🔥🔥 MÉTODO MEJORADO PARA LIMPIAR RECURSOS
   ngOnDestroy() {
     console.log('🧹 Limpiando recursos de EscanearComponent...');
-    
+
     // 1. Detener la cámara primero
     this.stopCamera();
 
@@ -357,10 +357,10 @@ export class EscanearComponent implements OnDestroy, OnInit {
         // Remover todos los event listeners
         Quagga.offDetected();
         Quagga.offProcessed();
-        
+
         // Detener completamente
         Quagga.stop();
-        
+
         console.log('✅ QuaggaJS limpiado correctamente');
       } catch (error) {
         console.error('Error al limpiar Quagga:', error);
@@ -370,7 +370,7 @@ export class EscanearComponent implements OnDestroy, OnInit {
     // 3. Limpiar el stream de MediaStream si existe
     if (this.stream) {
       try {
-        this.stream.getTracks().forEach(track => {
+        this.stream.getTracks().forEach((track) => {
           track.stop();
           console.log('Track detenido:', track.kind);
         });

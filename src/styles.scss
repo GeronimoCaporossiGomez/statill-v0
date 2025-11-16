@@ -13,7 +13,8 @@ $font-family-secundaria: "Roboto Condensed", sans-serif;
   font-family: $font-family-secundaria;
 }
 
-.error,.success {
+.error,
+.success {
   background-color: #fee2e2;
   color: #991b1b;
   border: 1px solid #fca5a5;
@@ -26,9 +27,9 @@ $font-family-secundaria: "Roboto Condensed", sans-serif;
   left: 50%;
   transform: translateX(-50%);
   z-index: 999;
-&.success {
-  background-color: #d1fae5;
-  color: #065f46;
-  border: 1px solid #6ee7b7;
+  &.success {
+    background-color: #d1fae5;
+    color: #065f46;
+    border: 1px solid #6ee7b7;
   }
 }

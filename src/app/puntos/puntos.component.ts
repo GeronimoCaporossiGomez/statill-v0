@@ -87,7 +87,8 @@ export class PuntosComponent implements OnInit {
               .filter((result) => result.puntos > 0)
               .map((result) => ({
                 imagen: 'assets/img/tienda.png',
-                nombre: result.store.name?.trim() || `Tienda #${result.store.id}`,
+                nombre:
+                  result.store.name?.trim() || `Tienda #${result.store.id}`,
                 puntos: result.puntos,
                 direccion: result.store.address || 'Dirección no disponible',
                 categoria: this.obtenerCategoria(result.store.category),

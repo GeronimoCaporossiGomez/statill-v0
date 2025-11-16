@@ -34,11 +34,17 @@ export const allowCreateCommerceGuard: CanActivateFn = (route, state) => {
   //  Si el usuario ya está cargado en memoria
   const user = authService.getCurrentUser();
   if (user) {
-    const hasStoreRole = user.store_role === 'owner' || user.store_role === 'cashier';
-    console.log('👤 Usuario en memoria, store_role =', user.store_role, 'hasStoreRole =', hasStoreRole);
+    const hasStoreRole =
+      user.store_role === 'owner' || user.store_role === 'cashier';
+    console.log(
+      '👤 Usuario en memoria, store_role =',
+      user.store_role,
+      'hasStoreRole =',
+      hasStoreRole,
+    );
 
     if (hasStoreRole) {
-          router.navigate(['/menu-local']);
+      router.navigate(['/menu-local']);
       return false;
     }
 
@@ -56,8 +62,9 @@ export const allowCreateCommerceGuard: CanActivateFn = (route, state) => {
       }
 
       const fetchedUser = response.data;
-      const hasStoreRole = fetchedUser.store_role === 'owner' || fetchedUser.store_role === 'cashier';
-      
+      const hasStoreRole =
+        fetchedUser.store_role === 'owner' ||
+        fetchedUser.store_role === 'cashier';
 
       if (hasStoreRole) {
         console.log('🚫 Ya tiene comercio -> /menu-local');
@@ -69,13 +76,11 @@ export const allowCreateCommerceGuard: CanActivateFn = (route, state) => {
       return true;
     }),
     catchError((error) => {
-      
       router.navigate(['/landing']);
       return of(false);
     }),
   );
 };
-
 
 export const activeUserGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
@@ -96,7 +101,6 @@ export const activeUserGuard: CanActivateFn = (route, state) => {
     return false;
   }
 
- 
   router.navigate(['/landing']);
   return false;
 };

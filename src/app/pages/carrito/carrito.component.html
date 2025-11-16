@@ -24,7 +24,10 @@
     <div class="cart-items">
       <div *ngFor="let item of cartItems" class="cart-item">
         <div class="item-image">
-          <img [src]="item.image || 'assets/img/tienda.png'" [alt]="item.name">
+          <img
+            [src]="item.image || 'assets/img/tienda.png'"
+            [alt]="item.name"
+          />
         </div>
         <div class="item-info">
           <h3>{{ item.name }}</h3>
@@ -50,7 +53,9 @@
         </div>
         <div class="summary-row total">
           <span><strong>Total</strong></span>
-          <span><strong>${{ getTotal() }}</strong></span>
+          <span
+            ><strong>${{ getTotal() }}</strong></span
+          >
         </div>
       </div>
 
@@ -58,19 +63,23 @@
       <div class="payment-section">
         <h3>Método de Pago</h3>
         <div class="payment-methods">
-          <label 
-            *ngFor="let method of paymentMethods" 
+          <label
+            *ngFor="let method of paymentMethods"
             class="payment-method"
             [class.disabled]="!isPaymentMethodAllowed(method.id)"
-            [class.selected]="selectedPaymentMethod === method.id">
-            <input 
-              type="radio" 
-              name="payment" 
+            [class.selected]="selectedPaymentMethod === method.id"
+          >
+            <input
+              type="radio"
+              name="payment"
               [value]="method.id"
               [(ngModel)]="selectedPaymentMethod"
               [disabled]="!isPaymentMethodAllowed(method.id)">
             <span class="method-name">{{ method.name }}</span>
-            <span *ngIf="!isPaymentMethodAllowed(method.id)" class="not-available">
+            <span
+              *ngIf="!isPaymentMethodAllowed(method.id)"
+              class="not-available"
+            >
               No disponible
             </span>
           </label>
@@ -81,10 +90,11 @@
       </div>
 
       <!-- Botón de confirmar -->
-      <button 
-        class="btn-checkout" 
+      <button
+        class="btn-checkout"
         (click)="createOrder()"
-        [disabled]="isLoading || cartItems.length === 0">
+        [disabled]="isLoading || cartItems.length === 0"
+      >
         <span *ngIf="!isLoading">Confirmar Pedido</span>
         <span *ngIf="isLoading">Procesando...</span>
       </button>

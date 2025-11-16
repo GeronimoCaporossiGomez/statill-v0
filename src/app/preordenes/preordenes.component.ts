@@ -17,7 +17,7 @@ export class PreordenesComponent {
   probando: any[] = [];
 
   constructor(private miApiService: MiApiService) {}
-  
+
   ngOnInit() {
     this.loadOrders();
   }
@@ -26,27 +26,26 @@ export class PreordenesComponent {
     this.miApiService.getMyOrders().subscribe({
       next: (data) => {
         const orders = data.data;
-        console.log(data.data)
+        console.log(data.data);
         // Create 1 request per order
         const storeRequests = orders.map((order: any) =>
-          this.miApiService.getStoreById(order.store_id)
+          this.miApiService.getStoreById(order.store_id),
         );
-  
+
         // Run all requests in parallel
         forkJoin(storeRequests).subscribe((stores) => {
           // Attach store to its order
           this.probando = orders.map((order: any, i: number) => ({
             ...order,
-            store: stores[i]   // <--- store info here
+            store: stores[i], // <--- store info here
           }));
         });
       },
       error: (err) => {
-        console.error("Error loading orders:", err);
-      }
+        console.error('Error loading orders:', err);
+      },
     });
   }
-
 
   verDetalle(index: number) {
     this.descripcion = this.descripcion === index ? null : index;

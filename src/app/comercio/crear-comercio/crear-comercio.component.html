@@ -91,7 +91,7 @@
         </div>
 
         <p *ngIf="ubicacionConfirmada" class="ubicacion-confirmada">
-           {{ ubicacionConfirmada }}
+          {{ ubicacionConfirmada }}
         </p>
 
         <!-- Mapa integrado -->
@@ -143,12 +143,7 @@
           Crédito
         </label>
         <label>
-          <input
-            type="checkbox"
-            name="pagoQR"
-            ngModel
-            [checked]="true"
-          />
+          <input type="checkbox" name="pagoQR" ngModel [checked]="true" />
           QR
         </label>
       </div>
@@ -195,7 +190,9 @@
         </div>
       </div>
 
-      <h1 [class]="{'success': !ErrorAlerta, 'error': ErrorAlerta}">{{mensajeAlerta}}aaa</h1>
+      <h1 [class]="{ success: !ErrorAlerta, error: ErrorAlerta }">
+        {{ mensajeAlerta }}aaa
+      </h1>
 
       <button type="button" (click)="bajarPantalla()">Anterior</button>
       <button type="submit">Crear Comercio</button>

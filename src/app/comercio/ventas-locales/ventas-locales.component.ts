@@ -2,14 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import {
-  ComercioService,
-} from '../../servicios/comercio.service';
-import {
-  MiApiService,
-  Product,
-  Store,
-} from '../../servicios/mi-api.service';
+import { ComercioService } from '../../servicios/comercio.service';
+import { MiApiService, Product, Store } from '../../servicios/mi-api.service';
 import { AuthService } from '../../servicios/auth.service';
 import { SidebarComponent } from '../../Componentes/sidebar-statill/sidebar.component';
 import { Subscription } from 'rxjs';
@@ -118,15 +112,9 @@ export class VentasLocalesComponent implements OnInit, OnDestroy {
     }
 
     this.filteredProducts = this.products.filter((product) => {
-      const nameMatch = product.name
-        ?.toLowerCase()
-        ?.includes(term);
-      const brandMatch = product.brand
-        ?.toLowerCase()
-        ?.includes(term);
-      const barcodeMatch = product.barcode
-        ?.toLowerCase()
-        ?.includes(term);
+      const nameMatch = product.name?.toLowerCase()?.includes(term);
+      const brandMatch = product.brand?.toLowerCase()?.includes(term);
+      const barcodeMatch = product.barcode?.toLowerCase()?.includes(term);
       return nameMatch || brandMatch || barcodeMatch;
     });
   }
@@ -194,7 +182,10 @@ export class VentasLocalesComponent implements OnInit, OnDestroy {
         ? Number(this.customerIdInput)
         : null;
 
-    if (this.assignToCustomer && (userId === null || isNaN(userId) || userId <= 0)) {
+    if (
+      this.assignToCustomer &&
+      (userId === null || isNaN(userId) || userId <= 0)
+    ) {
       this.feedbackMessage = {
         type: 'error',
         text: 'Ingresá un ID de cliente válido para asignar la venta.',
@@ -260,8 +251,7 @@ export class VentasLocalesComponent implements OnInit, OnDestroy {
       next: (response: any) => {
         if (response.successful && response.data) {
           this.store = response.data;
-          this.selectedPaymentMethod =
-            this.allowedPaymentMethods()[0]?.id ?? 0;
+          this.selectedPaymentMethod = this.allowedPaymentMethods()[0]?.id ?? 0;
         }
       },
       error: (error) => {
@@ -278,27 +268,24 @@ export class VentasLocalesComponent implements OnInit, OnDestroy {
   }
 
   private loadProducts(storeId: number): void {
-    const productSub = this.miApiService
-      .getProductosById(storeId)
-      .subscribe({
-        next: (response: any) => {
-          if (response.successful && Array.isArray(response.data)) {
-            this.products = response.data;
-            this.filteredProducts = [...this.products];
-          } else {
-            this.loadError =
-              'Todavía no hay productos cargados en esta tienda.';
-          }
-        },
-        error: (error) => {
-          console.error('Error al cargar productos', error);
-          this.loadError =
-            'No pudimos obtener los productos. Reintentá en unos minutos.';
-        },
-        complete: () => {
-          this.isLoading = false;
-        },
-      });
+    const productSub = this.miApiService.getProductosById(storeId).subscribe({
+      next: (response: any) => {
+        if (response.successful && Array.isArray(response.data)) {
+          this.products = response.data;
+          this.filteredProducts = [...this.products];
+        } else {
+          this.loadError = 'Todavía no hay productos cargados en esta tienda.';
+        }
+      },
+      error: (error) => {
+        console.error('Error al cargar productos', error);
+        this.loadError =
+          'No pudimos obtener los productos. Reintentá en unos minutos.';
+      },
+      complete: () => {
+        this.isLoading = false;
+      },
+    });
 
     this.subscriptions.add(productSub);
   }
@@ -318,7 +305,10 @@ export class VentasLocalesComponent implements OnInit, OnDestroy {
           }
         },
         error: (error) => {
-          console.error('No se pudo refrescar el stock después de la venta', error);
+          console.error(
+            'No se pudo refrescar el stock después de la venta',
+            error,
+          );
         },
       });
 

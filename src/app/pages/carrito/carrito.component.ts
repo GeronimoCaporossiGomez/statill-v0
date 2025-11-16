@@ -27,7 +27,7 @@ interface Store {
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './carrito.component.html',
-  styleUrls: ['./carrito.component.scss']
+  styleUrls: ['./carrito.component.scss'],
 })
 export class CarritoComponent implements OnInit {
   private router = inject(Router);
@@ -47,18 +47,18 @@ export class CarritoComponent implements OnInit {
     { id: 0, name: 'Efectivo', icon: '💵' },
     { id: 1, name: 'Débito', icon: '💳' },
     { id: 2, name: 'Crédito', icon: '💳' },
-    { id: 3, name: 'QR', icon: '📱' }
+    { id: 3, name: 'QR', icon: '📱' },
   ];
 
   ngOnInit() {
     // Obtener storeId de la URL
     this.storeId = Number(this.route.snapshot.queryParamMap.get('storeId'));
-    
+
     if (!this.storeId) {
       this.errorMessage = 'Error: No se encontró la tienda';
       return;
     }
-    
+
     // Obtener items del carrito del localStorage
     const cartData = localStorage.getItem(`cart_${this.storeId}`);
     if (cartData) {
@@ -79,12 +79,15 @@ export class CarritoComponent implements OnInit {
       error: (err) => {
         console.error('Error al cargar tienda:', err);
         this.errorMessage = 'Error al cargar información de la tienda';
-      }
+      },
     });
   }
 
   getTotal(): number {
-    return this.cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    return this.cartItems.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0,
+    );
   }
 
   getTotalItems(): number {
@@ -106,12 +109,15 @@ export class CarritoComponent implements OnInit {
   }
 
   removeItem(item: CartItem) {
-    this.cartItems = this.cartItems.filter(i => i.id !== item.id);
+    this.cartItems = this.cartItems.filter((i) => i.id !== item.id);
     this.saveCart();
   }
 
   saveCart() {
-    localStorage.setItem(`cart_${this.storeId}`, JSON.stringify(this.cartItems));
+    localStorage.setItem(
+      `cart_${this.storeId}`,
+      JSON.stringify(this.cartItems),
+    );
   }
 
   clearCart() {
@@ -140,7 +146,8 @@ export class CarritoComponent implements OnInit {
     }
 
     if (!this.isPaymentMethodAllowed(this.selectedPaymentMethod)) {
-      this.errorMessage = 'El método de pago seleccionado no está disponible en esta tienda';
+      this.errorMessage =
+        'El método de pago seleccionado no está disponible en esta tienda';
       return;
     }
 
@@ -150,11 +157,11 @@ export class CarritoComponent implements OnInit {
     // Preparar la preorden
     const order = {
       store_id: this.storeId,
-      products: this.cartItems.map(item => ({
+      products: this.cartItems.map((item) => ({
         product_id: item.id,
-        quantity: item.quantity
+        quantity: item.quantity,
       })),
-      payment_method: this.selectedPaymentMethod
+      payment_method: this.selectedPaymentMethod,
     };
 
     console.log('📦 Creando preorden:', order);
@@ -164,7 +171,7 @@ export class CarritoComponent implements OnInit {
       next: (response) => {
         console.log('✅ Preorden creada:', response);
         this.isLoading = false;
-        
+
         // Limpiar carrito
         this.clearCart();
 
@@ -172,10 +179,13 @@ export class CarritoComponent implements OnInit {
         const orderId = response.data?.id || response.data;
 
         // Redirigir según el método de pago
-        if (this.selectedPaymentMethod === 0 || this.selectedPaymentMethod === 3) {
+        if (
+          this.selectedPaymentMethod === 0 ||
+          this.selectedPaymentMethod === 3
+        ) {
           const paymentParam = this.selectedPaymentMethod === 3 ? 'qr' : 'cash';
           this.router.navigate(['/orden-confirmacion'], {
-            queryParams: { orderId: orderId, payment: paymentParam }
+            queryParams: { orderId: orderId, payment: paymentParam },
           });
         } else {
           this.router.navigate(['/metodo-pago-no-disponible']);
@@ -184,19 +194,20 @@ export class CarritoComponent implements OnInit {
       error: (error) => {
         console.error('❌ Error al crear preorden:', error);
         this.isLoading = false;
-        
+
         let errorMsg = 'Error al crear el pedido. Intente nuevamente.';
-        
+
         if (error.error?.message) {
           errorMsg = error.error.message;
         } else if (error.status === 404) {
-          errorMsg = 'No se pudo encontrar el producto. Verifica que estén disponibles.';
+          errorMsg =
+            'No se pudo encontrar el producto. Verifica que estén disponibles.';
         } else if (error.status === 400) {
           errorMsg = 'Datos inválidos. Verifica tu carrito.';
         }
-        
+
         this.errorMessage = errorMsg;
-      }
+      },
     });
   }
 

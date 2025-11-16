@@ -40,7 +40,8 @@
   }
 }
 
-.loading, .no-orders {
+.loading,
+.no-orders {
   text-align: center;
   padding: 3rem;
   background: white;
@@ -66,13 +67,21 @@
   background: white;
   border-radius: 12px;
   padding: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   border-left: 4px solid #ddd;
 
-  &.pending { border-left-color: #ff9800; }
-  &.accepted { border-left-color: #2196f3; }
-  &.received { border-left-color: #4caf50; }
-  &.cancelled { border-left-color: #f44336; }
+  &.pending {
+    border-left-color: #ff9800;
+  }
+  &.accepted {
+    border-left-color: #2196f3;
+  }
+  &.received {
+    border-left-color: #4caf50;
+  }
+  &.cancelled {
+    border-left-color: #f44336;
+  }
 }
 
 .order-header {
@@ -106,10 +115,22 @@
   font-size: 0.85rem;
   font-weight: 600;
 
-  &.pending { background: #fff3cd; color: #856404; }
-  &.accepted { background: #cfe2ff; color: #084298; }
-  &.received { background: #d1e7dd; color: #0f5132; }
-  &.cancelled { background: #f8d7da; color: #842029; }
+  &.pending {
+    background: #fff3cd;
+    color: #856404;
+  }
+  &.accepted {
+    background: #cfe2ff;
+    color: #084298;
+  }
+  &.received {
+    background: #d1e7dd;
+    color: #0f5132;
+  }
+  &.cancelled {
+    background: #f8d7da;
+    color: #842029;
+  }
 }
 
 .order-body {
@@ -201,7 +222,8 @@
     }
   }
 
-  .completed-badge, .cancelled-badge {
+  .completed-badge,
+  .cancelled-badge {
     flex: 1;
     text-align: center;
     padding: 0.75rem;

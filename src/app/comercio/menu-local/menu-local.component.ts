@@ -8,7 +8,7 @@ import { SidebarComponent } from '../../Componentes/sidebar-statill/sidebar.comp
   standalone: true,
   imports: [CommonModule, SidebarComponent],
   templateUrl: './menu-local.component.html',
-  styleUrls: ['./menu-local.component.scss']
+  styleUrls: ['./menu-local.component.scss'],
 })
 export class MenuLocalComponent {
   constructor(private router: Router) {}

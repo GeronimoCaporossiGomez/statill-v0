@@ -1,7 +1,12 @@
 import { Component, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Discount, MiApiService, Product, ProductsResponse, Store } from 'src/app/servicios/mi-api.service';
-
+import {
+  Discount,
+  MiApiService,
+  Product,
+  ProductsResponse,
+  Store,
+} from 'src/app/servicios/mi-api.service';
 
 @Component({
   selector: 'app-discounts-statill',
@@ -24,13 +29,13 @@ export class DiscountsStatillComponent {
         this.api.getStoreById(this.product.store_id).subscribe({
           next: (r: any) => {
             this.store = r.data;
-            this.api.getImageByObjectId("product", this.product .id).subscribe({
+            this.api.getImageByObjectId('product', this.product.id).subscribe({
               next: (r: any) => {
-                this.img = r.data;    this.text = `${this.d.pct_off}% OFF en ${this.product.name}`
-
-              }
+                this.img = r.data;
+                this.text = `${this.d.pct_off}% OFF en ${this.product.name}`;
+              },
             });
-          }
+          },
         });
       },
     });
