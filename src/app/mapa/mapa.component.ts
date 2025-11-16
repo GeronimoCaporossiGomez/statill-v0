@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
@@ -15,6 +15,7 @@ import * as L from 'leaflet';
 import { LeafletModule } from '@bluehalo/ngx-leaflet';
 import { MiApiService } from '../servicios/mi-api.service';
 import { GeocodingService } from '../servicios/geocoding.service';
+import { AlertComponent } from '../alert/alert.component';
 
 @Component({
   selector: 'app-mapa',
@@ -28,6 +29,7 @@ export class MapaComponent {
   @Input() ubicacion: [number, number] | null = null;
   @Output() ubicacionSeleccionada = new EventEmitter<[number, number]>();
   @Output() direccionSeleccionada = new EventEmitter<string>();
+  @ViewChild(AlertComponent) AlertComponent!: AlertComponent;
 
   // Variables para el modo vendedor
   direccionInput: string = '';
@@ -120,9 +122,7 @@ export class MapaComponent {
           coords.longitude < -73 ||
           coords.longitude > -53
         ) {
-          alert(
-            'La dirección no parece estar en Argentina. Por favor, verifica.',
-          );
+          this.AlertComponent.Alert('La dirección no parece estar en Argentina. Por favor, verifica.', true);
           this.buscandoDireccion = false;
           return;
         }
@@ -140,11 +140,11 @@ export class MapaComponent {
           `✅ Dirección encontrada: ${this.direccionActual} -> [${coords.latitude}, ${coords.longitude}]`,
         );
       } else {
-        alert('No se pudo encontrar la dirección. Intenta con otra.');
+        this.AlertComponent.Alert('No se pudo encontrar la dirección. Intenta con otra.', true);
       }
     } catch (error) {
       console.error('Error al buscar dirección:', error);
-      alert('Hubo un error al buscar la dirección. Intenta nuevamente.');
+      this.AlertComponent.Alert('Hubo un error al buscar la dirección. Intenta nuevamente.', true);
     }
 
     this.buscandoDireccion = false;

@@ -1,4 +1,4 @@
-import { Component, Inject, inject, OnInit } from '@angular/core';
+import { Component, Inject, inject, OnInit, ViewChild } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ComercioService } from '../servicios/comercio.service';
@@ -8,6 +8,7 @@ import { forkJoin, Observable } from 'rxjs';
 import { AuthService } from '../servicios/auth.service';
 import { GeneralService } from '../servicios/general.service';
 import { MiApiService } from '../servicios/mi-api.service';
+import { AlertComponent } from '../alert/alert.component';
 
 @Component({
   selector: 'app-negocio',
@@ -16,6 +17,8 @@ import { MiApiService } from '../servicios/mi-api.service';
   styleUrl: './negocio.component.scss',
 })
 export class NegocioComponent implements OnInit {
+  @ViewChild(AlertComponent) AlertComponent!: AlertComponent;
+
   constructor(@Inject(DOCUMENT) private document: Document) {}
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -130,7 +133,7 @@ export class NegocioComponent implements OnInit {
       error: (err) => {
         console.error('Error al cargar datos:', err);
         this.cargando = false;
-        alert('Error al cargar la tienda. Por favor, intente nuevamente.');
+        this.AlertComponent.Alert('Error al cargar la tienda. Por favor, intente nuevamente.', true);
         this.router.navigate(['/home']);
       },
     });
@@ -204,35 +207,33 @@ export class NegocioComponent implements OnInit {
 
   submitReview(): void {
     if (!this.authService.isActiveUser()) {
-      alert('Debes iniciar sesión y verificar tu email para dejar una reseña.');
+      this.AlertComponent.Alert('Debes iniciar sesión y verificar tu email para dejar una reseña.', true);
       return;
     }
 
     if (!this.comercio || !this.comercio.id) {
-      alert('Error: No se pudo cargar la información de la tienda.');
+      this.AlertComponent.Alert('Error: No se pudo cargar la información de la tienda.', true);
       return;
     }
 
     if (!this.hasPurchasedFromStore && !this.checkingPurchase) {
-      alert(
-        'Solo puedes dejar una reseña después de haber realizado un pedido en esta tienda.',
-      );
+      this.AlertComponent.Alert('Solo puedes dejar una reseña después de haber realizado un pedido en esta tienda.', true);
       return;
     }
 
     if (this.estrellas === 0) {
-      alert('Por favor, selecciona una calificación.');
+      this.AlertComponent.Alert('Por favor, selecciona una calificación.', true);
       return;
     }
 
     if (this.textValue.trim() === '') {
-      alert('Por favor, escribe una reseña.');
+      this.AlertComponent.Alert('Por favor, escribe una reseña.', true);
       return;
     }
 
     const currentUser = this.authService.getCurrentUser();
     if (!currentUser) {
-      alert('Error: No se pudo obtener tu información de usuario.');
+      this.AlertComponent.Alert('Error: No se pudo obtener tu información de usuario.', true);
       return;
     }
 
@@ -245,7 +246,7 @@ export class NegocioComponent implements OnInit {
     this.comercioService.postReview(review).subscribe({
       next: (response) => {
         console.log('Review realizada:', response);
-        alert('Reseña enviada con éxito!');
+        this.AlertComponent.Alert('Reseña enviada con éxito!', false);
         this.document.location.reload();
       },
       error: (err) => {
@@ -253,7 +254,7 @@ export class NegocioComponent implements OnInit {
         const errorMessage =
           err.error?.message ||
           'Error al enviar la reseña. Por favor, intente nuevamente.';
-        alert(errorMessage);
+        this.AlertComponent.Alert(errorMessage, true);
       },
     });
   }
@@ -261,19 +262,19 @@ export class NegocioComponent implements OnInit {
   deleteReview(): void {
     const currentUser = this.authService.getCurrentUser();
     if (!currentUser) {
-      alert('Debes iniciar sesión para eliminar una reseña.');
+      this.AlertComponent.Alert('Debes iniciar sesión para eliminar una reseña.', true);
       return;
     }
 
     if (!this.currentReview) {
-      alert('No tienes reseña para eliminar.');
+      this.AlertComponent.Alert('No tienes reseña para eliminar.', true);
       return;
     }
 
     this.comercioService.deleteReview(this.currentReview.id).subscribe({
       next: (response) => {
         console.log('Reseña eliminada:', response);
-        alert('Reseña eliminada con éxito!');
+        this.AlertComponent.Alert('Reseña eliminada con éxito!', false);
         this.reviews = this.reviews.filter(
           (review) => review.id !== this.currentReview.id,
         );
@@ -282,7 +283,7 @@ export class NegocioComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error al eliminar la reseña:', err);
-        alert('Error al eliminar la reseña. Por favor, intente nuevamente.');
+        this.AlertComponent.Alert('Error al eliminar la reseña. Por favor, intente nuevamente.', true);
       },
     });
   }
@@ -290,20 +291,18 @@ export class NegocioComponent implements OnInit {
   // 🔹 NUEVA FUNCIÓN FINALIZAR COMPRA (versión mejorada)
   finalizarCompra() {
     if (!this.comercio || !this.comercio.id) {
-      alert('Error: No se pudo cargar la información de la tienda.');
+      this.AlertComponent.Alert('Error: No se pudo cargar la información de la tienda.', true);
       return;
     }
 
     if (this.getTotalItems() === 0) {
-      alert('Agregue productos al carrito');
+      this.AlertComponent.Alert('Agregue productos al carrito', true);
       return;
     }
 
     // Verificar autenticación
     if (!this.authService.isActiveUser()) {
-      alert(
-        'Debes iniciar sesión y verificar tu email para realizar una compra.',
-      );
+      this.AlertComponent.Alert('Debes iniciar sesión y verificar tu email para realizar una compra.', true);
       return;
     }
 
