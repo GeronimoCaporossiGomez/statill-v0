@@ -7,9 +7,7 @@ import { MiApiService } from './mi-api.service';
 @Injectable({ providedIn: 'root' })
 export class GeocodingService {
   constructor(private api: MiApiService) {}
-  geocode(
-    address: string,
-  ): Observable<{
+  geocode(address: string): Observable<{
     latitude: number;
     longitude: number;
     formatted_address: string;
