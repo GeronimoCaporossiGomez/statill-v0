@@ -27,24 +27,27 @@
       <div class="products-section">
         <h3>Productos:</h3>
         <div *ngFor="let product of order.products" class="product-item">
-          <span>{{ product.quantity }}x Producto #{{ product.product_id }}</span>
+          <span
+            >{{ product.quantity }}x Producto #{{ product.product_id }}</span
+          >
         </div>
       </div>
 
       <div class="info-box">
         <p><strong>📍 Dirección de retiro:</strong></p>
         <p>
-          {{ storeName || ('Tienda #' + order.store_id) }}
+          {{ storeName || "Tienda #" + order.store_id }}
         </p>
         <p class="info-text info-address">
-          {{ storeAddress || 'Dirección no disponible' }}
+          {{ storeAddress || "Dirección no disponible" }}
         </p>
         <p class="info-text">
-          Presentá este número de orden al retirar tu pedido.
-          El comercio te avisará cuando esté listo.
+          Presentá este número de orden al retirar tu pedido. El comercio te
+          avisará cuando esté listo.
         </p>
         <p *ngIf="paymentContext === 'qr'" class="info-text qr-note">
-          Recordá que el pago QR se valida presencialmente en el local antes de entregar el pedido.
+          Recordá que el pago QR se valida presencialmente en el local antes de
+          entregar el pedido.
         </p>
       </div>
     </div>

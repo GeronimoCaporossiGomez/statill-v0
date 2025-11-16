@@ -47,10 +47,7 @@
   <section *ngIf="!showSearchResults" class="promotions-section">
     <h2 class="promotions-title">¡Promociones imperdibles!</h2>
     <div class="promotions-grid">
-      <app-discounts-statill
-        *ngFor="let promo of promotions"
-        [d]="promo"
-      >
+      <app-discounts-statill *ngFor="let promo of promotions" [d]="promo">
       </app-discounts-statill>
 
       <div *ngIf="isLoading" class="loading-container">

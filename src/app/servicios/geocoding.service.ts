@@ -6,23 +6,28 @@ import { MiApiService } from './mi-api.service';
 
 @Injectable({ providedIn: 'root' })
 export class GeocodingService {
-  constructor(private api: MiApiService){
-
-  }
+  constructor(private api: MiApiService) {}
   geocode(
     address: string,
-  ): Observable<{ latitude: number; longitude: number,formatted_address:string } | null> {
+  ): Observable<{
+    latitude: number;
+    longitude: number;
+    formatted_address: string;
+  } | null> {
     if (!address || address.trim() === '') {
       return of(null);
     }
 
     return this.api.geocodeAddress(address).pipe(
-      map(response => ({
+      map((response) => ({
         latitude: response.data.latitude,
         longitude: response.data.longitude,
-        formatted_address: response.data.formatted_address
+        formatted_address: response.data.formatted_address,
       })),
-      catchError((ex) => {console.error(ex);return of(null)})
+      catchError((ex) => {
+        console.error(ex);
+        return of(null);
+      }),
     );
   }
 
@@ -35,10 +40,10 @@ export class GeocodingService {
     }
 
     return this.api.reverseGeocode(latitude, longitude).pipe(
-      map(response => ({
-        address: response.data.address
+      map((response) => ({
+        address: response.data.address,
       })),
-      catchError(() => of(null))
+      catchError(() => of(null)),
     );
   }
 }

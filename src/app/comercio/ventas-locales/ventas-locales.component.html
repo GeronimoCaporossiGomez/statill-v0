@@ -13,8 +13,8 @@
         <span class="badge">Ventas en el local</span>
         <h1>Registrar nueva venta</h1>
         <p>
-          Crea ventas presenciales sin necesidad de preorden. Seleccioná los productos,
-          definí el método de pago y confirmá el cobro en tienda.
+          Crea ventas presenciales sin necesidad de preorden. Seleccioná los
+          productos, definí el método de pago y confirmá el cobro en tienda.
         </p>
       </div>
 
@@ -67,7 +67,7 @@
               <h3>{{ producto.name }}</h3>
               <p class="detalle">
                 <span *ngIf="producto.brand">{{ producto.brand }} · </span>
-                Código: {{ producto.barcode || '—' }}
+                Código: {{ producto.barcode || "—" }}
               </p>
               <p class="stock">
                 Stock disponible:
@@ -76,7 +76,7 @@
             </div>
 
             <div class="producto-precio">
-              ${{ producto.price | number : '1.2-2' }}
+              ${{ producto.price | number: "1.2-2" }}
             </div>
 
             <button
@@ -97,7 +97,11 @@
           <span>{{ saleItems.length }} productos seleccionados</span>
         </div>
 
-        <div *ngIf="feedbackMessage" class="feedback" [class.error]="feedbackMessage.type === 'error'">
+        <div
+          *ngIf="feedbackMessage"
+          class="feedback"
+          [class.error]="feedbackMessage.type === 'error'"
+        >
           {{ feedbackMessage.text }}
         </div>
 
@@ -106,13 +110,12 @@
         </div>
 
         <div *ngIf="saleItems.length > 0" class="venta-detalle">
-          <div
-            *ngFor="let item of saleItems"
-            class="venta-item"
-          >
+          <div *ngFor="let item of saleItems" class="venta-item">
             <div class="venta-info">
               <h3>{{ item.name }}</h3>
-              <p *ngIf="item.barcode" class="detalle">Código: {{ item.barcode }}</p>
+              <p *ngIf="item.barcode" class="detalle">
+                Código: {{ item.barcode }}
+              </p>
               <p class="stock">
                 Stock disponible:
                 <strong>{{ item.stock }}</strong>
@@ -143,7 +146,7 @@
                 </button>
               </div>
               <div class="importe">
-                ${{ (item.price * item.quantity) | number : '1.2-2' }}
+                ${{ item.price * item.quantity | number: "1.2-2" }}
               </div>
               <button
                 type="button"
@@ -181,10 +184,7 @@
 
           <div class="cliente-block">
             <label class="checkbox">
-              <input
-                type="checkbox"
-                [(ngModel)]="assignToCustomer"
-              />
+              <input type="checkbox" [(ngModel)]="assignToCustomer" />
               Asignar venta a un cliente
             </label>
 
@@ -209,7 +209,7 @@
             </div>
             <div class="fila total">
               <span>Total a cobrar</span>
-              <strong>${{ totalAmount | number : '1.2-2' }}</strong>
+              <strong>${{ totalAmount | number: "1.2-2" }}</strong>
             </div>
           </div>
 
@@ -237,4 +237,3 @@
     </div>
   </section>
 </div>
-

@@ -9,7 +9,7 @@ import { MiApiService } from '../../servicios/mi-api.service';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './Confirmation.component.html',
-  styleUrls: ['./Confirmation.component.scss']
+  styleUrls: ['./Confirmation.component.scss'],
 })
 export class OrdenConfirmacionComponent implements OnInit {
   private route = inject(ActivatedRoute);
@@ -71,10 +71,10 @@ export class OrdenConfirmacionComponent implements OnInit {
 
   getStatusText(status: string): string {
     const map: any = {
-      'pending': 'Pendiente',
-      'accepted': 'Aceptada',
-      'received': 'Entregada',
-      'cancelled': 'Cancelada'
+      pending: 'Pendiente',
+      accepted: 'Aceptada',
+      received: 'Entregada',
+      cancelled: 'Cancelada',
     };
     return map[status] || status;
   }
@@ -91,7 +91,7 @@ export class OrdenConfirmacionComponent implements OnInit {
       month: 'short',
       year: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   }
 

@@ -13,7 +13,6 @@ import {
 } from '../../servicios/mi-api.service';
 import { SidebarComponent } from 'src/app/Componentes/sidebar-statill/sidebar.component';
 
-
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -34,7 +33,7 @@ export class HomeComponent implements OnInit {
   searchTerm: string = '';
   stores: Store[] = [];
   filteredStores: Store[] = [];
-  promotions: Discount[] = null; 
+  promotions: Discount[] = null;
   isLoading: boolean = true;
   showSearchResults: boolean = false;
 
@@ -68,7 +67,7 @@ export class HomeComponent implements OnInit {
     this.apiService.getDiscounts().subscribe({
       next: (data) => {
         this.promotions = data.data;
-        console.log("Descuentos:");
+        console.log('Descuentos:');
         console.log(this.promotions);
         this.isLoading = false; // Data has been loaded, stop loading
       },

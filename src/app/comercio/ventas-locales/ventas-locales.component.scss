@@ -201,7 +201,10 @@
   padding: 1rem 1.25rem;
   border-radius: 18px;
   border: 1px solid #e2e8f0;
-  transition: border 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    border 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 
   &:hover {
     border-color: rgba(255, 95, 95, 0.6);
@@ -248,7 +251,9 @@
     font-weight: 700;
     padding: 0.8rem 0;
     cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.2s ease;
 
     &:hover:not(:disabled) {
       transform: translateY(-2px);
@@ -447,7 +452,9 @@
       border-radius: 12px;
       border: 1.5px solid #e2e8f0;
       cursor: pointer;
-      transition: border 0.2s ease, background 0.2s ease;
+      transition:
+        border 0.2s ease,
+        background 0.2s ease;
 
       &.selected {
         border-color: rgba(255, 97, 97, 0.7);
@@ -565,7 +572,9 @@
       font-size: 1rem;
       cursor: pointer;
       border: none;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 
       &:disabled {
         opacity: 0.6;
@@ -681,4 +690,3 @@
     flex-direction: column;
   }
 }
-

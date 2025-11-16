@@ -76,7 +76,8 @@ export class AuthModalComponent {
             // Check if user needs to verify email
             const user = this.authService.getCurrentUser();
             if (user && !user.email_verified) {
-              this.message = 'Por favor, verifique su email antes de continuar.';
+              this.message =
+                'Por favor, verifique su email antes de continuar.';
               this.messageType = 'error';
               // send verification code and redirect to confirmation route
               this.authService.sendEmailVerificationCode().subscribe({
@@ -122,7 +123,8 @@ export class AuthModalComponent {
         .subscribe({
           next: (res) => {
             this.loading = false;
-            this.message = 'Registro exitoso. Se ha enviado un código de verificación a tu email.';
+            this.message =
+              'Registro exitoso. Se ha enviado un código de verificación a tu email.';
             this.messageType = 'success';
             // Close modal and redirect to confirmation page
             this.close.emit();

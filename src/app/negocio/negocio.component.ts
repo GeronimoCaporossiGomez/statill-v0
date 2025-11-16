@@ -70,7 +70,7 @@ export class NegocioComponent implements OnInit {
             store: this.comercioService.getStoreById(id),
             productos: this.comercioService.getProductosByStore(id),
             reviews: this.comercioService.getReviewsByStore(id),
-          }
+          },
     ).subscribe({
       next: (results) => {
         this.comercio = results.store;
@@ -117,7 +117,7 @@ export class NegocioComponent implements OnInit {
             error: (error) => {
               console.error(
                 `❌ Error al cargar el primer nombre del usuario ${r.user_id}: `,
-                error
+                error,
               );
             },
           });
@@ -140,7 +140,7 @@ export class NegocioComponent implements OnInit {
     const currentUser = this.authService.getCurrentUser();
     if (currentUser) {
       this.currentReview = reviews.find(
-        (review) => review.user_id === currentUser.id
+        (review) => review.user_id === currentUser.id,
       );
       this.hasUserReview = !!this.currentReview;
     }
@@ -159,14 +159,14 @@ export class NegocioComponent implements OnInit {
         this.hasPurchasedFromStore = orders.some(
           (order: any) =>
             order.store_id === storeId &&
-            (order.status === 'received' || order.status === 'accepted')
+            (order.status === 'received' || order.status === 'accepted'),
         );
         this.checkingPurchase = false;
       },
       error: (err) => {
         if (err.status === 403 || err.status === 404) {
           console.warn(
-            'El endpoint de órdenes no está disponible o no tiene permisos. Permitiendo reseñas.'
+            'El endpoint de órdenes no está disponible o no tiene permisos. Permitiendo reseñas.',
           );
           this.hasPurchasedFromStore = true;
         } else {
@@ -215,7 +215,7 @@ export class NegocioComponent implements OnInit {
 
     if (!this.hasPurchasedFromStore && !this.checkingPurchase) {
       alert(
-        'Solo puedes dejar una reseña después de haber realizado un pedido en esta tienda.'
+        'Solo puedes dejar una reseña después de haber realizado un pedido en esta tienda.',
       );
       return;
     }
@@ -275,7 +275,7 @@ export class NegocioComponent implements OnInit {
         console.log('Reseña eliminada:', response);
         alert('Reseña eliminada con éxito!');
         this.reviews = this.reviews.filter(
-          (review) => review.id !== this.currentReview.id
+          (review) => review.id !== this.currentReview.id,
         );
         this.hasUserReview = false;
         this.currentReview = null;
@@ -302,7 +302,7 @@ export class NegocioComponent implements OnInit {
     // Verificar autenticación
     if (!this.authService.isActiveUser()) {
       alert(
-        'Debes iniciar sesión y verificar tu email para realizar una compra.'
+        'Debes iniciar sesión y verificar tu email para realizar una compra.',
       );
       return;
     }
@@ -318,7 +318,7 @@ export class NegocioComponent implements OnInit {
           quantity: quantity,
           image: producto?.image,
         };
-      }
+      },
     );
 
     // Guardar en localStorage

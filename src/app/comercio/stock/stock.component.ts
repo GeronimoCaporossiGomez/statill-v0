@@ -73,7 +73,7 @@ export class StockComponent implements OnInit {
 
     this.miApi.getProductos().subscribe((data: any) => {
       console.log('prubeba, prubea', data);
-      this.productos = data.data||[];
+      this.productos = data.data || [];
       console.log('Productos desde la API:', this.productos);
       for (const p of this.productos) {
         if (p && p.id) {
@@ -144,37 +144,44 @@ export class StockComponent implements OnInit {
             console.log('✅ Producto editado correctamente:', response);
             this.isLoading = false;
             this.errorMessage = '¡Producto editado exitosamente!';
-          // Si hay una imagen seleccionada, subirla ahora. Use fallback id when response doesn't include data
-          if (this.archivoProducto) {
-            const res: any = response || {};
-            const prodId = this.productoEditandoId ?? res?.data?.id ?? res?.id;
-            if (prodId) {
-              this.miApi.uploadImage('product', prodId, this.archivoProducto).subscribe({
-                next: () => {
-                  console.log('✅ Imagen de producto subida correctamente');
-                  this.cargarProductos();
-                  this.resetForm();
-                  setTimeout(() => (this.errorMessage = null), 3000);
-                },
-                error: (err) => {
-                  console.error('❌ Error al subir imagen de producto:', err);
-                  this.cargarProductos();
-                  this.resetForm();
-                  setTimeout(() => (this.errorMessage = null), 3000);
-                },
-              });
+            // Si hay una imagen seleccionada, subirla ahora. Use fallback id when response doesn't include data
+            if (this.archivoProducto) {
+              const res: any = response || {};
+              const prodId =
+                this.productoEditandoId ?? res?.data?.id ?? res?.id;
+              if (prodId) {
+                this.miApi
+                  .uploadImage('product', prodId, this.archivoProducto)
+                  .subscribe({
+                    next: () => {
+                      console.log('✅ Imagen de producto subida correctamente');
+                      this.cargarProductos();
+                      this.resetForm();
+                      setTimeout(() => (this.errorMessage = null), 3000);
+                    },
+                    error: (err) => {
+                      console.error(
+                        '❌ Error al subir imagen de producto:',
+                        err,
+                      );
+                      this.cargarProductos();
+                      this.resetForm();
+                      setTimeout(() => (this.errorMessage = null), 3000);
+                    },
+                  });
+              } else {
+                console.warn(
+                  'No se encontró ID de producto para subir la imagen (editar).',
+                );
+                this.cargarProductos();
+                this.resetForm();
+                setTimeout(() => (this.errorMessage = null), 3000);
+              }
             } else {
-              console.warn('No se encontró ID de producto para subir la imagen (editar).');
               this.cargarProductos();
               this.resetForm();
               setTimeout(() => (this.errorMessage = null), 3000);
             }
-          } else {
-            this.cargarProductos();
-            this.resetForm();
-            setTimeout(() => (this.errorMessage = null), 3000);
-          }
-   
           },
           error: (error) => {
             console.error('❌ Error al editar producto:', error);
@@ -212,7 +219,7 @@ export class StockComponent implements OnInit {
 
   cargarProductos() {
     this.miApi.getProductos().subscribe((data: any) => {
-      this.productos = data.data||[];
+      this.productos = data.data || [];
       this.productos = data.data || [];
 
       for (const p of this.productos) {

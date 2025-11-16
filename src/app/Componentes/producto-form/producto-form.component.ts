@@ -48,8 +48,8 @@ export class ProductoFormComponent implements OnInit {
   @Output() onSubmit = new EventEmitter<ProductoData>();
   @Output() onCancel = new EventEmitter<void>();
   @Output() onReset = new EventEmitter<void>();
-  @Output() onUseSuggestedData = new EventEmitter<boolean>(); 
-   @Output() onFileSelected = new EventEmitter<File | null>();
+  @Output() onUseSuggestedData = new EventEmitter<boolean>();
+  @Output() onFileSelected = new EventEmitter<File | null>();
 
   // Preview URL for the selected image inside the form
   selectedImageUrl: string | ArrayBuffer | null = null;
@@ -72,9 +72,9 @@ export class ProductoFormComponent implements OnInit {
     // Si hay datos sugeridos, preguntar si quiere usarlos
     if (this.suggestedData && this.suggestedData.length > 0) {
       this.useSuggestedData = true;
-          // Clear selected image preview and notify parent
-    this.selectedImageUrl = null;
-    this.onFileSelected.emit(null);
+      // Clear selected image preview and notify parent
+      this.selectedImageUrl = null;
+      this.onFileSelected.emit(null);
       this.applySuggestedData();
     }
 
