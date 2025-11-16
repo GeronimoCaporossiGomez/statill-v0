@@ -36,6 +36,7 @@ export class HomeComponent implements OnInit {
   promotions: Discount[] = null;
   isLoading: boolean = true;
   showSearchResults: boolean = false;
+  imageUrl: string = "";
 
   // Promociones atractivas
 
@@ -53,6 +54,7 @@ export class HomeComponent implements OnInit {
         if (response.successful && response.data) {
           this.stores = response.data;
           this.filteredStores = this.stores;
+          this.loadImages(); // <-- Llamar aquí para cargar imágenes después de obtener tiendas
         }
         this.isLoading = false;
       },
@@ -60,6 +62,20 @@ export class HomeComponent implements OnInit {
         console.error('Error al cargar tiendas:', error);
         this.isLoading = false;
       },
+    });
+  }
+
+  loadImages(): void {
+    this.stores.forEach((store) => {
+      this.apiService.getImageByObjectId('store', store.id)
+      .subscribe({
+        next: (imageUrl: any) => {
+          store.imageUrl = imageUrl.data;
+        },
+        error: () => {
+          store.imageUrl = '';
+        }
+      });
     });
   }
 

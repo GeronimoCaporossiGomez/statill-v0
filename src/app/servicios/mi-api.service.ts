@@ -118,6 +118,7 @@ export interface Store {
   opening_times: (string | null)[];
   closing_times: (string | null)[];
   payment_methods: boolean[];
+  imageUrl?: string;
 }
 
 export interface StoresResponse {

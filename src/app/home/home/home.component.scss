@@ -161,6 +161,39 @@
   }
 }
 
+.store-image-wrapper {
+  width: 90px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f5f5;
+  border-radius: 16px;
+  margin-right: 1.2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.07);
+}
+
+.store-image {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  border-radius: 12px;
+  background: transparent;
+  box-shadow: none;
+}
+
+.store-image-placeholder {
+  width: 70px;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #eee;
+  color: #aaa;
+  border-radius: 12px;
+  font-size: 0.9rem;
+}
+
 // Responsive design
 @media (max-width: 768px) {
   .home-container {

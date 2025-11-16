@@ -30,11 +30,15 @@
         class="store-card"
         (click)="goToStore(store.id)"
       >
+        <div class="store-image-wrapper">
+          <img *ngIf="store.imageUrl; else placeholder" [src]="store.imageUrl" alt="Logo de {{ store.name }}" class="store-image" />
+          <ng-template #placeholder>
+            <div class="store-image-placeholder">Sin imagen</div>
+          </ng-template>
+        </div>
         <div class="store-info">
           <h4 class="store-name">{{ store.name }}</h4>
-          <span class="store-category">{{
-            getCategoryName(store.category)
-          }}</span>
+          <span class="store-category">{{ getCategoryName(store.category) }}</span>
           <p class="store-address">{{ store.address }}</p>
         </div>
         <div class="store-arrow">→</div>

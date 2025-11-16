@@ -55,44 +55,24 @@ export class StockComponent implements OnInit {
   }
 
   ngOnInit() {
-    // Establecer el store_id del usuario owner
     const user = this.authService.getCurrentUser();
     if (user && user.store_id) {
       this.producto.store_id = user.store_id;
+      this.cargarProductos();
     } else {
-      // Si no hay usuario, intentar obtenerlo
       this.authService.fetchCurrentUser().subscribe({
         next: () => {
           const updatedUser = this.authService.getCurrentUser();
           if (updatedUser && updatedUser.store_id) {
             this.producto.store_id = updatedUser.store_id;
+            this.cargarProductos();
           }
-        },
+        }
       });
     }
-
-    this.miApi.getProductos().subscribe((data: any) => {
-      console.log('prubeba, prubea', data);
-      this.productos = data.data || [];
-      console.log('Productos desde la API:', this.productos);
-      for (const p of this.productos) {
-        if (p && p.id) {
-          this.miApi.getImageByObjectId('product', Number(p.id)).subscribe({
-            next: (imgRes: any) => {
-              p.img = imgRes?.data || '';
-            },
-            error: (err) => {
-              // No image found or error - leave img empty string so UI shows placeholder
-              p.img = '';
-            },
-          });
-        } else {
-          p.img = '';
-        }
-      }
-    });
   }
-  //invertimos
+
+  //invertir formulario
   FormChange() {
     this.SePuedeVerElformulario = !this.SePuedeVerElformulario;
   }
@@ -102,7 +82,6 @@ export class StockComponent implements OnInit {
     this.editarProducto = { ...producto };
     this.SePuedeVerElformulario = true;
 
-    // Mantener el store_id del usuario owner
     const user = this.authService.getCurrentUser();
     const storeId = user?.store_id || producto.store_id;
 
@@ -125,7 +104,6 @@ export class StockComponent implements OnInit {
     this.isLoading = true;
     this.errorMessage = null;
 
-    // Asegurar que el store_id sea el del usuario owner
     const user = this.authService.getCurrentUser();
     if (user && user.store_id) {
       productoData.store_id = user.store_id;
@@ -136,15 +114,13 @@ export class StockComponent implements OnInit {
     }
 
     if (this.productoEditandoId) {
-      // Editar producto existente (PUT)
       this.miApi
         .editarProducto(this.productoEditandoId, productoData)
         .subscribe({
           next: (response) => {
-            console.log('✅ Producto editado correctamente:', response);
             this.isLoading = false;
             this.errorMessage = '¡Producto editado exitosamente!';
-            // Si hay una imagen seleccionada, subirla ahora. Use fallback id when response doesn't include data
+
             if (this.archivoProducto) {
               const res: any = response || {};
               const prodId =
@@ -154,25 +130,17 @@ export class StockComponent implements OnInit {
                   .uploadImage('product', prodId, this.archivoProducto)
                   .subscribe({
                     next: () => {
-                      console.log('✅ Imagen de producto subida correctamente');
                       this.cargarProductos();
                       this.resetForm();
                       setTimeout(() => (this.errorMessage = null), 3000);
                     },
-                    error: (err) => {
-                      console.error(
-                        '❌ Error al subir imagen de producto:',
-                        err,
-                      );
+                    error: () => {
                       this.cargarProductos();
                       this.resetForm();
                       setTimeout(() => (this.errorMessage = null), 3000);
                     },
                   });
               } else {
-                console.warn(
-                  'No se encontró ID de producto para subir la imagen (editar).',
-                );
                 this.cargarProductos();
                 this.resetForm();
                 setTimeout(() => (this.errorMessage = null), 3000);
@@ -184,16 +152,13 @@ export class StockComponent implements OnInit {
             }
           },
           error: (error) => {
-            console.error('❌ Error al editar producto:', error);
             this.isLoading = false;
             this.errorMessage = `Error al editar producto: ${error.error?.message || error.message}`;
           },
         });
     } else {
-      // Crear producto nuevo (POST)
       this.miApi.crearProducto(productoData).subscribe({
-        next: (response) => {
-          console.log('✅ Producto creado correctamente:', response);
+        next: () => {
           this.isLoading = false;
           this.errorMessage = '¡Producto creado exitosamente!';
           this.cargarProductos();
@@ -201,7 +166,6 @@ export class StockComponent implements OnInit {
           setTimeout(() => (this.errorMessage = null), 3000);
         },
         error: (error) => {
-          console.error('❌ Error al crear producto:', error);
           this.isLoading = false;
           this.errorMessage = `Error al crear producto: ${error.error?.message || error.message}`;
         },
@@ -218,23 +182,44 @@ export class StockComponent implements OnInit {
   }
 
   cargarProductos() {
-    this.miApi.getProductos().subscribe((data: any) => {
-      this.productos = data.data || [];
-      this.productos = data.data || [];
+    const user = this.authService.getCurrentUser();
 
-      for (const p of this.productos) {
-        if (p && p.id) {
-          this.miApi.getImageByObjectId('product', Number(p.id)).subscribe({
-            next: (imgRes: any) => {
-              p.img = imgRes?.data || '';
-            },
-            error: () => {
-              p.img = '';
-            },
-          });
-        } else {
-          p.img = '';
+    if (!user || !user.store_id) {
+      console.error('❌ No se puede cargar productos: usuario o store_id no disponible');
+      this.productos = [];
+      return;
+    }
+
+    console.log('🔍 Cargando productos para store_id:', user.store_id);
+
+    // CORREGIDO: Usar getProductosById en lugar de getProductos
+    this.miApi.getProductosById(user.store_id).subscribe({
+      next: (data: any) => {
+        let todosLosProductos = data.data || data || [];
+        // FILTRO ADICIONAL: Filtrar en el cliente por store_id
+        this.productos = todosLosProductos.filter((p: any) => {
+          return p.store_id === user.store_id;
+        });;
+
+        // Cargar imágenes para cada producto
+        for (const p of this.productos) {
+          if (p && p.id) {
+            this.miApi.getImageByObjectId('product', Number(p.id)).subscribe({
+              next: (imgRes: any) => {
+                p.img = imgRes?.data || '';
+              },
+              error: () => {
+                p.img = '';
+              },
+            });
+          } else {
+            p.img = '';
+          }
         }
+      },
+      error: (err) => {
+        console.error('❌ Error al cargar productos:', err);
+        this.productos = [];
       }
     });
   }
@@ -259,12 +244,12 @@ export class StockComponent implements OnInit {
     this.errorMessage = null;
     this.archivoProducto = null;
   }
+
   onFileSelected(file: File | null) {
     this.archivoProducto = file;
   }
+
   onUseSuggestedData(useSuggested: boolean) {
     console.log('Usar datos sugeridos:', useSuggested);
-    // No hay datos sugeridos en el componente de stock
   }
-  // Manejar envío del formulario
 }

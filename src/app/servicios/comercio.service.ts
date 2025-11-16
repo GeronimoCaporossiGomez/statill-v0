@@ -26,6 +26,7 @@ export class ComercioService {
       .pipe(map((response: any) => response.data));
   }
 
+  // Para páginas públicas (negocio): filtra en el cliente para asegurar resultados correctos
   getProductosByStore(storeId: number): Observable<any[]> {
     return this.miApiService
       .getProductos()
@@ -34,6 +35,13 @@ export class ComercioService {
           response.data.filter((p: any) => p.store_id === storeId),
         ),
       );
+  }
+
+  // Para el dashboard del owner (stock): usa el endpoint del backend directamente
+  getMyStoreProducts(storeId: number): Observable<any[]> {
+    return this.miApiService
+      .getProductosById(storeId)
+      .pipe(map((response: any) => response.data));
   }
 
   postSales(sale: any): Observable<any> {
