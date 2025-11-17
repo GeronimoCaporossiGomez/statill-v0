@@ -11,7 +11,6 @@ import {
   Store,
   StoresResponse,
 } from '../../servicios/mi-api.service';
-import { SidebarComponent } from 'src/app/Componentes/sidebar-statill/sidebar.component';
 
 @Component({
   selector: 'app-home',
@@ -23,7 +22,6 @@ import { SidebarComponent } from 'src/app/Componentes/sidebar-statill/sidebar.co
     RouterModule,
     HeaderStatillComponent,
     DiscountsStatillComponent,
-    SidebarComponent,
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
