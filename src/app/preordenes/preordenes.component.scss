@@ -22,8 +22,10 @@
   justify-content: space-between;
   border: 1px solid #c2c2c2;
   background: #fafafa;
-  height: 25vh;
+  min-height: 25vh;
+  height: auto;
   cursor: pointer;
+  padding: 3%;
 }
 
 .cartel-comercio img,
@@ -84,6 +86,7 @@ img {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: normal;
 }
 .texto.detalles {
   margin-top: 3%;
