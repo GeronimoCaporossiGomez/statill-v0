@@ -781,3 +781,72 @@
     flex-direction: column;
   }
 }
+
+/* Dark background overlay */
+.scanner-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  z-index: 900;
+}
+
+/* The popup window */
+.scanner-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 90%;
+  max-width: 420px;   // Adjust popup size here
+  background: #fff;
+  border-radius: 12px;
+  z-index: 1000;
+  padding: 0 0 20px 0;
+
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  animation: fadeIn 0.25s ease-out;
+}
+
+/* Header */
+.scanner-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: #e63946;
+  color: white;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.close-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Body */
+.scanner-body {
+  padding: 15px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Smooth fade-in */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -45%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}

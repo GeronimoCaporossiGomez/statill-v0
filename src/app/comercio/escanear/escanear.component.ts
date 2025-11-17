@@ -14,6 +14,7 @@ import {
 } from 'src/app/Componentes/producto-form/producto-form.component';
 import { MiApiService, ProductsResponse } from '../../servicios/mi-api.service';
 import { ComercioService } from '../../servicios/comercio.service';
+import { Output, EventEmitter } from '@angular/core';
 
 // Declarar QuaggaJS
 declare const Quagga: any;
@@ -26,6 +27,7 @@ declare const Quagga: any;
   styleUrls: ['./escanear.component.scss'],
 })
 export class EscanearComponent implements OnDestroy, OnInit {
+  @Output() barcodeDetected = new EventEmitter<string>();
   @ViewChild('video') videoElement!: ElementRef<HTMLVideoElement>;
   private stream: MediaStream | null = null;
   private quaggaInitialized = false; // 🔥 Nueva bandera
@@ -204,6 +206,11 @@ export class EscanearComponent implements OnDestroy, OnInit {
 
   onBarcodeDetected(barcode: string) {
     this.scannedBarcode = barcode;
+  
+    // Emit barcode to parent component 🔥
+    this.barcodeDetected.emit(barcode);
+  
+    // (Optional) Still run your internal logic
     this.searchProductsByBarcode(barcode);
   }
 

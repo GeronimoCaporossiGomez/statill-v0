@@ -7,6 +7,7 @@ import { MiApiService, Product, Store } from '../../servicios/mi-api.service';
 import { AuthService } from '../../servicios/auth.service';
 import { SidebarComponent } from '../../Componentes/sidebar-statill/sidebar.component';
 import { Subscription } from 'rxjs';
+import { EscanearComponent } from '../escanear/escanear.component';
 
 interface SaleItem {
   product_id: number;
@@ -26,7 +27,7 @@ interface PaymentMethodOption {
 @Component({
   selector: 'app-ventas-locales',
   standalone: true,
-  imports: [CommonModule, FormsModule, SidebarComponent],
+  imports: [CommonModule, FormsModule, SidebarComponent, EscanearComponent],  
   templateUrl: './ventas-locales.component.html',
   styleUrls: ['./ventas-locales.component.scss'],
 })
@@ -62,6 +63,16 @@ export class VentasLocalesComponent implements OnInit, OnDestroy {
     private miApiService: MiApiService,
     private router: Router,
   ) {}
+
+  scannerPopupOpen = false;
+
+openScannerPopup() {
+  this.scannerPopupOpen = true;
+}
+
+closeScannerPopup() {
+  this.scannerPopupOpen = false;
+}
 
   ngOnInit(): void {
     this.storeId = this.authService.getStoreId();
@@ -176,12 +187,15 @@ export class VentasLocalesComponent implements OnInit, OnDestroy {
       };
       return;
     }
-
-    const userId =
-      this.assignToCustomer && this.customerIdInput.trim() !== ''
-        ? Number(this.customerIdInput)
-        : null;
-
+  
+    // Set userId to null if assignToCustomer is unchecked or invalid ID
+    let userId: number | null = null;
+  
+    if (this.assignToCustomer && this.customerIdInput.trim() !== '') {
+      userId = Number(this.customerIdInput);
+    }
+  
+    // If the checkbox is checked but the user ID is invalid, show an error
     if (
       this.assignToCustomer &&
       (userId === null || isNaN(userId) || userId <= 0)
@@ -192,7 +206,8 @@ export class VentasLocalesComponent implements OnInit, OnDestroy {
       };
       return;
     }
-
+  
+    // Prepare the payload for the sale request
     const payload = {
       store_id: this.storeId,
       products: this.saleItems.map((item) => ({
@@ -200,12 +215,14 @@ export class VentasLocalesComponent implements OnInit, OnDestroy {
         quantity: item.quantity,
       })),
       payment_method: this.selectedPaymentMethod,
-      user_id: userId,
+      user_id: userId, // Will be null if no customer is assigned
     };
-
+    console.log(payload)
+  
     this.isSubmitting = true;
     this.feedbackMessage = null;
-
+  
+    // Call the API to create the sale
     const sub = this.comercioService.postSales(payload).subscribe({
       next: (response) => {
         this.isSubmitting = false;
@@ -216,12 +233,12 @@ export class VentasLocalesComponent implements OnInit, OnDestroy {
         this.saleItems = [];
         this.assignToCustomer = false;
         this.customerIdInput = '';
-
+  
         const createdId = response?.data?.id ?? response?.data;
         if (createdId) {
           console.log('Venta registrada con ID:', createdId);
         }
-
+  
         this.reloadProducts();
       },
       error: (error) => {
@@ -235,7 +252,7 @@ export class VentasLocalesComponent implements OnInit, OnDestroy {
         };
       },
     });
-
+  
     this.subscriptions.add(sub);
   }
 
@@ -265,6 +282,30 @@ export class VentasLocalesComponent implements OnInit, OnDestroy {
     });
 
     this.subscriptions.add(storeSub);
+  }
+
+  onBarcodeDetected(barcode: string) {
+    console.log("Código recibido desde el escáner:", barcode);
+  
+    const product = this.products.find(
+      p => p.barcode && p.barcode.toString() === barcode.toString()
+    );
+  
+    if (!product) {
+      this.feedbackMessage = {
+        type: 'error',
+        text: `No se encontró el producto con código ${barcode}.`
+      };
+      return;
+    }
+  
+    // Add the product to the sale (already implemented)
+    this.addItem(product);
+  
+    this.feedbackMessage = {
+      type: 'success',
+      text: `Producto agregado: ${product.name}`
+    };
   }
 
   private loadProducts(storeId: number): void {

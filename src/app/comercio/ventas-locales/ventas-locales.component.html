@@ -50,7 +50,26 @@
             [(ngModel)]="searchTerm"
             (ngModelChange)="onSearchChange()"
           />
+          <button class="btn-pill btn-red" (click)="openScannerPopup()">
+            Escanear producto
+          </button>
+
         </div>
+
+        <!-- 🔥 POPUP OVERLAY -->
+<div class="scanner-overlay" *ngIf="scannerPopupOpen" (click)="closeScannerPopup()"></div>
+
+<!-- 🔥 POPUP WINDOW -->
+<div class="scanner-modal" *ngIf="scannerPopupOpen">
+  <div class="scanner-header">
+    <h3>Escanear Producto</h3>
+    <button class="close-btn" (click)="closeScannerPopup()">✕</button>
+  </div>
+
+  <div class="scanner-body">
+    <app-escanear (barcodeDetected)="onBarcodeDetected($event)"></app-escanear>
+  </div>
+</div>
 
         <div *ngIf="filteredProducts.length === 0" class="estado">
           <p>No encontramos productos que coincidan con tu búsqueda.</p>
@@ -233,4 +252,7 @@
       </aside>
     </div>
   </section>
+  
 </div>
+
+
