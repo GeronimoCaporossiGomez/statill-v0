@@ -7,7 +7,6 @@ import { MiApiService, Product, Store } from '../../servicios/mi-api.service';
 import { AuthService } from '../../servicios/auth.service';
 import { SidebarComponent } from '../../Componentes/sidebar-statill/sidebar.component';
 import { Subscription } from 'rxjs';
-import { EscanearComponent } from '../escanear/escanear.component';
 
 interface SaleItem {
   product_id: number;
@@ -27,7 +26,7 @@ interface PaymentMethodOption {
 @Component({
   selector: 'app-ventas-locales',
   standalone: true,
-  imports: [CommonModule, FormsModule, SidebarComponent, EscanearComponent],  
+  imports: [CommonModule, FormsModule, SidebarComponent],  
   templateUrl: './ventas-locales.component.html',
   styleUrls: ['./ventas-locales.component.scss'],
 })
@@ -282,30 +281,6 @@ closeScannerPopup() {
     });
 
     this.subscriptions.add(storeSub);
-  }
-
-  onBarcodeDetected(barcode: string) {
-    console.log("Código recibido desde el escáner:", barcode);
-  
-    const product = this.products.find(
-      p => p.barcode && p.barcode.toString() === barcode.toString()
-    );
-  
-    if (!product) {
-      this.feedbackMessage = {
-        type: 'error',
-        text: `No se encontró el producto con código ${barcode}.`
-      };
-      return;
-    }
-  
-    // Add the product to the sale (already implemented)
-    this.addItem(product);
-  
-    this.feedbackMessage = {
-      type: 'success',
-      text: `Producto agregado: ${product.name}`
-    };
   }
 
   private loadProducts(storeId: number): void {

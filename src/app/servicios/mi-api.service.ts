@@ -174,7 +174,7 @@ export class MiApiService {
     return this.http.post(this.apiUrl + '/api/v1/stores/', tienda);
   }
   getProductosById(storeId: number) {
-    return this.http.get(this.apiUrl + '/api/v1/products/?store_id=' + storeId);
+    return this.http.get(this.apiUrl + '/api/v1/products/store/' + storeId);
   }
   getProductsByBarcode(barcode: string): Observable<ProductsResponse> {
     return this.http.get<ProductsResponse>(
