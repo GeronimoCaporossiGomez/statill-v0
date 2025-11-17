@@ -163,7 +163,7 @@ export class CarritoComponent implements OnInit {
       })),
       payment_method: this.selectedPaymentMethod,
     };
-
+    
     console.log('📦 Creando preorden:', order);
 
     // Crear la preorden (POST /api/v1/orders/)

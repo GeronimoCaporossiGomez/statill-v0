@@ -15,13 +15,13 @@
           <div class="texto" [ngClass]="{ detalles: descripcion === i }">
             <h2 class="asd roboto">
               <span
-                >Pedido #{{ i + 1 }} ({{ prueba.start_date }}) ({{
-                  prueba.hora
-                }}):</span
+                >[{{prueba.status.toUpperCase()}}] Pedido {{ i + 1 }} ({{ prueba.created_at.slice(0,5) }}):</span
               >
               {{ prueba.store.data.name }}
             </h2>
-            <h3 class="gris roboto">{{ prueba.descripcion }}</h3>
+            <div class="gris roboto">
+              <div *ngFor="let prod of prueba.productsFull">{{ prod.name }} × {{ prod.quantity }}</div>
+            </div>
             <ng-container *ngIf="descripcion === i">
               <h3 class="descripcion roboto">
                 Pago:
@@ -29,7 +29,7 @@
                   Precio final abonado: {{ prueba.pago[0].precioFinalAbonado }}
                 </h3>
                 <h3 class="descri roboto">
-                  Medio de pago: {{ prueba.pago[1].metodo }}
+                  Medio de pago: {{ prueba.payment_method }}
                 </h3>
                 <h3 class="descri roboto">
                   Propina: {{ prueba.pago[2].propina }}
