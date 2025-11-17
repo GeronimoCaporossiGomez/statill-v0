@@ -342,6 +342,13 @@ export class AuthModalComponent {
     return entries;
   }
 
+  // Getter para la fecha máxima permitida (13 años atrás)
+  get maxBirthdate(): string {
+    const today = new Date();
+    const maxDate = new Date(today.getFullYear() - 13, today.getMonth(), today.getDate());
+    return maxDate.toISOString().split('T')[0];
+  }
+
   isLogin = true;
   // Registration fields
   first_names = '';
@@ -350,14 +357,12 @@ export class AuthModalComponent {
   password = '';
   birthdate = '';
   gender = '';
-  res_area =   this.resAreas.find(a => a.p === 'CABA' && a.n === 'Comuna 1');
+  res_area = this.resAreas.find(a => a.p === 'CABA' && a.n === 'Comuna 1');
 
   // For error/success messages
   message = '';
   messageType: 'success' | 'error' | '' = '';
   loading = false;
-
-
 
   constructor(private router: Router, private authService: AuthService) {}
 
@@ -419,6 +424,22 @@ export class AuthModalComponent {
           },
         });
     } else {
+      // Validar edad mínima antes de registrar
+      const birthDate = new Date(this.birthdate);
+      const today = new Date();
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+      if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+
+      if (age < 13) {
+        this.loading = false;
+        this.message = 'Debes tener al menos 13 años para registrarte.';
+        this.messageType = 'error';
+        return;
+      }
+
       // Register new user
       this.authService
         .registerUser({

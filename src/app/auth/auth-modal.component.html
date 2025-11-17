@@ -70,6 +70,7 @@
               type="date"
               [(ngModel)]="birthdate"
               name="birthdate"
+              [max]="maxBirthdate"
               required
             />
           </div>
@@ -86,25 +87,15 @@
 
           <div class="form-group full-width">
             <label for="res_area">Zona de residencia</label>
-            <!-- <input
-              id="res_area"
-              type="text"
-              placeholder="Ej: Vicente López"
-              [(ngModel)]="res_area"
-              name="res_area"
-              required
-            /> -->
-
-<select [(ngModel)]="res_area" [ngModelOptions]="{standalone: true}">
-  @for (prov of groupedAreas; track prov.key) {
-    <optgroup [label]="prov.key">
-      @for (area of prov.value; track area.n) {
-        <option [ngValue]="area">{{ area.n }}</option>
-      }
-    </optgroup>
-  }
-</select>
-
+            <select [(ngModel)]="res_area" [ngModelOptions]="{standalone: true}">
+              @for (prov of groupedAreas; track prov.key) {
+                <optgroup [label]="prov.key">
+                  @for (area of prov.value; track area.n) {
+                    <option [ngValue]="area">{{ area.n }}</option>
+                  }
+                </optgroup>
+              }
+            </select>
           </div>
         </div>
       </ng-container>
