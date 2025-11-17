@@ -3,39 +3,29 @@
   <!-- esto va a terminar siendo el header del figma -->
 
   <div class="puntos-seccion">
-    <h1>Mis preordenes:</h1>
+    <h1>Mis preórdenes:</h1>
     <div *ngFor="let prueba of probando; let i = index">
-      <div
-        class="cartel-comercio"
-        (click)="verDetalle(i)"
-        [ngClass]="{ 'descripcion-activa': descripcion === i }"
-      >
+      <div class="cartel-comercio">
         <div class="seccion-izquierda-cartel">
-          <img src="{{ prueba.imagen }}" alt="pokoko" />
+
+          <img [src]="prueba.imagen" alt="store image" (error)="onImgError($event)" />
+
           <div class="texto" [ngClass]="{ detalles: descripcion === i }">
+
             <h2 class="asd roboto">
-              <span
-                >[{{prueba.status.toUpperCase()}}] Pedido {{ i + 1 }} ({{ prueba.created_at.slice(0,5) }}):</span
-              >
+              <span>
+                [{{ prueba.status.toUpperCase() }}] Pedido {{ i + 1 }}
+                ({{ prueba.created_at_iso | date:'HH:mm' }}):
+              </span>
               {{ prueba.store.data.name }}
             </h2>
+
             <div class="gris roboto">
-              <div *ngFor="let prod of prueba.productsFull">{{ prod.name }} × {{ prod.quantity }}</div>
+              <div *ngFor="let prod of prueba.productsFull">
+                {{ prod.name }} × {{ prod.quantity }}
+              </div>
             </div>
-            <ng-container *ngIf="descripcion === i">
-              <h3 class="descripcion roboto">
-                Pago:
-                <h3 class="descri roboto">
-                  Precio final abonado: {{ prueba.pago[0].precioFinalAbonado }}
-                </h3>
-                <h3 class="descri roboto">
-                  Medio de pago: {{ prueba.payment_method }}
-                </h3>
-                <h3 class="descri roboto">
-                  Propina: {{ prueba.pago[2].propina }}
-                </h3>
-              </h3>
-            </ng-container>
+
           </div>
         </div>
       </div>
