@@ -1,9 +1,17 @@
-<div class="discount-card">
-  <div class="logo-container">
-    <img [src]="img" class="store-logo" />
+<div class="discount-card" (click)="handleClick()">
+  <div *ngIf="isLoaded; else loadingState" class="discount-content">
+    <div class="logo-container">
+      <img [src]="img" class="store-logo" />
+    </div>
+    <div class="info-container">
+      <p class="discount-label">{{ text }}</p>
+      <h3 class="store-name">{{ store?.name }}</h3>
+    </div>
   </div>
-  <div class="info-container">
-    <p class="discount-label">{{ text }}</p>
-    <h3 class="store-name">{{ store.name }}</h3>
-  </div>
+  <ng-template #loadingState>
+    <div class="discount-card-skeleton">
+      <div class="skeleton-image"></div>
+      <div class="skeleton-text"></div>
+    </div>
+  </ng-template>
 </div>

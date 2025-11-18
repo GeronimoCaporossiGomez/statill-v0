@@ -34,6 +34,7 @@ export class PreordenesComponent {
           const status = order.status?.toUpperCase();
           return status !== 'RECEIVED' && status !== 'CANCELLED';
         });
+        console.log(data);
 
         // Load store details
         const storeRequests = orders.map((order: any) =>
@@ -73,16 +74,38 @@ export class PreordenesComponent {
                   id: prod.product_id,
                   quantity: prod.quantity,
                   name: productDetails[index]?.data?.name ?? 'Producto desconocido',
+                  price: productDetails[index]?.data?.price ?? 0,
+                  payment_method: productDetails[index]?.data?.payment_method ?? 0,
                 }));
 
+                const totalPrice = productsFull.reduce((sum, p) => sum + p.quantity * p.price, 0);
                 const imagen = images[i]?.data && typeof images[i].data === 'string' && images[i].data.length > 0 ? images[i].data : '/assets/img/logo.png';
+                let convertedPaymentMethod = '';
+                switch (order.payment_method) {
+                  case 0:
+                    convertedPaymentMethod = 'Efectivo';
+                    break;
+                  case 1:
+                    convertedPaymentMethod = 'Débito';
+                    break;
+                  case 2:
+                    convertedPaymentMethod = 'Crédito';
+                    break;
+                  case 3:
+                    convertedPaymentMethod = 'QR';
+                    break;
+                  default:
+                    convertedPaymentMethod = 'Desconocido';
+                }
 
                 return {
                   ...order,
                   store: stores[i],
                   productsFull,
                   imagen,
+                  totalPrice,
                   created_at_iso: '1970-01-01T' + order.created_at,
+                  convertedPaymentMethod,
                 };
               });
             });
