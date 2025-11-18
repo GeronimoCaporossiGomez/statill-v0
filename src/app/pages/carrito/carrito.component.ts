@@ -1,11 +1,13 @@
 // src/app/pages/carrito/carrito.component.ts
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { OrderService } from '../../servicios/order.service';
 import { AuthService } from '../../servicios/auth.service';
 import { MiApiService } from '../../servicios/mi-api.service';
+import { forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 interface CartItem {
   id: number;
@@ -13,6 +15,7 @@ interface CartItem {
   price: number;
   quantity: number;
   image?: string;
+  pct_off?: number;
 }
 
 interface Store {
@@ -35,6 +38,7 @@ export class CarritoComponent implements OnInit {
   private orderService = inject(OrderService);
   private authService = inject(AuthService);
   private apiService = inject(MiApiService);
+  private cdr = inject(ChangeDetectorRef);
 
   cartItems: CartItem[] = [];
   store: Store | null = null;
@@ -42,6 +46,7 @@ export class CarritoComponent implements OnInit {
   isLoading = false;
   errorMessage: string | null = null;
   storeId: number = 0;
+  isDiscountsLoaded = false; // Track discount loading
 
   paymentMethods = [
     { id: 0, name: 'Efectivo', icon: '💵' },
@@ -53,7 +58,6 @@ export class CarritoComponent implements OnInit {
   ngOnInit() {
     // Obtener storeId de la URL
     this.storeId = Number(this.route.snapshot.queryParamMap.get('storeId'));
-
     if (!this.storeId) {
       this.errorMessage = 'Error: No se encontró la tienda';
       return;
@@ -63,10 +67,36 @@ export class CarritoComponent implements OnInit {
     const cartData = localStorage.getItem(`cart_${this.storeId}`);
     if (cartData) {
       this.cartItems = JSON.parse(cartData);
+      this.loadDiscounts();
+    } else {
+      this.isDiscountsLoaded = true; // nothing to load
     }
 
     // Cargar información de la tienda
     this.loadStoreInfo();
+  }
+
+  loadDiscounts() {
+    if (this.cartItems.length === 0) {
+      this.isDiscountsLoaded = true;
+      return;
+    }
+
+    const discountRequests = this.cartItems.map(item =>
+      this.apiService.getDiscountsByProductId(item.id)
+        .pipe(catchError(() => of({ pct_off: 0 })))
+    );
+
+    forkJoin(discountRequests).subscribe(results => {
+      results.forEach((res: any, index) => {
+        this.cartItems[index].pct_off = res.pct_off || 0;
+      });
+
+      this.isDiscountsLoaded = true; // discounts loaded
+      this.cdr.markForCheck();       // force Angular to update view
+    });
+
+    console.log(discountRequests)
   }
 
   loadStoreInfo() {
@@ -84,10 +114,11 @@ export class CarritoComponent implements OnInit {
   }
 
   getTotal(): number {
-    return this.cartItems.reduce(
-      (sum, item) => sum + item.price * item.quantity,
-      0,
-    );
+    return this.cartItems.reduce((sum, item) => {
+      const discount = item.pct_off ?? 0;
+      const priceAfterDiscount = item.price * (1 - discount / 100);
+      return sum + priceAfterDiscount * item.quantity;
+    }, 0);
   }
 
   getTotalItems(): number {
@@ -114,10 +145,7 @@ export class CarritoComponent implements OnInit {
   }
 
   saveCart() {
-    localStorage.setItem(
-      `cart_${this.storeId}`,
-      JSON.stringify(this.cartItems),
-    );
+    localStorage.setItem(`cart_${this.storeId}`, JSON.stringify(this.cartItems));
   }
 
   clearCart() {
@@ -126,7 +154,6 @@ export class CarritoComponent implements OnInit {
   }
 
   createOrder() {
-    // Validaciones
     if (!this.authService.isAuthenticated()) {
       this.errorMessage = 'Debes iniciar sesión para realizar un pedido';
       return;
@@ -134,9 +161,7 @@ export class CarritoComponent implements OnInit {
 
     if (!this.authService.isActiveUser()) {
       this.errorMessage = null;
-      this.router.navigate(['/confirmacion-codigo'], {
-        queryParams: { redirect: this.router.url },
-      });
+      this.router.navigate(['/confirmacion-codigo'], { queryParams: { redirect: this.router.url } });
       return;
     }
 
@@ -146,47 +171,31 @@ export class CarritoComponent implements OnInit {
     }
 
     if (!this.isPaymentMethodAllowed(this.selectedPaymentMethod)) {
-      this.errorMessage =
-        'El método de pago seleccionado no está disponible en esta tienda';
+      this.errorMessage = 'El método de pago seleccionado no está disponible en esta tienda';
       return;
     }
 
     this.isLoading = true;
     this.errorMessage = null;
 
-    // Preparar la preorden
     const order = {
       store_id: this.storeId,
-      products: this.cartItems.map((item) => ({
-        product_id: item.id,
-        quantity: item.quantity,
-      })),
+      products: this.cartItems.map(item => ({ product_id: item.id, quantity: item.quantity })),
       payment_method: this.selectedPaymentMethod,
     };
-    
+
     console.log('📦 Creando preorden:', order);
 
-    // Crear la preorden (POST /api/v1/orders/)
     this.orderService.createOrder(order).subscribe({
       next: (response) => {
         console.log('✅ Preorden creada:', response);
         this.isLoading = false;
-
-        // Limpiar carrito
         this.clearCart();
-
-        // Obtener el ID de la orden desde la respuesta
         const orderId = response.data?.id || response.data;
 
-        // Redirigir según el método de pago
-        if (
-          this.selectedPaymentMethod === 0 ||
-          this.selectedPaymentMethod === 3
-        ) {
+        if (this.selectedPaymentMethod === 0 || this.selectedPaymentMethod === 3) {
           const paymentParam = this.selectedPaymentMethod === 3 ? 'qr' : 'cash';
-          this.router.navigate(['/orden-confirmacion'], {
-            queryParams: { orderId: orderId, payment: paymentParam },
-          });
+          this.router.navigate(['/orden-confirmacion'], { queryParams: { orderId, payment: paymentParam } });
         } else {
           this.router.navigate(['/metodo-pago-no-disponible']);
         }
@@ -194,19 +203,7 @@ export class CarritoComponent implements OnInit {
       error: (error) => {
         console.error('❌ Error al crear preorden:', error);
         this.isLoading = false;
-
-        let errorMsg = 'Error al crear el pedido. Intente nuevamente.';
-
-        if (error.error?.message) {
-          errorMsg = error.error.message;
-        } else if (error.status === 404) {
-          errorMsg =
-            'No se pudo encontrar el producto. Verifica que estén disponibles.';
-        } else if (error.status === 400) {
-          errorMsg = 'Datos inválidos. Verifica tu carrito.';
-        }
-
-        this.errorMessage = errorMsg;
+        this.errorMessage = error.error?.message || 'Error al crear el pedido. Intente nuevamente.';
       },
     });
   }

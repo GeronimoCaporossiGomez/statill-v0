@@ -198,6 +198,10 @@ export class MiApiService {
     return this.http.get<DiscountsResponse>(this.apiUrl + '/api/v1/discounts/');
   }
 
+  getDiscountsByProductId(id: number): Observable<Discount> {
+    return this.http.get<Discount>(this.apiUrl + '/api/v1/discounts/product/' + id);
+  }
+
   getStoreById(id: number): Observable<any> {
     return this.http.get(this.apiUrl + '/api/v1/stores/' + id);
   }

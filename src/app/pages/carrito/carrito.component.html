@@ -1,85 +1,94 @@
 <div class="carrito-container">
+  <!-- Header -->
   <div class="carrito-header">
-    <button class="btn-back" (click)="volver()">
-      ← Volver
-    </button>
+    <button class="btn-back" (click)="volver()">← Volver</button>
     <h1>Tu Carrito</h1>
     <div class="store-name" *ngIf="store">{{ store.name }}</div>
   </div>
 
-  <!-- Mensaje de error -->
+  <!-- Error message -->
   <div *ngIf="errorMessage" class="error-message">
     {{ errorMessage }}
   </div>
 
-  <!-- Carrito vacío -->
+  <!-- Empty cart -->
   <div *ngIf="cartItems.length === 0" class="empty-cart">
     <h2>Tu carrito está vacío</h2>
     <p>Agrega productos para continuar</p>
     <button class="btn-primary" (click)="volver()">Ir a la tienda</button>
   </div>
 
-  <!-- Productos del carrito -->
+  <!-- Cart content -->
   <div *ngIf="cartItems.length > 0" class="cart-content">
     <div class="cart-items">
-      <div *ngFor="let item of cartItems" class="cart-item">
-        <div class="item-image">
-          <img
-            [src]="item.image || 'assets/img/tienda.png'"
-            [alt]="item.name"
-          />
+      <div class="cart-items" *ngIf="isDiscountsLoaded">
+        <div *ngFor="let item of cartItems" class="cart-item">
+          <!-- Product image -->
+          <div class="item-image">
+            <img [src]="item.image || 'assets/img/tienda.png'" [alt]="item.name" />
+          </div>
+
+          <!-- Product info -->
+          <div class="item-info">
+            <h3>{{ item.name }}</h3>
+
+            <!-- Original price + discount percentage -->
+            <p class="item-price">
+              ${{ item.price.toFixed(2) }}
+              <span *ngIf="item.pct_off && item.pct_off > 0" class="discount">
+                -{{ item.pct_off }}%
+              </span>
+            </p>
+
+            <!-- Discounted price -->
+            <p *ngIf="isDiscountsLoaded && item.pct_off && item.pct_off > 0" class="item-discounted">
+              Precio con descuento: ${{ (item.price * (1 - item.pct_off / 100)).toFixed(2) }}
+            </p>
+          </div>
+
+          <!-- Quantity controls -->
+          <div class="item-controls">
+            <button class="btn-qty" (click)="updateQuantity(item, -1)">-</button>
+            <span class="qty">{{ item.quantity }}</span>
+            <button class="btn-qty" (click)="updateQuantity(item, 1)">+</button>
+          </div>
+
+          <!-- Total per item -->
+          <div class="item-total">
+            ${{ ((item.price * (1 - (item.pct_off ?? 0) / 100)) * item.quantity).toFixed(2) }}
+          </div>
+
+          <!-- Remove button -->
+          <button class="btn-remove" (click)="removeItem(item)">×</button>
         </div>
-        <div class="item-info">
-          <h3>{{ item.name }}</h3>
-          <p class="item-price">${{ item.price }}</p>
-        </div>
-        <div class="item-controls">
-          <button class="btn-qty" (click)="updateQuantity(item, -1)">-</button>
-          <span class="qty">{{ item.quantity }}</span>
-          <button class="btn-qty" (click)="updateQuantity(item, 1)">+</button>
-        </div>
-        <div class="item-total">${{ item.price * item.quantity }}</div>
-        <button class="btn-remove" (click)="removeItem(item)">×</button>
       </div>
     </div>
 
-    <!-- Resumen y pago -->
+    <!-- Cart summary -->
     <div class="cart-summary">
       <div class="summary-section">
         <h2>Resumen del Pedido</h2>
         <div class="summary-row">
           <span>Productos ({{ getTotalItems() }})</span>
-          <span>${{ getTotal() }}</span>
+          <span>${{ getTotal().toFixed(2) }}</span>
         </div>
         <div class="summary-row total">
           <span><strong>Total</strong></span>
-          <span
-            ><strong>${{ getTotal() }}</strong></span
-          >
+          <span><strong>${{ getTotal().toFixed(2) }}</strong></span>
         </div>
       </div>
 
-      <!-- Métodos de pago -->
+      <!-- Payment methods -->
       <div class="payment-section">
         <h3>Método de Pago</h3>
         <div class="payment-methods">
-          <label
-            *ngFor="let method of paymentMethods"
-            class="payment-method"
+          <label *ngFor="let method of paymentMethods" class="payment-method"
             [class.disabled]="!isPaymentMethodAllowed(method.id)"
-            [class.selected]="selectedPaymentMethod === method.id"
-          >
-            <input
-              type="radio"
-              name="payment"
-              [value]="method.id"
-              [(ngModel)]="selectedPaymentMethod"
-              [disabled]="!isPaymentMethodAllowed(method.id)">
+            [class.selected]="selectedPaymentMethod === method.id">
+            <input type="radio" name="payment" [value]="method.id" [(ngModel)]="selectedPaymentMethod"
+              [disabled]="!isPaymentMethodAllowed(method.id)" />
             <span class="method-name">{{ method.name }}</span>
-            <span
-              *ngIf="!isPaymentMethodAllowed(method.id)"
-              class="not-available"
-            >
+            <span *ngIf="!isPaymentMethodAllowed(method.id)" class="not-available">
               No disponible
             </span>
           </label>
@@ -89,12 +98,8 @@
         </p>
       </div>
 
-      <!-- Botón de confirmar -->
-      <button
-        class="btn-checkout"
-        (click)="createOrder()"
-        [disabled]="isLoading || cartItems.length === 0"
-      >
+      <!-- Checkout button -->
+      <button class="btn-checkout" (click)="createOrder()" [disabled]="isLoading || cartItems.length === 0">
         <span *ngIf="!isLoading">Confirmar Pedido</span>
         <span *ngIf="isLoading">Procesando...</span>
       </button>
