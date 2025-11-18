@@ -158,6 +158,11 @@ export class StockComponent implements OnInit {
         });
     } else {
       this.miApi.crearProducto(productoData).subscribe({
+  next: (res: any) => {
+    const prodId = res?.data?.id ?? res?.id;
+    
+    if (this.archivoProducto && prodId) {
+      this.miApi.uploadImage('product', prodId, this.archivoProducto).subscribe({
         next: () => {
           this.isLoading = false;
           this.errorMessage = '¡Producto creado exitosamente!';
@@ -165,11 +170,26 @@ export class StockComponent implements OnInit {
           this.resetForm();
           setTimeout(() => (this.errorMessage = null), 3000);
         },
-        error: (error) => {
+        error: (err) => {
+          console.error('Error subiendo imagen:', err);
           this.isLoading = false;
-          this.errorMessage = `Error al crear producto: ${error.error?.message || error.message}`;
-        },
+          this.errorMessage = 'Producto creado, pero no se pudo subir la imagen';
+          this.cargarProductos();
+          this.resetForm();
+        }
       });
+    } else {
+      this.isLoading = false;
+      this.errorMessage = '¡Producto creado exitosamente!';
+      this.cargarProductos();
+      this.resetForm();
+    }
+  },
+  error: (error) => {
+    this.isLoading = false;
+    this.errorMessage = `Error al crear producto: ${error.error?.message || error.message}`;
+  }
+});
     }
   }
 
