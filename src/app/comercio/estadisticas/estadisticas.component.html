@@ -2,29 +2,26 @@
   <app-sidebar></app-sidebar>
   <div class="estadisticas-card">
     <div class="estadisticas-controls">
+      <!-- ✅ Mostrar selector de producto solo cuando sea necesario -->
       <ng-container
         *ngIf="
-          statTypeControl.value !== 'fidelidad_clientes';
-          else tiendaSelect
+          statTypeControl.value !== 'fidelidad_clientes' &&
+          statTypeControl.value !== 'ventas_por_dia' &&
+          statTypeControl.value !== 'dinero_por_dia'
         "
       >
-        <h2 class="estadisticas-title">Categoría:</h2>
+        <h2 class="estadisticas-title">
+          {{ statTypeControl.value === 'ganancias_por_producto' ? 'Producto (opcional):' : 'Producto:' }}
+        </h2>
         <select [formControl]="productControl" class="estadisticas-select">
-          <option value="">Seleccione producto</option>
+          <option value="">
+            {{ statTypeControl.value === 'ganancias_por_producto' ? 'Todos los productos' : 'Seleccione producto' }}
+          </option>
           <option *ngFor="let product of products" [value]="product.id">
             {{ product.name }}
           </option>
         </select>
       </ng-container>
-      <ng-template #tiendaSelect>
-        <h2 class="estadisticas-title">Tienda:</h2>
-        <select [formControl]="storeControl" class="estadisticas-select">
-          <option value="">Seleccione tienda</option>
-          <option *ngFor="let store of stores" [value]="store.id">
-            Tienda {{ store.id }}
-          </option>
-        </select>
-      </ng-template>
 
       <h2 class="estadisticas-title">Tipo de gráfico:</h2>
       <select [formControl]="statTypeControl" class="estadisticas-select">
@@ -35,8 +32,10 @@
         <option value="productos_junto">Productos que se venden junto</option>
         <option value="ganancias_por_producto">Ganancias por Producto</option>
         <option value="fidelidad_clientes">
-          Fidelidad de Clientes (Gasto Promedio)
+          Fidelidad de Clientes (Gasto Total y Promedio)
         </option>
+        <option value="ventas_por_dia">Ventas por Día</option>
+        <option value="dinero_por_dia">Dinero Generado por Día</option>
       </select>
 
       <div class="estadisticas-fechas">
@@ -44,11 +43,13 @@
           type="date"
           [formControl]="startDateControl"
           class="estadisticas-date"
+          placeholder="Fecha inicio"
         />
         <input
           type="date"
           [formControl]="endDateControl"
           class="estadisticas-date"
+          placeholder="Fecha fin"
         />
       </div>
 

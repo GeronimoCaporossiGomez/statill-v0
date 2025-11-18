@@ -56,10 +56,6 @@
           <strong>Descripción sugerida:</strong>
           {{ calculateMostCommonData(suggestedData).desc || "No disponible" }}
         </div>
-        <div class="preview-item">
-          <strong>Categoría sugerida:</strong>
-          {{ getTypeNameById(calculateMostCommonData(suggestedData).type) }}
-        </div>
       </div>
     </div>
   </div>
@@ -139,14 +135,7 @@
       </div>
 
       <!-- Categoría -->
-      <div class="form-group">
-        <label for="type" class="form-label"> Categoría </label>
-        <select id="type" [(ngModel)]="producto.type" class="form-select">
-          <option *ngFor="let tipo of tiposProducto" [value]="tipo.id">
-            {{ tipo.name }}
-          </option>
-        </select>
-      </div>
+      
 
       <!-- Código de barras -->
       <div *ngIf="showBarcodeField" class="form-group">

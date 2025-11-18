@@ -18,7 +18,8 @@ Chart.register(...registerables);
 interface Product {
   id: number;
   name: string;
-  stock: number;
+  price: number; // ✅ Cambiado de stock a price
+  stock?: number;
 }
 
 interface SaleProduct {
@@ -52,6 +53,7 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
 
   products: Product[] = [];
   stores: any[] = [];
+  users: any[] = []; // ✅ Agregar array de usuarios
   productControl = new FormControl('');
   storeControl = new FormControl('');
   startDateControl = new FormControl('');
@@ -84,6 +86,14 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
       error: (err) => console.error('Error al obtener tiendas', err),
     });
 
+    // ✅ Cargar usuarios para el gráfico de fidelidad
+    this.statisticsService.getUsers().subscribe({
+      next: (res: any) => {
+        this.users = res.data;
+      },
+      error: (err) => console.error('Error al obtener usuarios', err),
+    });
+
     // Establecer fechas por defecto (desde hace un mes hasta hoy)
     const hoy = new Date();
     const haceUnMes = new Date();
@@ -110,12 +120,13 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
     const end = this.endDateControl.value;
     const tipo = this.statTypeControl.value;
 
+    // ✅ Para ganancias por producto y estadísticas generales, no es obligatorio seleccionar producto
     if (
-      (tipo === 'ganancias_por_producto' && !productId) ||
-      (tipo === 'fidelidad_clientes' && !storeId) ||
-      (!productId &&
-        tipo !== 'ganancias_por_producto' &&
-        tipo !== 'fidelidad_clientes')
+      !productId &&
+      tipo !== 'ganancias_por_producto' &&
+      tipo !== 'fidelidad_clientes' &&
+      tipo !== 'ventas_por_dia' &&
+      tipo !== 'dinero_por_dia'
     ) {
       this.destruirGrafico();
       return;
@@ -146,7 +157,11 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
         } else if (tipo === 'ganancias_por_producto') {
           this.mostrarGananciasPorProducto(ventas, +productId!);
         } else if (tipo === 'fidelidad_clientes') {
-          this.mostrarFidelidadClientes(ventas, +storeId!);
+          this.mostrarFidelidadClientes(ventas);
+        } else if (tipo === 'ventas_por_dia') {
+          this.mostrarVentasPorDia(ventas, start, end);
+        } else if (tipo === 'dinero_por_dia') {
+          this.mostrarDineroPorDia(ventas, start, end);
         }
       },
       error: (err) => {
@@ -157,59 +172,206 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
   }
 
   mostrarGananciasPorProducto(sales: Sale[], productId: number) {
-    // Sumar cantidad * precio solo para el producto seleccionado
-    let total = 0;
-    let prodName = '';
-    sales.forEach((venta) => {
-      venta.products.forEach((p) => {
-        if (p.product_id === productId) {
+    // Si no hay productId, mostrar ganancias de TODOS los productos
+    if (!productId) {
+      const gananciasPorProducto: Record<number, { nombre: string; total: number }> = {};
+      
+      sales.forEach((venta) => {
+        venta.products.forEach((p) => {
           const prod = this.products.find((prod) => prod.id === p.product_id);
           if (prod) {
-            total += p.quantity * prod.stock; // stock como precio
-            prodName = prod.name;
+            if (!gananciasPorProducto[p.product_id]) {
+              gananciasPorProducto[p.product_id] = {
+                nombre: prod.name,
+                total: 0
+              };
+            }
+            // Precio real del producto * cantidad vendida
+            gananciasPorProducto[p.product_id].total += prod.price * p.quantity;
           }
+        });
+      });
+
+      const labels = Object.values(gananciasPorProducto).map(p => p.nombre);
+      const data = Object.values(gananciasPorProducto).map(p => p.total);
+
+      this.renderChart('bar', {
+        labels,
+        datasets: [
+          {
+            label: 'Ganancias por Producto',
+            data,
+            backgroundColor: labels.map((_, i) => `hsl(${i * 40}, 70%, 60%)`),
+          },
+        ],
+      });
+    } else {
+      // Mostrar ganancias de UN producto específico
+      let total = 0;
+      let prodName = '';
+      
+      sales.forEach((venta) => {
+        venta.products.forEach((p) => {
+          if (p.product_id === productId) {
+            const prod = this.products.find((prod) => prod.id === p.product_id);
+            if (prod) {
+              // Precio real del producto * cantidad vendida
+              total += prod.price * p.quantity;
+              prodName = prod.name;
+            }
+          }
+        });
+      });
+
+      this.renderChart('bar', {
+        labels: [prodName || `Producto ${productId}`],
+        datasets: [
+          {
+            label: 'Ganancias del Producto',
+            data: [total],
+            backgroundColor: ['#fd2a2c'],
+          },
+        ],
+      });
+    }
+  }
+
+  mostrarFidelidadClientes(sales: Sale[]) {
+    // Calcular gasto total y promedio por cliente
+    const clientes: Record<number, { 
+      nombre: string; 
+      compras: number[]; 
+      total: number;
+      promedio: number;
+    }> = {};
+
+    sales.forEach((venta) => {
+      if (!venta.user_id) return;
+      
+      let totalVenta = 0;
+      venta.products.forEach((p) => {
+        const prod = this.products.find((prod) => prod.id === p.product_id);
+        if (prod) {
+          totalVenta += p.quantity * prod.price;
         }
       });
+
+      if (!clientes[venta.user_id]) {
+        const user = this.users.find(u => u.id === venta.user_id);
+        const userName = user ? `${user.first_names} ${user.last_name}` : `Cliente ${venta.user_id}`;
+        
+        clientes[venta.user_id] = {
+          nombre: userName,
+          compras: [],
+          total: 0,
+          promedio: 0
+        };
+      }
+      
+      clientes[venta.user_id].compras.push(totalVenta);
+      clientes[venta.user_id].total += totalVenta;
     });
+
+    // Calcular promedios
+    Object.keys(clientes).forEach(userId => {
+      const cliente = clientes[+userId];
+      cliente.promedio = cliente.total / cliente.compras.length;
+    });
+
+    // Ordenar por gasto total (de mayor a menor)
+    const clientesOrdenados = Object.values(clientes)
+      .sort((a, b) => b.total - a.total);
+
+    const labels = clientesOrdenados.map(c => c.nombre);
+    const dataTotal = clientesOrdenados.map(c => c.total);
+    const dataPromedio = clientesOrdenados.map(c => c.promedio);
+
     this.renderChart('bar', {
-      labels: [prodName],
+      labels,
       datasets: [
         {
-          label: 'Ganancias del Producto',
-          data: [total],
-          backgroundColor: ['#fd2a2c'],
+          label: 'Gasto Total',
+          data: dataTotal,
+          backgroundColor: 'rgba(255, 99, 132, 0.7)',
+        },
+        {
+          label: 'Gasto Promedio por Compra',
+          data: dataPromedio,
+          backgroundColor: 'rgba(54, 162, 235, 0.7)',
         },
       ],
     });
   }
 
-  mostrarFidelidadClientes(sales: Sale[], storeId: number) {
-    // Calcular gasto promedio por cliente en la tienda
-    const clientes: Record<number, number[]> = {};
+  mostrarVentasPorDia(sales: Sale[], start?: string | null, end?: string | null) {
+    // Contar cantidad de ventas por día
+    const ventasPorDia: Record<string, number> = {};
+
     sales.forEach((venta) => {
-      if (!venta.user_id) return;
+      const date = new Date(venta.timestamp);
+      if (isNaN(date.getTime())) return;
+      const isoDate = date.toISOString().slice(0, 10);
+
+      if (start && isoDate < start) return;
+      if (end && isoDate > end) return;
+
+      ventasPorDia[isoDate] = (ventasPorDia[isoDate] || 0) + 1;
+    });
+
+    const labels = Object.keys(ventasPorDia).sort();
+    const data = labels.map((f) => ventasPorDia[f]);
+
+    this.renderChart('line', {
+      labels,
+      datasets: [
+        {
+          label: 'Cantidad de Ventas por Día',
+          data,
+          fill: true,
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderColor: 'rgb(75, 192, 192)',
+          tension: 0.4,
+        },
+      ],
+    });
+  }
+
+  mostrarDineroPorDia(sales: Sale[], start?: string | null, end?: string | null) {
+    // Calcular dinero generado por día
+    const dineroPorDia: Record<string, number> = {};
+
+    sales.forEach((venta) => {
+      const date = new Date(venta.timestamp);
+      if (isNaN(date.getTime())) return;
+      const isoDate = date.toISOString().slice(0, 10);
+
+      if (start && isoDate < start) return;
+      if (end && isoDate > end) return;
+
       let totalVenta = 0;
       venta.products.forEach((p) => {
         const prod = this.products.find((prod) => prod.id === p.product_id);
         if (prod) {
-          totalVenta += p.quantity * prod.stock; // stock como precio
+          totalVenta += p.quantity * prod.price;
         }
       });
-      if (!clientes[venta.user_id]) clientes[venta.user_id] = [];
-      clientes[venta.user_id].push(totalVenta);
+
+      dineroPorDia[isoDate] = (dineroPorDia[isoDate] || 0) + totalVenta;
     });
-    const clientIds = Object.keys(clientes);
-    const data = clientIds.map((id) => {
-      const sum = clientes[+id].reduce((a, b) => a + b, 0);
-      return sum / clientes[+id].length || 0;
-    });
-    this.renderChart('bar', {
-      labels: clientIds.map((id) => `Cliente ${id}`),
+
+    const labels = Object.keys(dineroPorDia).sort();
+    const data = labels.map((f) => dineroPorDia[f]);
+
+    this.renderChart('line', {
+      labels,
       datasets: [
         {
-          label: 'Gasto promedio por cliente',
+          label: 'Dinero Generado por Día ($)',
           data,
-          backgroundColor: clientIds.map((_, i) => `hsl(${i * 50}, 70%, 60%)`),
+          fill: true,
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          borderColor: 'rgb(255, 99, 132)',
+          tension: 0.4,
         },
       ],
     });

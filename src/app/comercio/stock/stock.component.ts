@@ -90,7 +90,7 @@ export class StockComponent implements OnInit {
       brand: producto.brand,
       price: producto.price,
       points_price: producto.points_price,
-      type: producto.type,
+      type: 1,
       quantity: producto.quantity,
       desc: producto.desc,
       barcode: producto.barcode,
