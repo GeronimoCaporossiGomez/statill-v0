@@ -20,7 +20,17 @@ export class StatisticsService {
     return this.http.get(`${this.apiUrl}/stores`);
   }
 
-  // Obtener todas las ventas
+  // ✅ ACTUALIZADO: Obtener ventas de MI tienda
+  getMyStoreSales(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/sales/store/my`);
+  }
+
+  // ✅ Obtener productos de MI tienda
+  getMyStoreProducts(storeId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/products/store/${storeId}`);
+  }
+
+  // ❌ DEPRECADO: Ya no usar este método para estadísticas
   getSalesStats(): Observable<any> {
     return this.http.get(`${this.apiUrl}/sales`);
   }

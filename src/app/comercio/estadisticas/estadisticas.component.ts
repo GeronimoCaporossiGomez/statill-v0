@@ -11,6 +11,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Chart, ChartConfiguration, ChartType, registerables } from 'chart.js';
 import { SidebarComponent } from 'src/app/Componentes/sidebar-statill/sidebar.component';
 import { StatisticsService } from 'src/app/servicios/stats.service';
+import { AuthService } from 'src/app/servicios/auth.service';
 
 Chart.register(...registerables);
 
@@ -27,10 +28,11 @@ interface SaleProduct {
 
 interface Sale {
   id: number;
+  user_id: number;
+  store_id: number;
   timestamp: string;
   payment_method: number;
   products: SaleProduct[];
-  store_id?: number;
 }
 
 @Component({
@@ -45,6 +47,7 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
   chartCanvas!: ElementRef<HTMLCanvasElement>;
 
   private statisticsService = inject(StatisticsService);
+  private authService = inject(AuthService);
   private chart?: Chart;
 
   products: Product[] = [];
@@ -56,12 +59,28 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
   statTypeControl = new FormControl('ventas_en_el_tiempo');
 
   ngOnInit(): void {
-    this.statisticsService.getProductsStats().subscribe({
-      next: (res: any) => (this.products = res.data),
-      error: (err) => console.error('Error al obtener productos', err),
+    // Verificar que el usuario tenga una tienda
+    const storeId = this.authService.getStoreId();
+    if (!storeId) {
+      console.error('Usuario no tiene tienda asociada');
+      return;
+    }
+
+    // ✅ Cargar solo los productos de MI tienda usando el endpoint correcto
+    this.statisticsService.getMyStoreProducts(storeId).subscribe({
+      next: (res: any) => {
+        this.products = res.data;
+      },
+      error: (err) => console.error('Error al obtener productos de mi tienda', err),
     });
+
+    // Ya no es necesario cargar todas las tiendas
+    // Solo mostraremos estadísticas de la tienda del usuario
     this.statisticsService.getStoresStats().subscribe({
-      next: (res: any) => (this.stores = res.data),
+      next: (res: any) => {
+        // Filtrar solo la tienda del usuario
+        this.stores = res.data.filter((s: any) => s.id === storeId);
+      },
       error: (err) => console.error('Error al obtener tiendas', err),
     });
 
@@ -102,9 +121,11 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.statisticsService.getSalesStats().subscribe({
+    // ✅ CAMBIO PRINCIPAL: Usar getMyStoreSales() en lugar de getSalesStats()
+    this.statisticsService.getMyStoreSales().subscribe({
       next: (res: any) => {
         let ventas = res.data as Sale[];
+        
         // Filtrar por fecha si hay fechas seleccionadas
         if (start || end) {
           ventas = ventas.filter((venta) => {
@@ -115,20 +136,21 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
             return true;
           });
         }
+
         if (tipo === 'ventas_en_el_tiempo') {
-          this.mostrarVentasEnElTiempo(ventas, +productId, start, end);
+          this.mostrarVentasEnElTiempo(ventas, +productId!, start, end);
         } else if (tipo === 'metodos_pago') {
-          this.mostrarMetodoDePago(ventas, +productId);
+          this.mostrarMetodoDePago(ventas, +productId!);
         } else if (tipo === 'productos_junto') {
-          this.mostrarProductosJunto(ventas, +productId);
+          this.mostrarProductosJunto(ventas, +productId!);
         } else if (tipo === 'ganancias_por_producto') {
-          this.mostrarGananciasPorProducto(ventas, +productId);
+          this.mostrarGananciasPorProducto(ventas, +productId!);
         } else if (tipo === 'fidelidad_clientes') {
-          this.mostrarFidelidadClientes(ventas, +storeId);
+          this.mostrarFidelidadClientes(ventas, +storeId!);
         }
       },
       error: (err) => {
-        console.error('Error al cargar ventas', err);
+        console.error('Error al cargar ventas de mi tienda', err);
         this.destruirGrafico();
       },
     });
@@ -162,10 +184,10 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
   }
 
   mostrarFidelidadClientes(sales: Sale[], storeId: number) {
-    // Calcular gasto promedio por cliente en la tienda seleccionada
+    // Calcular gasto promedio por cliente en la tienda
     const clientes: Record<number, number[]> = {};
     sales.forEach((venta) => {
-      if (venta.store_id !== storeId || !venta.id) return;
+      if (!venta.user_id) return;
       let totalVenta = 0;
       venta.products.forEach((p) => {
         const prod = this.products.find((prod) => prod.id === p.product_id);
@@ -173,8 +195,8 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
           totalVenta += p.quantity * prod.stock; // stock como precio
         }
       });
-      if (!clientes[venta.id]) clientes[venta.id] = [];
-      clientes[venta.id].push(totalVenta);
+      if (!clientes[venta.user_id]) clientes[venta.user_id] = [];
+      clientes[venta.user_id].push(totalVenta);
     });
     const clientIds = Object.keys(clientes);
     const data = clientIds.map((id) => {
@@ -196,8 +218,8 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
   mostrarVentasEnElTiempo(
     sales: Sale[],
     productId: number,
-    start?: string,
-    end?: string,
+    start?: string | null,
+    end?: string | null,
   ) {
     const ventasPorFecha: Record<string, number> = {};
 
@@ -293,12 +315,14 @@ export class EstadisticasComponent implements OnInit, OnDestroy {
 
   metodoPagoToString(metodo: number): string {
     switch (metodo) {
-      case 1:
+      case 0:
         return 'Efectivo';
-      case 2:
+      case 1:
         return 'Débito';
-      case 3:
+      case 2:
         return 'Crédito';
+      case 3:
+        return 'QR';
       default:
         return 'Otro';
     }
