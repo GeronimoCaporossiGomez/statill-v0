@@ -18,6 +18,66 @@ export const authGuard: CanActivateFn = (route, state) => {
   router.navigate(['/landing']);
   return false;
 };
+
+export const confirmacionCodigoGuard: CanActivateFn = (route, state) => {
+  const authService = inject(AuthService);
+  const router = inject(Router);
+
+  console.log('🔐 confirmacionCodigoGuard: Verificando acceso a', state.url);
+
+  // Check if user is authenticated
+  if (!authService.isAuthenticated()) {
+    console.log('❌ confirmacionCodigoGuard: No autenticado -> /landing');
+    router.navigate(['/landing']);
+    return false;
+  }
+
+  // If user is already loaded and verified, redirect to home
+  const user = authService.getCurrentUser();
+  if (user?.email_verified) {
+    console.log('✅ confirmacionCodigoGuard: Email ya verificado -> /home');
+    router.navigate(['/home']);
+    return false;
+  }
+
+  // If user is loaded and not verified, allow access
+  if (user) {
+    console.log('✅ confirmacionCodigoGuard: Acceso permitido (usuario no verificado)');
+    return true;
+  }
+
+  // If user not in memory but authenticated, fetch from server
+  console.log('⚠️ confirmacionCodigoGuard: Usuario no en memoria, obteniendo del servidor...');
+  return authService.fetchCurrentUser().pipe(
+    tap((response) => {
+      console.log('📥 Respuesta del servidor:', response);
+    }),
+    map((response) => {
+      if (!response?.successful || !response.data) {
+        console.log('❌ confirmacionCodigoGuard: Respuesta inválida -> /landing');
+        router.navigate(['/landing']);
+        return false;
+      }
+
+      const fetchedUser = response.data;
+      
+      // If already verified, redirect to home
+      if (fetchedUser.email_verified) {
+        console.log('✅ confirmacionCodigoGuard: Email ya verificado -> /home');
+        router.navigate(['/home']);
+        return false;
+      }
+
+      console.log('✅ confirmacionCodigoGuard: Acceso permitido (usuario no verificado)');
+      return true;
+    }),
+    catchError((error) => {
+      console.error('❌ confirmacionCodigoGuard: Error al obtener usuario:', error);
+      router.navigate(['/landing']);
+      return of(false);
+    }),
+  );
+};
 export const allowCreateCommerceGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);

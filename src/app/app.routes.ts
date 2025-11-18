@@ -5,6 +5,7 @@ import {
   ownerGuard,
   storeAccessGuard,
   allowCreateCommerceGuard,
+  confirmacionCodigoGuard,
 } from './core/guards/auth.guard';
 
 export const routes: Routes = [
@@ -52,7 +53,7 @@ export const routes: Routes = [
       import('./auth/Confirmation Code/Confirm.component').then(
         (m) => m.ConfirmComponent,
       ),
-    canActivate: [authGuard],
+    canActivate: [confirmacionCodigoGuard],
   },
   {
     path: 'perfil',

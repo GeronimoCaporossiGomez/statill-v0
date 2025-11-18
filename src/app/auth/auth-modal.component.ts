@@ -453,13 +453,32 @@ export class AuthModalComponent {
         })
         .subscribe({
           next: (res) => {
-            this.loading = false;
-            this.message =
-              'Registro exitoso. Se ha enviado un código de verificación a tu email.';
-            this.messageType = 'success';
-            // Close modal and redirect to confirmation page
-            this.close.emit();
-            this.router.navigate(['/confirmacion-codigo']);
+              // After successful registration, automatically log in the user
+            this.authService
+              .requestToken({
+                grant_type: 'password',
+                username: this.email,
+                password: this.password,
+              })
+              .subscribe({
+                next: (tokenRes) => {
+                  this.loading = false;
+                  this.message =
+                    'Registro exitoso. Se ha enviado un código de verificación a tu email.';
+                  this.messageType = 'success';
+                  // Close modal and redirect to confirmation page
+                  setTimeout(() => {
+                    this.close.emit();
+                    this.router.navigate(['/confirmacion-codigo']);
+                  }, 500);
+                },
+                error: (err) => {
+                  this.loading = false;
+                  this.message =
+                    'Registro exitoso pero hay un problema al iniciar sesión. Por favor, intente iniciar sesión manualmente.';
+                  this.messageType = 'error';
+                },
+              });
           },
           error: (err) => {
             this.loading = false;
