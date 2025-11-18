@@ -193,11 +193,15 @@ export class CarritoComponent implements OnInit {
         this.clearCart();
         const orderId = response.data?.id || response.data;
 
+        // Only redirect to 'no disponible' if the store does NOT accept the selected card method
         if (this.selectedPaymentMethod === 0 || this.selectedPaymentMethod === 3) {
           const paymentParam = this.selectedPaymentMethod === 3 ? 'qr' : 'cash';
           this.router.navigate(['/orden-confirmacion'], { queryParams: { orderId, payment: paymentParam } });
-        } else {
+        } else if (!this.isPaymentMethodAllowed(this.selectedPaymentMethod)) {
           this.router.navigate(['/metodo-pago-no-disponible']);
+        } else {
+          // Card payment accepted, go to confirmation
+          this.router.navigate(['/orden-confirmacion'], { queryParams: { orderId, payment: this.selectedPaymentMethod === 1 ? 'debito' : 'credito' } });
         }
       },
       error: (error) => {

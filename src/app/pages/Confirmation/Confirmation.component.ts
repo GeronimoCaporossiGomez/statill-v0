@@ -52,6 +52,7 @@ export class OrdenConfirmacionComponent implements OnInit {
           return;
         }
 
+        console.log('order.created_at:', order.created_at);
         this.order = order;
         this.storeName = '';
         this.storeAddress = '';
@@ -85,7 +86,19 @@ export class OrdenConfirmacionComponent implements OnInit {
   }
 
   formatDate(dateString: string): string {
-    const date = new Date(dateString);
+    if (!dateString) return 'Fecha no disponible';
+    let date: Date;
+    // If only time is provided, prepend today's date
+    if (/^\d{2}:\d{2}:\d{2}/.test(dateString)) {
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, '0');
+      const dd = String(today.getDate()).padStart(2, '0');
+      date = new Date(`${yyyy}-${mm}-${dd}T${dateString}`);
+    } else {
+      date = new Date(dateString);
+    }
+    if (isNaN(date.getTime())) return 'Fecha no disponible';
     return date.toLocaleString('es-AR', {
       day: '2-digit',
       month: 'short',
