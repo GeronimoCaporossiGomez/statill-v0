@@ -24,6 +24,9 @@
               <div *ngFor="let prod of prueba.productsFull">
                 {{ prod.name }} × {{ prod.quantity }}
               </div>
+              <div class="TextosPago">
+                <span>Precio: ${{ prueba.totalPrice }} ......................... Método de pago: {{ prueba.convertedPaymentMethod}}</span>
+              </div>
             </div>
 
           </div>
