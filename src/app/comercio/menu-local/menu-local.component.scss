@@ -2,21 +2,29 @@
   position: relative;
   min-height: 100vh;
   background: #fafafa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-
 
 .menu-local-container {
   padding: 3rem clamp(1.5rem, 4vw, 4rem);
   color: #1a1a1a;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 2.5rem;
   max-width: 1400px;
   margin: 0 auto;
+  width: 100%;
 }
 
 .menu-local-header {
   max-width: 720px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   .header-badge {
     display: inline-flex;
@@ -37,6 +45,9 @@
     font-size: clamp(28px, 5vw, 36px);
     font-weight: 600;
     color: #1a1a1a;
+    padding-bottom: 1rem;
+    border-bottom: 3px solid #FD2A2C;
+    display: inline-block;
   }
 
   .descripcion {
@@ -53,6 +64,7 @@
   gap: 16px;
   width: 100%;
   max-width: 960px;
+  justify-items: center;
 
   button {
     border: 1px solid #e8e8e8;
@@ -65,7 +77,9 @@
     color: #1a1a1a;
     cursor: pointer;
     transition: all 0.2s ease;
-    text-align: left;
+    text-align: center;
+    width: 100%;
+    max-width: 240px;
 
     &:hover {
       transform: translateY(-2px);
@@ -77,6 +91,10 @@
       .btn-subtitle {
         opacity: 0.9;
       }
+    }
+
+    &:last-child:nth-child(3n - 1) {
+      grid-column: 2;
     }
   }
 
@@ -128,5 +146,11 @@
 @media (max-width: 520px) {
   .botones-grid {
     grid-template-columns: 1fr;
+  }
+
+  button {
+    &:last-child:nth-child(3n - 1) {
+      grid-column: auto;
+    }
   }
 }
