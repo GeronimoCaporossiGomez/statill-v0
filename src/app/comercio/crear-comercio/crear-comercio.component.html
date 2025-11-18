@@ -7,7 +7,6 @@
     <a routerLink="/escanear">Ir a escanear de una</a>
   </button>
   <h1>¡Hola vendedor!</h1>
-  <h2>¿Que querés hacer?</h2>
   <button
     class="boton"
     type="button"
@@ -15,9 +14,7 @@
   >
     Crear comercio
   </button>
-  <button class="boton" type="button" (click)="creandoComercio(false)">
-    Unirme a un comercio
-  </button>
+  <button class="boton" type="button" (click)="handleGoBack()" >Volver</button>
 </div>
 
 <!-- Formulario de creación -->

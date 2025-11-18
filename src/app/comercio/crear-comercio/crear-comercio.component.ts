@@ -223,31 +223,59 @@ export class CrearComercioComponent {
     this.miApiService.postStores(datos).subscribe({
       next: (response: any) => {
         console.log('✅ Comercio creado exitosamente:', response);
-        if (this.archivoLogo) {
-          this.miApiService
-            .uploadImage('store', response.data.id, this.archivoLogo)
-            .subscribe({
-              next: () => {
-                console.log('✅ Imagen subida exitosamente');
-                this.AlertComponent.Alert('Comercio creado exitosamente', false);
-                this.miApiService.uploadImage(
-                  'store',
-                  response.data.id,
-                  this.archivoLogo,
-                );
-                this.router.navigate(['/escanear']);
-              },
-              error: (error) => {
-                console.error('❌ Error al subir imagen:', error);
-                this.AlertComponent.Alert('Comercio creado, pero hubo un error al subir la imagen', true);
-                this.router.navigate(['/escanear']);
-              },
-            });
-        } else {
-          this.AlertComponent.Alert('Comercio creado exitosamente', false);
-          this.router.navigate(['/escanear']);
-        }
-        this.router.navigate(['/escanear']);
+        // Refresh user data to update store_role in memory
+        this.authService.fetchCurrentUser().subscribe({
+          next: () => {
+            console.log('✅ Datos de usuario actualizados');
+            if (this.archivoLogo) {
+              this.miApiService
+                .uploadImage('store', response.data.id, this.archivoLogo)
+                .subscribe({
+                  next: () => {
+                    console.log('✅ Imagen subida exitosamente');
+                    this.AlertComponent.Alert('Comercio creado exitosamente', false);
+                    this.miApiService.uploadImage(
+                      'store',
+                      response.data.id,
+                      this.archivoLogo,
+                    );
+                    this.router.navigate([`/menu-local`]);
+                  },
+                  error: (error) => {
+                    console.error('❌ Error al subir imagen:', error);
+                    this.AlertComponent.Alert('Comercio creado, pero hubo un error al subir la imagen', true);
+                    this.router.navigate(['/escanear']);
+                  },
+                });
+            } else {
+              this.AlertComponent.Alert('Comercio creado exitosamente', false);
+              this.router.navigate(['/escanear']);
+            }
+            this.router.navigate(['/escanear']);
+          },
+          error: (error) => {
+            console.error('❌ Error al actualizar datos de usuario:', error);
+            // Even if update fails, still continue with the flow
+            if (this.archivoLogo) {
+              this.miApiService
+                .uploadImage('store', response.data.id, this.archivoLogo)
+                .subscribe({
+                  next: () => {
+                    console.log('✅ Imagen subida exitosamente');
+                    this.AlertComponent.Alert('Comercio creado exitosamente', false);
+                    this.router.navigate(['/escanear']);
+                  },
+                  error: () => {
+                    this.AlertComponent.Alert('Comercio creado, pero hubo un error al subir la imagen', true);
+                    this.router.navigate(['/escanear']);
+                  },
+                });
+            } else {
+              this.AlertComponent.Alert('Comercio creado exitosamente', false);
+              this.router.navigate(['/escanear']);
+            }
+          },
+        });
       },
       error: (error) => {
         console.error('❌ Error al crear comercio:', error);
@@ -287,5 +315,9 @@ export class CrearComercioComponent {
       };
       reader.readAsDataURL(input.files[0]);
     }
+  }
+
+  handleGoBack(){
+    this.router.navigate(['/home'])
   }
 }

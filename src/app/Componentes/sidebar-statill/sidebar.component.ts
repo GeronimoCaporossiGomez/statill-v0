@@ -28,12 +28,6 @@ export class SidebarComponent {
       id: 'ventas-locales',
     },
     {
-      path: '/catalogo',
-      icon: 'assets/img/catalogo-noesPNG.png',
-      text: 'Catálogo',
-      id: 'catalogo',
-    },
-    {
       path: '/stock',
       icon: 'assets/img/Productos-icono.png',
       text: 'Productos',
