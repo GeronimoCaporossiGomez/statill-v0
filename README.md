@@ -51,10 +51,6 @@ src/
 
 🔐 Autenticación vía modal con animaciones suaves.
 
-📲 Pensado para multiplataforma
-100% responsive.
-
-Instalación como Progressive Web App (PWA).
 
 Preparado para ser empaquetado como aplicación nativa para Android/iOS.
 
@@ -72,3 +68,5 @@ Gerónimo Caporossi
 
 Martín Adler
 ```
+ACLARACIÓN
+El backend no devuelve los json de los datos por eso usted no puede registrarse ni ver las promociones debido a que la instancia no fue levantada.
